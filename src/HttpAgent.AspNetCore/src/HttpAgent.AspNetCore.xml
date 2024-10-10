@@ -6,7 +6,7 @@
     <members>
         <member name="T:HttpAgent.HttpContextForwardBuilder">
             <summary>
-                HTTP 转发构建器
+                <see cref="P:HttpAgent.HttpContextForwardBuilder.HttpContext"/> 转发构建器
             </summary>
         </member>
         <member name="M:HttpAgent.HttpContextForwardBuilder.#ctor(System.Net.Http.HttpMethod,System.Uri,Microsoft.AspNetCore.Http.HttpContext)">
