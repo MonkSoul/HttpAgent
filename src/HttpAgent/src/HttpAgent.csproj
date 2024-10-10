@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Description>Furion 框架 HTTP 远程请求模块。</Description>
+        <PackageTags>Furion;ASP.NET;dotNET China;Cross Platform;百小僧;Monk;MonkSoul;Core;HTTP;HttpClient;Remote</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
+        <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0"/>
+        <PackageReference Include="Microsoft.Net.Http.Headers" Version="8.0.0"/>
+    </ItemGroup>
+
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net9.0' ">
+        <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0-rc.2.24473.5"/>
+        <PackageReference Include="Microsoft.Net.Http.Headers" Version="9.0.0-rc.2.24474.3"/>
+    </ItemGroup>
+
+</Project>

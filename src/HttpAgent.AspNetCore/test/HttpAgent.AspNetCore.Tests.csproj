@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <ItemGroup>
+        <ProjectReference Include="..\src\HttpAgent.AspNetCore.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="test.txt"/>
+        <Content Include="test.txt">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+</Project>
