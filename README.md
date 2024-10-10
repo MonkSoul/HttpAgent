@@ -46,9 +46,9 @@ services.AddHttpRemote();
 ```cs
 public class YourService(IHttpRemoteService httpRemoteService)
 {
-    public async Task<string?> GetHtml()
+    public async Task<string?> GetContent()
     {
-        return await httpRemoteService.GetAsync<string>("https://furion.net/");
+        return await httpRemoteService.GetAsAsync<string>("https://furion.net/");
     }
 }
 ```
