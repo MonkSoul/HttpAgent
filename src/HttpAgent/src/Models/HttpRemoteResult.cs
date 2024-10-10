@@ -160,7 +160,8 @@ public sealed class HttpRemoteResult<TResult>
         var requestEntry = ResponseMessage.RequestMessage?.ProfilerHeaders();
 
         // 格式化常规和响应条目
-        var generalAndResponseEntry = ResponseMessage.ProfilerGeneralAndHeaders();
+        var generalAndResponseEntry = ResponseMessage.ProfilerGeneralAndHeaders(generalCustomKeyValues:
+            [new KeyValuePair<string, IEnumerable<string>>("Request Duration (ms)", [$"{RequestDuration:N2}"])]);
 
         return $"{requestEntry}\r\n{generalAndResponseEntry}";
     }

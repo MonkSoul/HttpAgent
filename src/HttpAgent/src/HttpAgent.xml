@@ -2770,7 +2770,7 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.ProfilerGeneralAndHeaders(System.Net.Http.HttpResponseMessage,System.String,System.String)">
+        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.ProfilerGeneralAndHeaders(System.Net.Http.HttpResponseMessage,System.String,System.String,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.Collections.Generic.IEnumerable{System.String}}})">
             <summary>
                 分析常规和 <see cref="T:System.Net.Http.HttpResponseMessage" /> 标头
             </summary>
@@ -2779,6 +2779,7 @@
             </param>
             <param name="responseSummary">响应标头摘要</param>
             <param name="generalSummary">常规摘要</param>
+            <param name="generalCustomKeyValues">自定义常规摘要键值集合</param>
             <returns>
                 <see cref="T:System.String" />
             </returns>

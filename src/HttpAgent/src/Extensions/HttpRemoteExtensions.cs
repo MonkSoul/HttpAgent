@@ -58,11 +58,13 @@ public static class HttpRemoteExtensions
     /// </param>
     /// <param name="responseSummary">响应标头摘要</param>
     /// <param name="generalSummary">常规摘要</param>
+    /// <param name="generalCustomKeyValues">自定义常规摘要键值集合</param>
     /// <returns>
     ///     <see cref="string" />
     /// </returns>
     public static string ProfilerGeneralAndHeaders(this HttpResponseMessage httpResponseMessage,
-        string? responseSummary = "Response Headers", string? generalSummary = "General")
+        string? responseSummary = "Response Headers", string? generalSummary = "General",
+        IEnumerable<KeyValuePair<string, IEnumerable<string>>>? generalCustomKeyValues = null)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(httpResponseMessage);
@@ -74,13 +76,14 @@ public static class HttpRemoteExtensions
         ArgumentNullException.ThrowIfNull(httpRequestMessage);
 
         // 格式化常规条目
-        var generalEntry = StringUtility.FormatKeyValuesSummary([
+        var generalEntry = StringUtility.FormatKeyValuesSummary(new[]
+        {
             new KeyValuePair<string, IEnumerable<string>>("Request URL",
                 [httpRequestMessage.RequestUri?.OriginalString!]),
             new KeyValuePair<string, IEnumerable<string>>("HTTP Method", [httpRequestMessage.Method.ToString()]),
             new KeyValuePair<string, IEnumerable<string>>("Status Code",
                 [$"{(int)httpResponseMessage.StatusCode} {httpResponseMessage.StatusCode}"])
-        ], generalSummary);
+        }.Concat(generalCustomKeyValues ?? []), generalSummary);
 
         // 格式化响应条目
         var responseEntry = httpResponseMessage.ProfilerHeaders(responseSummary);

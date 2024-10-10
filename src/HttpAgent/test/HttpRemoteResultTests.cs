@@ -168,9 +168,10 @@ public class HttpRemoteResultTests
         httpResponseMessage.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
         httpResponseMessage.Content.Headers.TryAddWithoutValidation("Content-Type", "application/json");
 
-        var httpRemoteResult = new HttpRemoteResult<string>(httpResponseMessage);
+        var httpRemoteResult = new HttpRemoteResult<string>(httpResponseMessage) { RequestDuration = 200 };
+
         Assert.Equal(
-            "Request Headers: \r\n\tAccept:              application/json\r\n\tAccept-Encoding:     gzip, deflate\r\nGeneral: \r\n\tRequest URL:     http://localhost\r\n\tHTTP Method:     GET\r\n\tStatus Code:     200 OK\r\nResponse Headers: \r\n\tAccept:              application/json\r\n\tAccept-Encoding:     gzip, deflate\r\n\tContent-Type:        application/json\r\n\tContent-Length:      0",
+            "Request Headers: \r\n\tAccept:              application/json\r\n\tAccept-Encoding:     gzip, deflate\r\nGeneral: \r\n\tRequest URL:               http://localhost\r\n\tHTTP Method:               GET\r\n\tStatus Code:               200 OK\r\n\tRequest Duration (ms):     200.00\r\nResponse Headers: \r\n\tAccept:              application/json\r\n\tAccept-Encoding:     gzip, deflate\r\n\tContent-Type:        application/json\r\n\tContent-Length:      0",
             httpRemoteResult.ToString());
     }
 }
