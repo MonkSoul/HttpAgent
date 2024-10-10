@@ -12,15 +12,20 @@ internal sealed partial class HttpRemoteService
     /// <inheritdoc />
     public void DownloadFile(string? requestUri, string? destinationPath, Action<HttpRequestBuilder>? configure = null,
         Func<FileTransferProgress, Task>? onProgressChanged = null,
+        FileExistsBehavior fileExistsBehavior = FileExistsBehavior.CreateNew,
         CancellationToken cancellationToken = default) =>
-        Send(HttpRequestBuilder.DownloadFile(requestUri, destinationPath, onProgressChanged), configure,
-            cancellationToken);
+        Send(
+            HttpRequestBuilder.DownloadFile(requestUri, destinationPath, onProgressChanged)
+                .SetFileExistsBehavior(fileExistsBehavior), configure, cancellationToken);
 
     /// <inheritdoc />
     public Task DownloadFileAsync(string? requestUri, string? destinationPath,
         Action<HttpRequestBuilder>? configure = null, Func<FileTransferProgress, Task>? onProgressChanged = null,
+        FileExistsBehavior fileExistsBehavior = FileExistsBehavior.CreateNew,
         CancellationToken cancellationToken = default) =>
-        SendAsync(HttpRequestBuilder.DownloadFile(requestUri, destinationPath, onProgressChanged), configure,
+        SendAsync(
+            HttpRequestBuilder.DownloadFile(requestUri, destinationPath, onProgressChanged)
+                .SetFileExistsBehavior(fileExistsBehavior), configure,
             cancellationToken);
 
     /// <inheritdoc />

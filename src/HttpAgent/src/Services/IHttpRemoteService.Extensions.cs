@@ -16,11 +16,15 @@ public partial interface IHttpRemoteService
     /// <param name="destinationPath">文件保存的目标路径</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
+    /// <param name="fileExistsBehavior">
+    ///     <see cref="FileExistsBehavior" />
+    /// </param>
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
     void DownloadFile(string? requestUri, string? destinationPath, Action<HttpRequestBuilder>? configure = null,
         Func<FileTransferProgress, Task>? onProgressChanged = null,
+        FileExistsBehavior fileExistsBehavior = FileExistsBehavior.CreateNew,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -30,6 +34,9 @@ public partial interface IHttpRemoteService
     /// <param name="destinationPath">文件保存的目标路径</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
+    /// <param name="fileExistsBehavior">
+    ///     <see cref="FileExistsBehavior" />
+    /// </param>
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
@@ -38,6 +45,7 @@ public partial interface IHttpRemoteService
     /// </returns>
     Task DownloadFileAsync(string? requestUri, string? destinationPath, Action<HttpRequestBuilder>? configure = null,
         Func<FileTransferProgress, Task>? onProgressChanged = null,
+        FileExistsBehavior fileExistsBehavior = FileExistsBehavior.CreateNew,
         CancellationToken cancellationToken = default);
 
     /// <summary>
