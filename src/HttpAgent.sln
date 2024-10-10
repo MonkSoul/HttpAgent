@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpAgent.AspNetCore", "Htt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpAgent.AspNetCore.Tests", "HttpAgent.AspNetCore\test\HttpAgent.AspNetCore.Tests.csproj", "{6BDB676F-F9DB-4049-BFFD-869ADA7A9FDC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpAgent.Samples", "..\samples\HttpAgent.Samples\HttpAgent.Samples.csproj", "{6F48BEAB-1348-4E25-B84F-B23EFBA83D76}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpAgent.AspNetCore.Samples", "..\samples\HttpAgent.AspNetCore.Samples\HttpAgent.AspNetCore.Samples.csproj", "{8B1B6769-DB0B-4ECB-82B9-9A222197B1AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{6BDB676F-F9DB-4049-BFFD-869ADA7A9FDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BDB676F-F9DB-4049-BFFD-869ADA7A9FDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BDB676F-F9DB-4049-BFFD-869ADA7A9FDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F48BEAB-1348-4E25-B84F-B23EFBA83D76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F48BEAB-1348-4E25-B84F-B23EFBA83D76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F48BEAB-1348-4E25-B84F-B23EFBA83D76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F48BEAB-1348-4E25-B84F-B23EFBA83D76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B1B6769-DB0B-4ECB-82B9-9A222197B1AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B1B6769-DB0B-4ECB-82B9-9A222197B1AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B1B6769-DB0B-4ECB-82B9-9A222197B1AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B1B6769-DB0B-4ECB-82B9-9A222197B1AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
