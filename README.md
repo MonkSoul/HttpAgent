@@ -2,7 +2,8 @@
 
 [![license](https://img.shields.io/badge/license-MIT-orange?cacheSeconds=10800)](https://gitee.com/dotnetchina/HttpAgent/blob/master/LICENSE) [![nuget](https://img.shields.io/nuget/v/HttpAgent.svg?cacheSeconds=10800)](https://www.nuget.org/packages/HttpAgent) [![dotNET China](https://img.shields.io/badge/organization-dotNET%20China-yellow?cacheSeconds=10800)](https://gitee.com/dotnetchina)
 
-HttpAgent 是一个高性能、灵活且易用的开源库，提供了全面的 HTTP 功能支持，包括文件传输、轮询、测试工具、实时通信、请求管理、Media 类型处理、MessagePack 支持等，并具有低资源消耗和高测试覆盖率的特点。
+HttpAgent 是一个高性能、灵活且易用的开源库，提供了全面的 HTTP 功能支持，包括文件传输、轮询、测试工具、实时通信、请求管理、Media
+类型处理、MessagePack 支持等，并具有低资源消耗和高测试覆盖率的特点。
 
 ![HttpAgent.drawio](https://gitee.com/dotnetchina/HttpAgent/raw/master/drawio/HttpAgent.drawio.png "HttpAgent.drawio.png")
 
@@ -23,8 +24,6 @@ HttpAgent 是一个高性能、灵活且易用的开源库，提供了全面的 
 - **跨平台无依赖**：支持跨平台运行，无需外部依赖。
 - **高质量代码保障**：遵循高标准编码规范，拥有高达 `98%` 的单元测试与集成测试覆盖率。
 - **`.NET 8+` 兼容性**：可在 `.NET 8` 及更高版本环境中部署使用。
-
-这样表述更加紧凑，同时强调了各项特性的专业性和实用性。
 
 ## 安装
 
