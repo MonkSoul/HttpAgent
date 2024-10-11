@@ -73,7 +73,7 @@ public class HttpRemoteServiceExtensionsTests
 
         Assert.Throws<TaskCanceledException>(() =>
         {
-            httpRemoteService.DownloadFile($"http://localhost:{port}/test", destinationPath, null, null,
+            httpRemoteService.DownloadFile($"http://localhost:{port}/test", destinationPath, null,
                 cancellationToken: cancellationTokenSource.Token);
         });
 
@@ -194,7 +194,7 @@ public class HttpRemoteServiceExtensionsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            await httpRemoteService.DownloadFileAsync($"http://localhost:{port}/test", destinationPath, null, null,
+            await httpRemoteService.DownloadFileAsync($"http://localhost:{port}/test", destinationPath, null,
                 cancellationToken: cancellationTokenSource.Token);
         });
 

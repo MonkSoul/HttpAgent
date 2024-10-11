@@ -1336,6 +1336,15 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.DisableCache(System.Boolean)">
+            <summary>
+                设置禁用 HTTP 缓存
+            </summary>
+            <param name="disabled">布尔值</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.SetEventHandler(System.Type)">
             <summary>
                 设置 HTTP 远程请求事件处理程序
@@ -2716,13 +2725,14 @@
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
             </param>
         </member>
-        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogResponseHeadersAndSummary(System.Net.Http.HttpResponseMessage)">
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogResponseHeadersAndSummary(System.Net.Http.HttpResponseMessage,System.Int64)">
             <summary>
                 记录常规和响应标头
             </summary>
             <param name="httpResponseMessage">
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </param>
+            <param name="requestDuration">请求耗时（毫秒）</param>
         </member>
         <member name="M:HttpAgent.ProfilerDelegatingHandler.Log(System.String)">
             <summary>

@@ -53,7 +53,7 @@ public class ProfilerDelegatingHandlerTests
         httpResponseMessage.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
         httpResponseMessage.Content.Headers.TryAddWithoutValidation("Content-Type", "application/json");
 
-        handler.LogResponseHeadersAndSummary(httpResponseMessage);
+        handler.LogResponseHeadersAndSummary(httpResponseMessage, 200);
     }
 
     [Fact]

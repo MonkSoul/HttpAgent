@@ -808,6 +808,20 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
+    ///     设置禁用 HTTP 缓存
+    /// </summary>
+    /// <param name="disabled">布尔值</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder DisableCache(bool disabled)
+    {
+        DisableCacheEnabled = disabled;
+
+        return this;
+    }
+
+    /// <summary>
     ///     设置 HTTP 远程请求事件处理程序
     /// </summary>
     /// <param name="requestEventHandlerType">实现 <see cref="IHttpRequestEventHandler" /> 接口的类型</param>

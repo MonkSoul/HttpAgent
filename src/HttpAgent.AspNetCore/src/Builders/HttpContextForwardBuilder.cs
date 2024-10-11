@@ -5,7 +5,7 @@
 namespace HttpAgent;
 
 /// <summary>
-///     <see cref="HttpContext"/> 转发构建器
+///     <see cref="HttpContext" /> 转发构建器
 /// </summary>
 public sealed class HttpContextForwardBuilder
 {

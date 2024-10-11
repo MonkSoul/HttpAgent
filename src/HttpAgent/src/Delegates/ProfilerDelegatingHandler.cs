@@ -19,11 +19,20 @@ public sealed class ProfilerDelegatingHandler(ILogger<Logging> logger) : Delegat
         // 记录请求标头
         LogRequestHeaders(request);
 
+        // 初始化 Stopwatch 实例并开启计时操作
+        var stopwatch = Stopwatch.StartNew();
+
         // 发送 HTTP 远程请求
         var httpResponseMessage = base.Send(request, cancellationToken);
 
+        // 获取请求耗时
+        var requestDuration = stopwatch.ElapsedMilliseconds;
+
+        // 停止计时
+        stopwatch.Stop();
+
         // 记录常规和响应标头
-        LogResponseHeadersAndSummary(httpResponseMessage);
+        LogResponseHeadersAndSummary(httpResponseMessage, requestDuration);
 
         return httpResponseMessage;
     }
@@ -35,11 +44,20 @@ public sealed class ProfilerDelegatingHandler(ILogger<Logging> logger) : Delegat
         // 记录请求标头
         LogRequestHeaders(request);
 
+        // 初始化 Stopwatch 实例并开启计时操作
+        var stopwatch = Stopwatch.StartNew();
+
         // 发送 HTTP 远程请求
         var httpResponseMessage = await base.SendAsync(request, cancellationToken);
 
+        // 获取请求耗时
+        var requestDuration = stopwatch.ElapsedMilliseconds;
+
+        // 停止计时
+        stopwatch.Stop();
+
         // 记录常规和响应标头
-        LogResponseHeadersAndSummary(httpResponseMessage);
+        LogResponseHeadersAndSummary(httpResponseMessage, requestDuration);
 
         return httpResponseMessage;
     }
@@ -58,8 +76,10 @@ public sealed class ProfilerDelegatingHandler(ILogger<Logging> logger) : Delegat
     /// <param name="httpResponseMessage">
     ///     <see cref="HttpResponseMessage" />
     /// </param>
-    internal void LogResponseHeadersAndSummary(HttpResponseMessage httpResponseMessage) =>
-        Log(httpResponseMessage.ProfilerGeneralAndHeaders());
+    /// <param name="requestDuration">请求耗时（毫秒）</param>
+    internal void LogResponseHeadersAndSummary(HttpResponseMessage httpResponseMessage, long requestDuration) =>
+        Log(httpResponseMessage.ProfilerGeneralAndHeaders(generalCustomKeyValues:
+            [new KeyValuePair<string, IEnumerable<string>>("Request Duration (ms)", [$"{requestDuration:N2}"])]));
 
     /// <summary>
     ///     打印日志

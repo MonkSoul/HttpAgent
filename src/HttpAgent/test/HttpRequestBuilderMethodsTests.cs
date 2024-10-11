@@ -949,6 +949,9 @@ public class HttpRequestBuilderMethodsTests
         httpRequestBuilder.DisableCache();
 
         Assert.True(httpRequestBuilder.DisableCacheEnabled);
+
+        httpRequestBuilder.DisableCache(false);
+        Assert.False(httpRequestBuilder.DisableCacheEnabled);
     }
 
     [Fact]
