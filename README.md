@@ -1,10 +1,10 @@
 # HttpAgent
 
-[[license](https://img.shields.io/badge/license-MIT-orange?cacheSeconds=10800)](https://gitee.com/dotnetchina/HttpAgent/blob/master/LICENSE) [[nuget](https://img.shields.io/nuget/v/HttpAgent.svg?cacheSeconds=10800)](https://www.nuget.org/packages/HttpAgent) [[dotNET China](https://img.shields.io/badge/organization-dotNET%20China-yellow?cacheSeconds=10800)](https://gitee.com/dotnetchina)
+[![license](https://img.shields.io/badge/license-MIT-orange?cacheSeconds=10800)](https://gitee.com/dotnetchina/HttpAgent/blob/master/LICENSE) [![nuget](https://img.shields.io/nuget/v/HttpAgent.svg?cacheSeconds=10800)](https://www.nuget.org/packages/HttpAgent) [![dotNET China](https://img.shields.io/badge/organization-dotNET%20China-yellow?cacheSeconds=10800)](https://gitee.com/dotnetchina)
 
 HttpAgent is a high-performance, flexible, and user-friendly open-source library that provides comprehensive support for HTTP functionalities, including file transfer, polling, testing tools, real-time communication, request management, media type handling, MessagePack support, and more. It is characterized by low resource consumption and high test coverage.
 
-[HttpAgent.drawio](https://gitee.com/dotnetchina/HttpAgent/raw/master/drawio/HttpAgent.drawio.png "HttpAgent.drawio.png")
+![HttpAgent.drawio](https://gitee.com/dotnetchina/HttpAgent/raw/master/drawio/HttpAgent.drawio.png "HttpAgent.drawio.png")
 
 [**View High-Definition Architecture Diagram**](https://diagram-viewer.giteeusercontent.com?repo=dotnetchina/HttpAgent&ref=master&file=drawio/HttpAgent.drawio)
 
