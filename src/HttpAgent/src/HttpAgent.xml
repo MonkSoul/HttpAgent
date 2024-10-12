@@ -6748,7 +6748,7 @@
                 WebSocket 客户端
             </summary>
             <summary>
-               客户端
+                WebSocket 客户端
             </summary>
         </member>
         <member name="F:HttpAgent.WebSocketClient._clientWebSocket">
@@ -6759,7 +6759,7 @@
                 取消接收服务器消息标记
             </summary>
         </member>
-        <member name="F:HttpAgent.WebSocketClient._receiveMessagesTask">
+        <member name="F:HttpAgent.WebSocketClient._receiveTask">
             <summary>
                 接收服务器消息任务
             </summary>
@@ -6810,9 +6810,9 @@
                 <see cref="T:System.Threading.Tasks.Task" />
             </returns>
         </member>
-        <member name="M:HttpAgent.WebSocketClient.WaitForReceptionAsync(System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.WebSocketClient.WaitToReceiveAsync(System.Threading.CancellationToken)">
             <summary>
-                等待接收服务器消息完成
+                等待接收服务器消息
             </summary>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
@@ -6826,7 +6826,7 @@
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
-        <member name="M:HttpAgent.WebSocketClient.ReceiveMessagesAsync(System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.WebSocketClient.ReceiveAsync(System.Threading.CancellationToken)">
             <summary>
                 接收服务器消息
             </summary>
@@ -6872,12 +6872,12 @@
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
-        <member name="E:HttpAgent.WebSocketClient.MessageReceived">
+        <member name="E:HttpAgent.WebSocketClient.Received">
             <summary>
                 接收文本消息事件
             </summary>
         </member>
-        <member name="E:HttpAgent.WebSocketClient.BinaryMessageReceived">
+        <member name="E:HttpAgent.WebSocketClient.BinaryReceived">
             <summary>
                 接收二进制消息事件
             </summary>
@@ -6907,12 +6907,12 @@
                 断开连接时触发事件
             </summary>
         </member>
-        <member name="E:HttpAgent.WebSocketClient.StartedReceivingMessages">
+        <member name="E:HttpAgent.WebSocketClient.StartedReceiving">
             <summary>
                 开始接收消息时触发事件
             </summary>
         </member>
-        <member name="E:HttpAgent.WebSocketClient.StoppedReceivingMessages">
+        <member name="E:HttpAgent.WebSocketClient.StoppedReceiving">
             <summary>
                 停止接收消息时触发事件
             </summary>
@@ -6942,23 +6942,23 @@
                 触发断开连接事件
             </summary>
         </member>
-        <member name="M:HttpAgent.WebSocketClient.OnStartedReceivingMessages">
+        <member name="M:HttpAgent.WebSocketClient.OnStartedReceiving">
             <summary>
                 触发开始接收消息事件
             </summary>
         </member>
-        <member name="M:HttpAgent.WebSocketClient.OnStoppedReceivingMessages">
+        <member name="M:HttpAgent.WebSocketClient.OnStoppedReceiving">
             <summary>
                 触发停止接收消息事件
             </summary>
         </member>
-        <member name="M:HttpAgent.WebSocketClient.OnMessageReceived(System.String)">
+        <member name="M:HttpAgent.WebSocketClient.OnReceived(System.String)">
             <summary>
                 触发接收文本消息事件
             </summary>
             <param name="message">消息</param>
         </member>
-        <member name="M:HttpAgent.WebSocketClient.OnBinaryMessageReceived(System.Byte[])">
+        <member name="M:HttpAgent.WebSocketClient.OnBinaryReceived(System.Byte[])">
             <summary>
                 触发接收二进制消息事件
             </summary>
@@ -6990,7 +6990,7 @@
             <summary>
                 重新连接的间隔时间（毫秒）
             </summary>
-            <remarks>默认值为 2000 毫秒。</remarks>
+            <remarks>默认值为 2 秒。</remarks>
         </member>
         <member name="P:HttpAgent.WebSocketClientOptions.MaxReconnectRetries">
             <summary>

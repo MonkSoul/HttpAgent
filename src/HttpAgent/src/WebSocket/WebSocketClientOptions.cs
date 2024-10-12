@@ -14,8 +14,11 @@ public sealed class WebSocketClientOptions
     /// </summary>
     /// <param name="serverUri">服务器地址</param>
     public WebSocketClientOptions(string serverUri)
-        : this(new Uri(serverUri ?? throw new ArgumentNullException(nameof(serverUri))))
     {
+        // 空检查
+        ArgumentException.ThrowIfNullOrWhiteSpace(serverUri);
+
+        ServerUri = new Uri(serverUri);
     }
 
     /// <summary>
@@ -38,8 +41,8 @@ public sealed class WebSocketClientOptions
     /// <summary>
     ///     重新连接的间隔时间（毫秒）
     /// </summary>
-    /// <remarks>默认值为 2000 毫秒。</remarks>
-    public int ReconnectInterval { get; set; } = 2000;
+    /// <remarks>默认值为 2 秒。</remarks>
+    public TimeSpan ReconnectInterval { get; set; } = TimeSpan.FromSeconds(2);
 
     /// <summary>
     ///     最大重连次数

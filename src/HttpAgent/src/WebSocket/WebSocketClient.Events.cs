@@ -5,19 +5,19 @@
 namespace HttpAgent;
 
 /// <summary>
-///    客户端
+///     WebSocket 客户端
 /// </summary>
 public sealed partial class WebSocketClient
 {
     /// <summary>
     ///     接收文本消息事件
     /// </summary>
-    public event EventHandler<string>? MessageReceived;
+    public event EventHandler<string>? Received;
 
     /// <summary>
     ///     接收二进制消息事件
     /// </summary>
-    public event EventHandler<byte[]>? BinaryMessageReceived;
+    public event EventHandler<byte[]>? BinaryReceived;
 
     /// <summary>
     ///     开始连接时触发事件
@@ -47,12 +47,12 @@ public sealed partial class WebSocketClient
     /// <summary>
     ///     开始接收消息时触发事件
     /// </summary>
-    public event EventHandler<EventArgs>? StartedReceivingMessages;
+    public event EventHandler<EventArgs>? StartedReceiving;
 
     /// <summary>
     ///     停止接收消息时触发事件
     /// </summary>
-    public event EventHandler<EventArgs>? StoppedReceivingMessages;
+    public event EventHandler<EventArgs>? StoppedReceiving;
 
     /// <summary>
     ///     触发开始连接事件
@@ -82,22 +82,22 @@ public sealed partial class WebSocketClient
     /// <summary>
     ///     触发开始接收消息事件
     /// </summary>
-    internal void OnStartedReceivingMessages() => StartedReceivingMessages?.Invoke(this, EventArgs.Empty);
+    internal void OnStartedReceiving() => StartedReceiving?.Invoke(this, EventArgs.Empty);
 
     /// <summary>
     ///     触发停止接收消息事件
     /// </summary>
-    internal void OnStoppedReceivingMessages() => StoppedReceivingMessages?.Invoke(this, EventArgs.Empty);
+    internal void OnStoppedReceiving() => StoppedReceiving?.Invoke(this, EventArgs.Empty);
 
     /// <summary>
     ///     触发接收文本消息事件
     /// </summary>
     /// <param name="message">消息</param>
-    internal void OnMessageReceived(string message) => MessageReceived?.Invoke(this, message);
+    internal void OnReceived(string message) => Received?.Invoke(this, message);
 
     /// <summary>
     ///     触发接收二进制消息事件
     /// </summary>
     /// <param name="bytes">二进制消息</param>
-    internal void OnBinaryMessageReceived(byte[] bytes) => BinaryMessageReceived?.Invoke(this, bytes);
+    internal void OnBinaryReceived(byte[] bytes) => BinaryReceived?.Invoke(this, bytes);
 }

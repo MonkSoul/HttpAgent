@@ -20,7 +20,7 @@ public sealed partial class WebSocketClient : IDisposable
     /// <summary>
     ///     接收服务器消息任务
     /// </summary>
-    internal Task? _receiveMessagesTask;
+    internal Task? _receiveTask;
 
     /// <summary>
     ///     <inheritdoc cref="WebSocketClient" />
@@ -67,7 +67,7 @@ public sealed partial class WebSocketClient : IDisposable
         _messageCancellationTokenSource?.Dispose();
         _messageCancellationTokenSource = null;
 
-        _receiveMessagesTask?.Wait();
+        _receiveTask?.Wait();
     }
 
     /// <summary>
@@ -150,27 +150,27 @@ public sealed partial class WebSocketClient : IDisposable
     public Task ListeningAsync(CancellationToken cancellationToken = default)
     {
         // 初始化接收服务器消息任务
-        _receiveMessagesTask = ReceiveMessagesAsync(cancellationToken);
+        _receiveTask = ReceiveAsync(cancellationToken);
 
         return Task.CompletedTask;
     }
 
     /// <summary>
-    ///     等待接收服务器消息完成
+    ///     等待接收服务器消息
     /// </summary>
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
-    public async Task WaitForReceptionAsync(CancellationToken cancellationToken = default)
+    public async Task WaitToReceiveAsync(CancellationToken cancellationToken = default)
     {
         // 空检查
-        if (_receiveMessagesTask is not null)
+        if (_receiveTask is not null)
         {
-            await _receiveMessagesTask;
+            await _receiveTask;
         }
         else
         {
-            await ReceiveMessagesAsync(cancellationToken);
+            await ReceiveAsync(cancellationToken);
         }
     }
 
@@ -202,7 +202,7 @@ public sealed partial class WebSocketClient : IDisposable
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
-    internal async Task ReceiveMessagesAsync(CancellationToken cancellationToken)
+    internal async Task ReceiveAsync(CancellationToken cancellationToken)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(_clientWebSocket);
@@ -211,7 +211,7 @@ public sealed partial class WebSocketClient : IDisposable
         _messageCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
         // 触发开始接收消息事件
-        var onStartedReceiving = OnStartedReceivingMessages;
+        var onStartedReceiving = OnStartedReceiving;
         onStartedReceiving.TryInvoke();
 
         // 初始化缓冲区大小
@@ -242,8 +242,8 @@ public sealed partial class WebSocketClient : IDisposable
                             var message = Encoding.UTF8.GetString(buffer, 0, received.Count);
 
                             // 触发接收文本消息事件
-                            var onMessageReceived = OnMessageReceived;
-                            onMessageReceived.TryInvoke(message);
+                            var onReceived = OnReceived;
+                            onReceived.TryInvoke(message);
                             break;
                         case WebSocketMessageType.Binary:
                             // 将接收到的数据从原始缓冲区复制到新创建的字节数组中
@@ -251,8 +251,8 @@ public sealed partial class WebSocketClient : IDisposable
                             Buffer.BlockCopy(buffer, 0, bytes, 0, received.Count);
 
                             // 触发接收二进制消息事件
-                            var onBinaryMessageReceived = OnBinaryMessageReceived;
-                            onBinaryMessageReceived.TryInvoke(bytes);
+                            var onBinaryReceived = OnBinaryReceived;
+                            onBinaryReceived.TryInvoke(bytes);
                             break;
                     }
 
@@ -276,8 +276,8 @@ public sealed partial class WebSocketClient : IDisposable
         finally
         {
             // 触发停止接收消息事件
-            var onStoppedReceivingMessages = OnStoppedReceivingMessages;
-            onStoppedReceivingMessages.TryInvoke();
+            var onStoppedReceiving = OnStoppedReceiving;
+            onStoppedReceiving.TryInvoke();
 
             // 断开连接
             await DisconnectAsync(cancellationToken);
