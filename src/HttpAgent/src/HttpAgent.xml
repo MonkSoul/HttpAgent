@@ -1966,6 +1966,7 @@
             <summary>
                 默认重新连接的间隔时间（毫秒）
             </summary>
+            <remarks>默认值为 2000 毫秒。</remarks>
         </member>
         <member name="P:HttpAgent.HttpServerSentEventsBuilder.MaxRetries">
             <summary>
@@ -6742,35 +6743,334 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="T:Microsoft.Extensions.DependencyInjection.HttpRemoteServiceCollectionExtensions">
+        <member name="T:HttpAgent.WebSocketClient">
             <summary>
-                HTTP 远程请求模块 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> 拓展类
+                WebSocket 客户端
+            </summary>
+            <summary>
+                WebSocket 客户端
             </summary>
         </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.HttpRemoteServiceCollectionExtensions.AddHttpRemote(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{HttpAgent.HttpRemoteBuilder})">
-            <summary>
-                添加 HTTP 远程请求服务
-            </summary>
-            <param name="services">
-                <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
-            </param>
-            <param name="configure">自定义配置委托</param>
-            <returns>
-                <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
-            </returns>
+        <member name="F:HttpAgent.WebSocketClient._clientWebSocket">
+            <inheritdoc cref="T:System.Net.WebSockets.ClientWebSocket" />
         </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.HttpRemoteServiceCollectionExtensions.AddHttpRemote(Microsoft.Extensions.DependencyInjection.IServiceCollection,HttpAgent.HttpRemoteBuilder)">
+        <member name="F:HttpAgent.WebSocketClient._messageCancellationTokenSource">
             <summary>
-                添加 HTTP 远程请求服务
+                取消接收服务器消息标记
             </summary>
-            <param name="services">
-                <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
+        </member>
+        <member name="F:HttpAgent.WebSocketClient._receiveMessagesTask">
+            <summary>
+                接收服务器消息任务
+            </summary>
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.WebSocketClient" />
+            </summary>
+            <param name="serverUri">服务器地址</param>
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.#ctor(HttpAgent.WebSocketClientOptions)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.WebSocketClient" />
+            </summary>
+            <param name="options">
+                <see cref="T:HttpAgent.WebSocketClientOptions" />
             </param>
-            <param name="httpRemoteBuilder">
-                <see cref="T:HttpAgent.HttpRemoteBuilder" />
+        </member>
+        <member name="P:HttpAgent.WebSocketClient.Options">
+            <summary>
+                <see cref="T:HttpAgent.WebSocketClientOptions" />
+            </summary>
+        </member>
+        <member name="P:HttpAgent.WebSocketClient.CurrentReconnectRetries">
+            <summary>
+                当前重连次数
+            </summary>
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.ConnectAsync(System.Threading.CancellationToken)">
+            <summary>
+                连接到服务器
+            </summary>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.ReconnectAsync(System.Threading.CancellationToken)">
+            <summary>
+                重新连接到服务器
+            </summary>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.ReceiveMessagesAsync(System.Threading.CancellationToken)">
+            <summary>
+                接收服务器消息
+            </summary>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.SendAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+                向服务器发送消息
+            </summary>
+            <param name="message">字符串消息</param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.SendAsync(System.String,System.Net.WebSockets.WebSocketMessageType,System.Threading.CancellationToken)">
+            <summary>
+                向服务器发送消息
+            </summary>
+            <param name="message">字符串消息</param>
+            <param name="webSocketMessageType">
+                <see cref="T:System.Net.WebSockets.WebSocketMessageType" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.SendAsync(System.Byte[],System.Threading.CancellationToken)">
+            <summary>
+                向服务器发送消息
+            </summary>
+            <param name="bytes">二进制消息</param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.DisconnectAsync(System.Threading.CancellationToken)">
+            <summary>
+                断开连接
+            </summary>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+        </member>
+        <member name="E:HttpAgent.WebSocketClient.MessageReceived">
+            <summary>
+                从 WebSocket 服务器接收文本消息时触发事件
+            </summary>
+        </member>
+        <member name="E:HttpAgent.WebSocketClient.BinaryMessageReceived">
+            <summary>
+                从 WebSocket 服务器接收二进制消息时触发事件
+            </summary>
+        </member>
+        <member name="E:HttpAgent.WebSocketClient.Connecting">
+            <summary>
+                开始连接时触发事件
+            </summary>
+        </member>
+        <member name="E:HttpAgent.WebSocketClient.Connected">
+            <summary>
+                连接成功时触发事件
+            </summary>
+        </member>
+        <member name="E:HttpAgent.WebSocketClient.Reconnecting">
+            <summary>
+                开始重新连接时触发事件
+            </summary>
+        </member>
+        <member name="E:HttpAgent.WebSocketClient.Reconnected">
+            <summary>
+                重新连接成功时触发事件
+            </summary>
+        </member>
+        <member name="E:HttpAgent.WebSocketClient.Disconnected">
+            <summary>
+                断开连接时触发事件
+            </summary>
+        </member>
+        <member name="E:HttpAgent.WebSocketClient.StartedReceivingMessages">
+            <summary>
+                开始接收消息时触发事件
+            </summary>
+        </member>
+        <member name="E:HttpAgent.WebSocketClient.StoppedReceivingMessages">
+            <summary>
+                停止接收消息时触发事件
+            </summary>
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.OnConnecting">
+            <summary>
+                触发开始连接事件
+            </summary>
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.OnConnected">
+            <summary>
+                触发连接成功事件
+            </summary>
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.OnReconnecting">
+            <summary>
+                触发开始重新连接事件
+            </summary>
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.OnReconnected">
+            <summary>
+                触发重新连接成功事件
+            </summary>
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.OnDisconnected">
+            <summary>
+                触发断开连接事件
+            </summary>
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.OnStartedReceivingMessages">
+            <summary>
+                触发开始接收消息事件
+            </summary>
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.OnStoppedReceivingMessages">
+            <summary>
+                触发停止接收消息事件
+            </summary>
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.OnMessageReceived(System.String)">
+            <summary>
+                触发文本消息接收事件
+            </summary>
+            <param name="message">消息</param>
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.OnBinaryMessageReceived(System.Byte[])">
+            <summary>
+                触发二进制消息接收事件
+            </summary>
+            <param name="bytes">二进制消息</param>
+        </member>
+        <member name="T:HttpAgent.WebSocketClientOptions">
+            <summary>
+                WebSocket 客户端配置选项
+            </summary>
+        </member>
+        <member name="M:HttpAgent.WebSocketClientOptions.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.WebSocketClientOptions" />
+            </summary>
+            <param name="serverUri">服务器地址</param>
+        </member>
+        <member name="M:HttpAgent.WebSocketClientOptions.#ctor(System.Uri)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.WebSocketClientOptions" />
+            </summary>
+            <param name="serverUri">服务器地址</param>
+        </member>
+        <member name="P:HttpAgent.WebSocketClientOptions.ServerUri">
+            <summary>
+                服务器地址
+            </summary>
+        </member>
+        <member name="P:HttpAgent.WebSocketClientOptions.ReconnectInterval">
+            <summary>
+                重新连接的间隔时间（毫秒）
+            </summary>
+            <remarks>默认值为 2000 毫秒。</remarks>
+        </member>
+        <member name="P:HttpAgent.WebSocketClientOptions.MaxReconnectRetries">
+            <summary>
+                最大重连次数
+            </summary>
+            <remarks>默认最大重连次数为 10。</remarks>
+        </member>
+        <member name="P:HttpAgent.WebSocketClientOptions.Timeout">
+            <summary>
+                超时时间
+            </summary>
+        </member>
+        <member name="T:System.Debugging">
+            <summary>
+                向事件管理器中输出事件信息
+            </summary>
+        </member>
+        <member name="M:System.Debugging.WriteLine(System.Int32,System.String)">
+            <summary>
+                输出一行事件信息
+            </summary>
+            <param name="level">
+                <para>信息级别</para>
+                <list type="number">
+                    <item>
+                        <description>跟踪</description>
+                    </item>
+                    <item>
+                        <description>信息</description>
+                    </item>
+                    <item>
+                        <description>警告</description>
+                    </item>
+                    <item>
+                        <description>错误</description>
+                    </item>
+                    <item>
+                        <description>文件</description>
+                    </item>
+                    <item>
+                        <description>提示</description>
+                    </item>
+                    <item>
+                        <description>搜索</description>
+                    </item>
+                    <item>
+                        <description>时钟</description>
+                    </item>
+                </list>
+            </param>
+            <param name="message">事件信息</param>
+        </member>
+        <member name="M:System.Debugging.Error(System.String)">
+            <summary>
+                输出错误级别事件信息
+            </summary>
+            <param name="message">事件信息</param>
+        </member>
+        <member name="M:System.Debugging.File(System.String)">
+            <summary>
+                输出文件级别事件信息
+            </summary>
+            <param name="message">事件信息</param>
+        </member>
+        <member name="M:System.Debugging.GetLevelEmoji(System.Int32)">
+            <summary>
+                获取信息级别对应的 emoji
+            </summary>
+            <param name="level">
+                <para>信息级别</para>
+                <list type="number">
+                    <item>
+                        <description>跟踪</description>
+                    </item>
+                    <item>
+                        <description>信息</description>
+                    </item>
+                    <item>
+                        <description>警告</description>
+                    </item>
+                    <item>
+                        <description>错误</description>
+                    </item>
+                    <item>
+                        <description>文件</description>
+                    </item>
+                    <item>
+                        <description>提示</description>
+                    </item>
+                    <item>
+                        <description>搜索</description>
+                    </item>
+                    <item>
+                        <description>时钟</description>
+                    </item>
+                </list>
             </param>
             <returns>
-                <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
+                <see cref="T:System.String" />
             </returns>
         </member>
         <member name="T:System.Text.RegularExpressions.Generated.PlaceholderRegex_0">
@@ -6860,6 +7160,37 @@
         </member>
         <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_ascii_60FF03FEFFFF87FEFFFF47">
             <summary>Supports searching for characters in or not in "-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~".</summary>
+        </member>
+        <member name="T:Microsoft.Extensions.DependencyInjection.HttpRemoteServiceCollectionExtensions">
+            <summary>
+                HTTP 远程请求模块 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> 拓展类
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.HttpRemoteServiceCollectionExtensions.AddHttpRemote(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{HttpAgent.HttpRemoteBuilder})">
+            <summary>
+                添加 HTTP 远程请求服务
+            </summary>
+            <param name="services">
+                <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
+            </param>
+            <param name="configure">自定义配置委托</param>
+            <returns>
+                <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
+            </returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.HttpRemoteServiceCollectionExtensions.AddHttpRemote(Microsoft.Extensions.DependencyInjection.IServiceCollection,HttpAgent.HttpRemoteBuilder)">
+            <summary>
+                添加 HTTP 远程请求服务
+            </summary>
+            <param name="services">
+                <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
+            </param>
+            <param name="httpRemoteBuilder">
+                <see cref="T:HttpAgent.HttpRemoteBuilder" />
+            </param>
+            <returns>
+                <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
+            </returns>
         </member>
     </members>
 </doc>

@@ -84,7 +84,7 @@ internal sealed class ServerSentEventsManager
     /// </param>
     internal void Start(CancellationToken cancellationToken = default)
     {
-        // 创建关联的取消标记
+        // 创建关联的取消标识
         using var messageCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
         // 初始化接收事件消息任务
@@ -127,7 +127,7 @@ internal sealed class ServerSentEventsManager
                     continue;
                 }
 
-                // 重置失败次数计数器
+                // 重置当前重试次数
                 CurrentRetries = 0;
 
                 // 发送事件数据到通道
@@ -149,7 +149,7 @@ internal sealed class ServerSentEventsManager
             // 处理与事件源的连接错误
             HandleError(e);
 
-            // 检查是否达到了最大重试次数
+            // 检查是否达到了最大当前重试次数
             if (CurrentRetries < _httpServerSentEventsBuilder.MaxRetries)
             {
                 // 重新开始接收
@@ -184,7 +184,7 @@ internal sealed class ServerSentEventsManager
     /// </param>
     internal async Task StartAsync(CancellationToken cancellationToken = default)
     {
-        // 创建关联的取消标记
+        // 创建关联的取消标识
         using var messageCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
         // 初始化接收事件消息任务
@@ -228,7 +228,7 @@ internal sealed class ServerSentEventsManager
                     continue;
                 }
 
-                // 重置失败次数计数器
+                // 重置当前重试次数
                 CurrentRetries = 0;
 
                 // 发送事件数据到通道
@@ -250,7 +250,7 @@ internal sealed class ServerSentEventsManager
             // 处理与事件源的连接错误
             HandleError(e);
 
-            // 检查是否达到了最大重试次数
+            // 检查是否达到了最大当前重试次数
             if (CurrentRetries < _httpServerSentEventsBuilder.MaxRetries)
             {
                 // 重新开始接收
@@ -416,8 +416,10 @@ internal sealed class ServerSentEventsManager
 
                     break;
                 }
-                catch
+                catch (Exception e)
                 {
+                    // 输出调试事件
+                    Debugging.Error(e.Message);
                 }
             }
         }
@@ -425,8 +427,10 @@ internal sealed class ServerSentEventsManager
         {
             // 任务被取消
         }
-        catch
+        catch (Exception e)
         {
+            // 输出调试事件
+            Debugging.Error(e.Message);
         }
     }
 

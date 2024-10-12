@@ -27,6 +27,7 @@ public sealed class HttpServerSentEventsBuilder
     /// <summary>
     ///     默认重新连接的间隔时间（毫秒）
     /// </summary>
+    /// <remarks>默认值为 2000 毫秒。</remarks>
     public int DefaultRetryInterval { get; private set; } = 2000;
 
     /// <summary>

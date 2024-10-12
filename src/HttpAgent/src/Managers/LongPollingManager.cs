@@ -75,7 +75,7 @@ internal sealed class LongPollingManager
     /// </param>
     internal void Start(CancellationToken cancellationToken = default)
     {
-        // 创建关联的取消标记
+        // 创建关联的取消标识
         using var dataCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
         // 初始化接收数据任务
@@ -97,7 +97,7 @@ internal sealed class LongPollingManager
                 // 检查是否请求成功
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
-                    // 重置失败次数计数器
+                    // 重置当前重试次数
                     CurrentRetries = 0;
 
                     // 发送响应消息对象到通道
@@ -112,9 +112,12 @@ internal sealed class LongPollingManager
             {
                 throw;
             }
-            catch
+            catch (Exception e)
             {
-                // 增加失败次数计数器
+                // 输出调试事件
+                Debugging.Error(e.Message);
+
+                // 递增当前重试次数
                 CurrentRetries++;
 
                 // 检查是否超过了最大连续失败次数
@@ -144,7 +147,7 @@ internal sealed class LongPollingManager
     /// </param>
     internal async Task StartAsync(CancellationToken cancellationToken = default)
     {
-        // 创建关联的取消标记
+        // 创建关联的取消标识
         using var dataCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
         // 初始化接收数据任务
@@ -166,7 +169,7 @@ internal sealed class LongPollingManager
                 // 检查是否请求成功
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
-                    // 重置失败次数计数器
+                    // 重置当前重试次数
                     CurrentRetries = 0;
 
                     // 发送响应消息对象到通道
@@ -181,9 +184,12 @@ internal sealed class LongPollingManager
             {
                 throw;
             }
-            catch
+            catch (Exception e)
             {
-                // 增加失败次数计数器
+                // 输出调试事件
+                Debugging.Error(e.Message);
+
+                // 递增当前重试次数
                 CurrentRetries++;
 
                 // 检查是否超过了最大连续失败次数
@@ -225,7 +231,7 @@ internal sealed class LongPollingManager
             return true;
         }
 
-        // 如果响应状态码不是成功的，则增加失败次数计数器
+        // 如果响应状态码不是成功的，则递增当前重试次数
         if (!httpResponseMessage.IsSuccessStatusCode)
         {
             CurrentRetries++;
@@ -267,8 +273,10 @@ internal sealed class LongPollingManager
 
                     break;
                 }
-                catch
+                catch (Exception e)
                 {
+                    // 输出调试事件
+                    Debugging.Error(e.Message);
                 }
             }
         }
@@ -276,8 +284,10 @@ internal sealed class LongPollingManager
         {
             // 任务被取消
         }
-        catch
+        catch (Exception e)
         {
+            // 输出调试事件
+            Debugging.Error(e.Message);
         }
     }
 

@@ -76,7 +76,7 @@ internal sealed class FileUploadManager
     {
         HttpResponseMessage httpResponseMessage;
 
-        // 创建关联的取消标记
+        // 创建关联的取消标识
         using var progressCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
         // 初始化进度报告任务
@@ -135,7 +135,7 @@ internal sealed class FileUploadManager
     {
         HttpResponseMessage httpResponseMessage;
 
-        // 创建关联的取消标记
+        // 创建关联的取消标识
         using var progressCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
         // 初始化进度报告任务
@@ -217,8 +217,10 @@ internal sealed class FileUploadManager
 
                     break;
                 }
-                catch
+                catch (Exception e)
                 {
+                    // 输出调试事件
+                    Debugging.Error(e.Message);
                 }
             }
         }
@@ -226,8 +228,10 @@ internal sealed class FileUploadManager
         {
             // 任务被取消
         }
-        catch
+        catch (Exception e)
         {
+            // 输出调试事件
+            Debugging.Error(e.Message);
         }
     }
 
