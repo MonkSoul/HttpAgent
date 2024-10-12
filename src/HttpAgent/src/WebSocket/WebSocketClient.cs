@@ -208,7 +208,7 @@ public sealed partial class WebSocketClient : IDisposable
                             // 解码接收到的文本消息
                             var message = Encoding.UTF8.GetString(buffer, 0, received.Count);
 
-                            // 触发文本消息接收事件
+                            // 触发接收文本消息事件
                             var onMessageReceived = OnMessageReceived;
                             onMessageReceived.TryInvoke(message);
                             break;
@@ -217,7 +217,7 @@ public sealed partial class WebSocketClient : IDisposable
                             var bytes = new byte[received.Count];
                             Buffer.BlockCopy(buffer, 0, bytes, 0, received.Count);
 
-                            // 触发二进制消息接收事件
+                            // 触发接收二进制消息事件
                             var onBinaryMessageReceived = OnBinaryMessageReceived;
                             onBinaryMessageReceived.TryInvoke(bytes);
                             break;

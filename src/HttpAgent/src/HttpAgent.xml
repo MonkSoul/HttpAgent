@@ -6748,7 +6748,7 @@
                 WebSocket 客户端
             </summary>
             <summary>
-                WebSocket 客户端
+               客户端
             </summary>
         </member>
         <member name="F:HttpAgent.WebSocketClient._clientWebSocket">
@@ -6855,12 +6855,12 @@
         </member>
         <member name="E:HttpAgent.WebSocketClient.MessageReceived">
             <summary>
-                从 WebSocket 服务器接收文本消息时触发事件
+                接收文本消息事件
             </summary>
         </member>
         <member name="E:HttpAgent.WebSocketClient.BinaryMessageReceived">
             <summary>
-                从 WebSocket 服务器接收二进制消息时触发事件
+                接收二进制消息事件
             </summary>
         </member>
         <member name="E:HttpAgent.WebSocketClient.Connecting">
@@ -6935,13 +6935,13 @@
         </member>
         <member name="M:HttpAgent.WebSocketClient.OnMessageReceived(System.String)">
             <summary>
-                触发文本消息接收事件
+                触发接收文本消息事件
             </summary>
             <param name="message">消息</param>
         </member>
         <member name="M:HttpAgent.WebSocketClient.OnBinaryMessageReceived(System.Byte[])">
             <summary>
-                触发二进制消息接收事件
+                触发接收二进制消息事件
             </summary>
             <param name="bytes">二进制消息</param>
         </member>

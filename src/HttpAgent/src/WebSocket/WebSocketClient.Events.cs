@@ -5,17 +5,17 @@
 namespace HttpAgent;
 
 /// <summary>
-///     WebSocket 客户端
+///    客户端
 /// </summary>
 public sealed partial class WebSocketClient
 {
     /// <summary>
-    ///     从 WebSocket 服务器接收文本消息时触发事件
+    ///     接收文本消息事件
     /// </summary>
     public event EventHandler<string>? MessageReceived;
 
     /// <summary>
-    ///     从 WebSocket 服务器接收二进制消息时触发事件
+    ///     接收二进制消息事件
     /// </summary>
     public event EventHandler<byte[]>? BinaryMessageReceived;
 
@@ -90,13 +90,13 @@ public sealed partial class WebSocketClient
     internal void OnStoppedReceivingMessages() => StoppedReceivingMessages?.Invoke(this, EventArgs.Empty);
 
     /// <summary>
-    ///     触发文本消息接收事件
+    ///     触发接收文本消息事件
     /// </summary>
     /// <param name="message">消息</param>
     internal void OnMessageReceived(string message) => MessageReceived?.Invoke(this, message);
 
     /// <summary>
-    ///     触发二进制消息接收事件
+    ///     触发接收二进制消息事件
     /// </summary>
     /// <param name="bytes">二进制消息</param>
     internal void OnBinaryMessageReceived(byte[] bytes) => BinaryMessageReceived?.Invoke(this, bytes);
