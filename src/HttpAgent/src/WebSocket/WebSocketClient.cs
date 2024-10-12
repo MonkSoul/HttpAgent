@@ -111,9 +111,6 @@ public sealed partial class WebSocketClient : IDisposable
             // 触发连接成功事件
             var onConnected = OnConnected;
             onConnected.TryInvoke();
-
-            // 初始化接收服务器消息任务
-            _receiveMessagesTask = ReceiveMessagesAsync(cancellationToken);
         }
         catch (Exception e) when (cancellationToken.IsCancellationRequested || e is OperationCanceledException)
         {
@@ -138,6 +135,42 @@ public sealed partial class WebSocketClient : IDisposable
             {
                 throw;
             }
+        }
+    }
+
+    /// <summary>
+    ///     开始监听服务器消息
+    /// </summary>
+    /// <param name="cancellationToken">
+    ///     <see cref="CancellationToken" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="Task" />
+    /// </returns>
+    public Task ListeningAsync(CancellationToken cancellationToken = default)
+    {
+        // 初始化接收服务器消息任务
+        _receiveMessagesTask = ReceiveMessagesAsync(cancellationToken);
+
+        return Task.CompletedTask;
+    }
+
+    /// <summary>
+    ///     等待接收服务器消息完成
+    /// </summary>
+    /// <param name="cancellationToken">
+    ///     <see cref="CancellationToken" />
+    /// </param>
+    public async Task WaitForReceptionAsync(CancellationToken cancellationToken = default)
+    {
+        // 空检查
+        if (_receiveMessagesTask is not null)
+        {
+            await _receiveMessagesTask;
+        }
+        else
+        {
+            await ReceiveMessagesAsync(cancellationToken);
         }
     }
 

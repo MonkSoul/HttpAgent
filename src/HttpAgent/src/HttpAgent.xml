@@ -6799,6 +6799,25 @@
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
+        <member name="M:HttpAgent.WebSocketClient.ListeningAsync(System.Threading.CancellationToken)">
+            <summary>
+                开始监听服务器消息
+            </summary>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.Threading.Tasks.Task" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.WaitForReceptionAsync(System.Threading.CancellationToken)">
+            <summary>
+                等待接收服务器消息完成
+            </summary>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+        </member>
         <member name="M:HttpAgent.WebSocketClient.ReconnectAsync(System.Threading.CancellationToken)">
             <summary>
                 重新连接到服务器
