@@ -54,4 +54,15 @@ public sealed class WebSocketClientOptions
     ///     超时时间
     /// </summary>
     public TimeSpan? Timeout { get; set; }
+
+    /// <summary>
+    ///     接收服务器新消息缓冲区大小
+    /// </summary>
+    /// <remarks>默认值为：4096。</remarks>
+    public int ReceiveBufferSize { get; set; } = 1024 * 4;
+
+    /// <summary>
+    ///     用于配置 <see cref="ConfigureClientWebSocketOptions" /> 的操作
+    /// </summary>
+    public Action<ClientWebSocketOptions>? ConfigureClientWebSocketOptions { get; set; }
 }

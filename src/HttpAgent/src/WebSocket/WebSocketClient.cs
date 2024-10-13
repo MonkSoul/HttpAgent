@@ -34,6 +34,15 @@ public sealed partial class WebSocketClient : IDisposable
     /// <summary>
     ///     <inheritdoc cref="WebSocketClient" />
     /// </summary>
+    /// <param name="serverUri">服务器地址</param>
+    public WebSocketClient(Uri serverUri)
+        : this(new WebSocketClientOptions(serverUri))
+    {
+    }
+
+    /// <summary>
+    ///     <inheritdoc cref="WebSocketClient" />
+    /// </summary>
     /// <param name="options">
     ///     <see cref="WebSocketClientOptions" />
     /// </param>
@@ -44,6 +53,9 @@ public sealed partial class WebSocketClient : IDisposable
 
         Options = options;
     }
+
+    /// <inheritdoc cref="WebSocketState" />
+    public WebSocketState? State => _clientWebSocket?.State;
 
     /// <summary>
     ///     <see cref="WebSocketClientOptions" />
@@ -68,6 +80,7 @@ public sealed partial class WebSocketClient : IDisposable
         _messageCancellationTokenSource = null;
 
         _receiveTask?.Wait();
+        _receiveTask = null;
     }
 
     /// <summary>
@@ -81,8 +94,11 @@ public sealed partial class WebSocketClient : IDisposable
         // 初始化 ClientWebSocket 实例
         _clientWebSocket ??= new ClientWebSocket();
 
+        // 调用用于配置 ConfigureClientWebSocketOptions 的操作
+        Options.ConfigureClientWebSocketOptions?.Invoke(_clientWebSocket.Options);
+
         // 检查连接是否处于正在连接或打开状态，如果是则跳过
-        if (_clientWebSocket.State is WebSocketState.Connecting or WebSocketState.Open)
+        if (State is WebSocketState.Connecting or WebSocketState.Open)
         {
             return;
         }
@@ -150,7 +166,7 @@ public sealed partial class WebSocketClient : IDisposable
     public Task ListeningAsync(CancellationToken cancellationToken = default)
     {
         // 初始化接收服务器消息任务
-        _receiveTask = ReceiveAsync(cancellationToken);
+        _receiveTask ??= ReceiveAsync(cancellationToken);
 
         return Task.CompletedTask;
     }
@@ -215,12 +231,12 @@ public sealed partial class WebSocketClient : IDisposable
         onStartedReceiving.TryInvoke();
 
         // 初始化缓冲区大小
-        var buffer = new byte[1024 * 4];
+        var buffer = new byte[Options.ReceiveBufferSize];
 
         try
         {
             // 循环读取服务器消息直到取消请求或连接处于非打开状态
-            while (!cancellationToken.IsCancellationRequested && _clientWebSocket.State == WebSocketState.Open)
+            while (!cancellationToken.IsCancellationRequested && State == WebSocketState.Open)
             {
                 try
                 {
@@ -312,7 +328,7 @@ public sealed partial class WebSocketClient : IDisposable
         ArgumentNullException.ThrowIfNull(_clientWebSocket);
 
         // 检查连接是否处于打开状态
-        if (_clientWebSocket.State != WebSocketState.Open)
+        if (State != WebSocketState.Open)
         {
             return;
         }
@@ -341,7 +357,7 @@ public sealed partial class WebSocketClient : IDisposable
         ArgumentNullException.ThrowIfNull(_clientWebSocket);
 
         // 检查连接是否处于打开状态
-        if (_clientWebSocket.State != WebSocketState.Open)
+        if (State != WebSocketState.Open)
         {
             return;
         }
@@ -365,7 +381,7 @@ public sealed partial class WebSocketClient : IDisposable
         ArgumentNullException.ThrowIfNull(_clientWebSocket);
 
         // 检查连接是否处于打开状态
-        if (_clientWebSocket.State != WebSocketState.Open)
+        if (State != WebSocketState.Open)
         {
             return;
         }

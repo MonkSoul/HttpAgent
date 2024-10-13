@@ -10,16 +10,6 @@ namespace HttpAgent;
 public sealed partial class WebSocketClient
 {
     /// <summary>
-    ///     接收文本消息事件
-    /// </summary>
-    public event EventHandler<string>? Received;
-
-    /// <summary>
-    ///     接收二进制消息事件
-    /// </summary>
-    public event EventHandler<byte[]>? BinaryReceived;
-
-    /// <summary>
     ///     开始连接时触发事件
     /// </summary>
     public event EventHandler<EventArgs>? Connecting;
@@ -53,6 +43,16 @@ public sealed partial class WebSocketClient
     ///     停止接收消息时触发事件
     /// </summary>
     public event EventHandler<EventArgs>? StoppedReceiving;
+
+    /// <summary>
+    ///     接收文本消息事件
+    /// </summary>
+    public event EventHandler<string>? Received;
+
+    /// <summary>
+    ///     接收二进制消息事件
+    /// </summary>
+    public event EventHandler<byte[]>? BinaryReceived;
 
     /// <summary>
     ///     触发开始连接事件

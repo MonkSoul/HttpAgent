@@ -6770,6 +6770,12 @@
             </summary>
             <param name="serverUri">服务器地址</param>
         </member>
+        <member name="M:HttpAgent.WebSocketClient.#ctor(System.Uri)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.WebSocketClient" />
+            </summary>
+            <param name="serverUri">服务器地址</param>
+        </member>
         <member name="M:HttpAgent.WebSocketClient.#ctor(HttpAgent.WebSocketClientOptions)">
             <summary>
                 <inheritdoc cref="T:HttpAgent.WebSocketClient" />
@@ -6777,6 +6783,9 @@
             <param name="options">
                 <see cref="T:HttpAgent.WebSocketClientOptions" />
             </param>
+        </member>
+        <member name="P:HttpAgent.WebSocketClient.State">
+            <inheritdoc cref="T:System.Net.WebSockets.WebSocketState" />
         </member>
         <member name="P:HttpAgent.WebSocketClient.Options">
             <summary>
@@ -6872,16 +6881,6 @@
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
-        <member name="E:HttpAgent.WebSocketClient.Received">
-            <summary>
-                接收文本消息事件
-            </summary>
-        </member>
-        <member name="E:HttpAgent.WebSocketClient.BinaryReceived">
-            <summary>
-                接收二进制消息事件
-            </summary>
-        </member>
         <member name="E:HttpAgent.WebSocketClient.Connecting">
             <summary>
                 开始连接时触发事件
@@ -6915,6 +6914,16 @@
         <member name="E:HttpAgent.WebSocketClient.StoppedReceiving">
             <summary>
                 停止接收消息时触发事件
+            </summary>
+        </member>
+        <member name="E:HttpAgent.WebSocketClient.Received">
+            <summary>
+                接收文本消息事件
+            </summary>
+        </member>
+        <member name="E:HttpAgent.WebSocketClient.BinaryReceived">
+            <summary>
+                接收二进制消息事件
             </summary>
         </member>
         <member name="M:HttpAgent.WebSocketClient.OnConnecting">
@@ -7001,6 +7010,17 @@
         <member name="P:HttpAgent.WebSocketClientOptions.Timeout">
             <summary>
                 超时时间
+            </summary>
+        </member>
+        <member name="P:HttpAgent.WebSocketClientOptions.ReceiveBufferSize">
+            <summary>
+                接收服务器新消息缓冲区大小
+            </summary>
+            <remarks>默认值为：4096。</remarks>
+        </member>
+        <member name="P:HttpAgent.WebSocketClientOptions.ConfigureClientWebSocketOptions">
+            <summary>
+                用于配置 <see cref="P:HttpAgent.WebSocketClientOptions.ConfigureClientWebSocketOptions" /> 的操作
             </summary>
         </member>
         <member name="T:System.Debugging">
