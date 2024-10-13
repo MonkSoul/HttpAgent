@@ -218,7 +218,7 @@ public sealed partial class WebSocketClient : IDisposable
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
-    internal async Task ReceiveAsync(CancellationToken cancellationToken)
+    internal async Task ReceiveAsync(CancellationToken cancellationToken = default)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(_clientWebSocket);
@@ -257,18 +257,33 @@ public sealed partial class WebSocketClient : IDisposable
                             // 解码接收到的文本消息
                             var message = Encoding.UTF8.GetString(buffer, 0, received.Count);
 
+                            // 初始化 WebSocketReceiveResult<TResult> 实例
+                            var receiveResult = new WebSocketReceiveResult<string>(received.Count, received.MessageType,
+                                received.EndOfMessage, received.CloseStatus, received.CloseStatusDescription)
+                            {
+                                Result = message
+                            };
+
                             // 触发接收文本消息事件
                             var onReceived = OnReceived;
-                            onReceived.TryInvoke(message);
+                            onReceived.TryInvoke(receiveResult);
                             break;
                         case WebSocketMessageType.Binary:
                             // 将接收到的数据从原始缓冲区复制到新创建的字节数组中
                             var bytes = new byte[received.Count];
                             Buffer.BlockCopy(buffer, 0, bytes, 0, received.Count);
 
+                            // 初始化 WebSocketReceiveResult<TResult> 实例
+                            var binaryReceiveResult = new WebSocketReceiveResult<byte[]>(received.Count,
+                                received.MessageType,
+                                received.EndOfMessage, received.CloseStatus, received.CloseStatusDescription)
+                            {
+                                Result = bytes
+                            };
+
                             // 触发接收二进制消息事件
                             var onBinaryReceived = OnBinaryReceived;
-                            onBinaryReceived.TryInvoke(bytes);
+                            onBinaryReceived.TryInvoke(binaryReceiveResult);
                             break;
                     }
 
@@ -304,11 +319,12 @@ public sealed partial class WebSocketClient : IDisposable
     ///     向服务器发送消息
     /// </summary>
     /// <param name="message">字符串消息</param>
+    /// <param name="endOfMessage">是否作为消息的最后一部分，默认值为 <c>true</c>。</param>
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
-    public Task SendAsync(string message, CancellationToken cancellationToken = default) =>
-        SendAsync(message, WebSocketMessageType.Text, cancellationToken);
+    public Task SendAsync(string message, bool endOfMessage = true, CancellationToken cancellationToken = default) =>
+        SendAsync(message, WebSocketMessageType.Text, endOfMessage, cancellationToken);
 
     /// <summary>
     ///     向服务器发送消息
@@ -317,10 +333,11 @@ public sealed partial class WebSocketClient : IDisposable
     /// <param name="webSocketMessageType">
     ///     <see cref="WebSocketMessageType" />
     /// </param>
+    /// <param name="endOfMessage">是否作为消息的最后一部分，默认值为 <c>true</c>。</param>
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
-    public async Task SendAsync(string message, WebSocketMessageType webSocketMessageType,
+    public async Task SendAsync(string message, WebSocketMessageType webSocketMessageType, bool endOfMessage = true,
         CancellationToken cancellationToken = default)
     {
         // 空检查
@@ -340,17 +357,18 @@ public sealed partial class WebSocketClient : IDisposable
         var arraySegment = new ArraySegment<byte>(buffer);
 
         // 向服务器发送消息
-        await _clientWebSocket.SendAsync(arraySegment, webSocketMessageType, true, cancellationToken);
+        await _clientWebSocket.SendAsync(arraySegment, webSocketMessageType, endOfMessage, cancellationToken);
     }
 
     /// <summary>
     ///     向服务器发送消息
     /// </summary>
     /// <param name="bytes">二进制消息</param>
+    /// <param name="endOfMessage">是否作为消息的最后一部分，默认值为 <c>true</c>。</param>
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
-    public async Task SendAsync(byte[] bytes, CancellationToken cancellationToken = default)
+    public async Task SendAsync(byte[] bytes, bool endOfMessage = true, CancellationToken cancellationToken = default)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(bytes);
@@ -366,7 +384,7 @@ public sealed partial class WebSocketClient : IDisposable
         var arraySegment = new ArraySegment<byte>(bytes);
 
         // 向服务器发送二进制消息
-        await _clientWebSocket.SendAsync(arraySegment, WebSocketMessageType.Binary, true, cancellationToken);
+        await _clientWebSocket.SendAsync(arraySegment, WebSocketMessageType.Binary, endOfMessage, cancellationToken);
     }
 
     /// <summary>
@@ -375,7 +393,7 @@ public sealed partial class WebSocketClient : IDisposable
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
-    public async Task DisconnectAsync(CancellationToken cancellationToken)
+    public async Task DisconnectAsync(CancellationToken cancellationToken = default)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(_clientWebSocket);

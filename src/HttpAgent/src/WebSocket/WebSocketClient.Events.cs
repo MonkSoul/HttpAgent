@@ -47,12 +47,12 @@ public sealed partial class WebSocketClient
     /// <summary>
     ///     接收文本消息事件
     /// </summary>
-    public event EventHandler<string>? Received;
+    public event EventHandler<WebSocketReceiveResult<string>>? Received;
 
     /// <summary>
     ///     接收二进制消息事件
     /// </summary>
-    public event EventHandler<byte[]>? BinaryReceived;
+    public event EventHandler<WebSocketReceiveResult<byte[]>>? BinaryReceived;
 
     /// <summary>
     ///     触发开始连接事件
@@ -92,12 +92,17 @@ public sealed partial class WebSocketClient
     /// <summary>
     ///     触发接收文本消息事件
     /// </summary>
-    /// <param name="message">消息</param>
-    internal void OnReceived(string message) => Received?.Invoke(this, message);
+    /// <param name="receiveResult">
+    ///     <see cref="WebSocketReceiveResult{TResult}" />
+    /// </param>
+    internal void OnReceived(WebSocketReceiveResult<string> receiveResult) => Received?.Invoke(this, receiveResult);
 
     /// <summary>
     ///     触发接收二进制消息事件
     /// </summary>
-    /// <param name="bytes">二进制消息</param>
-    internal void OnBinaryReceived(byte[] bytes) => BinaryReceived?.Invoke(this, bytes);
+    /// <param name="receiveResult">
+    ///     <see cref="WebSocketReceiveResult{TResult}" />
+    /// </param>
+    internal void OnBinaryReceived(WebSocketReceiveResult<byte[]> receiveResult) =>
+        BinaryReceived?.Invoke(this, receiveResult);
 }

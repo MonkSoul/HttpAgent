@@ -6843,16 +6843,17 @@
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
-        <member name="M:HttpAgent.WebSocketClient.SendAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.WebSocketClient.SendAsync(System.String,System.Boolean,System.Threading.CancellationToken)">
             <summary>
                 向服务器发送消息
             </summary>
             <param name="message">字符串消息</param>
+            <param name="endOfMessage">是否作为消息的最后一部分，默认值为 <c>true</c>。</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
-        <member name="M:HttpAgent.WebSocketClient.SendAsync(System.String,System.Net.WebSockets.WebSocketMessageType,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.WebSocketClient.SendAsync(System.String,System.Net.WebSockets.WebSocketMessageType,System.Boolean,System.Threading.CancellationToken)">
             <summary>
                 向服务器发送消息
             </summary>
@@ -6860,15 +6861,17 @@
             <param name="webSocketMessageType">
                 <see cref="T:System.Net.WebSockets.WebSocketMessageType" />
             </param>
+            <param name="endOfMessage">是否作为消息的最后一部分，默认值为 <c>true</c>。</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
-        <member name="M:HttpAgent.WebSocketClient.SendAsync(System.Byte[],System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.WebSocketClient.SendAsync(System.Byte[],System.Boolean,System.Threading.CancellationToken)">
             <summary>
                 向服务器发送消息
             </summary>
             <param name="bytes">二进制消息</param>
+            <param name="endOfMessage">是否作为消息的最后一部分，默认值为 <c>true</c>。</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -6961,17 +6964,21 @@
                 触发停止接收消息事件
             </summary>
         </member>
-        <member name="M:HttpAgent.WebSocketClient.OnReceived(System.String)">
+        <member name="M:HttpAgent.WebSocketClient.OnReceived(HttpAgent.WebSocketReceiveResult{System.String})">
             <summary>
                 触发接收文本消息事件
             </summary>
-            <param name="message">消息</param>
+            <param name="receiveResult">
+                <see cref="T:HttpAgent.WebSocketReceiveResult`1" />
+            </param>
         </member>
-        <member name="M:HttpAgent.WebSocketClient.OnBinaryReceived(System.Byte[])">
+        <member name="M:HttpAgent.WebSocketClient.OnBinaryReceived(HttpAgent.WebSocketReceiveResult{System.Byte[]})">
             <summary>
                 触发接收二进制消息事件
             </summary>
-            <param name="bytes">二进制消息</param>
+            <param name="receiveResult">
+                <see cref="T:HttpAgent.WebSocketReceiveResult`1" />
+            </param>
         </member>
         <member name="T:HttpAgent.WebSocketClientOptions">
             <summary>
@@ -7021,6 +7028,23 @@
         <member name="P:HttpAgent.WebSocketClientOptions.ConfigureClientWebSocketOptions">
             <summary>
                 用于配置 <see cref="P:HttpAgent.WebSocketClientOptions.ConfigureClientWebSocketOptions" /> 的操作
+            </summary>
+        </member>
+        <member name="T:HttpAgent.WebSocketReceiveResult`1">
+            <summary>
+                WebSocket 接收到的数据结果
+            </summary>
+            <typeparam name="TResult">结果的目标类型</typeparam>
+        </member>
+        <member name="M:HttpAgent.WebSocketReceiveResult`1.#ctor(System.Int32,System.Net.WebSockets.WebSocketMessageType,System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.WebSocketReceiveResult`1.#ctor(System.Int32,System.Net.WebSockets.WebSocketMessageType,System.Boolean,System.Nullable{System.Net.WebSockets.WebSocketCloseStatus},System.String)">
+            <inheritdoc />
+        </member>
+        <member name="P:HttpAgent.WebSocketReceiveResult`1.Result">
+            <summary>
+                <typeparamref name="TResult" />
             </summary>
         </member>
         <member name="T:System.Debugging">
