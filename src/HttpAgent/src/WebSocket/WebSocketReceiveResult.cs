@@ -27,5 +27,5 @@ public sealed class WebSocketReceiveResult<TResult> : WebSocketReceiveResult
     /// <summary>
     ///     <typeparamref name="TResult" />
     /// </summary>
-    public TResult Result { get; internal set; } = default!;
+    public TResult Result { get; internal init; } = default!;
 }

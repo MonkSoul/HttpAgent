@@ -6808,6 +6808,14 @@
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
+        <member name="M:HttpAgent.WebSocketClient.ReconnectAsync(System.Threading.CancellationToken)">
+            <summary>
+                重新连接到服务器
+            </summary>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+        </member>
         <member name="M:HttpAgent.WebSocketClient.ListeningAsync(System.Threading.CancellationToken)">
             <summary>
                 开始监听服务器消息
@@ -6822,14 +6830,6 @@
         <member name="M:HttpAgent.WebSocketClient.WaitToReceiveAsync(System.Threading.CancellationToken)">
             <summary>
                 等待接收服务器消息
-            </summary>
-            <param name="cancellationToken">
-                <see cref="T:System.Threading.CancellationToken" />
-            </param>
-        </member>
-        <member name="M:HttpAgent.WebSocketClient.ReconnectAsync(System.Threading.CancellationToken)">
-            <summary>
-                重新连接到服务器
             </summary>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
@@ -6904,9 +6904,14 @@
                 重新连接成功时触发事件
             </summary>
         </member>
+        <member name="E:HttpAgent.WebSocketClient.Disconnecting">
+            <summary>
+                开始断开连接时触发事件
+            </summary>
+        </member>
         <member name="E:HttpAgent.WebSocketClient.Disconnected">
             <summary>
-                断开连接时触发事件
+                断开连接成功时触发事件
             </summary>
         </member>
         <member name="E:HttpAgent.WebSocketClient.StartedReceiving">
@@ -6949,9 +6954,14 @@
                 触发重新连接成功事件
             </summary>
         </member>
+        <member name="M:HttpAgent.WebSocketClient.OnDisconnecting">
+            <summary>
+                触发开始断开连接事件
+            </summary>
+        </member>
         <member name="M:HttpAgent.WebSocketClient.OnDisconnected">
             <summary>
-                触发断开连接事件
+                触发断开连接成功事件
             </summary>
         </member>
         <member name="M:HttpAgent.WebSocketClient.OnStartedReceiving">

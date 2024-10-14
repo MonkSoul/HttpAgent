@@ -30,7 +30,12 @@ public sealed partial class WebSocketClient
     public event EventHandler<EventArgs>? Reconnected;
 
     /// <summary>
-    ///     断开连接时触发事件
+    ///     开始断开连接时触发事件
+    /// </summary>
+    public event EventHandler<EventArgs>? Disconnecting;
+
+    /// <summary>
+    ///     断开连接成功时触发事件
     /// </summary>
     public event EventHandler<EventArgs>? Disconnected;
 
@@ -75,7 +80,12 @@ public sealed partial class WebSocketClient
     internal void OnReconnected() => Reconnected?.Invoke(this, EventArgs.Empty);
 
     /// <summary>
-    ///     触发断开连接事件
+    ///     触发开始断开连接事件
+    /// </summary>
+    internal void OnDisconnecting() => Disconnecting?.Invoke(this, EventArgs.Empty);
+
+    /// <summary>
+    ///     触发断开连接成功事件
     /// </summary>
     internal void OnDisconnected() => Disconnected?.Invoke(this, EventArgs.Empty);
 

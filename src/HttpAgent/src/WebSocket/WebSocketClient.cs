@@ -100,6 +100,12 @@ public sealed partial class WebSocketClient : IDisposable
         // 检查连接是否处于正在连接或打开状态，如果是则跳过
         if (State is WebSocketState.Connecting or WebSocketState.Open)
         {
+            // 重置当前重连次数
+            if (State == WebSocketState.Open)
+            {
+                CurrentReconnectRetries = 0;
+            }
+
             return;
         }
 
@@ -134,6 +140,9 @@ public sealed partial class WebSocketClient : IDisposable
         }
         catch (Exception e)
         {
+            // 释放 WebSocketClient 实例
+            Dispose();
+
             // 输出调试事件
             Debugging.Error(e.Message);
 
@@ -152,6 +161,28 @@ public sealed partial class WebSocketClient : IDisposable
                 throw;
             }
         }
+    }
+
+    /// <summary>
+    ///     重新连接到服务器
+    /// </summary>
+    /// <param name="cancellationToken">
+    ///     <see cref="CancellationToken" />
+    /// </param>
+    internal async Task ReconnectAsync(CancellationToken cancellationToken = default)
+    {
+        // 递增当前重连次数
+        CurrentReconnectRetries++;
+
+        // 根据配置的重连的间隔时间延迟重新开始连接
+        await Task.Delay(Options.ReconnectInterval, cancellationToken);
+
+        // 重新连接到服务器
+        await ConnectAsync(cancellationToken);
+
+        // 触发重新连接成功事件
+        var onReconnected = OnReconnected;
+        onReconnected.TryInvoke();
     }
 
     /// <summary>
@@ -188,28 +219,6 @@ public sealed partial class WebSocketClient : IDisposable
         {
             await ReceiveAsync(cancellationToken);
         }
-    }
-
-    /// <summary>
-    ///     重新连接到服务器
-    /// </summary>
-    /// <param name="cancellationToken">
-    ///     <see cref="CancellationToken" />
-    /// </param>
-    internal async Task ReconnectAsync(CancellationToken cancellationToken = default)
-    {
-        // 递增当前重连次数
-        CurrentReconnectRetries++;
-
-        // 根据配置的重连的间隔时间延迟重新开始连接
-        await Task.Delay(Options.ReconnectInterval, cancellationToken);
-
-        // 重新连接到服务器
-        await ConnectAsync(cancellationToken);
-
-        // 触发重新连接成功事件
-        var onReconnected = OnReconnected;
-        onReconnected.TryInvoke();
     }
 
     /// <summary>
@@ -342,13 +351,15 @@ public sealed partial class WebSocketClient : IDisposable
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(message);
-        ArgumentNullException.ThrowIfNull(_clientWebSocket);
 
         // 检查连接是否处于打开状态
-        if (State != WebSocketState.Open)
+        if (State is null or not WebSocketState.Open)
         {
             return;
         }
+
+        // 空检查
+        ArgumentNullException.ThrowIfNull(_clientWebSocket);
 
         // 将字符串编码为字节数组
         var buffer = Encoding.UTF8.GetBytes(message);
@@ -372,13 +383,15 @@ public sealed partial class WebSocketClient : IDisposable
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(bytes);
-        ArgumentNullException.ThrowIfNull(_clientWebSocket);
 
         // 检查连接是否处于打开状态
-        if (State != WebSocketState.Open)
+        if (State is null or not WebSocketState.Open)
         {
             return;
         }
+
+        // 空检查
+        ArgumentNullException.ThrowIfNull(_clientWebSocket);
 
         // 初始化 ArraySegment 实例
         var arraySegment = new ArraySegment<byte>(bytes);
@@ -395,14 +408,18 @@ public sealed partial class WebSocketClient : IDisposable
     /// </param>
     public async Task DisconnectAsync(CancellationToken cancellationToken = default)
     {
-        // 空检查
-        ArgumentNullException.ThrowIfNull(_clientWebSocket);
-
-        // 检查连接是否处于打开状态
-        if (State != WebSocketState.Open)
+        // 检查连接是否处于关闭状态
+        if (State is null or WebSocketState.Closed)
         {
             return;
         }
+
+        // 空检查
+        ArgumentNullException.ThrowIfNull(_clientWebSocket);
+
+        // 触发开始断开连接事件
+        var onDisconnecting = OnDisconnecting;
+        onDisconnecting.TryInvoke();
 
         try
         {
@@ -411,12 +428,15 @@ public sealed partial class WebSocketClient : IDisposable
         }
         finally
         {
-            // 触发断开连接事件
-            var onDisconnected = OnDisconnected;
-            onDisconnected.TryInvoke();
-
             // 释放 WebSocketClient 实例
             Dispose();
+
+            // 重置当前重连次数
+            CurrentReconnectRetries = 0;
+
+            // 触发断开连接成功事件
+            var onDisconnected = OnDisconnected;
+            onDisconnected.TryInvoke();
         }
     }
 }
