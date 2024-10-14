@@ -433,6 +433,11 @@ public sealed partial class WebSocketClient : IDisposable
             // 发送关闭帧并断开连接
             await _clientWebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", cancellationToken);
         }
+        catch (Exception e)
+        {
+            // 输出调试事件
+            Debugging.Error(e.Message);
+        }
         finally
         {
             // 释放 WebSocketClient 实例
