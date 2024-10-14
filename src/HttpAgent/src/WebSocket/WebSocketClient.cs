@@ -100,9 +100,9 @@ public sealed partial class WebSocketClient : IDisposable
         // 检查连接是否处于正在连接或打开状态，如果是则跳过
         if (State is WebSocketState.Connecting or WebSocketState.Open)
         {
-            // 重置当前重连次数
             if (State == WebSocketState.Open)
             {
+                // 重置当前重连次数
                 CurrentReconnectRetries = 0;
             }
 
@@ -196,8 +196,12 @@ public sealed partial class WebSocketClient : IDisposable
     /// </returns>
     public Task ListeningAsync(CancellationToken cancellationToken = default)
     {
-        // 初始化接收服务器消息任务
-        _receiveTask ??= ReceiveAsync(cancellationToken);
+        // 检查连接是否处于打开状态
+        if (State == WebSocketState.Open)
+        {
+            // 初始化接收服务器消息任务
+            _receiveTask ??= ReceiveAsync(cancellationToken);
+        }
 
         return Task.CompletedTask;
     }
@@ -210,6 +214,12 @@ public sealed partial class WebSocketClient : IDisposable
     /// </param>
     public async Task WaitToReceiveAsync(CancellationToken cancellationToken = default)
     {
+        // 检查连接是否处于打开状态
+        if (State != WebSocketState.Open)
+        {
+            return;
+        }
+
         // 空检查
         if (_receiveTask is not null)
         {
@@ -250,45 +260,42 @@ public sealed partial class WebSocketClient : IDisposable
                 try
                 {
                     // 获取接收到的数据
-                    var received =
+                    var receiveResult =
                         await _clientWebSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationToken);
 
                     // 如果接收到关闭帧，则退出循环
-                    if (received.MessageType == WebSocketMessageType.Close)
+                    if (receiveResult.MessageType == WebSocketMessageType.Close || receiveResult.CloseStatus.HasValue)
                     {
                         break;
                     }
 
                     // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
-                    switch (received.MessageType)
+                    switch (receiveResult.MessageType)
                     {
                         case WebSocketMessageType.Text:
                             // 解码接收到的文本消息
-                            var message = Encoding.UTF8.GetString(buffer, 0, received.Count);
+                            var message = Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
 
                             // 初始化 WebSocketReceiveResult<TResult> 实例
-                            var receiveResult = new WebSocketReceiveResult<string>(received.Count, received.MessageType,
-                                received.EndOfMessage, received.CloseStatus, received.CloseStatusDescription)
-                            {
-                                Result = message
-                            };
+                            var textReceiveResult = new WebSocketReceiveResult<string>(receiveResult.Count,
+                                receiveResult.MessageType,
+                                receiveResult.EndOfMessage, receiveResult.CloseStatus,
+                                receiveResult.CloseStatusDescription) { Result = message };
 
                             // 触发接收文本消息事件
                             var onReceived = OnReceived;
-                            onReceived.TryInvoke(receiveResult);
+                            onReceived.TryInvoke(textReceiveResult);
                             break;
                         case WebSocketMessageType.Binary:
                             // 将接收到的数据从原始缓冲区复制到新创建的字节数组中
-                            var bytes = new byte[received.Count];
-                            Buffer.BlockCopy(buffer, 0, bytes, 0, received.Count);
+                            var bytes = new byte[receiveResult.Count];
+                            Buffer.BlockCopy(buffer, 0, bytes, 0, receiveResult.Count);
 
                             // 初始化 WebSocketReceiveResult<TResult> 实例
-                            var binaryReceiveResult = new WebSocketReceiveResult<byte[]>(received.Count,
-                                received.MessageType,
-                                received.EndOfMessage, received.CloseStatus, received.CloseStatusDescription)
-                            {
-                                Result = bytes
-                            };
+                            var binaryReceiveResult = new WebSocketReceiveResult<byte[]>(receiveResult.Count,
+                                receiveResult.MessageType,
+                                receiveResult.EndOfMessage, receiveResult.CloseStatus,
+                                receiveResult.CloseStatusDescription) { Result = bytes };
 
                             // 触发接收二进制消息事件
                             var onBinaryReceived = OnBinaryReceived;
@@ -297,7 +304,7 @@ public sealed partial class WebSocketClient : IDisposable
                     }
 
                     // 如果这是消息的最后一部分，则清空缓冲区
-                    if (received.EndOfMessage)
+                    if (receiveResult.EndOfMessage)
                     {
                         Array.Clear(buffer, 0, buffer.Length);
                     }
@@ -353,7 +360,7 @@ public sealed partial class WebSocketClient : IDisposable
         ArgumentNullException.ThrowIfNull(message);
 
         // 检查连接是否处于打开状态
-        if (State is null or not WebSocketState.Open)
+        if (State != WebSocketState.Open)
         {
             return;
         }
@@ -385,7 +392,7 @@ public sealed partial class WebSocketClient : IDisposable
         ArgumentNullException.ThrowIfNull(bytes);
 
         // 检查连接是否处于打开状态
-        if (State is null or not WebSocketState.Open)
+        if (State != WebSocketState.Open)
         {
             return;
         }
@@ -409,7 +416,7 @@ public sealed partial class WebSocketClient : IDisposable
     public async Task DisconnectAsync(CancellationToken cancellationToken = default)
     {
         // 检查连接是否处于关闭状态
-        if (State is null or WebSocketState.Closed)
+        if (State is null or WebSocketState.CloseSent or WebSocketState.Closed)
         {
             return;
         }
