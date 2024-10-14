@@ -9,13 +9,17 @@ public class ProgressFileStreamTests(ITestOutputHelper output)
     [Fact]
     public void New_Invalid_Parameters()
     {
-        Assert.Throws<ArgumentNullException>(() => new ProgressFileStream(null!, null!, null!));
-
         var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var fileInfo = new FileInfo(fileFullName);
         using var fileStream = File.OpenRead(fileFullName);
-        Assert.Throws<ArgumentNullException>(() => new ProgressFileStream(fileStream, null!, null!));
+
+        Assert.Throws<ArgumentNullException>(() => new ProgressFileStream(null!, null!, fileInfo.Length, null!));
+        Assert.Throws<ArgumentNullException>(() => new ProgressFileStream(fileStream, null!, fileInfo.Length, null!));
+        Assert.Throws<ArgumentException>(() =>
+            new ProgressFileStream(fileStream, string.Empty, fileInfo.Length, null!));
+        Assert.Throws<ArgumentException>(() => new ProgressFileStream(fileStream, " ", fileInfo.Length, null!));
         Assert.Throws<ArgumentNullException>(
-            () => new ProgressFileStream(fileStream, new FileInfo(fileFullName), null!));
+            () => new ProgressFileStream(fileStream, fileFullName, fileInfo.Length, null!));
     }
 
     [Fact]
@@ -25,7 +29,8 @@ public class ProgressFileStreamTests(ITestOutputHelper output)
         using var fileStream = File.OpenRead(fileFullName);
         var fileInfo = new FileInfo(fileFullName);
         var progressChannel = Channel.CreateUnbounded<FileTransferProgress>();
-        using var progressFileStream = new ProgressFileStream(fileStream, fileInfo, progressChannel);
+        using var progressFileStream =
+            new ProgressFileStream(fileStream, fileFullName, fileInfo.Length, progressChannel);
 
         Assert.Equal(21, progressFileStream._fileLength);
         Assert.Equal(fileStream, progressFileStream._fileStream);
@@ -52,7 +57,8 @@ public class ProgressFileStreamTests(ITestOutputHelper output)
         using var fileStream = File.OpenRead(fileFullName);
         var fileInfo = new FileInfo(fileFullName);
         var progressChannel = Channel.CreateUnbounded<FileTransferProgress>();
-        using var progressFileStream = new ProgressFileStream(fileStream, fileInfo, progressChannel);
+        using var progressFileStream =
+            new ProgressFileStream(fileStream, fileFullName, fileInfo.Length, progressChannel);
 
         progressFileStream.Flush();
     }
@@ -64,7 +70,8 @@ public class ProgressFileStreamTests(ITestOutputHelper output)
         await using var fileStream = File.OpenRead(fileFullName);
         var fileInfo = new FileInfo(fileFullName);
         var progressChannel = Channel.CreateUnbounded<FileTransferProgress>();
-        await using var progressFileStream = new ProgressFileStream(fileStream, fileInfo, progressChannel);
+        await using var progressFileStream =
+            new ProgressFileStream(fileStream, fileFullName, fileInfo.Length, progressChannel);
 
         var bytes = new byte[1024];
         var bytesRead = progressFileStream.Read(bytes, 0, 10);
@@ -86,7 +93,8 @@ public class ProgressFileStreamTests(ITestOutputHelper output)
         using var fileStream = File.OpenRead(fileFullName);
         var fileInfo = new FileInfo(fileFullName);
         var progressChannel = Channel.CreateUnbounded<FileTransferProgress>();
-        using var progressFileStream = new ProgressFileStream(fileStream, fileInfo, progressChannel);
+        using var progressFileStream =
+            new ProgressFileStream(fileStream, fileFullName, fileInfo.Length, progressChannel);
 
         progressFileStream.Seek(0, SeekOrigin.Begin);
     }
@@ -100,7 +108,8 @@ public class ProgressFileStreamTests(ITestOutputHelper output)
             8092);
         var fileInfo = new FileInfo(fileFullName);
         var progressChannel = Channel.CreateUnbounded<FileTransferProgress>();
-        await using var progressFileStream = new ProgressFileStream(fileStream, fileInfo, progressChannel);
+        await using var progressFileStream =
+            new ProgressFileStream(fileStream, fileFullName, fileInfo.Length, progressChannel);
 
         var bytes = new byte[1024];
         progressFileStream.Write(bytes, 0, 21);
@@ -121,7 +130,8 @@ public class ProgressFileStreamTests(ITestOutputHelper output)
         using var fileStream = File.OpenWrite(fileFullName);
         var fileInfo = new FileInfo(fileFullName);
         var progressChannel = Channel.CreateUnbounded<FileTransferProgress>();
-        using var progressFileStream = new ProgressFileStream(fileStream, fileInfo, progressChannel);
+        using var progressFileStream =
+            new ProgressFileStream(fileStream, fileFullName, fileInfo.Length, progressChannel);
 
         progressFileStream.SetLength(21);
     }
@@ -133,7 +143,7 @@ public class ProgressFileStreamTests(ITestOutputHelper output)
         var fileStream = File.OpenRead(fileFullName);
         var fileInfo = new FileInfo(fileFullName);
         var progressChannel = Channel.CreateUnbounded<FileTransferProgress>();
-        var progressFileStream = new ProgressFileStream(fileStream, fileInfo, progressChannel);
+        var progressFileStream = new ProgressFileStream(fileStream, fileFullName, fileInfo.Length, progressChannel);
 
         progressFileStream.Dispose();
         Assert.False(fileStream.CanRead);
@@ -147,7 +157,8 @@ public class ProgressFileStreamTests(ITestOutputHelper output)
         await using var fileStream = File.OpenRead(fileFullName);
         var fileInfo = new FileInfo(fileFullName);
         var progressChannel = Channel.CreateUnbounded<FileTransferProgress>();
-        await using var progressFileStream = new ProgressFileStream(fileStream, fileInfo, progressChannel);
+        await using var progressFileStream =
+            new ProgressFileStream(fileStream, fileFullName, fileInfo.Length, progressChannel);
 
         progressFileStream.ReportProgress(10);
 

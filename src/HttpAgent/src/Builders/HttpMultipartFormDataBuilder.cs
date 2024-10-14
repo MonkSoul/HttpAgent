@@ -216,11 +216,12 @@ public sealed class HttpMultipartFormDataBuilder
 
         // 获取文件信息
         var fileInfo = new FileInfo(fileFullName);
+        var fileLength = fileInfo.Length;
 
         // 添加文件流到请求结束时需要释放的集合中
         _httpRequestBuilder.AddDisposable(fileStream);
 
-        return AddStream(fileStream, name, fileName, fileInfo.Length, contentType, contentEncoding);
+        return AddStream(fileStream, name, fileName, fileLength, contentType, contentEncoding);
     }
 
     /// <summary>
@@ -260,14 +261,15 @@ public sealed class HttpMultipartFormDataBuilder
 
         // 获取文件信息
         var fileInfo = new FileInfo(fileFullName);
+        var fileLength = fileInfo.Length;
 
         // 初始化带读写进度的文件流
-        var progressFileStream = new ProgressFileStream(fileStream, fileInfo, progressChannel);
+        var progressFileStream = new ProgressFileStream(fileStream, fileFullName, fileLength, progressChannel);
 
         // 添加文件流到请求结束时需要释放的集合中
         _httpRequestBuilder.AddDisposable(progressFileStream);
 
-        return AddStream(progressFileStream, name, fileName, fileInfo.Length, contentType, contentEncoding);
+        return AddStream(progressFileStream, name, fileName, fileLength, contentType, contentEncoding);
     }
 
     /// <summary>
@@ -304,8 +306,9 @@ public sealed class HttpMultipartFormDataBuilder
 
         // 获取文件信息
         var fileInfo = new FileInfo(fileFullName);
+        var fileLength = fileInfo.Length;
 
-        return AddByteArray(bytes, name, fileName, fileInfo.Length, contentType, contentEncoding);
+        return AddByteArray(bytes, name, fileName, fileLength, contentType, contentEncoding);
     }
 
     /// <summary>

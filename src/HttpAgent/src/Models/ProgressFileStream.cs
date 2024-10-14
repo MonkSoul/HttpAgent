@@ -14,8 +14,8 @@ internal sealed class ProgressFileStream : Stream
     /// </summary>
     internal readonly long _fileLength;
 
-    /// <inheritdoc cref="FileStream" />
-    internal readonly FileStream _fileStream;
+    /// <inheritdoc cref="Stream" />
+    internal readonly Stream _fileStream;
 
     /// <inheritdoc cref="FileTransferProgress" />
     internal readonly FileTransferProgress _fileTransferProgress;
@@ -37,25 +37,25 @@ internal sealed class ProgressFileStream : Stream
     ///     <inheritdoc cref="ProgressFileStream" />
     /// </summary>
     /// <param name="fileStream">
-    ///     <see cref="FileStream" />
+    ///     <see cref="Stream" />
     /// </param>
-    /// <param name="fileInfo">
-    ///     <see cref="FileInfo" />
-    /// </param>
+    /// <param name="fileFullName">文件完整路径或文件名</param>
+    /// <param name="fileLength">文件大小</param>
     /// <param name="progressChannel">文件传输进度信息的通道</param>
-    internal ProgressFileStream(FileStream fileStream, FileInfo fileInfo, Channel<FileTransferProgress> progressChannel)
+    internal ProgressFileStream(Stream fileStream, string fileFullName, long fileLength,
+        Channel<FileTransferProgress> progressChannel)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(fileStream);
-        ArgumentNullException.ThrowIfNull(fileInfo);
+        ArgumentException.ThrowIfNullOrWhiteSpace(fileFullName);
         ArgumentNullException.ThrowIfNull(progressChannel);
 
         _fileStream = fileStream;
-        _fileLength = fileInfo.Length;
+        _fileLength = fileLength;
         _progressChannel = progressChannel;
 
         // 初始化 FileTransferProgress 实例
-        _fileTransferProgress = new FileTransferProgress(fileInfo.FullName, _fileLength);
+        _fileTransferProgress = new FileTransferProgress(fileFullName, _fileLength);
 
         // 初始化 Stopwatch 实例并开启计时操作
         _stopwatch = Stopwatch.StartNew();

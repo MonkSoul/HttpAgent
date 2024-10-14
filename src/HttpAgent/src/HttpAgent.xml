@@ -3876,7 +3876,7 @@
             </summary>
         </member>
         <member name="F:HttpAgent.ProgressFileStream._fileStream">
-            <inheritdoc cref="T:System.IO.FileStream" />
+            <inheritdoc cref="T:System.IO.Stream" />
         </member>
         <member name="F:HttpAgent.ProgressFileStream._fileTransferProgress">
             <inheritdoc cref="T:HttpAgent.FileTransferProgress" />
@@ -3894,16 +3894,15 @@
                 已传输的数据量
             </summary>
         </member>
-        <member name="M:HttpAgent.ProgressFileStream.#ctor(System.IO.FileStream,System.IO.FileInfo,System.Threading.Channels.Channel{HttpAgent.FileTransferProgress})">
+        <member name="M:HttpAgent.ProgressFileStream.#ctor(System.IO.Stream,System.String,System.Int64,System.Threading.Channels.Channel{HttpAgent.FileTransferProgress})">
             <summary>
                 <inheritdoc cref="T:HttpAgent.ProgressFileStream" />
             </summary>
             <param name="fileStream">
-                <see cref="T:System.IO.FileStream" />
+                <see cref="T:System.IO.Stream" />
             </param>
-            <param name="fileInfo">
-                <see cref="T:System.IO.FileInfo" />
-            </param>
+            <param name="fileFullName">文件完整路径或文件名</param>
+            <param name="fileLength">文件大小</param>
             <param name="progressChannel">文件传输进度信息的通道</param>
         </member>
         <member name="P:HttpAgent.ProgressFileStream.CanRead">
