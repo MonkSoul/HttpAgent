@@ -884,13 +884,7 @@ public sealed partial class HttpRequestBuilder
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
     public HttpRequestBuilder SimulateBrowser() =>
-        WithHeaders(new Dictionary<string, object?>
-        {
-            {
-                HeaderNames.UserAgent,
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"
-            }
-        });
+        WithHeaders(new Dictionary<string, object?> { { HeaderNames.UserAgent, Constants.USER_AGENT_OF_BROWSER } });
 
     /// <summary>
     ///     手动释放 <see cref="HttpClient" /> 实例管理器

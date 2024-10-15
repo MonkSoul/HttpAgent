@@ -2229,6 +2229,11 @@
                 压力测试标头值
             </summary>
         </member>
+        <member name="F:HttpAgent.Constants.USER_AGENT_OF_BROWSER">
+            <summary>
+                浏览器的 <c>User-Agent</c> 标头值
+            </summary>
+        </member>
         <member name="T:HttpAgent.FileExistsBehavior">
             <summary>
                 指定当目标文件已存在时的行为
