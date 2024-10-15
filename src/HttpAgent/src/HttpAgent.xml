@@ -1792,7 +1792,7 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.DownloadFile(System.Net.Http.HttpMethod,System.Uri,System.String,System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task})">
+        <member name="M:HttpAgent.HttpRequestBuilder.DownloadFile(System.Net.Http.HttpMethod,System.Uri,System.String,System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},HttpAgent.FileExistsBehavior)">
             <summary>
                 创建 <see cref="T:HttpAgent.HttpFileDownloadBuilder" /> 构建器
             </summary>
@@ -1800,28 +1800,31 @@
             <param name="requestUri">请求地址</param>
             <param name="destinationPath">文件保存的目标路径</param>
             <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
+            <param name="fileExistsBehavior"><see cref="T:HttpAgent.HttpFileDownloadBuilder" /></param>
             <returns>
                 <see cref="T:HttpAgent.HttpFileDownloadBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.DownloadFile(System.Uri,System.String,System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task})">
+        <member name="M:HttpAgent.HttpRequestBuilder.DownloadFile(System.Uri,System.String,System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},HttpAgent.FileExistsBehavior)">
             <summary>
                 创建 <see cref="T:HttpAgent.HttpFileDownloadBuilder" /> 构建器
             </summary>
             <param name="requestUri">请求地址</param>
             <param name="destinationPath">文件保存的目标路径</param>
             <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
+            <param name="fileExistsBehavior"><see cref="T:HttpAgent.HttpFileDownloadBuilder" /></param>
             <returns>
                 <see cref="T:HttpAgent.HttpFileDownloadBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.DownloadFile(System.String,System.String,System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task})">
+        <member name="M:HttpAgent.HttpRequestBuilder.DownloadFile(System.String,System.String,System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},HttpAgent.FileExistsBehavior)">
             <summary>
                 创建 <see cref="T:HttpAgent.HttpFileDownloadBuilder" /> 构建器
             </summary>
             <param name="requestUri">请求地址</param>
             <param name="destinationPath">文件保存的目标路径</param>
             <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
+            <param name="fileExistsBehavior"><see cref="T:HttpAgent.HttpFileDownloadBuilder" /></param>
             <returns>
                 <see cref="T:HttpAgent.HttpFileDownloadBuilder" />
             </returns>
@@ -4439,10 +4442,10 @@
                 <see cref="T:System.Net.Http.HttpClient" />
             </param>
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.DownloadFile(System.String,System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},HttpAgent.FileExistsBehavior,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.DownloadFile(System.String,System.String,System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},HttpAgent.FileExistsBehavior,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.DownloadFileAsync(System.String,System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},HttpAgent.FileExistsBehavior,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.DownloadFileAsync(System.String,System.String,System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},HttpAgent.FileExistsBehavior,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.Send(HttpAgent.HttpFileDownloadBuilder,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -4451,10 +4454,10 @@
         <member name="M:HttpAgent.HttpRemoteService.SendAsync(HttpAgent.HttpFileDownloadBuilder,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.UploadFile(System.String,System.String,System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.UploadFile(System.String,System.String,System.String,System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.UploadFileAsync(System.String,System.String,System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.UploadFileAsync(System.String,System.String,System.String,System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.Send(HttpAgent.HttpFileUploadBuilder,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -5002,32 +5005,32 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.DownloadFile(System.String,System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},HttpAgent.FileExistsBehavior,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.DownloadFile(System.String,System.String,System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},HttpAgent.FileExistsBehavior,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 下载文件
             </summary>
             <param name="requestUri">请求地址</param>
             <param name="destinationPath">文件保存的目标路径</param>
-            <param name="configure">自定义配置委托</param>
             <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
             <param name="fileExistsBehavior">
                 <see cref="T:HttpAgent.FileExistsBehavior" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.DownloadFileAsync(System.String,System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},HttpAgent.FileExistsBehavior,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.DownloadFileAsync(System.String,System.String,System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},HttpAgent.FileExistsBehavior,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 下载文件
             </summary>
             <param name="requestUri">请求地址</param>
             <param name="destinationPath">文件保存的目标路径</param>
-            <param name="configure">自定义配置委托</param>
             <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
             <param name="fileExistsBehavior">
                 <see cref="T:HttpAgent.FileExistsBehavior" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -5062,15 +5065,15 @@
                 <see cref="T:System.Threading.Tasks.Task" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.UploadFile(System.String,System.String,System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.UploadFile(System.String,System.String,System.String,System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 上传文件
             </summary>
             <param name="requestUri">请求地址</param>
             <param name="fileFullName">文件完整路径</param>
             <param name="name">表单名称；默认值为 <c>file</c>。</param>
-            <param name="configure">自定义配置委托</param>
             <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -5078,15 +5081,15 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.UploadFileAsync(System.String,System.String,System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.UploadFileAsync(System.String,System.String,System.String,System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 上传文件
             </summary>
             <param name="requestUri">请求地址</param>
             <param name="fileFullName">文件完整路径</param>
             <param name="name">表单名称；默认值为 <c>file</c>。</param>
-            <param name="configure">自定义配置委托</param>
             <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>

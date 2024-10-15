@@ -110,7 +110,7 @@ public class HttpRemoteServiceExtensionsTests
 
         var i = 0;
         // ReSharper disable once MethodHasAsyncOverload
-        httpRemoteService.DownloadFile($"http://localhost:{port}/test", destinationPath, requestBuilder =>
+        httpRemoteService.DownloadFile($"http://localhost:{port}/test", destinationPath, configure: requestBuilder =>
         {
             requestBuilder.SetOnPreSendRequest(_ =>
             {
@@ -230,13 +230,14 @@ public class HttpRemoteServiceExtensionsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var i = 0;
-        await httpRemoteService.DownloadFileAsync($"http://localhost:{port}/test", destinationPath, requestBuilder =>
-        {
-            requestBuilder.SetOnPreSendRequest(_ =>
+        await httpRemoteService.DownloadFileAsync($"http://localhost:{port}/test", destinationPath,
+            configure: requestBuilder =>
             {
-                i += 1;
+                requestBuilder.SetOnPreSendRequest(_ =>
+                {
+                    i += 1;
+                });
             });
-        });
 
         Assert.True(File.Exists(destinationPath));
         Assert.Equal(12, (await File.ReadAllBytesAsync(destinationPath)).Length);
@@ -785,7 +786,7 @@ public class HttpRemoteServiceExtensionsTests
         var i = 0;
         // ReSharper disable once MethodHasAsyncOverload
         var httpResponseMessage = httpRemoteService.UploadFile($"http://localhost:{port}/test", fileFullName,
-            "file", requestBuilder =>
+            "file", configure: requestBuilder =>
             {
                 requestBuilder.SetOnPreSendRequest(_ =>
                 {
@@ -894,7 +895,7 @@ public class HttpRemoteServiceExtensionsTests
 
         var i = 0;
         var httpResponseMessage = await httpRemoteService.UploadFileAsync($"http://localhost:{port}/test",
-            fileFullName, "file", requestBuilder =>
+            fileFullName, "file", configure: requestBuilder =>
             {
                 requestBuilder.SetOnPreSendRequest(_ =>
                 {
