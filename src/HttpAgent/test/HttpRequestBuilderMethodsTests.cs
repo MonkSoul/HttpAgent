@@ -993,6 +993,34 @@ public class HttpRequestBuilderMethodsTests
     }
 
     [Fact]
+    public void SimulateBrowser_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder.SimulateBrowser();
+
+        Assert.NotNull(httpRequestBuilder.Headers);
+        Assert.Single(httpRequestBuilder.Headers);
+        Assert.Equal(
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0",
+            httpRequestBuilder.Headers["User-Agent"].First());
+    }
+
+    [Fact]
+    public void SimulateBrowser_Duplicate_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder.SimulateBrowser();
+        httpRequestBuilder.SimulateBrowser();
+
+        Assert.NotNull(httpRequestBuilder.Headers);
+        Assert.Single(httpRequestBuilder.Headers);
+        Assert.Single(httpRequestBuilder.Headers["User-Agent"]);
+        Assert.Equal(
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0",
+            httpRequestBuilder.Headers["User-Agent"].First());
+    }
+
+    [Fact]
     public void ReleaseHttpClientPooling_ReturnOK()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));

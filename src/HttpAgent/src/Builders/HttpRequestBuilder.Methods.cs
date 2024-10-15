@@ -2,6 +2,9 @@
 // 
 // 此源代码遵循位于源代码树根目录中的 LICENSE 文件的许可证。
 
+using Microsoft.Net.Http.Headers;
+using MediaTypeHeaderValue = System.Net.Http.Headers.MediaTypeHeaderValue;
+
 namespace HttpAgent;
 
 /// <summary>
@@ -264,7 +267,7 @@ public sealed partial class HttpRequestBuilder
         // 存在则合并否则添加
         Headers.AddOrUpdate(headers.ToDictionary(u => u.Key,
             u => u.Value?.ToCultureString(culture ?? CultureInfo.InvariantCulture)?.EscapeDataString(escape),
-            comparer));
+            comparer), false);
 
         return this;
     }
@@ -296,7 +299,7 @@ public sealed partial class HttpRequestBuilder
         Headers.AddOrUpdate(headerSource.ObjectToDictionary()!
             .ToDictionary(u => u.Key.ToCultureString(culture ?? CultureInfo.InvariantCulture)!,
                 u => u.Value?.ToCultureString(culture ?? CultureInfo.InvariantCulture)?.EscapeDataString(escape),
-                comparer));
+                comparer), false);
 
         return this;
     }
@@ -872,6 +875,22 @@ public sealed partial class HttpRequestBuilder
 
         return this;
     }
+
+    /// <summary>
+    ///     模拟浏览器环境
+    /// </summary>
+    /// <remarks>设置此配置后，将在单次请求标头中添加主流浏览器的 <c>User-Agent</c> 值。</remarks>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder SimulateBrowser() =>
+        WithHeaders(new Dictionary<string, object?>
+        {
+            {
+                HeaderNames.UserAgent,
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"
+            }
+        });
 
     /// <summary>
     ///     手动释放 <see cref="HttpClient" /> 实例管理器

@@ -7,13 +7,13 @@ public class GetStartController(IHttpRemoteService httpRemoteService) : Controll
     [HttpGet]
     public async Task<string?> GetBaiduHtml()
     {
-        return await httpRemoteService.SendAsAsync<string>(HttpRequestBuilder.Get("https://furion.net/"));
+        return await httpRemoteService.SendAsAsync<string>(HttpRequestBuilder.Get("https://www.baidu.com"));
     }
 
     [HttpGet]
     public async Task<string?> GetBaiduHtml2()
     {
-        return await httpRemoteService.GetAsAsync<string>("https://furion.net/");
+        return await httpRemoteService.GetAsAsync<string>("https://www.baidu.com");
     }
 
     [HttpGet]

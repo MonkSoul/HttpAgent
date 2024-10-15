@@ -1375,6 +1375,15 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.SimulateBrowser">
+            <summary>
+                模拟浏览器环境
+            </summary>
+            <remarks>设置此配置后，将在单次请求标头中添加主流浏览器的 <c>User-Agent</c> 值。</remarks>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.ReleaseHttpClientPooling">
             <summary>
                 手动释放 <see cref="T:System.Net.Http.HttpClient" /> 实例管理器
@@ -2414,7 +2423,7 @@
                 <see cref="T:System.Collections.Generic.IDictionary`2" /> 拓展类
             </summary>
         </member>
-        <member name="M:HttpAgent.Core.Extensions.IDictionaryExtensions.AddOrUpdate``2(System.Collections.Generic.IDictionary{``0,System.Collections.Generic.List{``1}},System.Collections.Generic.IDictionary{``0,``1})">
+        <member name="M:HttpAgent.Core.Extensions.IDictionaryExtensions.AddOrUpdate``2(System.Collections.Generic.IDictionary{``0,System.Collections.Generic.List{``1}},System.Collections.Generic.IDictionary{``0,``1},System.Boolean)">
             <summary>
                 添加或更新
             </summary>
@@ -2426,6 +2435,7 @@
             <param name="concatDictionary">
                 <see cref="T:System.Collections.Generic.IDictionary`2" />
             </param>
+            <param name="allowDuplicates">是否允许重复添加。默认值为：<c>true</c>。</param>
         </member>
         <member name="M:HttpAgent.Core.Extensions.IDictionaryExtensions.AddOrUpdate``2(System.Collections.Generic.IDictionary{``0,``1},System.Collections.Generic.IDictionary{``0,``1})">
             <summary>
