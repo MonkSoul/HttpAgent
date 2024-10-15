@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0" version="24.7.17">
   <diagram name="第 1 页" id="MidELUbckxybCgodSF5H">
-    <mxGraphModel dx="2051" dy="2316" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="3773" dy="2322" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -277,10 +277,10 @@
         <mxCell id="awtECVfnWK-pebtbf7MO-24" value="WebSocketClient" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="1530" y="503" width="150" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="awtECVfnWK-pebtbf7MO-25" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=1;sketch=1;curveFitting=1;jiggle=2;dashed=1;shadow=1;strokeColor=#666666;" parent="1" edge="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="1502" y="451" as="sourcePoint" />
-            <mxPoint x="1465" y="411" as="targetPoint" />
+        <mxCell id="fZrPMFSZ2sT8OrPW5bAN-1" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=1;sketch=1;curveFitting=1;jiggle=2;shadow=1;dashed=1;strokeColor=#666666;" edge="1" parent="1">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="1472" y="406" as="sourcePoint" />
+            <mxPoint x="1512" y="456" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
