@@ -83,7 +83,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
 
         Assert.NotNull(httpClient);
         Assert.Null(httpClientPooling.Release);
-        Assert.Equal("HttpAgent/1.0.0.6", httpClient.DefaultRequestHeaders.GetValues("User-Agent").First());
+        Assert.Equal("HttpAgent/1.0.0.7", httpClient.DefaultRequestHeaders.GetValues("User-Agent").First());
 
         var httpRequestBuilder2 =
             new HttpRequestBuilder(HttpMethod.Get, new Uri("/api/test", UriKind.RelativeOrAbsolute))
@@ -94,7 +94,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         Assert.NotNull(httpClient2.BaseAddress);
         Assert.Equal("http://localhost/test/", httpClient2.BaseAddress.ToString());
         Assert.Null(httpClientPooling2.Release);
-        Assert.Equal("HttpAgent/1.0.0.6", httpClient2.DefaultRequestHeaders.GetValues("User-Agent").First());
+        Assert.Equal("HttpAgent/1.0.0.7", httpClient2.DefaultRequestHeaders.GetValues("User-Agent").First());
 
         var httpClient3 = new HttpClient { BaseAddress = new Uri("http://localhost/custom") };
         var httpRequestBuilder3 =
@@ -107,7 +107,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         var httpClientPooling3 = httpRemoteService.CreateHttpClientWithDefaults(httpRequestBuilder3);
         var httpClient4 = httpClientPooling3.Instance;
         Assert.Equal(httpClient3, httpClient4);
-        Assert.Equal("HttpAgent/1.0.0.6", httpClient4.DefaultRequestHeaders.GetValues("User-Agent").First());
+        Assert.Equal("HttpAgent/1.0.0.7", httpClient4.DefaultRequestHeaders.GetValues("User-Agent").First());
         Assert.NotNull(httpClientPooling3.Release);
         httpClientPooling3.Release(httpClient3);
 
@@ -148,7 +148,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
 
         Assert.NotNull(httpClient);
         Assert.Null(httpClientPooling.Release);
-        Assert.Equal("HttpAgent/1.0.0.6", httpClient.DefaultRequestHeaders.GetValues("User-Agent").First());
+        Assert.Equal("HttpAgent/1.0.0.7", httpClient.DefaultRequestHeaders.GetValues("User-Agent").First());
 
         var httpRequestBuilder2 =
             new HttpRequestBuilder(HttpMethod.Get, new Uri("/api/test", UriKind.RelativeOrAbsolute))
@@ -159,7 +159,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         Assert.NotNull(httpClient2.BaseAddress);
         Assert.Equal("http://localhost/test/", httpClient2.BaseAddress.ToString());
         Assert.Null(httpClientPooling2.Release);
-        Assert.Equal("HttpAgent/1.0.0.6", httpClient2.DefaultRequestHeaders.GetValues("User-Agent").First());
+        Assert.Equal("HttpAgent/1.0.0.7", httpClient2.DefaultRequestHeaders.GetValues("User-Agent").First());
 
         var httpClient3 = new HttpClient { BaseAddress = new Uri("http://localhost/custom") };
         var httpRequestBuilder3 =
@@ -172,7 +172,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         var httpClientPooling3 = httpRemoteService.CreateHttpClientPooling(httpRequestBuilder3);
         var httpClient4 = httpClientPooling3.Instance;
         Assert.Equal(httpClient3, httpClient4);
-        Assert.Equal("HttpAgent/1.0.0.6", httpClient4.DefaultRequestHeaders.GetValues("User-Agent").First());
+        Assert.Equal("HttpAgent/1.0.0.7", httpClient4.DefaultRequestHeaders.GetValues("User-Agent").First());
         Assert.NotNull(httpClientPooling3.Release);
         httpClientPooling3.Release(httpClient3);
 
@@ -185,7 +185,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         var httpClient = new HttpClient();
         HttpRemoteService.AddDefaultUserAgentHeader(httpClient);
 
-        Assert.Equal("HttpAgent/1.0.0.6", httpClient.DefaultRequestHeaders.GetValues("User-Agent").First());
+        Assert.Equal("HttpAgent/1.0.0.7", httpClient.DefaultRequestHeaders.GetValues("User-Agent").First());
 
         var httpClient2 = new HttpClient();
         httpClient2.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "furion");
