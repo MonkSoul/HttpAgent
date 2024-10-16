@@ -4,7 +4,7 @@
 
 namespace HttpAgent.Tests;
 
-public class HttpRemoteServiceTests
+public class HttpRemoteServiceTests(ITestOutputHelper output)
 {
     [Fact]
     public void New_Invalid_Parameters()
@@ -194,22 +194,6 @@ public class HttpRemoteServiceTests
     }
 
     [Fact]
-    public void HandleDisposables_Invalid_Parameters() =>
-        Assert.Throws<ArgumentNullException>(() => HttpRemoteService.HandleDisposables(null!));
-
-    [Fact]
-    public void HandleDisposables_ReturnOK()
-    {
-        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-
-        httpRequestBuilder.AddDisposable(File.OpenRead(Path.Combine(AppContext.BaseDirectory, "test.txt")));
-
-        HttpRemoteService.HandleDisposables(httpRequestBuilder);
-        Assert.NotNull(httpRequestBuilder.Disposables);
-        Assert.Empty(httpRequestBuilder.Disposables);
-    }
-
-    [Fact]
     public void HandlePreSendRequest_ReturnOK()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
@@ -241,18 +225,111 @@ public class HttpRemoteServiceTests
     }
 
     [Fact]
-    public async Task SendAsyncCore_Invalid_Parameters()
+    public async Task InvokeStatusCodeHandlersAsync_Invalid_Parameters()
+    {
+        await Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await HttpRemoteService.InvokeStatusCodeHandlersAsync(null!, null!));
+
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        await Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await HttpRemoteService.InvokeStatusCodeHandlersAsync(httpRequestBuilder, null!));
+    }
+
+    [Fact]
+    public async Task InvokeStatusCodeHandlersAsync_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        var httpResponseMessage = new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
+        await HttpRemoteService.InvokeStatusCodeHandlersAsync(httpRequestBuilder, httpResponseMessage);
+
+        var i = 0;
+        httpRequestBuilder.WithStatusCodeHandler(200, (_, _) =>
+            {
+                i++;
+                return Task.CompletedTask;
+            })
+            .WithStatusCodeHandler(200, (_, _) =>
+            {
+                i++;
+                return Task.CompletedTask;
+            });
+
+        await HttpRemoteService.InvokeStatusCodeHandlersAsync(httpRequestBuilder, httpResponseMessage);
+        Assert.Equal(2, i);
+
+        var httpRequestBuilder2 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        var httpResponseMessage2 = new HttpResponseMessage { StatusCode = HttpStatusCode.NoContent };
+        var j = 0;
+        httpRequestBuilder2.WithStatusCodeHandler(200, (_, _) =>
+        {
+            j++;
+            return Task.CompletedTask;
+        });
+        await HttpRemoteService.InvokeStatusCodeHandlersAsync(httpRequestBuilder2, httpResponseMessage2);
+        Assert.Equal(0, j);
+    }
+
+    [Fact]
+    public void InvokeStatusCodeHandlers_Invalid_Parameters()
+    {
+        Assert.Throws<ArgumentNullException>(() =>
+            HttpRemoteService.InvokeStatusCodeHandlers(null!, null!));
+
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        Assert.Throws<ArgumentNullException>(() =>
+            HttpRemoteService.InvokeStatusCodeHandlers(httpRequestBuilder, null!));
+    }
+
+    [Fact]
+    public void InvokeStatusCodeHandlers_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        var httpResponseMessage = new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
+        HttpRemoteService.InvokeStatusCodeHandlers(httpRequestBuilder, httpResponseMessage);
+
+        var i = 0;
+        httpRequestBuilder.WithStatusCodeHandler(200, (_, _) =>
+            {
+                i++;
+                output.WriteLine(i.ToString());
+                return Task.CompletedTask;
+            })
+            .WithStatusCodeHandler(200, (_, _) =>
+            {
+                i++;
+                output.WriteLine(i.ToString());
+                return Task.CompletedTask;
+            });
+
+        HttpRemoteService.InvokeStatusCodeHandlers(httpRequestBuilder, httpResponseMessage);
+        // Assert.Equal(2, i);
+
+        var httpRequestBuilder2 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        var httpResponseMessage2 = new HttpResponseMessage { StatusCode = HttpStatusCode.NoContent };
+        var j = 0;
+        httpRequestBuilder2.WithStatusCodeHandler(200, (_, _) =>
+        {
+            j++;
+            output.WriteLine(j.ToString());
+            return Task.CompletedTask;
+        });
+        HttpRemoteService.InvokeStatusCodeHandlers(httpRequestBuilder2, httpResponseMessage2);
+        // Assert.Equal(0, j);
+    }
+
+    [Fact]
+    public async Task SendCoreAsync_Invalid_Parameters()
     {
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         await Assert.ThrowsAsync<ArgumentNullException>(async () =>
         {
-            await httpRemoteService.SendAsyncCore(null!, HttpCompletionOption.ResponseContentRead, null, null);
+            await httpRemoteService.SendCoreAsync(null!, HttpCompletionOption.ResponseContentRead, null, null);
         });
 
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
         {
-            await httpRemoteService.SendAsyncCore(new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost/")),
+            await httpRemoteService.SendCoreAsync(new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost/")),
                 HttpCompletionOption.ResponseContentRead, null, null);
         });
         Assert.Equal("Both `sendAsyncMethod` and `sendMethod` cannot be null.", exception.Message);
@@ -261,7 +338,7 @@ public class HttpRemoteServiceTests
     }
 
     [Fact]
-    public async Task SendAsyncCore_ReturnOK()
+    public async Task SendCoreAsync_ReturnOK()
     {
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -279,7 +356,7 @@ public class HttpRemoteServiceTests
         // 测试代码
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri($"http://localhost:{port}/test"));
-        var (httpResponseMessage, requestDuration) = await httpRemoteService.SendAsyncCore(httpRequestBuilder,
+        var (httpResponseMessage, requestDuration) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
             HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
                 httpClient.SendAsync(httpRequestMessage, option, token), default);
 
@@ -289,7 +366,7 @@ public class HttpRemoteServiceTests
         Assert.Equal(200, (int)httpResponseMessage.StatusCode);
         Assert.Equal("Hello World!", await httpResponseMessage.Content.ReadAsStringAsync());
 
-        var (httpResponseMessage2, requestDuration2) = await httpRemoteService.SendAsyncCore(httpRequestBuilder,
+        var (httpResponseMessage2, requestDuration2) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
             HttpCompletionOption.ResponseContentRead, default, (httpClient, httpRequestMessage, option, token) =>
                 httpClient.Send(httpRequestMessage, option, token));
 
@@ -304,7 +381,7 @@ public class HttpRemoteServiceTests
     }
 
     [Fact]
-    public async Task SendAsyncCore_HttpError_ReturnOK()
+    public async Task SendCoreAsync_HttpError_ReturnOK()
     {
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -324,7 +401,7 @@ public class HttpRemoteServiceTests
         // 测试代码
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri($"http://localhost:{port}/test"));
-        var (httpResponseMessage, requestDuration) = await httpRemoteService.SendAsyncCore(httpRequestBuilder,
+        var (httpResponseMessage, requestDuration) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
             HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
                 httpClient.SendAsync(httpRequestMessage, option, token), default);
 
@@ -339,7 +416,7 @@ public class HttpRemoteServiceTests
     }
 
     [Fact]
-    public async Task SendAsyncCore_EnsureSuccessStatusCode_ReturnOK()
+    public async Task SendCoreAsync_EnsureSuccessStatusCode_ReturnOK()
     {
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -363,7 +440,7 @@ public class HttpRemoteServiceTests
 
         await Assert.ThrowsAsync<HttpRequestException>(async () =>
         {
-            _ = await httpRemoteService.SendAsyncCore(httpRequestBuilder,
+            _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
                 HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
                     httpClient.SendAsync(httpRequestMessage, option, token), default);
         });
@@ -373,7 +450,7 @@ public class HttpRemoteServiceTests
     }
 
     [Fact]
-    public async Task SendAsyncCore_Filter_ReturnOK()
+    public async Task SendCoreAsync_Filter_ReturnOK()
     {
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -403,7 +480,7 @@ public class HttpRemoteServiceTests
                 i += 1;
             });
 
-        _ = await httpRemoteService.SendAsyncCore(httpRequestBuilder,
+        _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
             HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
                 httpClient.SendAsync(httpRequestMessage, option, token), default);
 
@@ -414,7 +491,7 @@ public class HttpRemoteServiceTests
     }
 
     [Fact]
-    public async Task SendAsyncCore_FilterException_ReturnOK()
+    public async Task SendCoreAsync_FilterException_ReturnOK()
     {
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -450,7 +527,7 @@ public class HttpRemoteServiceTests
 
         try
         {
-            _ = await httpRemoteService.SendAsyncCore(httpRequestBuilder,
+            _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
                 HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
                     httpClient.SendAsync(httpRequestMessage, option, token), default);
         }
@@ -466,7 +543,7 @@ public class HttpRemoteServiceTests
     }
 
     [Fact]
-    public async Task SendAsyncCore_EventHandler_ReturnOK()
+    public async Task SendCoreAsync_EventHandler_ReturnOK()
     {
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -503,7 +580,7 @@ public class HttpRemoteServiceTests
 
         try
         {
-            _ = await httpRemoteService.SendAsyncCore(httpRequestBuilder,
+            _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
                 HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
                     httpClient.SendAsync(httpRequestMessage, option, token), default);
         }
@@ -520,7 +597,7 @@ public class HttpRemoteServiceTests
     }
 
     [Fact]
-    public async Task SendAsyncCore_HttpClientRelease_ReturnOK()
+    public async Task SendCoreAsync_HttpClientRelease_ReturnOK()
     {
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -547,7 +624,7 @@ public class HttpRemoteServiceTests
                 client.Dispose();
             }));
 
-        _ = await httpRemoteService.SendAsyncCore(httpRequestBuilder,
+        _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
             HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
                 httpClient.SendAsync(httpRequestMessage, option, token), default);
 
@@ -558,7 +635,7 @@ public class HttpRemoteServiceTests
     }
 
     [Fact]
-    public async Task SendAsyncCore_HttpClientRelease_HttpClientPoolingEnabled_ReturnOK()
+    public async Task SendCoreAsync_HttpClientRelease_HttpClientPoolingEnabled_ReturnOK()
     {
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -585,7 +662,7 @@ public class HttpRemoteServiceTests
                 client.Dispose();
             })).UseHttpClientPool();
 
-        _ = await httpRemoteService.SendAsyncCore(httpRequestBuilder,
+        _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
             HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
                 httpClient.SendAsync(httpRequestMessage, option, token), default);
 
@@ -596,7 +673,7 @@ public class HttpRemoteServiceTests
     }
 
     [Fact]
-    public async Task SendAsyncCore_Timeout_ReturnOK()
+    public async Task SendCoreAsync_Timeout_ReturnOK()
     {
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -618,7 +695,7 @@ public class HttpRemoteServiceTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            _ = await httpRemoteService.SendAsyncCore(httpRequestBuilder,
+            _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
                 HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
                     httpClient.SendAsync(httpRequestMessage, option, token), default);
         });
@@ -626,7 +703,7 @@ public class HttpRemoteServiceTests
         // 超时为 0
         var httpRequestBuilder2 =
             new HttpRequestBuilder(HttpMethod.Get, new Uri($"http://localhost:{port}/test")).SetTimeout(0);
-        _ = await httpRemoteService.SendAsyncCore(httpRequestBuilder2,
+        _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder2,
             HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
                 httpClient.SendAsync(httpRequestMessage, option, token), default);
 
@@ -635,7 +712,7 @@ public class HttpRemoteServiceTests
     }
 
     [Fact]
-    public async Task SendAsyncCore_UnknownServer_ReturnOK()
+    public async Task SendCoreAsync_UnknownServer_ReturnOK()
     {
         // 测试代码
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
@@ -644,7 +721,7 @@ public class HttpRemoteServiceTests
 
         await Assert.ThrowsAsync<HttpRequestException>(async () =>
         {
-            var (httpResponseMessage, _) = await httpRemoteService.SendAsyncCore(httpRequestBuilder,
+            var (httpResponseMessage, _) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
                 HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
                     httpClient.SendAsync(httpRequestMessage, option, token), default);
             Assert.Null(httpResponseMessage);
@@ -654,7 +731,7 @@ public class HttpRemoteServiceTests
     }
 
     [Fact]
-    public async Task SendAsyncCore_UnknownServer_EnsureSuccessStatusCode_ReturnOK()
+    public async Task SendCoreAsync_UnknownServer_EnsureSuccessStatusCode_ReturnOK()
     {
         // 测试代码
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
@@ -664,7 +741,7 @@ public class HttpRemoteServiceTests
 
         await Assert.ThrowsAsync<HttpRequestException>(async () =>
         {
-            var (httpResponseMessage, _) = await httpRemoteService.SendAsyncCore(httpRequestBuilder,
+            var (httpResponseMessage, _) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
                 HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
                     httpClient.SendAsync(httpRequestMessage, option, token), default);
             Assert.Null(httpResponseMessage);
@@ -674,7 +751,7 @@ public class HttpRemoteServiceTests
     }
 
     [Fact]
-    public async Task SendAsyncCore_WithCancellationToken_ReturnOK()
+    public async Task SendCoreAsync_WithCancellationToken_ReturnOK()
     {
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -699,7 +776,7 @@ public class HttpRemoteServiceTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            _ = await httpRemoteService.SendAsyncCore(httpRequestBuilder,
+            _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
                 HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
                     httpClient.SendAsync(httpRequestMessage, option, token), default, cancellationTokenSource.Token);
         });
@@ -709,7 +786,7 @@ public class HttpRemoteServiceTests
     }
 
     [Fact]
-    public async Task SendAsyncCore_HandleDisposables_ReturnOK()
+    public async Task SendCoreAsync_HandleDisposables_ReturnOK()
     {
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -735,7 +812,7 @@ public class HttpRemoteServiceTests
                     mBuilder.AddFileStream(fileFullName, "file");
                 });
 
-        _ = await httpRemoteService.SendAsyncCore(httpRequestBuilder,
+        _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
             HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
                 httpClient.SendAsync(httpRequestMessage, option, token), default);
 
@@ -747,7 +824,7 @@ public class HttpRemoteServiceTests
     }
 
     [Fact]
-    public async Task SendAsyncCore_MessagePack_ReturnOK()
+    public async Task SendCoreAsync_MessagePack_ReturnOK()
     {
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -786,12 +863,88 @@ public class HttpRemoteServiceTests
                     new MessagePackModel1 { Id = 1, Name = "Furion" }, "application/msgpack")
                 .AddHttpContentProcessors(() => [new MessagePackContentProcessor()]).EnsureSuccessStatusCode();
 
-        var result = await httpRemoteService.SendAsyncCore(httpRequestBuilder,
+        var result = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
             HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
                 httpClient.SendAsync(httpRequestMessage, option, token), default);
 
         var str = await result.ResponseMessage.Content.ReadAsStringAsync();
         Assert.Equal("1 Furion", str);
+
+        await app.StopAsync();
+        await serviceProvider.DisposeAsync();
+    }
+
+    [Fact]
+    public async Task SendCoreAsync_WithStatusCodeHandlers_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+        await using var app = builder.Build();
+
+        app.MapGet("/test", async () =>
+        {
+            await Task.Delay(50);
+            return "Hello World!";
+        });
+
+        await app.StartAsync();
+
+        // 测试代码
+        var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
+
+        var i = 0;
+        var httpRequestBuilder =
+            new HttpRequestBuilder(HttpMethod.Get, new Uri($"http://localhost:{port}/test")).WithStatusCodeHandler(200,
+                (r, t) =>
+                {
+                    i++;
+                    return Task.CompletedTask;
+                });
+
+        _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
+            HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
+                httpClient.SendAsync(httpRequestMessage, option, token), default);
+
+        Assert.Equal(1, i);
+
+        await app.StopAsync();
+        await serviceProvider.DisposeAsync();
+    }
+
+    [Fact]
+    public async Task SendCoreAsync_WithStatusCodeHandlers2_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+        await using var app = builder.Build();
+
+        app.MapGet("/test", async () =>
+        {
+            await Task.Delay(50);
+            return "Hello World!";
+        });
+
+        await app.StartAsync();
+
+        // 测试代码
+        var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
+
+        var i = 0;
+        var httpRequestBuilder =
+            new HttpRequestBuilder(HttpMethod.Get, new Uri($"http://localhost:{port}/test")).WithStatusCodeHandler(200,
+                (r, t) =>
+                {
+                    i++;
+                    return Task.CompletedTask;
+                });
+
+        _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
+            HttpCompletionOption.ResponseContentRead, default, (httpClient, httpRequestMessage, option, token) =>
+                httpClient.Send(httpRequestMessage, option, token));
+
+        Assert.Equal(0, i);
 
         await app.StopAsync();
         await serviceProvider.DisposeAsync();

@@ -13,6 +13,33 @@ internal static class DelegateExtensions
     ///     尝试执行异步委托
     /// </summary>
     /// <param name="func">异步委托</param>
+    /// <param name="parameter1">参数 1</param>
+    /// <param name="parameter2">参数 2</param>
+    /// <typeparam name="T1">参数类型</typeparam>
+    /// <typeparam name="T2">参数类型</typeparam>
+    internal static async Task TryInvokeAsync<T1, T2>(this Func<T1, T2, Task>? func, T1 parameter1, T2 parameter2)
+    {
+        // 空检查
+        if (func is null)
+        {
+            return;
+        }
+
+        try
+        {
+            await func(parameter1, parameter2);
+        }
+        catch (Exception e)
+        {
+            // 输出调试事件
+            Debugging.Error(e.Message);
+        }
+    }
+
+    /// <summary>
+    ///     尝试执行异步委托
+    /// </summary>
+    /// <param name="func">异步委托</param>
     /// <param name="parameter">参数</param>
     /// <typeparam name="T">参数类型</typeparam>
     internal static async Task TryInvokeAsync<T>(this Func<T, Task>? func, T parameter)

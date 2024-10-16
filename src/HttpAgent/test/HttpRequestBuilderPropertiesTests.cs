@@ -50,5 +50,6 @@ public class HttpRequestBuilderPropertiesTests
         Assert.Null(httpRequestBuilder2.Disposables);
         Assert.Null(httpRequestBuilder2.HttpClientPooling);
         Assert.False(httpRequestBuilder2.HttpClientPoolingEnabled);
+        Assert.Null(httpRequestBuilder2.StatusCodeHandlers);
     }
 }

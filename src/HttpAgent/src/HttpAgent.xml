@@ -1384,10 +1384,33 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.ReleaseHttpClientPooling">
+        <member name="M:HttpAgent.HttpRequestBuilder.ReleaseResources">
             <summary>
-                手动释放 <see cref="T:System.Net.Http.HttpClient" /> 实例管理器
+                释放资源集合
             </summary>
+            <remarks>包含自定义 <see cref="T:System.Net.Http.HttpClient" /> 实例和其他可释放对象集合。</remarks>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.WithStatusCodeHandler(System.Collections.Generic.IEnumerable{System.Int32},System.Func{System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken,System.Threading.Tasks.Task})">
+            <summary>
+                添加状态码处理程序
+            </summary>
+            <remarks>支持多次调用。</remarks>
+            <param name="statusCodes">HTTP 状态码集合</param>
+            <param name="handler">自定义处理程序</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.WithStatusCodeHandler(System.Int32,System.Func{System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken,System.Threading.Tasks.Task})">
+            <summary>
+                添加状态码处理程序
+            </summary>
+            <remarks>支持多次调用。</remarks>
+            <param name="statusCode">HTTP 状态码</param>
+            <param name="handler">自定义处理程序</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.AddDisposable(System.IDisposable)">
             <summary>
@@ -1399,6 +1422,11 @@
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.ReleaseDisposables">
+            <summary>
+                释放可释放的对象集合
+            </summary>
         </member>
         <member name="P:HttpAgent.HttpRequestBuilder.RequestUri">
             <summary>
@@ -1566,6 +1594,11 @@
         <member name="P:HttpAgent.HttpRequestBuilder.HttpClientPoolingEnabled">
             <summary>
                 是否启用 <see cref="T:System.Net.Http.HttpClient" /> 的池化管理
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HttpRequestBuilder.StatusCodeHandlers">
+            <summary>
+                状态码处理程序
             </summary>
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.Get(System.String,System.Action{HttpAgent.HttpRequestBuilder})">
@@ -1809,7 +1842,9 @@
             <param name="requestUri">请求地址</param>
             <param name="destinationPath">文件保存的目标路径</param>
             <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
-            <param name="fileExistsBehavior"><see cref="T:HttpAgent.HttpFileDownloadBuilder" /></param>
+            <param name="fileExistsBehavior">
+                <see cref="T:HttpAgent.FileExistsBehavior" />
+            </param>
             <returns>
                 <see cref="T:HttpAgent.HttpFileDownloadBuilder" />
             </returns>
@@ -1821,7 +1856,9 @@
             <param name="requestUri">请求地址</param>
             <param name="destinationPath">文件保存的目标路径</param>
             <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
-            <param name="fileExistsBehavior"><see cref="T:HttpAgent.HttpFileDownloadBuilder" /></param>
+            <param name="fileExistsBehavior">
+                <see cref="T:HttpAgent.FileExistsBehavior" />
+            </param>
             <returns>
                 <see cref="T:HttpAgent.HttpFileDownloadBuilder" />
             </returns>
@@ -1833,7 +1870,9 @@
             <param name="requestUri">请求地址</param>
             <param name="destinationPath">文件保存的目标路径</param>
             <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
-            <param name="fileExistsBehavior"><see cref="T:HttpAgent.HttpFileDownloadBuilder" /></param>
+            <param name="fileExistsBehavior">
+                <see cref="T:HttpAgent.FileExistsBehavior" />
+            </param>
             <returns>
                 <see cref="T:HttpAgent.HttpFileDownloadBuilder" />
             </returns>
@@ -2374,6 +2413,16 @@
                 委托拓展类
             </summary>
         </member>
+        <member name="M:HttpAgent.Core.Extensions.DelegateExtensions.TryInvokeAsync``2(System.Func{``0,``1,System.Threading.Tasks.Task},``0,``1)">
+            <summary>
+                尝试执行异步委托
+            </summary>
+            <param name="func">异步委托</param>
+            <param name="parameter1">参数 1</param>
+            <param name="parameter2">参数 2</param>
+            <typeparam name="T1">参数类型</typeparam>
+            <typeparam name="T2">参数类型</typeparam>
+        </member>
         <member name="M:HttpAgent.Core.Extensions.DelegateExtensions.TryInvokeAsync``1(System.Func{``0,System.Threading.Tasks.Task},``0)">
             <summary>
                 尝试执行异步委托
@@ -2515,6 +2564,18 @@
             <param name="enumAsString">指示是否将枚举类型的值作为名称输出，默认为 <c>true</c>。若为 <c>false</c>，则输出枚举的值</param>
             <returns>
                 <see cref="T:System.String" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Core.Extensions.ObjectExtensions.TryGetCount(System.Object,System.Int32@)">
+            <summary>
+                尝试获取对象的数量
+            </summary>
+            <param name="obj">
+                <see cref="T:System.Object" />
+            </param>
+            <param name="count">数量</param>
+            <returns>
+                <see cref="T:System.Boolean" />
             </returns>
         </member>
         <member name="M:HttpAgent.Core.Extensions.ObjectExtensions.ObjectToDictionary(System.Object)">
@@ -4354,7 +4415,7 @@
         <member name="M:HttpAgent.HttpRemoteService.SendAsync``1(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.SendAsyncCore(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpCompletionOption,System.Func{System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken,System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage}},System.Func{System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken,System.Net.Http.HttpResponseMessage},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.SendCoreAsync(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpCompletionOption,System.Func{System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken,System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage}},System.Func{System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken,System.Net.Http.HttpResponseMessage},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP 远程请求并处理 <see cref="T:System.Net.Http.HttpResponseMessage" /> 实例
             </summary>
@@ -4418,14 +4479,6 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </param>
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.HandleDisposables(HttpAgent.HttpRequestBuilder)">
-            <summary>
-                处理需要释放的对象集合
-            </summary>
-            <param name="httpRequestBuilder">
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
-            </param>
-        </member>
         <member name="M:HttpAgent.HttpRemoteService.CreateHttpClientWithDefaults(HttpAgent.HttpRequestBuilder)">
             <summary>
                 创建带有默认值的 <see cref="T:System.Net.Http.HttpClient" /> 实例
@@ -4455,6 +4508,34 @@
             <remarks>解决某些服务器可能需要这个头部信息才能正确响应请求。</remarks>
             <param name="httpClient">
                 <see cref="T:System.Net.Http.HttpClient" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.InvokeStatusCodeHandlers(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <summary>
+                调用状态码处理程序
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+            <param name="httpResponseMessage">
+                <see cref="T:System.Net.Http.HttpResponseMessage" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.InvokeStatusCodeHandlersAsync(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <summary>
+                调用状态码处理程序
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+            <param name="httpResponseMessage">
+                <see cref="T:System.Net.Http.HttpResponseMessage" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
         <member name="M:HttpAgent.HttpRemoteService.DownloadFile(System.String,System.String,System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},HttpAgent.FileExistsBehavior,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">

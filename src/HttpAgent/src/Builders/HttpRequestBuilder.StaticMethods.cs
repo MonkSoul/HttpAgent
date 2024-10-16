@@ -299,7 +299,9 @@ public sealed partial class HttpRequestBuilder
     /// <param name="requestUri">请求地址</param>
     /// <param name="destinationPath">文件保存的目标路径</param>
     /// <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
-    /// <param name="fileExistsBehavior"><see cref="HttpFileDownloadBuilder" /></param>
+    /// <param name="fileExistsBehavior">
+    ///     <see cref="FileExistsBehavior" />
+    /// </param>
     /// <returns>
     ///     <see cref="HttpFileDownloadBuilder" />
     /// </returns>
@@ -326,7 +328,9 @@ public sealed partial class HttpRequestBuilder
     /// <param name="requestUri">请求地址</param>
     /// <param name="destinationPath">文件保存的目标路径</param>
     /// <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
-    /// <param name="fileExistsBehavior"><see cref="HttpFileDownloadBuilder" /></param>
+    /// <param name="fileExistsBehavior">
+    ///     <see cref="FileExistsBehavior" />
+    /// </param>
     /// <returns>
     ///     <see cref="HttpFileDownloadBuilder" />
     /// </returns>
@@ -341,7 +345,9 @@ public sealed partial class HttpRequestBuilder
     /// <param name="requestUri">请求地址</param>
     /// <param name="destinationPath">文件保存的目标路径</param>
     /// <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
-    /// <param name="fileExistsBehavior"><see cref="HttpFileDownloadBuilder" /></param>
+    /// <param name="fileExistsBehavior">
+    ///     <see cref="FileExistsBehavior" />
+    /// </param>
     /// <returns>
     ///     <see cref="HttpFileDownloadBuilder" />
     /// </returns>

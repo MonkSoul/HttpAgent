@@ -1021,10 +1021,10 @@ public class HttpRequestBuilderMethodsTests
     }
 
     [Fact]
-    public void ReleaseHttpClientPooling_ReturnOK()
+    public void ReleaseResources_ReturnOK()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        httpRequestBuilder.ReleaseHttpClientPooling();
+        httpRequestBuilder.ReleaseResources();
         Assert.Null(httpRequestBuilder.HttpClientPooling);
 
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
@@ -1036,10 +1036,15 @@ public class HttpRequestBuilderMethodsTests
         }));
         Assert.NotNull(httpRequestBuilder.HttpClientProvider);
 
+        httpRequestBuilder.AddDisposable(File.OpenRead(Path.Combine(AppContext.BaseDirectory, "test.txt")));
+
         _ = httpRemoteService.CreateHttpClientWithDefaults(httpRequestBuilder);
-        httpRequestBuilder.ReleaseHttpClientPooling();
+        httpRequestBuilder.ReleaseResources();
         Assert.Null(httpRequestBuilder.HttpClientPooling);
         Assert.Equal(1, i);
+
+        Assert.NotNull(httpRequestBuilder.Disposables);
+        Assert.Empty(httpRequestBuilder.Disposables);
 
         serviceProvider.Dispose();
     }
@@ -1059,5 +1064,48 @@ public class HttpRequestBuilderMethodsTests
         httpRequestBuilder.AddDisposable(File.OpenRead(Path.Combine(AppContext.BaseDirectory, "test.txt")));
         Assert.NotNull(httpRequestBuilder.Disposables);
         Assert.Single(httpRequestBuilder.Disposables);
+    }
+
+    [Fact]
+    public void WithStatusCodeHandler_Invalid_Parameters()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+
+        Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.WithStatusCodeHandler(null!, null!));
+        var exception =
+            Assert.Throws<ArgumentException>(() =>
+                httpRequestBuilder.WithStatusCodeHandler(Array.Empty<int>(), null!));
+
+        Assert.Equal(
+            "The status codes array cannot be empty. At least one status code must be provided. (Parameter 'statusCodes')",
+            exception.Message);
+
+        Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.WithStatusCodeHandler([200], null!));
+    }
+
+    [Fact]
+    public void WithStatusCodeHandler_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder.WithStatusCodeHandler([200], (_, _) => Task.CompletedTask);
+        httpRequestBuilder.WithStatusCodeHandler([200], (_, _) => Task.CompletedTask);
+        httpRequestBuilder.WithStatusCodeHandler([200, 204], (_, _) => Task.CompletedTask);
+        httpRequestBuilder.WithStatusCodeHandler([200, 204], (_, _) => Task.CompletedTask);
+        httpRequestBuilder.WithStatusCodeHandler([200, 209], (_, _) => Task.CompletedTask);
+
+        Assert.NotNull(httpRequestBuilder.StatusCodeHandlers);
+        Assert.Equal(5, httpRequestBuilder.StatusCodeHandlers.Count);
+    }
+
+    [Fact]
+    public void ReleaseDisposables_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+
+        httpRequestBuilder.AddDisposable(File.OpenRead(Path.Combine(AppContext.BaseDirectory, "test.txt")));
+
+        httpRequestBuilder.ReleaseDisposables();
+        Assert.NotNull(httpRequestBuilder.Disposables);
+        Assert.Empty(httpRequestBuilder.Disposables);
     }
 }

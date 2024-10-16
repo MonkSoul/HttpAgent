@@ -73,7 +73,7 @@ public class HttpRemoteServiceExtensionsTests
 
         Assert.Throws<TaskCanceledException>(() =>
         {
-            httpRemoteService.DownloadFile($"http://localhost:{port}/test", destinationPath, null,
+            httpRemoteService.DownloadFile($"http://localhost:{port}/test", destinationPath,
                 cancellationToken: cancellationTokenSource.Token);
         });
 
@@ -194,7 +194,7 @@ public class HttpRemoteServiceExtensionsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            await httpRemoteService.DownloadFileAsync($"http://localhost:{port}/test", destinationPath, null,
+            await httpRemoteService.DownloadFileAsync($"http://localhost:{port}/test", destinationPath,
                 cancellationToken: cancellationTokenSource.Token);
         });
 
@@ -786,7 +786,7 @@ public class HttpRemoteServiceExtensionsTests
         var i = 0;
         // ReSharper disable once MethodHasAsyncOverload
         var httpResponseMessage = httpRemoteService.UploadFile($"http://localhost:{port}/test", fileFullName,
-            "file", configure: requestBuilder =>
+            configure: requestBuilder =>
             {
                 requestBuilder.SetOnPreSendRequest(_ =>
                 {
@@ -895,7 +895,7 @@ public class HttpRemoteServiceExtensionsTests
 
         var i = 0;
         var httpResponseMessage = await httpRemoteService.UploadFileAsync($"http://localhost:{port}/test",
-            fileFullName, "file", configure: requestBuilder =>
+            fileFullName, configure: requestBuilder =>
             {
                 requestBuilder.SetOnPreSendRequest(_ =>
                 {
