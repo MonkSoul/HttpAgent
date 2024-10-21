@@ -72,6 +72,6 @@ public class ProfilerDelegatingHandlerTests
         ProfilerDelegatingHandler.Log(logger, null);
         ProfilerDelegatingHandler.Log(logger, string.Empty);
         ProfilerDelegatingHandler.Log(logger, " ");
-        ProfilerDelegatingHandler.Log(logger, "Furion.HttpRemote.Tests");
+        ProfilerDelegatingHandler.Log(logger, "HttpAgent.Tests");
     }
 }
