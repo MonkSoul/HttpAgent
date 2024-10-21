@@ -1412,6 +1412,14 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.Profiler">
+            <summary>
+                设置是否启用请求分析工具
+            </summary>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.AddDisposable(System.IDisposable)">
             <summary>
                 添加请求结束时需要释放的对象
@@ -1594,6 +1602,11 @@
         <member name="P:HttpAgent.HttpRequestBuilder.HttpClientPoolingEnabled">
             <summary>
                 是否启用 <see cref="T:System.Net.Http.HttpClient" /> 的池化管理
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HttpRequestBuilder.ProfilerEnabled">
+            <summary>
+                是否启用请求分析工具
             </summary>
         </member>
         <member name="P:HttpAgent.HttpRequestBuilder.StatusCodeHandlers">
@@ -4353,12 +4366,18 @@
         <member name="F:HttpAgent.HttpRemoteService._httpContentProcessorFactory">
             <inheritdoc cref="T:HttpAgent.IHttpContentProcessorFactory" />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.#ctor(System.IServiceProvider,System.Net.Http.IHttpClientFactory,HttpAgent.IHttpContentProcessorFactory,HttpAgent.IHttpContentConverterFactory,HttpAgent.HttpRemoteOptions)">
+        <member name="F:HttpAgent.HttpRemoteService._logger">
+            <inheritdoc cref="T:Microsoft.Extensions.Logging.ILogger`1" />
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.#ctor(System.IServiceProvider,Microsoft.Extensions.Logging.ILogger{HttpAgent.Logging},System.Net.Http.IHttpClientFactory,HttpAgent.IHttpContentProcessorFactory,HttpAgent.IHttpContentConverterFactory,HttpAgent.HttpRemoteOptions)">
             <summary>
                 <inheritdoc cref="T:HttpAgent.HttpRemoteService" />
             </summary>
             <param name="serviceProvider">
                 <see cref="T:System.IServiceProvider" />
+            </param>
+            <param name="logger">
+                <see cref="T:Microsoft.Extensions.Logging.Logger`1" />
             </param>
             <param name="httpClientFactory">
                 <see cref="T:System.Net.Http.IHttpClientFactory" />

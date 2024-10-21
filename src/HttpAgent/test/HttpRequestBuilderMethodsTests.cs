@@ -1108,4 +1108,13 @@ public class HttpRequestBuilderMethodsTests
         Assert.NotNull(httpRequestBuilder.Disposables);
         Assert.Empty(httpRequestBuilder.Disposables);
     }
+
+    [Fact]
+    public void Profiler_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder.Profiler();
+
+        Assert.True(httpRequestBuilder.ProfilerEnabled);
+    }
 }

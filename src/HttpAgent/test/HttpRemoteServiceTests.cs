@@ -17,20 +17,24 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         });
 
         var serviceProvider = services.BuildServiceProvider();
+        var logger = serviceProvider.GetRequiredService<ILogger<Logging>>();
         var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
 
         var httpContentProcessorFactory = new HttpContentProcessorFactory(null);
         var httpContentConverterFactory = new HttpContentConverterFactory(serviceProvider, null);
 
-        Assert.Throws<ArgumentNullException>(() => new HttpRemoteService(null!, null!, null!, null!, null!));
+        Assert.Throws<ArgumentNullException>(() => new HttpRemoteService(null!, null!, null!, null!, null!, null!));
         Assert.Throws<ArgumentNullException>(() =>
-            new HttpRemoteService(serviceProvider, null!, null!, null!, null!));
+            new HttpRemoteService(serviceProvider, null!, null!, null!, null!, null!));
         Assert.Throws<ArgumentNullException>(() =>
-            new HttpRemoteService(serviceProvider, httpClientFactory, null!, null!, null!));
+            new HttpRemoteService(serviceProvider, logger, null!, null!, null!, null!));
         Assert.Throws<ArgumentNullException>(() =>
-            new HttpRemoteService(serviceProvider, httpClientFactory, httpContentProcessorFactory, null!, null!));
+            new HttpRemoteService(serviceProvider, logger, httpClientFactory, null!, null!, null!));
         Assert.Throws<ArgumentNullException>(() =>
-            new HttpRemoteService(serviceProvider, httpClientFactory, httpContentProcessorFactory,
+            new HttpRemoteService(serviceProvider, logger, httpClientFactory, httpContentProcessorFactory, null!,
+                null!));
+        Assert.Throws<ArgumentNullException>(() =>
+            new HttpRemoteService(serviceProvider, logger, httpClientFactory, httpContentProcessorFactory,
                 httpContentConverterFactory, null!));
     }
 

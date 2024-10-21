@@ -40,10 +40,12 @@ public class Helpers
         }
 
         var serviceProvider = services.BuildServiceProvider();
+        var logger = serviceProvider.GetRequiredService<ILogger<Logging>>();
         var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
 
         var httpContentProcessorFactory = new HttpContentProcessorFactory(null);
-        var httpRemoteService = new HttpRemoteService(serviceProvider, httpClientFactory, httpContentProcessorFactory,
+        var httpRemoteService = new HttpRemoteService(serviceProvider, logger, httpClientFactory,
+            httpContentProcessorFactory,
             new HttpContentConverterFactory(serviceProvider, null), new HttpRemoteOptions());
 
         return (httpRemoteService, serviceProvider);

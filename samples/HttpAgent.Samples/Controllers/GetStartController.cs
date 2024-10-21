@@ -49,4 +49,10 @@ public class GetStartController(IHttpRemoteService httpRemoteService) : Controll
                 await Task.CompletedTask;
             }, FileExistsBehavior.Overwrite);
     }
+
+    [HttpGet]
+    public async Task<string?> Profiler()
+    {
+        return await httpRemoteService.SendAsAsync<string>(HttpRequestBuilder.Get("https://www.baidu.com").Profiler());
+    }
 }
