@@ -46,6 +46,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         Assert.NotNull(httpRemoteService);
         Assert.NotNull(httpRemoteService.ServiceProvider);
         Assert.NotNull(httpRemoteService.RemoteOptions);
+        Assert.NotNull(httpRemoteService._logger);
         Assert.NotNull(httpRemoteService._httpClientFactory);
         Assert.NotNull(httpRemoteService._httpContentProcessorFactory);
         Assert.NotNull(httpRemoteService._httpContentConverterFactory);

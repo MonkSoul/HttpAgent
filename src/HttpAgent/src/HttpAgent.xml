@@ -2810,27 +2810,36 @@
         <member name="M:HttpAgent.ProfilerDelegatingHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogRequestHeaders(System.Net.Http.HttpRequestMessage)">
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogRequestHeaders(Microsoft.Extensions.Logging.ILogger,System.Net.Http.HttpRequestMessage)">
             <summary>
                 记录请求标头
             </summary>
+            <param name="logger">
+                <see cref="T:Microsoft.Extensions.Logging.ILogger" />
+            </param>
             <param name="request">
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
             </param>
         </member>
-        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogResponseHeadersAndSummary(System.Net.Http.HttpResponseMessage,System.Int64)">
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogResponseHeadersAndSummary(Microsoft.Extensions.Logging.ILogger,System.Net.Http.HttpResponseMessage,System.Int64)">
             <summary>
                 记录常规和响应标头
             </summary>
+            <param name="logger">
+                <see cref="T:Microsoft.Extensions.Logging.ILogger" />
+            </param>
             <param name="httpResponseMessage">
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </param>
             <param name="requestDuration">请求耗时（毫秒）</param>
         </member>
-        <member name="M:HttpAgent.ProfilerDelegatingHandler.Log(System.String)">
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.Log(Microsoft.Extensions.Logging.ILogger,System.String)">
             <summary>
                 打印日志
             </summary>
+            <param name="logger">
+                <see cref="T:Microsoft.Extensions.Logging.ILogger" />
+            </param>
             <param name="message">日志消息</param>
         </member>
         <member name="T:HttpAgent.Extensions.HttpRemoteExtensions">

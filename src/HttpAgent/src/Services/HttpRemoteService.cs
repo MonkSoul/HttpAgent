@@ -250,7 +250,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         // 检查是否启用请求分析工具
         if (httpRequestBuilder.ProfilerEnabled)
         {
-            _logger.LogInformation("{message}", httpRequestMessage.ProfilerHeaders());
+            ProfilerDelegatingHandler.LogRequestHeaders(_logger, httpRequestMessage);
         }
 
         // 创建关联的超时 Token 标识
@@ -292,12 +292,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
             // 检查是否启用请求分析工具
             if (httpRequestBuilder.ProfilerEnabled)
             {
-                _logger.LogInformation("{message}", httpResponseMessage.ProfilerGeneralAndHeaders(
-                    generalCustomKeyValues:
-                    [
-                        new KeyValuePair<string, IEnumerable<string>>("Request Duration (ms)",
-                            [$"{requestDuration:N2}"])
-                    ]));
+                ProfilerDelegatingHandler.LogResponseHeadersAndSummary(_logger, httpResponseMessage, requestDuration);
             }
 
             // 如果 HTTP 响应的 IsSuccessStatusCode 属性是 false，则引发异常

@@ -31,7 +31,7 @@ public class ProfilerDelegatingHandlerTests
         httpRequestMessage.Headers.TryAddWithoutValidation("Accept", "application/json");
         httpRequestMessage.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
 
-        handler.LogRequestHeaders(httpRequestMessage);
+        ProfilerDelegatingHandler.LogRequestHeaders(logger, httpRequestMessage);
     }
 
     [Fact]
@@ -53,8 +53,12 @@ public class ProfilerDelegatingHandlerTests
         httpResponseMessage.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
         httpResponseMessage.Content.Headers.TryAddWithoutValidation("Content-Type", "application/json");
 
-        handler.LogResponseHeadersAndSummary(httpResponseMessage, 200);
+        ProfilerDelegatingHandler.LogResponseHeadersAndSummary(logger, httpResponseMessage, 200);
     }
+
+    [Fact]
+    public void Log_Invalid_Parameters() =>
+        Assert.Throws<ArgumentNullException>(() => ProfilerDelegatingHandler.Log(null!, null!));
 
     [Fact]
     public void Log_ReturnOK()
@@ -65,9 +69,9 @@ public class ProfilerDelegatingHandlerTests
         var logger = provider.GetRequiredService<ILogger<Logging>>();
         var handler = new ProfilerDelegatingHandler(logger);
 
-        handler.Log(null);
-        handler.Log(string.Empty);
-        handler.Log(" ");
-        handler.Log("HttpAgent.Tests");
+        ProfilerDelegatingHandler.Log(logger, null);
+        ProfilerDelegatingHandler.Log(logger, string.Empty);
+        ProfilerDelegatingHandler.Log(logger, " ");
+        ProfilerDelegatingHandler.Log(logger, "Furion.HttpRemote.Tests");
     }
 }
