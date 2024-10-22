@@ -254,12 +254,12 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         }
 
         // 创建关联的超时 Token 标识
-        using var cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        using var timeoutCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
         // 设置单次请求超时时间控制
         if (httpRequestBuilder.Timeout is not null && httpRequestBuilder.Timeout.Value != TimeSpan.Zero)
         {
-            cancellationTokenSource.CancelAfter(httpRequestBuilder.Timeout.Value);
+            timeoutCancellationTokenSource.CancelAfter(httpRequestBuilder.Timeout.Value);
         }
 
         HttpResponseMessage? httpResponseMessage = null;
@@ -271,8 +271,8 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         {
             // 调用发送 HTTP 请求委托
             httpResponseMessage = sendAsyncMethod is not null
-                ? await sendAsyncMethod(httpClient, httpRequestMessage, completionOption, cancellationTokenSource.Token)
-                : sendMethod!(httpClient, httpRequestMessage, completionOption, cancellationTokenSource.Token);
+                ? await sendAsyncMethod(httpClient, httpRequestMessage, completionOption, timeoutCancellationTokenSource.Token)
+                : sendMethod!(httpClient, httpRequestMessage, completionOption, timeoutCancellationTokenSource.Token);
 
             // 获取请求耗时
             var requestDuration = stopwatch.ElapsedMilliseconds;
@@ -281,12 +281,12 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
             if (sendAsyncMethod is not null)
             {
                 await InvokeStatusCodeHandlersAsync(httpRequestBuilder, httpResponseMessage,
-                    cancellationTokenSource.Token);
+                    timeoutCancellationTokenSource.Token);
             }
             else
             {
                 // ReSharper disable once MethodHasAsyncOverload
-                InvokeStatusCodeHandlers(httpRequestBuilder, httpResponseMessage, cancellationTokenSource.Token);
+                InvokeStatusCodeHandlers(httpRequestBuilder, httpResponseMessage, timeoutCancellationTokenSource.Token);
             }
 
             // 检查是否启用请求分析工具
