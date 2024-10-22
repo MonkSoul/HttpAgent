@@ -6885,7 +6885,7 @@
                 取消接收服务器消息标记
             </summary>
         </member>
-        <member name="F:HttpAgent.WebSocketClient._receiveTask">
+        <member name="F:HttpAgent.WebSocketClient._receiveMessageTask">
             <summary>
                 接收服务器消息任务
             </summary>

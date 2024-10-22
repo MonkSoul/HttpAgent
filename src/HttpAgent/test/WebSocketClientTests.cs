@@ -33,7 +33,7 @@ public class WebSocketClientTests
         Assert.Equal("ws://localhost:12345/", webSocketClient3.Options.ServerUri.ToString());
         Assert.Null(webSocketClient3._clientWebSocket);
         Assert.Null(webSocketClient3._messageCancellationTokenSource);
-        Assert.Null(webSocketClient3._receiveTask);
+        Assert.Null(webSocketClient3._receiveMessageTask);
         Assert.Null(webSocketClient3.State);
         Assert.Equal(0, webSocketClient3.CurrentReconnectRetries);
     }
@@ -46,7 +46,7 @@ public class WebSocketClientTests
 
         Assert.Null(webSocketClient._clientWebSocket);
         Assert.Null(webSocketClient._messageCancellationTokenSource);
-        Assert.Null(webSocketClient._receiveTask);
+        Assert.Null(webSocketClient._receiveMessageTask);
         Assert.Null(webSocketClient.State);
         Assert.Equal(0, webSocketClient.CurrentReconnectRetries);
     }
@@ -523,7 +523,7 @@ public class WebSocketClientTests
 
         Assert.Null(webSocketClient._clientWebSocket);
         Assert.Null(webSocketClient._messageCancellationTokenSource);
-        Assert.Null(webSocketClient._receiveTask);
+        Assert.Null(webSocketClient._receiveMessageTask);
         Assert.Null(webSocketClient.State);
         Assert.Equal(0, webSocketClient.CurrentReconnectRetries);
 
@@ -578,7 +578,7 @@ public class WebSocketClientTests
 
         Assert.Null(webSocketClient._clientWebSocket);
         Assert.Null(webSocketClient._messageCancellationTokenSource);
-        Assert.Null(webSocketClient._receiveTask);
+        Assert.Null(webSocketClient._receiveMessageTask);
         Assert.Null(webSocketClient.State);
         Assert.Equal(0, webSocketClient.CurrentReconnectRetries);
         Assert.Equal(2, i);
@@ -636,7 +636,7 @@ public class WebSocketClientTests
 
         Assert.Null(webSocketClient._clientWebSocket);
         Assert.Null(webSocketClient._messageCancellationTokenSource);
-        Assert.Null(webSocketClient._receiveTask);
+        Assert.Null(webSocketClient._receiveMessageTask);
         Assert.Null(webSocketClient.State);
         Assert.Equal(0, webSocketClient.CurrentReconnectRetries);
         Assert.Equal(2, i);
@@ -680,7 +680,7 @@ public class WebSocketClientTests
 
         Assert.Null(webSocketClient._clientWebSocket);
         Assert.Null(webSocketClient._messageCancellationTokenSource);
-        Assert.Null(webSocketClient._receiveTask);
+        Assert.Null(webSocketClient._receiveMessageTask);
         Assert.Null(webSocketClient.State);
         Assert.Equal(0, webSocketClient.CurrentReconnectRetries);
 
@@ -734,7 +734,7 @@ public class WebSocketClientTests
         Assert.Equal(1, i);
         Assert.Null(webSocketClient._clientWebSocket);
         Assert.Null(webSocketClient._messageCancellationTokenSource);
-        Assert.Null(webSocketClient._receiveTask);
+        Assert.Null(webSocketClient._receiveMessageTask);
         Assert.Null(webSocketClient.State);
         Assert.Equal(0, webSocketClient.CurrentReconnectRetries);
 
@@ -791,7 +791,7 @@ public class WebSocketClientTests
         Assert.Equal(1, i);
         Assert.Null(webSocketClient._clientWebSocket);
         Assert.Null(webSocketClient._messageCancellationTokenSource);
-        Assert.Null(webSocketClient._receiveTask);
+        Assert.Null(webSocketClient._receiveMessageTask);
         Assert.Null(webSocketClient.State);
         Assert.Equal(0, webSocketClient.CurrentReconnectRetries);
 
@@ -852,7 +852,7 @@ public class WebSocketClientTests
         Assert.Equal(3, i);
         Assert.Null(webSocketClient._clientWebSocket);
         Assert.Null(webSocketClient._messageCancellationTokenSource);
-        Assert.Null(webSocketClient._receiveTask);
+        Assert.Null(webSocketClient._receiveMessageTask);
         Assert.Null(webSocketClient.State);
         Assert.Equal(0, webSocketClient.CurrentReconnectRetries);
 

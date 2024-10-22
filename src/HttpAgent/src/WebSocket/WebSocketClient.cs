@@ -20,7 +20,7 @@ public sealed partial class WebSocketClient : IDisposable
     /// <summary>
     ///     接收服务器消息任务
     /// </summary>
-    internal Task? _receiveTask;
+    internal Task? _receiveMessageTask;
 
     /// <summary>
     ///     <inheritdoc cref="WebSocketClient" />
@@ -79,8 +79,8 @@ public sealed partial class WebSocketClient : IDisposable
         _messageCancellationTokenSource?.Dispose();
         _messageCancellationTokenSource = null;
 
-        _receiveTask?.Wait();
-        _receiveTask = null;
+        _receiveMessageTask?.Wait();
+        _receiveMessageTask = null;
     }
 
     /// <summary>
@@ -200,7 +200,7 @@ public sealed partial class WebSocketClient : IDisposable
         if (State == WebSocketState.Open)
         {
             // 初始化接收服务器消息任务
-            _receiveTask ??= ReceiveAsync(cancellationToken);
+            _receiveMessageTask ??= ReceiveAsync(cancellationToken);
         }
 
         return Task.CompletedTask;
@@ -221,9 +221,9 @@ public sealed partial class WebSocketClient : IDisposable
         }
 
         // 空检查
-        if (_receiveTask is not null)
+        if (_receiveMessageTask is not null)
         {
-            await _receiveTask;
+            await _receiveMessageTask;
         }
         else
         {
