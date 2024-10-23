@@ -25,12 +25,17 @@ public class ObjectModel
 
 public class CustomObjectContentConverter<TResult> : ObjectContentConverter<TResult>;
 
+public class CustomObjectContentConverter : ObjectContentConverter;
+
 public class NotImplementObjectContentConverterFactory;
 
 public class CustomObjectContentConverterFactory : IObjectContentConverterFactory
 {
     /// <inheritdoc />
     public ObjectContentConverter<TResult> GetConverter<TResult>() => new CustomObjectContentConverter<TResult>();
+
+    /// <inheritdoc />
+    public ObjectContentConverter GetConverter(Type resultType) => new CustomObjectContentConverter();
 }
 
 public class MultipartModel

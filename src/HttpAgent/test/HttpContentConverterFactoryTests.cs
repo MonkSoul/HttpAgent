@@ -155,4 +155,118 @@ public class HttpContentConverterFactoryTests
             cancellationToken: cancellationTokenSource.Token);
         Assert.Equal("furion", result);
     }
+
+    [Fact]
+    public void GetConverter_WithType_Invalid_Parameters()
+    {
+        using var serviceProvider = new ServiceCollection().BuildServiceProvider();
+        var httpContentConverterFactory = new HttpContentConverterFactory(serviceProvider, null);
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+        {
+            _ = httpContentConverterFactory.GetConverter(typeof(HttpResponseMessage));
+        });
+
+        Assert.Equal("`HttpResponseMessage` type cannot be directly processed as result type.", exception.Message);
+    }
+
+    [Fact]
+    public void GetConverter_WithType_ReturnOK()
+    {
+        using var serviceProvider = new ServiceCollection().BuildServiceProvider();
+        var httpContentConverterFactory = new HttpContentConverterFactory(serviceProvider, null);
+
+        Assert.Equal(typeof(StringContentConverter),
+            httpContentConverterFactory.GetConverter(typeof(string)).GetType());
+        Assert.Equal(typeof(ByteArrayContentConverter),
+            httpContentConverterFactory.GetConverter(typeof(byte[])).GetType());
+        Assert.Equal(typeof(StreamContentConverter),
+            httpContentConverterFactory.GetConverter(typeof(Stream)).GetType());
+        Assert.Equal(typeof(ObjectContentConverter), httpContentConverterFactory.GetConverter(typeof(int)).GetType());
+        Assert.Equal(typeof(ObjectContentConverter),
+            httpContentConverterFactory.GetConverter(typeof(ObjectModel)).GetType());
+    }
+
+    [Fact]
+    public void GetConverter_WithType_Of_Customize_ObjectContentConverter_ReturnOK()
+    {
+        var services = new ServiceCollection();
+        services.AddHttpRemote(builder =>
+        {
+            builder.UseObjectContentConverterFactory<CustomObjectContentConverterFactory>();
+        });
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var httpContentConverterFactory = serviceProvider.GetRequiredService<IHttpContentConverterFactory>();
+
+        Assert.Equal(typeof(CustomObjectContentConverter),
+            httpContentConverterFactory.GetConverter(typeof(ObjectModel)).GetType());
+    }
+
+    [Fact]
+    public void GetConverter_WithType_WithCustomize_ReturnOK()
+    {
+        using var serviceProvider = new ServiceCollection().BuildServiceProvider();
+        var httpContentConverterFactory =
+            new HttpContentConverterFactory(serviceProvider, [new CustomByteArrayContentConverter()]);
+
+        Assert.Equal(typeof(CustomStringContentConverter),
+            httpContentConverterFactory.GetConverter(typeof(string), new CustomStringContentConverter()).GetType());
+        Assert.Equal(typeof(CustomByteArrayContentConverter),
+            httpContentConverterFactory.GetConverter(typeof(byte[])).GetType());
+    }
+
+    [Fact]
+    public void Read_WithType_ReturnOK()
+    {
+        using var stringContent = new StringContent("furion");
+        var httpResponseMessage = new HttpResponseMessage();
+        httpResponseMessage.Content = stringContent;
+
+        using var serviceProvider = new ServiceCollection().BuildServiceProvider();
+        var httpContentConverterFactory =
+            new HttpContentConverterFactory(serviceProvider, null);
+
+        var result = httpContentConverterFactory.Read(typeof(string), httpResponseMessage);
+        Assert.Equal("furion", result);
+
+        var result2 = httpContentConverterFactory.Read(typeof(HttpResponseMessage), httpResponseMessage);
+        Assert.Equal(result2, httpResponseMessage);
+    }
+
+    [Fact]
+    public async Task ReadAsync_WithType_ReturnOK()
+    {
+        using var stringContent = new StringContent("furion");
+        var httpResponseMessage = new HttpResponseMessage();
+        httpResponseMessage.Content = stringContent;
+
+        await using var serviceProvider = new ServiceCollection().BuildServiceProvider();
+        var httpContentConverterFactory =
+            new HttpContentConverterFactory(serviceProvider, null);
+
+        var result = await httpContentConverterFactory.ReadAsync(typeof(string), httpResponseMessage);
+        Assert.Equal("furion", result);
+
+        var result2 = await httpContentConverterFactory.ReadAsync(typeof(HttpResponseMessage), httpResponseMessage);
+        Assert.Equal(result2, httpResponseMessage);
+    }
+
+    [Fact]
+    public async Task ReadAsync_WithType_WithCancellationToken_ReturnOK()
+    {
+        using var stringContent = new StringContent("furion");
+        var httpResponseMessage = new HttpResponseMessage();
+        httpResponseMessage.Content = stringContent;
+
+        await using var serviceProvider = new ServiceCollection().BuildServiceProvider();
+        var httpContentConverterFactory =
+            new HttpContentConverterFactory(serviceProvider, null);
+
+        using var cancellationTokenSource = new CancellationTokenSource();
+
+        var result = await httpContentConverterFactory.ReadAsync(typeof(string), httpResponseMessage,
+            cancellationToken: cancellationTokenSource.Token);
+        Assert.Equal("furion", result);
+    }
 }

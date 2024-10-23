@@ -2319,10 +2319,46 @@
         <member name="M:HttpAgent.ByteArrayContentConverter.ReadAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:HttpAgent.ByteArrayContentConverter.Read(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.ByteArrayContentConverter.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="T:HttpAgent.IHttpContentConverter">
             <summary>
                 <see cref="T:HttpAgent.IHttpContentConverter`1" /> 默认实现接口
             </summary>
+        </member>
+        <member name="M:HttpAgent.IHttpContentConverter.Read(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <summary>
+                从 <see cref="T:System.Net.Http.HttpResponseMessage" /> 中同步读取数据并转换为 <see cref="T:System.Object" /> 实例
+            </summary>
+            <param name="resultType">转换的目标类型</param>
+            <param name="httpResponseMessage">
+                <see cref="T:System.Net.Http.HttpResponseMessage" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.Object" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IHttpContentConverter.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <summary>
+                从 <see cref="T:System.Net.Http.HttpResponseMessage" /> 中异步读取数据并转换为 <see cref="T:System.Object" /> 实例
+            </summary>
+            <param name="resultType">转换的目标类型</param>
+            <param name="httpResponseMessage">
+                <see cref="T:System.Net.Http.HttpResponseMessage" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.Object" />
+            </returns>
         </member>
         <member name="T:HttpAgent.IHttpContentConverter`1">
             <summary>
@@ -2358,6 +2394,17 @@
                 <typeparamref name="TResult" />
             </returns>
         </member>
+        <member name="T:HttpAgent.ObjectContentConverter">
+            <summary>
+                <see cref="T:HttpAgent.ObjectContentConverter`1" /> 默认基类
+            </summary>
+        </member>
+        <member name="M:HttpAgent.ObjectContentConverter.Read(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.ObjectContentConverter.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="T:HttpAgent.ObjectContentConverter`1">
             <summary>
                 对象转换器
@@ -2381,6 +2428,12 @@
         <member name="M:HttpAgent.StreamContentConverter.ReadAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:HttpAgent.StreamContentConverter.Read(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.StreamContentConverter.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="T:HttpAgent.StringContentConverter">
             <summary>
                 字符串内容转换器
@@ -2390,6 +2443,12 @@
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.StringContentConverter.ReadAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.StringContentConverter.Read(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.StringContentConverter.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="T:HttpAgent.Core.Extensions.AssemblyExtensions">
@@ -2531,6 +2590,23 @@
             <param name="keySelector">键选择器</param>
             <typeparam name="TKey">字典键类型</typeparam>
             <typeparam name="TValue">字典值类型</typeparam>
+        </member>
+        <member name="T:HttpAgent.Core.Extensions.IEnumerableExtensions">
+            <summary>
+                <see cref="T:System.Collections.IEnumerable" /> 拓展类
+            </summary>
+        </member>
+        <member name="M:HttpAgent.Core.Extensions.IEnumerableExtensions.OfType(System.Collections.IEnumerable,System.Type)">
+            <summary>
+                根据指定类型筛选 <see cref="T:System.Collections.IEnumerable" /> 的元素
+            </summary>
+            <param name="source">
+                <see cref="T:System.Collections.IEnumerable" />
+            </param>
+            <param name="resultType">筛选的结果类型</param>
+            <returns>
+                <see cref="T:System.Collections.IEnumerable" />
+            </returns>
         </member>
         <member name="T:HttpAgent.Core.Extensions.NumberExtensions">
             <summary>
@@ -2919,10 +2995,19 @@
         <member name="M:HttpAgent.HttpContentConverterFactory.GetConverter``1(HttpAgent.IHttpContentConverter[])">
             <inheritdoc />
         </member>
+        <member name="M:HttpAgent.HttpContentConverterFactory.GetConverter(System.Type,HttpAgent.IHttpContentConverter[])">
+            <inheritdoc />
+        </member>
         <member name="M:HttpAgent.HttpContentConverterFactory.Read``1(System.Net.Http.HttpResponseMessage,HttpAgent.IHttpContentConverter[],System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:HttpAgent.HttpContentConverterFactory.Read(System.Type,System.Net.Http.HttpResponseMessage,HttpAgent.IHttpContentConverter[],System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="M:HttpAgent.HttpContentConverterFactory.ReadAsync``1(System.Net.Http.HttpResponseMessage,HttpAgent.IHttpContentConverter[],System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpContentConverterFactory.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,HttpAgent.IHttpContentConverter[],System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="T:HttpAgent.HttpContentProcessorFactory">
@@ -2960,13 +3045,25 @@
                 <see cref="T:HttpAgent.IHttpContentConverter`1" />
             </returns>
         </member>
+        <member name="M:HttpAgent.IHttpContentConverterFactory.GetConverter(System.Type,HttpAgent.IHttpContentConverter[])">
+            <summary>
+                获取 <see cref="T:HttpAgent.IHttpContentConverter" /> 实例
+            </summary>
+            <param name="resultType">转换的目标类型</param>
+            <param name="converters"><see cref="T:HttpAgent.IHttpContentConverter`1" /> 数组</param>
+            <returns>
+                <see cref="T:HttpAgent.IHttpContentConverter" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.IHttpContentConverterFactory.Read``1(System.Net.Http.HttpResponseMessage,HttpAgent.IHttpContentConverter[],System.Threading.CancellationToken)">
             <summary>
                 将 <see cref="T:System.Net.Http.HttpResponseMessage" /> 转换为
                 <typeparamref name="TResult" />
                 实例
             </summary>
-            <param name="httpResponseMessage"></param>
+            <param name="httpResponseMessage">
+                <see cref="T:System.Net.Http.HttpResponseMessage" />
+            </param>
             <param name="converters"><see cref="T:HttpAgent.IHttpContentConverter`1" /> 数组</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
@@ -2976,13 +3073,31 @@
                 <typeparamref name="TResult" />
             </returns>
         </member>
+        <member name="M:HttpAgent.IHttpContentConverterFactory.Read(System.Type,System.Net.Http.HttpResponseMessage,HttpAgent.IHttpContentConverter[],System.Threading.CancellationToken)">
+            <summary>
+                将 <see cref="T:System.Net.Http.HttpResponseMessage" /> 转换为 <see cref="T:System.Object" /> 实例
+            </summary>
+            <param name="resultType">转换的目标类型</param>
+            <param name="httpResponseMessage">
+                <see cref="T:System.Net.Http.HttpResponseMessage" />
+            </param>
+            <param name="converters"><see cref="T:HttpAgent.IHttpContentConverter`1" /> 数组</param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.Object" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.IHttpContentConverterFactory.ReadAsync``1(System.Net.Http.HttpResponseMessage,HttpAgent.IHttpContentConverter[],System.Threading.CancellationToken)">
             <summary>
                 将 <see cref="T:System.Net.Http.HttpResponseMessage" /> 转换为
                 <typeparamref name="TResult" />
                 实例
             </summary>
-            <param name="httpResponseMessage"></param>
+            <param name="httpResponseMessage">
+                <see cref="T:System.Net.Http.HttpResponseMessage" />
+            </param>
             <param name="converters"><see cref="T:HttpAgent.IHttpContentConverter`1" /> 数组</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
@@ -2990,6 +3105,22 @@
             <typeparam name="TResult">转换的目标类型</typeparam>
             <returns>
                 <typeparamref name="TResult" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IHttpContentConverterFactory.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,HttpAgent.IHttpContentConverter[],System.Threading.CancellationToken)">
+            <summary>
+                将 <see cref="T:System.Net.Http.HttpResponseMessage" /> 转换为 <see cref="T:System.Object" /> 实例
+            </summary>
+            <param name="resultType">转换的目标类型</param>
+            <param name="httpResponseMessage">
+                <see cref="T:System.Net.Http.HttpResponseMessage" />
+            </param>
+            <param name="converters"><see cref="T:HttpAgent.IHttpContentConverter`1" /> 数组</param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.Object" />
             </returns>
         </member>
         <member name="T:HttpAgent.IHttpContentProcessorFactory">
@@ -3032,6 +3163,15 @@
             <typeparam name="TResult">转换的目标类型</typeparam>
             <returns>
                 <see cref="T:HttpAgent.ObjectContentConverter`1" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IObjectContentConverterFactory.GetConverter(System.Type)">
+            <summary>
+                获取 <see cref="T:HttpAgent.ObjectContentConverter" /> 实例
+            </summary>
+            <param name="resultType">转换的目标类型</param>
+            <returns>
+                <see cref="T:HttpAgent.ObjectContentConverter" />
             </returns>
         </member>
         <member name="T:HttpAgent.IHttpFileTransferEventHandler">

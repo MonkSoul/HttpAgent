@@ -121,4 +121,100 @@ public class IActionResultContentConverterTests
         Assert.Equal(contentType, fileStreamResult.ContentType);
         Assert.Equal("test.pdf", fileStreamResult.FileDownloadName);
     }
+
+    [Theory]
+    [InlineData("application/json")]
+    [InlineData("application/json-patch+json")]
+    [InlineData("application/xml")]
+    [InlineData("application/xml-patch+xml")]
+    [InlineData("text/xml")]
+    [InlineData("text/html")]
+    [InlineData("text/plain")]
+    public void Read_WithType_ContentResult_ReturnOk(string contentType)
+    {
+        var actionResultContentConverter = new IActionResultContentConverter();
+
+        var httpResponseMessage = new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
+        httpResponseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+        var actionResult = actionResultContentConverter.Read(typeof(ContentResult), httpResponseMessage);
+
+        Assert.NotNull(actionResult);
+        Assert.True(actionResult is ContentResult);
+
+        var contentResult = actionResult as ContentResult;
+        Assert.NotNull(contentResult);
+        Assert.Equal(200, contentResult.StatusCode);
+        Assert.Equal(contentType, contentResult.ContentType);
+    }
+
+    [Theory]
+    [InlineData("application/pdf")]
+    [InlineData("application/octet-stream")]
+    [InlineData("image/jpeg")]
+    public void Read_WithType_FileStreamResult_ReturnOk(string contentType)
+    {
+        var actionResultContentConverter = new IActionResultContentConverter();
+
+        var httpResponseMessage = new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
+        httpResponseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+        httpResponseMessage.Content.Headers.ContentDisposition =
+            new ContentDispositionHeaderValue("attachment") { FileName = "test.pdf" };
+        var actionResult = actionResultContentConverter.Read(typeof(FileStreamResult), httpResponseMessage);
+
+        Assert.NotNull(actionResult);
+        Assert.True(actionResult is FileStreamResult);
+        var fileStreamResult = actionResult as FileStreamResult;
+
+        Assert.NotNull(fileStreamResult);
+        Assert.Equal(contentType, fileStreamResult.ContentType);
+        Assert.Equal("test.pdf", fileStreamResult.FileDownloadName);
+    }
+
+    [Theory]
+    [InlineData("application/json")]
+    [InlineData("application/json-patch+json")]
+    [InlineData("application/xml")]
+    [InlineData("application/xml-patch+xml")]
+    [InlineData("text/xml")]
+    [InlineData("text/html")]
+    [InlineData("text/plain")]
+    public async Task ReadAsync_WithType_ContentResult_ReturnOk(string contentType)
+    {
+        var actionResultContentConverter = new IActionResultContentConverter();
+
+        var httpResponseMessage = new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
+        httpResponseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+        var actionResult = await actionResultContentConverter.ReadAsync(typeof(ContentResult), httpResponseMessage);
+
+        Assert.NotNull(actionResult);
+        Assert.True(actionResult is ContentResult);
+
+        var contentResult = actionResult as ContentResult;
+        Assert.NotNull(contentResult);
+        Assert.Equal(200, contentResult.StatusCode);
+        Assert.Equal(contentType, contentResult.ContentType);
+    }
+
+    [Theory]
+    [InlineData("application/pdf")]
+    [InlineData("application/octet-stream")]
+    [InlineData("image/jpeg")]
+    public async Task ReadAsync_WithType_FileStreamResult_ReturnOk(string contentType)
+    {
+        var actionResultContentConverter = new IActionResultContentConverter();
+
+        var httpResponseMessage = new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
+        httpResponseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+        httpResponseMessage.Content.Headers.ContentDisposition =
+            new ContentDispositionHeaderValue("attachment") { FileName = "test.pdf" };
+        var actionResult = await actionResultContentConverter.ReadAsync(typeof(FileStreamResult), httpResponseMessage);
+
+        Assert.NotNull(actionResult);
+        Assert.True(actionResult is FileStreamResult);
+        var fileStreamResult = actionResult as FileStreamResult;
+
+        Assert.NotNull(fileStreamResult);
+        Assert.Equal(contentType, fileStreamResult.ContentType);
+        Assert.Equal("test.pdf", fileStreamResult.FileDownloadName);
+    }
 }

@@ -10,7 +10,8 @@ namespace HttpAgent;
 public class IActionResultContentConverter : IHttpContentConverter<IActionResult>
 {
     /// <inheritdoc />
-    public IActionResult? Read(HttpResponseMessage httpResponseMessage, CancellationToken cancellationToken = default)
+    public virtual IActionResult? Read(HttpResponseMessage httpResponseMessage,
+        CancellationToken cancellationToken = default)
     {
         // 处理特定状态码结果
         if (TryGetStatusCodeResult(httpResponseMessage, out var statusCode, out var statusCodeResult))
@@ -67,7 +68,7 @@ public class IActionResultContentConverter : IHttpContentConverter<IActionResult
     }
 
     /// <inheritdoc />
-    public async Task<IActionResult?> ReadAsync(HttpResponseMessage httpResponseMessage,
+    public virtual async Task<IActionResult?> ReadAsync(HttpResponseMessage httpResponseMessage,
         CancellationToken cancellationToken = default)
     {
         // 处理特定状态码结果
@@ -122,6 +123,16 @@ public class IActionResultContentConverter : IHttpContentConverter<IActionResult
                 };
         }
     }
+
+    /// <inheritdoc />
+    public virtual object? Read(Type resultType, HttpResponseMessage httpResponseMessage,
+        CancellationToken cancellationToken = default) =>
+        Read(httpResponseMessage, cancellationToken);
+
+    /// <inheritdoc />
+    public virtual async Task<object?> ReadAsync(Type resultType, HttpResponseMessage httpResponseMessage,
+        CancellationToken cancellationToken = default) =>
+        await ReadAsync(httpResponseMessage, cancellationToken);
 
     /// <summary>
     ///     处理特定状态码结果

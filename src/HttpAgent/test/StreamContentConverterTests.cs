@@ -66,4 +66,57 @@ public class StreamContentConverterTests
         var result = await reader.ReadToEndAsync(cancellationTokenSource.Token);
         Assert.Equal("furion", result);
     }
+
+    [Fact]
+    public void Read_WithType_ReturnOK()
+    {
+        using var memoryStream = new MemoryStream("furion"u8.ToArray());
+        using var streamContent = new StreamContent(memoryStream);
+        var httpResponseMessage = new HttpResponseMessage();
+        httpResponseMessage.Content = streamContent;
+
+        var converter = new StreamContentConverter();
+        var stream = converter.Read(typeof(Stream), httpResponseMessage);
+        Assert.NotNull(stream);
+
+        using var reader = new StreamReader((Stream)stream, Encoding.UTF8);
+        var result = reader.ReadToEnd();
+        Assert.Equal("furion", result);
+    }
+
+    [Fact]
+    public async Task ReadAsync_WithType_ReturnOK()
+    {
+        using var memoryStream = new MemoryStream("furion"u8.ToArray());
+        using var streamContent = new StreamContent(memoryStream);
+        var httpResponseMessage = new HttpResponseMessage();
+        httpResponseMessage.Content = streamContent;
+
+        var converter = new StreamContentConverter();
+        var stream = await converter.ReadAsync(typeof(Stream), httpResponseMessage);
+        Assert.NotNull(stream);
+
+        using var reader = new StreamReader((Stream)stream, Encoding.UTF8);
+        var result = await reader.ReadToEndAsync();
+        Assert.Equal("furion", result);
+    }
+
+    [Fact]
+    public async Task ReadAsync_WithType_WithCancellationToken_ReturnOK()
+    {
+        using var memoryStream = new MemoryStream("furion"u8.ToArray());
+        using var streamContent = new StreamContent(memoryStream);
+        var httpResponseMessage = new HttpResponseMessage();
+        httpResponseMessage.Content = streamContent;
+
+        using var cancellationTokenSource = new CancellationTokenSource();
+
+        var converter = new StreamContentConverter();
+        var stream = await converter.ReadAsync(typeof(Stream), httpResponseMessage, cancellationTokenSource.Token);
+        Assert.NotNull(stream);
+
+        using var reader = new StreamReader((Stream)stream, Encoding.UTF8);
+        var result = await reader.ReadToEndAsync(cancellationTokenSource.Token);
+        Assert.Equal("furion", result);
+    }
 }

@@ -54,4 +54,45 @@ public class ByteArrayContentConverterTests
         Assert.NotNull(bytes);
         Assert.Equal("furion", Encoding.UTF8.GetString(bytes));
     }
+
+    [Fact]
+    public void Read_WithType_ReturnOK()
+    {
+        using var byteArrayContent = new ByteArrayContent("furion"u8.ToArray());
+        var httpResponseMessage = new HttpResponseMessage();
+        httpResponseMessage.Content = byteArrayContent;
+
+        var converter = new ByteArrayContentConverter();
+        var bytes = converter.Read(typeof(byte[]), httpResponseMessage);
+        Assert.NotNull(bytes);
+        Assert.Equal("furion", Encoding.UTF8.GetString((byte[])bytes));
+    }
+
+    [Fact]
+    public async Task ReadAsync_WithType_ReturnOK()
+    {
+        using var byteArrayContent = new ByteArrayContent("furion"u8.ToArray());
+        var httpResponseMessage = new HttpResponseMessage();
+        httpResponseMessage.Content = byteArrayContent;
+
+        var converter = new ByteArrayContentConverter();
+        var bytes = await converter.ReadAsync(typeof(byte[]), httpResponseMessage);
+        Assert.NotNull(bytes);
+        Assert.Equal("furion", Encoding.UTF8.GetString((byte[])bytes));
+    }
+
+    [Fact]
+    public async Task ReadAsync_WithType_WithCancellationToken_ReturnOK()
+    {
+        using var byteArrayContent = new ByteArrayContent("furion"u8.ToArray());
+        var httpResponseMessage = new HttpResponseMessage();
+        httpResponseMessage.Content = byteArrayContent;
+
+        using var cancellationTokenSource = new CancellationTokenSource();
+
+        var converter = new ByteArrayContentConverter();
+        var bytes = await converter.ReadAsync(typeof(byte[]), httpResponseMessage, cancellationTokenSource.Token);
+        Assert.NotNull(bytes);
+        Assert.Equal("furion", Encoding.UTF8.GetString((byte[])bytes));
+    }
 }

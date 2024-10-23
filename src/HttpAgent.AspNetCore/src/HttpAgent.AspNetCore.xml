@@ -151,6 +151,12 @@
         <member name="M:HttpAgent.IActionResultContentConverter.ReadAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:HttpAgent.IActionResultContentConverter.Read(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.IActionResultContentConverter.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="M:HttpAgent.IActionResultContentConverter.TryGetStatusCodeResult(System.Net.Http.HttpResponseMessage,System.Net.HttpStatusCode@,Microsoft.AspNetCore.Mvc.IActionResult@)">
             <summary>
                 处理特定状态码结果
