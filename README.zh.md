@@ -50,7 +50,7 @@ public class YourService(IHttpRemoteService httpRemoteService)
 {
     public async Task<string?> GetContent()
     {
-        return await httpRemoteService.GetAsAsync<string>("https://furion.net/");
+        return await httpRemoteService.GetAsStringAsync("https://furion.net/");
     }
 }
 ```
