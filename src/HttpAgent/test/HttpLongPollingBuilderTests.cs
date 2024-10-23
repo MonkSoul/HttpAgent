@@ -89,10 +89,10 @@ public class HttpLongPollingBuilderTests
         var builder = new HttpLongPollingBuilder(HttpMethod.Get, new Uri("http://localhost"));
 
         Assert.Throws<ArgumentNullException>(() => builder.SetEventHandler(null!));
-        var exception = Assert.Throws<InvalidOperationException>(() =>
+        var exception = Assert.Throws<ArgumentException>(() =>
             builder.SetEventHandler(typeof(NotLongPollingEventHandler)));
         Assert.Equal(
-            $"`{typeof(NotLongPollingEventHandler)}` type is not assignable from `{typeof(IHttpLongPollingEventHandler)}`.",
+            $"`{typeof(NotLongPollingEventHandler)}` type is not assignable from `{typeof(IHttpLongPollingEventHandler)}`. (Parameter 'longPollingEventHandlerType')",
             exception.Message);
     }
 

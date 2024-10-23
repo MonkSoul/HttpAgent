@@ -122,7 +122,7 @@ public sealed class HttpLongPollingBuilder
     /// <returns>
     ///     <see cref="HttpLongPollingBuilder" />
     /// </returns>
-    /// <exception cref="InvalidOperationException"></exception>
+    /// <exception cref="ArgumentException"></exception>
     public HttpLongPollingBuilder SetEventHandler(Type longPollingEventHandlerType)
     {
         // 空检查
@@ -131,8 +131,9 @@ public sealed class HttpLongPollingBuilder
         // 检查类型是否实现了 IHttpLongPollingEventHandler 接口
         if (!typeof(IHttpLongPollingEventHandler).IsAssignableFrom(longPollingEventHandlerType))
         {
-            throw new InvalidOperationException(
-                $"`{longPollingEventHandlerType}` type is not assignable from `{typeof(IHttpLongPollingEventHandler)}`.");
+            throw new ArgumentException(
+                $"`{longPollingEventHandlerType}` type is not assignable from `{typeof(IHttpLongPollingEventHandler)}`.",
+                nameof(longPollingEventHandlerType));
         }
 
         LongPollingEventHandlerType = longPollingEventHandlerType;

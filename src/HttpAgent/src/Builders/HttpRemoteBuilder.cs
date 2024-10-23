@@ -133,7 +133,7 @@ public sealed class HttpRemoteBuilder
     /// <returns>
     ///     <see cref="HttpRemoteBuilder" />
     /// </returns>
-    /// <exception cref="InvalidOperationException"></exception>
+    /// <exception cref="ArgumentException"></exception>
     public HttpRemoteBuilder UseObjectContentConverterFactory(Type factoryType)
     {
         // 空检查
@@ -142,8 +142,9 @@ public sealed class HttpRemoteBuilder
         // 检查类型是否实现了 IObjectContentConverterFactory 接口
         if (!typeof(IObjectContentConverterFactory).IsAssignableFrom(factoryType))
         {
-            throw new InvalidOperationException(
-                $"`{factoryType}` type is not assignable from `{typeof(IObjectContentConverterFactory)}`.");
+            throw new ArgumentException(
+                $"`{factoryType}` type is not assignable from `{typeof(IObjectContentConverterFactory)}`.",
+                nameof(factoryType));
         }
 
         _objectContentConverterFactoryType = factoryType;

@@ -127,7 +127,7 @@ public class ProgressFileStreamTests(ITestOutputHelper output)
     public void SetLength_ReturnOK()
     {
         var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
-        using var fileStream = new FileStream(fileFullName, FileMode.Open, FileAccess.Write, FileShare.Read);
+        using var fileStream = File.OpenWrite(fileFullName);
         var fileInfo = new FileInfo(fileFullName);
         var progressChannel = Channel.CreateUnbounded<FileTransferProgress>();
         using var progressFileStream =

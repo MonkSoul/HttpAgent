@@ -862,4 +862,60 @@ public class HttpRemoteServiceMethodsTests
         await app.StopAsync();
         await serviceProvider.DisposeAsync();
     }
+
+    [Fact]
+    public async Task SendAs_HttpRemoteResult_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+        await using var app = builder.Build();
+
+        app.MapGet("/test", async () =>
+        {
+            await Task.Delay(50);
+            return "Hello World!";
+        });
+
+        await app.StartAsync();
+
+        // 测试代码
+        var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri($"http://localhost:{port}/test"));
+
+        var result = httpRemoteService.SendAs<HttpRemoteResult<string>>(httpRequestBuilder);
+
+        Assert.Equal("Hello World!", result?.Result);
+
+        await app.StopAsync();
+        await serviceProvider.DisposeAsync();
+    }
+
+    [Fact]
+    public async Task SendAsAsync_HttpRemoteResult_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+        await using var app = builder.Build();
+
+        app.MapGet("/test", async () =>
+        {
+            await Task.Delay(50);
+            return "Hello World!";
+        });
+
+        await app.StartAsync();
+
+        // 测试代码
+        var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri($"http://localhost:{port}/test"));
+
+        var result = await httpRemoteService.SendAsAsync<HttpRemoteResult<string>>(httpRequestBuilder);
+
+        Assert.Equal("Hello World!", result?.Result);
+
+        await app.StopAsync();
+        await serviceProvider.DisposeAsync();
+    }
 }

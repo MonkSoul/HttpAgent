@@ -195,10 +195,10 @@ public class HttpFileUploadBuilderTests
             @"C:\Workspaces\index.html", "file");
 
         Assert.Throws<ArgumentNullException>(() => builder.SetEventHandler(null!));
-        var exception = Assert.Throws<InvalidOperationException>(() =>
+        var exception = Assert.Throws<ArgumentException>(() =>
             builder.SetEventHandler(typeof(NotImplementFileDownloadEventHandler)));
         Assert.Equal(
-            $"`{typeof(NotImplementFileDownloadEventHandler)}` type is not assignable from `{typeof(IHttpFileTransferEventHandler)}`.",
+            $"`{typeof(NotImplementFileDownloadEventHandler)}` type is not assignable from `{typeof(IHttpFileTransferEventHandler)}`. (Parameter 'fileTransferEventHandlerType')",
             exception.Message);
     }
 

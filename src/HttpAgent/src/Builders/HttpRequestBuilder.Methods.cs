@@ -831,7 +831,7 @@ public sealed partial class HttpRequestBuilder
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
-    /// <exception cref="InvalidOperationException"></exception>
+    /// <exception cref="ArgumentException"></exception>
     public HttpRequestBuilder SetEventHandler(Type requestEventHandlerType)
     {
         // 空检查
@@ -840,8 +840,9 @@ public sealed partial class HttpRequestBuilder
         // 检查类型是否实现了 IHttpRequestEventHandler 接口
         if (!typeof(IHttpRequestEventHandler).IsAssignableFrom(requestEventHandlerType))
         {
-            throw new InvalidOperationException(
-                $"`{requestEventHandlerType}` type is not assignable from `{typeof(IHttpRequestEventHandler)}`.");
+            throw new ArgumentException(
+                $"`{requestEventHandlerType}` type is not assignable from `{typeof(IHttpRequestEventHandler)}`.",
+                nameof(requestEventHandlerType));
         }
 
         RequestEventHandlerType = requestEventHandlerType;

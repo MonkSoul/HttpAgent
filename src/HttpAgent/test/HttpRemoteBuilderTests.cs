@@ -162,10 +162,10 @@ public class HttpRemoteBuilderTests
 
         Assert.Throws<ArgumentNullException>(() => builder.UseObjectContentConverterFactory(null!));
 
-        var exception = Assert.Throws<InvalidOperationException>(() =>
+        var exception = Assert.Throws<ArgumentException>(() =>
             builder.UseObjectContentConverterFactory(typeof(NotImplementObjectContentConverterFactory)));
         Assert.Equal(
-            $"`{typeof(NotImplementObjectContentConverterFactory)}` type is not assignable from `{typeof(IObjectContentConverterFactory)}`.",
+            $"`{typeof(NotImplementObjectContentConverterFactory)}` type is not assignable from `{typeof(IObjectContentConverterFactory)}`. (Parameter 'factoryType')",
             exception.Message);
     }
 

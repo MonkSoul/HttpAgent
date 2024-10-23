@@ -971,10 +971,10 @@ public class HttpRequestBuilderMethodsTests
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
 
         Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.SetEventHandler(null!));
-        var exception = Assert.Throws<InvalidOperationException>(() =>
+        var exception = Assert.Throws<ArgumentException>(() =>
             httpRequestBuilder.SetEventHandler(typeof(NotImplementRequestEventHandler)));
         Assert.Equal(
-            $"`{typeof(NotImplementRequestEventHandler)}` type is not assignable from `{typeof(IHttpRequestEventHandler)}`.",
+            $"`{typeof(NotImplementRequestEventHandler)}` type is not assignable from `{typeof(IHttpRequestEventHandler)}`. (Parameter 'requestEventHandlerType')",
             exception.Message);
     }
 

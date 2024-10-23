@@ -162,7 +162,7 @@
             <returns>
                 <see cref="T:HttpAgent.HttpFileDownloadBuilder" />
             </returns>
-            <exception cref="T:System.InvalidOperationException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:HttpAgent.HttpFileDownloadBuilder.SetEventHandler``1">
             <summary>
@@ -320,7 +320,7 @@
             <returns>
                 <see cref="T:HttpAgent.HttpFileUploadBuilder" />
             </returns>
-            <exception cref="T:System.InvalidOperationException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:HttpAgent.HttpFileUploadBuilder.SetEventHandler``1">
             <summary>
@@ -428,7 +428,7 @@
             <returns>
                 <see cref="T:HttpAgent.HttpLongPollingBuilder" />
             </returns>
-            <exception cref="T:System.InvalidOperationException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:HttpAgent.HttpLongPollingBuilder.SetEventHandler``1">
             <summary>
@@ -788,7 +788,7 @@
             <returns>
                 <see cref="T:HttpAgent.HttpRemoteBuilder" />
             </returns>
-            <exception cref="T:System.InvalidOperationException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:HttpAgent.HttpRemoteBuilder.Build(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
@@ -1353,7 +1353,7 @@
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
-            <exception cref="T:System.InvalidOperationException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.SetEventHandler``1">
             <summary>
@@ -2113,7 +2113,7 @@
             <returns>
                 <see cref="T:HttpAgent.HttpServerSentEventsBuilder" />
             </returns>
-            <exception cref="T:System.InvalidOperationException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:HttpAgent.HttpServerSentEventsBuilder.SetEventHandler``1">
             <summary>
@@ -2775,6 +2775,20 @@
                 <see cref="T:System.Boolean" />
             </returns>
         </member>
+        <member name="M:HttpAgent.Core.Extensions.TypeExtensions.IsDefinitionEqual(System.Type,System.Type)">
+            <summary>
+                检查类型和指定类型定义是否相等
+            </summary>
+            <param name="type">
+                <see cref="T:System.Type" />
+            </param>
+            <param name="compareType">
+                <see cref="T:System.Type" />
+            </param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.Core.Extensions.TypeExtensions.IsKeyValuePair(System.Type)">
             <summary>
                 检查类型是否是 <see cref="T:System.Collections.Generic.KeyValuePair`2" /> 类型
@@ -2822,6 +2836,21 @@
             </param>
             <returns>
                 <see cref="T:System.Func`2" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Core.Extensions.TypeExtensions.CreatePropertySetter(System.Type,System.Reflection.PropertyInfo)">
+            <summary>
+                创建实例属性值设置器
+            </summary>
+            <param name="type">
+                <see cref="T:System.Type" />
+            </param>
+            <remarks>不支持 <c>struct</c> 类型设置属性值。</remarks>
+            <param name="propertyInfo">
+                <see cref="T:System.Reflection.PropertyInfo" />
+            </param>
+            <returns>
+                <see cref="T:System.Action`2" />
             </returns>
         </member>
         <member name="T:HttpAgent.Core.Utilities.NetworkUtility">
@@ -4705,6 +4734,21 @@
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.DynamicCreateHttpRemoteResult(System.Type,System.Net.Http.HttpResponseMessage,System.Object,System.Int64)">
+            <summary>
+                动态创建 <see cref="T:HttpAgent.HttpRemoteResult`1" /> 实例
+            </summary>
+            <param name="httpRemoteResultType"><see cref="T:HttpAgent.HttpRemoteResult`1" /> 类型</param>
+            <param name="httpResponseMessage">
+                <see cref="T:System.Net.Http.HttpResponseMessage" />
+            </param>
+            <param name="result"><see cref="T:HttpAgent.HttpRemoteResult`1" /> 泛型类型的实例</param>
+            <param name="requestDuration">请求耗时（毫秒）</param>
+            <returns>
+                <see cref="T:System.Object" />
+            </returns>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:HttpAgent.HttpRemoteService.DownloadFile(System.String,System.String,System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},HttpAgent.FileExistsBehavior,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />

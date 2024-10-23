@@ -116,10 +116,10 @@ public class HttpServerSentEventsBuilderTests
         var builder = new HttpServerSentEventsBuilder(new Uri("http://localhost"));
 
         Assert.Throws<ArgumentNullException>(() => builder.SetEventHandler(null!));
-        var exception = Assert.Throws<InvalidOperationException>(() =>
+        var exception = Assert.Throws<ArgumentException>(() =>
             builder.SetEventHandler(typeof(NotImplementServerSentEventsEventHandler)));
         Assert.Equal(
-            $"`{typeof(NotImplementServerSentEventsEventHandler)}` type is not assignable from `{typeof(IHttpServerSentEventsEventHandler)}`.",
+            $"`{typeof(NotImplementServerSentEventsEventHandler)}` type is not assignable from `{typeof(IHttpServerSentEventsEventHandler)}`. (Parameter 'serverSentEventsEventHandlerType')",
             exception.Message);
     }
 

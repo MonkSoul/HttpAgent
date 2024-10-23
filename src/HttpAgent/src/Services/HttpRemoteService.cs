@@ -115,12 +115,30 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         CancellationToken cancellationToken = default)
     {
         // 发送 HTTP 远程请求
-        var httpResponseMessage = Send(httpRequestBuilder, completionOption, cancellationToken);
+        var (httpResponseMessage, requestDuration) = SendCoreAsync(httpRequestBuilder, completionOption, default,
+            (httpClient, httpRequestMessage, option, token) =>
+                httpClient.Send(httpRequestMessage, option, token), cancellationToken).GetAwaiter().GetResult();
 
-        // 将 HttpResponseMessage 转换为 TResult 实例
-        return _httpContentConverterFactory.Read<TResult>(httpResponseMessage,
+        // 获取结果类型
+        var resultType = typeof(TResult);
+
+        // 检查类型是否是 HttpRemoteResult<TResult> 类型
+        if (!typeof(HttpRemoteResult<>).IsDefinitionEqual(resultType))
+        {
+            // 将 HttpResponseMessage 转换为 TResult 实例
+            return _httpContentConverterFactory.Read<TResult>(httpResponseMessage,
+                httpRequestBuilder.HttpContentConverterProviders?.SelectMany(u => u.Invoke()).ToArray(),
+                cancellationToken);
+        }
+
+        // 将 HttpResponseMessage 转换为 HttpRemoteResult<> 泛型类型的实例
+        var result = _httpContentConverterFactory.Read(resultType.GetGenericArguments()[0],
+            httpResponseMessage,
             httpRequestBuilder.HttpContentConverterProviders?.SelectMany(u => u.Invoke()).ToArray(),
             cancellationToken);
+
+        // 动态创建 HttpRemoteResult<TResult> 实例
+        return (TResult)DynamicCreateHttpRemoteResult(resultType, httpResponseMessage, result, requestDuration);
     }
 
     /// <inheritdoc />
@@ -134,12 +152,30 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         CancellationToken cancellationToken = default)
     {
         // 发送 HTTP 远程请求
-        var httpResponseMessage = await SendAsync(httpRequestBuilder, completionOption, cancellationToken);
+        var (httpResponseMessage, requestDuration) = await SendCoreAsync(httpRequestBuilder, completionOption,
+            (httpClient, httpRequestMessage, option, token) =>
+                httpClient.SendAsync(httpRequestMessage, option, token), default, cancellationToken);
 
-        // 将 HttpResponseMessage 转换为 TResult 实例
-        return await _httpContentConverterFactory.ReadAsync<TResult>(httpResponseMessage,
+        // 获取结果类型
+        var resultType = typeof(TResult);
+
+        // 检查类型是否是 HttpRemoteResult<TResult> 类型
+        if (!typeof(HttpRemoteResult<>).IsDefinitionEqual(resultType))
+        {
+            // 将 HttpResponseMessage 转换为 TResult 实例
+            return await _httpContentConverterFactory.ReadAsync<TResult>(httpResponseMessage,
+                httpRequestBuilder.HttpContentConverterProviders?.SelectMany(u => u.Invoke()).ToArray(),
+                cancellationToken);
+        }
+
+        // 将 HttpResponseMessage 转换为 HttpRemoteResult<> 泛型类型的实例
+        var result = await _httpContentConverterFactory.ReadAsync(resultType.GetGenericArguments()[0],
+            httpResponseMessage,
             httpRequestBuilder.HttpContentConverterProviders?.SelectMany(u => u.Invoke()).ToArray(),
             cancellationToken);
+
+        // 动态创建 HttpRemoteResult<TResult> 实例
+        return (TResult)DynamicCreateHttpRemoteResult(resultType, httpResponseMessage, result, requestDuration);
     }
 
     /// <inheritdoc />
@@ -564,5 +600,56 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         // 并行执行所有的处理程序，并等待所有任务完成
         await Task.WhenAll(statusCodeHandlers.Select(handler =>
             handler.TryInvokeAsync(httpResponseMessage, cancellationToken)));
+    }
+
+    /// <summary>
+    ///     动态创建 <see cref="HttpRemoteResult{TResult}" /> 实例
+    /// </summary>
+    /// <param name="httpRemoteResultType"><see cref="HttpRemoteResult{TResult}" /> 类型</param>
+    /// <param name="httpResponseMessage">
+    ///     <see cref="HttpResponseMessage" />
+    /// </param>
+    /// <param name="result"><see cref="HttpRemoteResult{TResult}" /> 泛型类型的实例</param>
+    /// <param name="requestDuration">请求耗时（毫秒）</param>
+    /// <returns>
+    ///     <see cref="object" />
+    /// </returns>
+    /// <exception cref="ArgumentException"></exception>
+    internal static object DynamicCreateHttpRemoteResult(Type httpRemoteResultType,
+        HttpResponseMessage httpResponseMessage,
+        object? result, long requestDuration)
+    {
+        // 检查类型是否是 HttpRemoteResult<TResult> 类型
+        if (!typeof(HttpRemoteResult<>).IsDefinitionEqual(httpRemoteResultType))
+        {
+            throw new ArgumentException(
+                $"`{httpRemoteResultType}` type is not assignable from `{typeof(HttpRemoteResult<>)}`.",
+                nameof(httpRemoteResultType));
+        }
+
+        // 反射创建 HttpRemoteResult<TResult> 实例
+        var httpRemoteResult = Activator.CreateInstance(httpRemoteResultType, httpResponseMessage);
+
+        // 空检查
+        ArgumentNullException.ThrowIfNull(httpRemoteResult);
+
+        // 初始化反射搜索成员方式
+        const BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+
+        // 获取 Result 和 RequestDuration 属性设置器
+        var setResultDelegate =
+            httpRemoteResultType.CreatePropertySetter(httpRemoteResultType.GetProperty(
+                nameof(HttpRemoteResult<object>.Result),
+                bindingFlags)!);
+        var setRequestDurationDelegate =
+            httpRemoteResultType.CreatePropertySetter(httpRemoteResultType.GetProperty(
+                nameof(HttpRemoteResult<object>.RequestDuration),
+                bindingFlags)!);
+
+        // 设置 Result 和 RequestDuration 属性值
+        setResultDelegate(httpRemoteResult, result);
+        setRequestDurationDelegate(httpRemoteResult, requestDuration);
+
+        return httpRemoteResult;
     }
 }
