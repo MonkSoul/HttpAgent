@@ -131,13 +131,13 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
                 cancellationToken);
         }
 
-        // 将 HttpResponseMessage 转换为 HttpRemoteResult<> 泛型类型的实例
+        // 将 HttpResponseMessage 转换为 HttpRemoteResult<T> 泛型类型 T 的实例
         var result = _httpContentConverterFactory.Read(resultType.GetGenericArguments()[0],
             httpResponseMessage,
             httpRequestBuilder.HttpContentConverterProviders?.SelectMany(u => u.Invoke()).ToArray(),
             cancellationToken);
 
-        // 动态创建 HttpRemoteResult<TResult> 实例
+        // 动态创建 HttpRemoteResult<TResult> 实例并转换为 TResult 实例
         return (TResult)DynamicCreateHttpRemoteResult(resultType, httpResponseMessage, result, requestDuration);
     }
 
@@ -168,13 +168,13 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
                 cancellationToken);
         }
 
-        // 将 HttpResponseMessage 转换为 HttpRemoteResult<> 泛型类型的实例
+        // 将 HttpResponseMessage 转换为 HttpRemoteResult<T> 泛型类型 T 的实例
         var result = await _httpContentConverterFactory.ReadAsync(resultType.GetGenericArguments()[0],
             httpResponseMessage,
             httpRequestBuilder.HttpContentConverterProviders?.SelectMany(u => u.Invoke()).ToArray(),
             cancellationToken);
 
-        // 动态创建 HttpRemoteResult<TResult> 实例
+        // 动态创建 HttpRemoteResult<TResult> 实例并转换为 TResult 实例
         return (TResult)DynamicCreateHttpRemoteResult(resultType, httpResponseMessage, result, requestDuration);
     }
 
