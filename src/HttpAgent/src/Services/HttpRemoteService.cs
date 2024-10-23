@@ -271,7 +271,8 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         {
             // 调用发送 HTTP 请求委托
             httpResponseMessage = sendAsyncMethod is not null
-                ? await sendAsyncMethod(httpClient, httpRequestMessage, completionOption, timeoutCancellationTokenSource.Token)
+                ? await sendAsyncMethod(httpClient, httpRequestMessage, completionOption,
+                    timeoutCancellationTokenSource.Token)
                 : sendMethod!(httpClient, httpRequestMessage, completionOption, timeoutCancellationTokenSource.Token);
 
             // 获取请求耗时
