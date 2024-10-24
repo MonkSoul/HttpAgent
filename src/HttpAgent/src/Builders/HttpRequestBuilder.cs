@@ -59,6 +59,9 @@ public sealed partial class HttpRequestBuilder
         // 追加 Cookies
         AppendCookies(httpRequestMessage);
 
+        // 移除请求标头
+        RemoveHeaders(httpRequestMessage);
+
         // 构建并设置指定的 HttpRequestMessage 请求消息的内容
         BuildAndSetContent(httpRequestMessage, httpContentProcessorFactory, httpRemoteOptions);
 
@@ -190,6 +193,27 @@ public sealed partial class HttpRequestBuilder
         foreach (var (key, values) in Headers)
         {
             httpRequestMessage.Headers.TryAddWithoutValidation(key, values);
+        }
+    }
+
+    /// <summary>
+    ///     移除请求标头
+    /// </summary>
+    /// <param name="httpRequestMessage">
+    ///     <see cref="HttpRequestMessage" />
+    /// </param>
+    internal void RemoveHeaders(HttpRequestMessage httpRequestMessage)
+    {
+        // 空检查
+        if (HeadersToRemove.IsNullOrEmpty())
+        {
+            return;
+        }
+
+        // 遍历请求标头集合并从 HttpRequestMessage.Headers 中移除
+        foreach (var headerName in HeadersToRemove)
+        {
+            httpRequestMessage.Headers.Remove(headerName);
         }
     }
 

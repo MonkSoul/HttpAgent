@@ -160,16 +160,46 @@ internal static partial class StringExtensions
 
         return template is null
             ? null
-            : PlaceholderRegex().Replace(template, match => replacementSource[match.Groups[1].Value] ?? string.Empty);
+            : PlaceholderRegex().Replace(template,
+                match => replacementSource[match.Groups[1].Value.Trim()] ?? string.Empty);
+    }
+
+    /// <summary>
+    ///     替换字符串中的占位符为实际值
+    /// </summary>
+    /// <param name="template">包含占位符的模板字符串</param>
+    /// <param name="replacementSource">
+    ///     <see cref="object" />
+    /// </param>
+    /// <param name="modelName">模板字符串中对象名；默认值为：<c>model</c>。</param>
+    /// <param name="bindingFlags">
+    ///     <see cref="BindingFlags" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="string" />
+    /// </returns>
+    internal static string? ReplacePlaceholders(this string? template, object replacementSource,
+        string modelName = "model",
+        BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(replacementSource);
+
+        return template is null
+            ? null
+            : PlaceholderRegex().Replace(template,
+                match => replacementSource
+                    .GetPropertyValueFromPath(match.Groups[1].Value.Trim(), modelName, bindingFlags)
+                    ?.ToCultureString(CultureInfo.InvariantCulture) ?? string.Empty);
     }
 
     /// <summary>
     ///     占位符匹配正则表达式
     /// </summary>
-    /// <remarks>占位符格式：<c>{Key}</c>。</remarks>
+    /// <remarks>占位符格式：<c>{Key}</c> 或 <c>{Key.Property}</c> 或 {Key.Property.NestProperty}。</remarks>
     /// <returns>
     ///     <see cref="Regex" />
     /// </returns>
-    [GeneratedRegex(@"\{(\w+)\}")]
+    [GeneratedRegex(@"\{\s*(\w+\s*(\.\s*\w+\s*)*)\s*\}")]
     private static partial Regex PlaceholderRegex();
 }

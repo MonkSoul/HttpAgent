@@ -29,6 +29,7 @@ public class HttpRequestBuilderPropertiesTests
         Assert.Equal(Encoding.UTF8, httpRequestBuilder2.ContentEncoding);
         Assert.Null(httpRequestBuilder2.RawContent);
         Assert.Null(httpRequestBuilder2.Headers);
+        Assert.Null(httpRequestBuilder2.HeadersToRemove);
         Assert.Null(httpRequestBuilder2.Fragment);
         Assert.Null(httpRequestBuilder2.Timeout);
         Assert.Null(httpRequestBuilder2.QueryParameters);

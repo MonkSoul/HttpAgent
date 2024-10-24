@@ -364,6 +364,27 @@ public class HttpRequestBuilderMethodsTests
     }
 
     [Fact]
+    public void RemoveHeaders_Invalid_Parameters()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.RemoveHeaders((string[])null!));
+    }
+
+    [Fact]
+    public void RemoveHeaders_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder.RemoveHeaders(null!, string.Empty, " ");
+
+        Assert.NotNull(httpRequestBuilder.HeadersToRemove);
+        Assert.Empty(httpRequestBuilder.HeadersToRemove);
+
+        httpRequestBuilder.RemoveHeaders("Set-Cookie");
+        httpRequestBuilder.RemoveHeaders("set-cookie");
+        Assert.Single(httpRequestBuilder.HeadersToRemove);
+    }
+
+    [Fact]
     public void SetFragment_Invalid_Parameters()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));

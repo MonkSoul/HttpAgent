@@ -179,6 +179,29 @@ public class HttpRequestBuilderTests
     }
 
     [Fact]
+    public void RemoveHeaders_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        var finalRequestUri = httpRequestBuilder.BuildFinalRequestUri(null);
+        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.Method!, finalRequestUri);
+
+        httpRequestBuilder.RemoveHeaders(httpRequestMessage);
+        Assert.Empty(httpRequestMessage.Headers);
+
+        httpRequestBuilder.WithHeaders(new { id = 10, name = "furion" }).RemoveHeaders("name").RemoveHeaders("unknown")
+            .AppendHeaders(httpRequestMessage);
+
+        httpRequestBuilder.RemoveHeaders(httpRequestMessage);
+        Assert.Single(httpRequestMessage.Headers);
+        Assert.Equal("10", httpRequestMessage.Headers.GetValues("id").First());
+
+        httpRequestBuilder.RemoveHeaders("ID");
+
+        httpRequestBuilder.RemoveHeaders(httpRequestMessage);
+        Assert.Empty(httpRequestMessage.Headers);
+    }
+
+    [Fact]
     public void BuildAndSetContent_ReturnOK()
     {
         var httpRemoteOptions = new HttpRemoteOptions();
@@ -311,12 +334,14 @@ public class HttpRequestBuilderTests
             .WithQueryParameters(new { id = 10, name = "furion" })
             .WithPathParameters(new { id = 10, name = "furion" })
             .WithCookies(new { id = 10, name = "furion" })
+            .WithHeaders(new { id = 10, name = "furion" })
+            .RemoveHeaders("name")
             .Build(httpRemoteOptions, new HttpContentProcessorFactory([]), null);
 
         Assert.NotNull(httpRequestMessage);
         Assert.NotNull(httpRequestMessage.RequestUri);
         Assert.Equal("http://localhost/10/furion?id=10&name=furion", httpRequestMessage.RequestUri.ToString());
-        Assert.Single(httpRequestMessage.Headers);
+        Assert.Equal(2, httpRequestMessage.Headers.Count());
         Assert.Equal("id=10; name=furion", httpRequestMessage.Headers.GetValues("Cookie").First());
         Assert.NotNull(httpRequestMessage.Content);
         Assert.Equal(typeof(StringContent), httpRequestMessage.Content.GetType());

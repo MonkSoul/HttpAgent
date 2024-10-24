@@ -51,6 +51,11 @@ public sealed partial class HttpRequestBuilder
     public IDictionary<string, List<string?>>? Headers { get; private set; }
 
     /// <summary>
+    ///     需要从请求中移除的标头集合
+    /// </summary>
+    public HashSet<string>? HeadersToRemove { get; private set; }
+
+    /// <summary>
     ///     片段标识符
     /// </summary>
     /// <remarks>请求地址中的 <c>#</c> 符号后面的部分。</remarks>

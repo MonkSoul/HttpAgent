@@ -885,6 +885,14 @@
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
             </param>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.RemoveHeaders(System.Net.Http.HttpRequestMessage)">
+            <summary>
+                移除请求标头
+            </summary>
+            <param name="httpRequestMessage">
+                <see cref="T:System.Net.Http.HttpRequestMessage" />
+            </param>
+        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.AppendCookies(System.Net.Http.HttpRequestMessage)">
             <summary>
                 追加 Cookies
@@ -1073,6 +1081,16 @@
             <param name="comparer">
                 <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
             </param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.RemoveHeaders(System.String[])">
+            <summary>
+                设置需要从请求中移除的标头
+            </summary>
+            <remarks>支持多次调用。</remarks>
+            <param name="headerNames">请求标头名集合</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -1475,6 +1493,11 @@
         <member name="P:HttpAgent.HttpRequestBuilder.Headers">
             <summary>
                 请求标头集合
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HttpRequestBuilder.HeadersToRemove">
+            <summary>
+                需要从请求中移除的标头集合
             </summary>
         </member>
         <member name="P:HttpAgent.HttpRequestBuilder.Fragment">
@@ -2679,6 +2702,22 @@
             </returns>
             <exception cref="T:System.NotSupportedException"></exception>
         </member>
+        <member name="M:HttpAgent.Core.Extensions.ObjectExtensions.GetPropertyValueFromPath(System.Object,System.String,System.String,System.Reflection.BindingFlags)">
+            <summary>
+                根据模板路径从对象中获取属性值
+            </summary>
+            <param name="obj">
+                <see cref="T:System.Object" />
+            </param>
+            <param name="path">模板路径。支持 <c>{Key}</c> 或 <c>{Key.Property}</c> 或 {Key.Property.NestProperty} 语法格式。</param>
+            <param name="modelName">模板字符串中对象名；默认值为：<c>model</c>。</param>
+            <param name="bindingFlags">
+                <see cref="T:System.Reflection.BindingFlags" />
+            </param>
+            <returns>
+                <see cref="T:System.Object" />
+            </returns>
+        </member>
         <member name="T:HttpAgent.Core.Extensions.StringExtensions">
             <summary>
                 <see cref="T:System.String" /> 拓展类
@@ -2746,15 +2785,40 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
+        <member name="M:HttpAgent.Core.Extensions.StringExtensions.ReplacePlaceholders(System.String,System.Object,System.String,System.Reflection.BindingFlags)">
+            <summary>
+                替换字符串中的占位符为实际值
+            </summary>
+            <param name="template">包含占位符的模板字符串</param>
+            <param name="replacementSource">
+                <see cref="T:System.Object" />
+            </param>
+            <param name="modelName">模板字符串中对象名；默认值为：<c>model</c>。</param>
+            <param name="bindingFlags">
+                <see cref="T:System.Reflection.BindingFlags" />
+            </param>
+            <returns>
+                <see cref="T:System.String" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.Core.Extensions.StringExtensions.PlaceholderRegex">
             <remarks>
             Pattern:<br/>
-            <code>\\{(\\w+)\\}</code><br/>
+            <code>\\{\\s*(\\w+\\s*(\\.\\s*\\w+\\s*)*)\\s*\\}</code><br/>
             Explanation:<br/>
             <code>
             ○ Match '{'.<br/>
+            ○ Match a whitespace character atomically any number of times.<br/>
             ○ 1st capture group.<br/>
-                ○ Match a word character atomically at least once.<br/>
+                ○ Match a word character greedily at least once.<br/>
+                ○ Match a whitespace character greedily any number of times.<br/>
+                ○ Loop greedily any number of times.<br/>
+                    ○ 2nd capture group.<br/>
+                        ○ Match '.'.<br/>
+                        ○ Match a whitespace character atomically any number of times.<br/>
+                        ○ Match a word character greedily at least once.<br/>
+                        ○ Match a whitespace character greedily any number of times.<br/>
+            ○ Match a whitespace character atomically any number of times.<br/>
             ○ Match '}'.<br/>
             </code>
             </remarks>
@@ -9298,6 +9362,9 @@
         </member>
         <member name="M:System.Text.RegularExpressions.Generated.Utilities.StackPush(System.Int32[]@,System.Int32@,System.Int32,System.Int32)">
             <summary>Pushes 2 values onto the backtracking stack.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.Utilities.StackPush(System.Int32[]@,System.Int32@,System.Int32,System.Int32,System.Int32)">
+            <summary>Pushes 3 values onto the backtracking stack.</summary>
         </member>
         <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_ascii_60FF03FEFFFF87FEFFFF47">
             <summary>Supports searching for characters in or not in "-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~".</summary>

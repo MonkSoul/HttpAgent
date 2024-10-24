@@ -305,6 +305,39 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
+    ///     设置需要从请求中移除的标头
+    /// </summary>
+    /// <remarks>支持多次调用。</remarks>
+    /// <param name="headerNames">请求标头名集合</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder RemoveHeaders(params string[] headerNames)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(headerNames);
+
+        // 检查是否为空元素数组
+        if (headerNames.Length == 0)
+        {
+            return this;
+        }
+
+        HeadersToRemove ??= new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        // 逐条添加到集合中
+        foreach (var headerName in headerNames)
+        {
+            if (!string.IsNullOrWhiteSpace(headerName))
+            {
+                HeadersToRemove.Add(headerName);
+            }
+        }
+
+        return this;
+    }
+
+    /// <summary>
     ///     设置片段标识符
     /// </summary>
     /// <param name="fragment">片段标识符</param>
