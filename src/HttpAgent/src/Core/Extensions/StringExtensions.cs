@@ -161,7 +161,11 @@ internal static partial class StringExtensions
         return template is null
             ? null
             : PlaceholderRegex().Replace(template,
-                match => replacementSource[match.Groups[1].Value.Trim()] ?? string.Empty);
+                match => replacementSource.TryGetValue(match.Groups[1].Value.Trim(), out var replacement)
+                    // 如果找到匹配则替换
+                    ? replacement ?? string.Empty
+                    // 否则返回原始字符串
+                    : match.ToString());
     }
 
     /// <summary>
@@ -188,9 +192,19 @@ internal static partial class StringExtensions
         return template is null
             ? null
             : PlaceholderRegex().Replace(template,
-                match => replacementSource
-                    .GetPropertyValueFromPath(match.Groups[1].Value.Trim(), modelName, bindingFlags)
-                    ?.ToCultureString(CultureInfo.InvariantCulture) ?? string.Empty);
+                match =>
+                {
+                    // 获取模板解析后的值
+                    var replacement =
+                        replacementSource.GetPropertyValueFromPath(match.Groups[1].Value.Trim(), out var isMatch,
+                            modelName, bindingFlags);
+
+                    return isMatch
+                        // 如果找到匹配则替换
+                        ? replacement?.ToCultureString(CultureInfo.InvariantCulture) ?? string.Empty
+                        // 否则返回原始字符串
+                        : match.ToString();
+                });
     }
 
     /// <summary>

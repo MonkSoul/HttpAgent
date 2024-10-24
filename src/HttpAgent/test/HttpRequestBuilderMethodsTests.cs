@@ -595,6 +595,37 @@ public class HttpRequestBuilderMethodsTests
     }
 
     [Fact]
+    public void WithObjectPathParameter_Invalid_Parameters()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+
+        Assert.Throws<ArgumentNullException>(() =>
+        {
+            httpRequestBuilder.WithObjectPathParameter(null!, null!);
+        });
+
+        Assert.Throws<ArgumentNullException>(() =>
+            httpRequestBuilder.WithObjectPathParameter(new ObjectModel(), null!));
+        Assert.Throws<ArgumentException>(() =>
+            httpRequestBuilder.WithObjectPathParameter(new ObjectModel(), string.Empty));
+        Assert.Throws<ArgumentException>(() =>
+            httpRequestBuilder.WithObjectPathParameter(new ObjectModel(), " "));
+    }
+
+    [Fact]
+    public void WithObjectPathParameter_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+
+        httpRequestBuilder.WithObjectPathParameter(new ObjectModel(), "model");
+        httpRequestBuilder.WithObjectPathParameter(new ObjectModel(), "model");
+        httpRequestBuilder.WithObjectPathParameter(new ObjectModel(), "Model");
+
+        Assert.NotNull(httpRequestBuilder.ObjectPathParameters);
+        Assert.Equal(2, httpRequestBuilder.ObjectPathParameters.Count);
+    }
+
+    [Fact]
     public void WithCookies_Invalid_Parameters()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));

@@ -522,6 +522,32 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
+    ///     设置路径参数集合
+    /// </summary>
+    /// <remarks>
+    ///     支持多次调用。区别于 <c>WithPathParameters</c> 方法，<c>WithObjectPathParameter</c> 主要用于对象路径方式。如：
+    ///     <c>{model.Prop.SubProp}</c>。
+    /// </remarks>
+    /// <param name="parameterSource">路径参数源对象</param>
+    /// <param name="modelName">模板字符串中对象名</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder WithObjectPathParameter(object parameterSource, string modelName)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(parameterSource);
+        ArgumentException.ThrowIfNullOrWhiteSpace(modelName);
+
+        ObjectPathParameters ??= new Dictionary<string, object>();
+
+        // 存在则更新否则添加
+        ObjectPathParameters[modelName] = parameterSource;
+
+        return this;
+    }
+
+    /// <summary>
     ///     设置 Cookies 集合
     /// </summary>
     /// <remarks>支持多次调用。</remarks>

@@ -122,6 +122,18 @@ public class HttpRequestBuilderTests
             .WithPathParameters(new { name = "monksoul" });
         var newUri2 = httpRequestBuilder.ReplacePathPlaceholders(uriBuilder);
         Assert.Equal("http://localhost/10/monksoul?v=1&id=10", newUri2);
+
+        // Object
+        var httpRequestBuilder2 =
+            new HttpRequestBuilder(HttpMethod.Get,
+                new Uri("http://localhost/{user.id}/{author.name}/{unknown.test}?v=1&id={id}"));
+        var uriBuilder2 = new UriBuilder(httpRequestBuilder2.RequestUri!);
+        httpRequestBuilder2.WithPathParameters(new { id = 10, name = "furion" })
+            .WithPathParameters(new { name = "monksoul" })
+            .WithObjectPathParameter(new { id = 10 }, "user")
+            .WithObjectPathParameter(new { name = "furion" }, "author");
+        var newUri3 = httpRequestBuilder2.ReplacePathPlaceholders(uriBuilder2);
+        Assert.Equal("http://localhost/10/furion/{unknown.test}?v=1&id=10", newUri3);
     }
 
     [Fact]

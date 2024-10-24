@@ -34,6 +34,7 @@ public class HttpRequestBuilderPropertiesTests
         Assert.Null(httpRequestBuilder2.Timeout);
         Assert.Null(httpRequestBuilder2.QueryParameters);
         Assert.Null(httpRequestBuilder2.PathParameters);
+        Assert.Null(httpRequestBuilder2.ObjectPathParameters);
         Assert.Null(httpRequestBuilder2.Cookies);
         Assert.Null(httpRequestBuilder2.HttpClientFactoryName);
         Assert.Null(httpRequestBuilder2.HttpClientProvider);

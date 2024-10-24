@@ -221,19 +221,24 @@ internal static class ObjectExtensions
     /// </param>
     /// <param name="path">模板路径。支持 <c>{Key}</c> 或 <c>{Key.Property}</c> 或 {Key.Property.NestProperty} 语法格式。</param>
     /// <param name="modelName">模板字符串中对象名；默认值为：<c>model</c>。</param>
+    /// <param name="isMatch">用于检查是否以 <c>modelName.</c> 开头</param>
     /// <param name="bindingFlags">
     ///     <see cref="BindingFlags" />
     /// </param>
     /// <returns>
     ///     <see cref="object" />
     /// </returns>
-    internal static object? GetPropertyValueFromPath(this object obj, string path, string modelName = "model",
+    internal static object? GetPropertyValueFromPath(this object obj, string path, out bool isMatch,
+        string modelName = "model",
         BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(obj);
         ArgumentException.ThrowIfNullOrWhiteSpace(path);
         ArgumentException.ThrowIfNullOrWhiteSpace(modelName);
+
+        // 初始化 isMatch 返回值
+        isMatch = false;
 
         // 移除前后空格
         var modelNameTrim = modelName.Trim();
@@ -248,8 +253,9 @@ internal static class ObjectExtensions
         var parts = path.Split('.', StringSplitOptions.RemoveEmptyEntries).Select(u => u.Trim()).ToArray();
 
         // 检查首个元素是否等于 modelName 的值，如果是则跳过首元素
-        if (parts.Length > 1 && parts[0] == modelNameTrim)
+        if (parts.Length > 0 && parts[0] == modelNameTrim)
         {
+            isMatch = true;
             parts = parts.Skip(1).ToArray();
         }
 

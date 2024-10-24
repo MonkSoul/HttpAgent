@@ -1191,6 +1191,20 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.WithObjectPathParameter(System.Object,System.String)">
+            <summary>
+                设置路径参数集合
+            </summary>
+            <remarks>
+                支持多次调用。区别于 <c>WithPathParameters</c> 方法，<c>WithObjectPathParameter</c> 主要用于对象路径方式。如：
+                <c>{model.Prop.SubProp}</c>。
+            </remarks>
+            <param name="parameterSource">路径参数源对象</param>
+            <param name="modelName">模板字符串中对象名</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.WithCookies(System.Collections.Generic.IDictionary{System.String,System.Object},System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
             <summary>
                 设置 Cookies 集合
@@ -1522,7 +1536,13 @@
             <summary>
                 路径参数集合
             </summary>
-            <remarks>用于替换请求地址中符合 <c>{\w+}</c> 正则表达式匹配的数据。</remarks>
+            <remarks>用于替换请求地址中符合 <c>\{\s*(\w+\s*(\.\s*\w+\s*)*)\s*\}</c> 正则表达式匹配的数据。</remarks>
+        </member>
+        <member name="P:HttpAgent.HttpRequestBuilder.ObjectPathParameters">
+            <summary>
+                路径参数集合
+            </summary>
+            <remarks>支持自定义类类型。用于替换请求地址中符合 <c>\{\s*(\w+\s*(\.\s*\w+\s*)*)\s*\}</c> 正则表达式匹配的数据。</remarks>
         </member>
         <member name="P:HttpAgent.HttpRequestBuilder.Cookies">
             <summary>
@@ -2702,7 +2722,7 @@
             </returns>
             <exception cref="T:System.NotSupportedException"></exception>
         </member>
-        <member name="M:HttpAgent.Core.Extensions.ObjectExtensions.GetPropertyValueFromPath(System.Object,System.String,System.String,System.Reflection.BindingFlags)">
+        <member name="M:HttpAgent.Core.Extensions.ObjectExtensions.GetPropertyValueFromPath(System.Object,System.String,System.Boolean@,System.String,System.Reflection.BindingFlags)">
             <summary>
                 根据模板路径从对象中获取属性值
             </summary>
@@ -2711,6 +2731,7 @@
             </param>
             <param name="path">模板路径。支持 <c>{Key}</c> 或 <c>{Key.Property}</c> 或 {Key.Property.NestProperty} 语法格式。</param>
             <param name="modelName">模板字符串中对象名；默认值为：<c>model</c>。</param>
+            <param name="isMatch">用于检查是否以 <c>modelName.</c> 开头</param>
             <param name="bindingFlags">
                 <see cref="T:System.Reflection.BindingFlags" />
             </param>

@@ -151,7 +151,21 @@ public sealed partial class HttpRequestBuilder
     {
         var newUri = uriBuilder.Uri.ToString();
 
-        return PathParameters.IsNullOrEmpty() ? newUri : newUri.ReplacePlaceholders(PathParameters)!;
+        // 空检查
+        if (!PathParameters.IsNullOrEmpty())
+        {
+            newUri = newUri.ReplacePlaceholders(PathParameters);
+        }
+
+        // 空检查
+        if (!ObjectPathParameters.IsNullOrEmpty())
+        {
+            newUri = ObjectPathParameters.Aggregate(newUri,
+                (current, objectPathParameter) =>
+                    current.ReplacePlaceholders(objectPathParameter.Value, objectPathParameter.Key));
+        }
+
+        return newUri!;
     }
 
     /// <summary>
