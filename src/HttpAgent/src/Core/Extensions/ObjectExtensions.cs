@@ -283,6 +283,13 @@ internal static class ObjectExtensions
                 return null;
             }
         }
+        
+        // 处理 IEnumerable<T> 类型，使用 string.Join 进行拼接
+        if (current is IEnumerable enumerable and not string &&
+            typeof(IEnumerable<>).IsDefinitionEquals(current.GetType()))
+        {
+            current = string.Join(',', enumerable.Cast<object>());
+        }
 
         return current;
     }

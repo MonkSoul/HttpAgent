@@ -2874,6 +2874,21 @@
                 <see cref="T:System.Boolean" />
             </returns>
         </member>
+        <member name="M:HttpAgent.Core.Extensions.TypeExtensions.IsDefinitionEquals(System.Type,System.Type)">
+            <summary>
+                检查类型和指定类型定义是否相等
+            </summary>
+            <remarks>将查找所有派生的基类和实现的接口。</remarks>
+            <param name="type">
+                <see cref="T:System.Type" />
+            </param>
+            <param name="compareType">
+                <see cref="T:System.Type" />
+            </param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.Core.Extensions.TypeExtensions.IsKeyValuePair(System.Type)">
             <summary>
                 检查类型是否是 <see cref="T:System.Collections.Generic.KeyValuePair`2" /> 类型

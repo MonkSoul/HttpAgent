@@ -43,7 +43,7 @@ internal static class TypeExtensions
             type = underlyingType;
         }
     }
-    
+
     /// <summary>
     ///     检查类型和指定类型定义是否相等
     /// </summary>
@@ -66,6 +66,47 @@ internal static class TypeExtensions
                    && compareType.IsGenericType
                    && type.IsGenericTypeDefinition // 💡
                    && type == compareType.GetGenericTypeDefinition());
+    }
+
+    /// <summary>
+    ///     检查类型和指定类型定义是否相等
+    /// </summary>
+    /// <remarks>将查找所有派生的基类和实现的接口。</remarks>
+    /// <param name="type">
+    ///     <see cref="Type" />
+    /// </param>
+    /// <param name="compareType">
+    ///     <see cref="Type" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="bool" />
+    /// </returns>
+    internal static bool IsDefinitionEquals(this Type type, Type? compareType)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(compareType);
+
+        // 检查类型和指定类型定义是否相等
+        if (type.IsDefinitionEqual(compareType))
+        {
+            return true;
+        }
+
+        // 递归查找所有基类
+        var baseType = compareType.BaseType;
+        while (baseType is not null && baseType != typeof(object))
+        {
+            // 检查类型和指定类型定义是否相等
+            if (type.IsDefinitionEqual(baseType))
+            {
+                return true;
+            }
+
+            baseType = baseType.BaseType;
+        }
+
+        // 检查所有实现接口定义是否一致
+        return compareType.GetInterfaces().Any(type.IsDefinitionEqual);
     }
 
     /// <summary>
@@ -238,7 +279,7 @@ internal static class TypeExtensions
         // 创建一个委托并将其转换为适当的 Func 类型
         return (Func<object, object?>)dynamicMethod.CreateDelegate(typeof(Func<object, object?>));
     }
-    
+
     /// <summary>
     ///     创建实例属性值设置器
     /// </summary>
