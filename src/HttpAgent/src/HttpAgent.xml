@@ -2099,7 +2099,7 @@
                 创建 <see cref="T:HttpAgent.HttpDeclarativeBuilder" /> 构建器
             </summary>
             <param name="method">调用方法</param>
-            <param name="args">调用方法的参数数组</param>
+            <param name="args">调用方法的参数值数组</param>
             <returns>
                 <see cref="T:HttpAgent.HttpDeclarativeBuilder" />
             </returns>
@@ -3253,7 +3253,7 @@
                 <inheritdoc cref="T:HttpAgent.HttpDeclarativeBuilder" />
             </summary>
             <param name="method">调用方法</param>
-            <param name="args">调用方法的参数数组</param>
+            <param name="args">调用方法的参数值数组</param>
         </member>
         <member name="P:HttpAgent.HttpDeclarativeBuilder.Method">
             <summary>
@@ -3262,7 +3262,12 @@
         </member>
         <member name="P:HttpAgent.HttpDeclarativeBuilder.Args">
             <summary>
-                调用方法的参数数组
+                调用方法的参数值数组
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HttpDeclarativeBuilder.Parameters">
+            <summary>
+                调用方法的参数字典
             </summary>
         </member>
         <member name="M:HttpAgent.HttpDeclarativeBuilder.Build">
@@ -3272,6 +3277,15 @@
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractQueryParameters(HttpAgent.HttpRequestBuilder)">
+            <summary>
+                解析查询参数
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
         </member>
         <member name="T:HttpAgent.HttpDeclarativeDispatchProxy">
             <summary>
@@ -3281,9 +3295,6 @@
         <member name="P:HttpAgent.HttpDeclarativeDispatchProxy.RemoteService">
             <inheritdoc cref="T:HttpAgent.IHttpRemoteService" />
         </member>
-        <member name="P:HttpAgent.HttpDeclarativeDispatchProxy.ServiceProvider">
-            <inheritdoc cref="T:System.IServiceProvider" />
-        </member>
         <member name="M:HttpAgent.HttpDeclarativeDispatchProxy.Invoke(System.Reflection.MethodInfo,System.Object[])">
             <inheritdoc />
         </member>
@@ -3292,15 +3303,6 @@
         </member>
         <member name="M:HttpAgent.HttpDeclarativeDispatchProxy.InvokeAsyncT``1(System.Reflection.MethodInfo,System.Object[])">
             <inheritdoc />
-        </member>
-        <member name="M:HttpAgent.HttpDeclarativeDispatchProxy.ExtractSpecialArguments(System.Object[])">
-            <summary>
-                解析特殊类型参数实例
-            </summary>
-            <param name="args">调用方法的参数数组</param>
-            <returns>
-                <see cref="T:System.Tuple`2" />
-            </returns>
         </member>
         <member name="T:HttpAgent.IHttpDeclarative">
             <summary>
@@ -3803,6 +3805,51 @@
             ○ Match if at the end of the string or if before an ending newline.<br/>
             </code>
             </remarks>
+        </member>
+        <member name="T:HttpAgent.DeclarativeManager">
+            <summary>
+                HTTP 声明式管理器
+            </summary>
+        </member>
+        <member name="F:HttpAgent.DeclarativeManager._httpDeclarativeBuilder">
+            <inheritdoc cref="T:HttpAgent.HttpDeclarativeBuilder" />
+        </member>
+        <member name="F:HttpAgent.DeclarativeManager._httpRemoteService">
+            <inheritdoc cref="T:HttpAgent.IHttpRemoteService" />
+        </member>
+        <member name="M:HttpAgent.DeclarativeManager.#ctor(HttpAgent.IHttpRemoteService,HttpAgent.HttpDeclarativeBuilder)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.DeclarativeManager" />
+            </summary>
+            <param name="httpRemoteService">
+                <see cref="T:HttpAgent.IHttpRemoteService" />
+            </param>
+            <param name="httpDeclarativeBuilder">
+                <see cref="T:HttpAgent.HttpDeclarativeBuilder" />
+            </param>
+        </member>
+        <member name="P:HttpAgent.DeclarativeManager.RequestBuilder">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.HttpRequestBuilder" />
+            </summary>
+        </member>
+        <member name="M:HttpAgent.DeclarativeManager.Start">
+            <summary>
+                开始请求
+            </summary>
+        </member>
+        <member name="M:HttpAgent.DeclarativeManager.StartAsync``1">
+            <summary>
+                开始请求
+            </summary>
+        </member>
+        <member name="M:HttpAgent.DeclarativeManager.ExtractSpecialArguments">
+            <summary>
+                解析特殊类型参数实例
+            </summary>
+            <returns>
+                <see cref="T:System.Tuple`2" />
+            </returns>
         </member>
         <member name="T:HttpAgent.FileDownloadManager">
             <summary>
@@ -5243,6 +5290,18 @@
         <member name="M:HttpAgent.HttpRemoteService.SendAsync(HttpAgent.HttpLongPollingBuilder,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:HttpAgent.HttpRemoteService.Declarative(System.Reflection.MethodInfo,System.Object[])">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.DeclarativeAsync``1(System.Reflection.MethodInfo,System.Object[])">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.SendAs(HttpAgent.HttpDeclarativeBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.SendAsAsync``1(HttpAgent.HttpDeclarativeBuilder)">
+            <inheritdoc />
+        </member>
         <member name="M:HttpAgent.HttpRemoteService.Get(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
@@ -6382,6 +6441,50 @@
             </param>
             <returns>
                 <see cref="T:System.Threading.Tasks.Task" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IHttpRemoteService.Declarative(System.Reflection.MethodInfo,System.Object[])">
+            <summary>
+                发送 HTTP 声明式请求
+            </summary>
+            <param name="method">调用方法</param>
+            <param name="args">调用方法的参数值数组</param>
+            <returns>
+                <see cref="T:System.Object" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IHttpRemoteService.DeclarativeAsync``1(System.Reflection.MethodInfo,System.Object[])">
+            <summary>
+                发送 HTTP 声明式请求
+            </summary>
+            <param name="method">调用方法</param>
+            <param name="args">调用方法的参数值数组</param>
+            <typeparam name="T">转换的目标类型</typeparam>
+            <returns>
+                <typeparamref name="T" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IHttpRemoteService.SendAs(HttpAgent.HttpDeclarativeBuilder)">
+            <summary>
+                发送 HTTP 声明式请求
+            </summary>
+            <param name="httpDeclarativeBuilder">
+                <see cref="T:HttpAgent.HttpDeclarativeBuilder" />
+            </param>
+            <returns>
+                <see cref="T:System.Object" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IHttpRemoteService.SendAsAsync``1(HttpAgent.HttpDeclarativeBuilder)">
+            <summary>
+                发送 HTTP 声明式请求
+            </summary>
+            <param name="httpDeclarativeBuilder">
+                <see cref="T:HttpAgent.HttpDeclarativeBuilder" />
+            </param>
+            <typeparam name="T">转换的目标类型</typeparam>
+            <returns>
+                <typeparamref name="T" />
             </returns>
         </member>
         <member name="M:HttpAgent.IHttpRemoteService.Get(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">

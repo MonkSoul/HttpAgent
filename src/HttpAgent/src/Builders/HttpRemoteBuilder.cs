@@ -325,9 +325,6 @@ public sealed class HttpRemoteBuilder
                 // 解析 IHttpRemoteService 服务并设置给 RemoteService 属性
                 httpDeclarative.RemoteService = provider.GetRequiredService<IHttpRemoteService>();
 
-                // 设置 ServiceProvider 属性值
-                httpDeclarative.ServiceProvider = provider;
-
                 return httpDeclarative;
             });
         }

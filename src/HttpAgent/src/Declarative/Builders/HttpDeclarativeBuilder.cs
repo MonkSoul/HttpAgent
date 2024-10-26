@@ -23,7 +23,7 @@ public sealed class HttpDeclarativeBuilder
     ///     <inheritdoc cref="HttpDeclarativeBuilder" />
     /// </summary>
     /// <param name="method">调用方法</param>
-    /// <param name="args">调用方法的参数数组</param>
+    /// <param name="args">调用方法的参数值数组</param>
     internal HttpDeclarativeBuilder(MethodInfo method, object?[] args)
     {
         // 空检查
@@ -31,6 +31,8 @@ public sealed class HttpDeclarativeBuilder
 
         Method = method;
         Args = args;
+
+        Parameters = method.GetParameters().Select((p, i) => new { p, v = args[i] }).ToDictionary(u => u.p, u => u.v);
     }
 
     /// <summary>
@@ -39,9 +41,14 @@ public sealed class HttpDeclarativeBuilder
     public MethodInfo Method { get; }
 
     /// <summary>
-    ///     调用方法的参数数组
+    ///     调用方法的参数值数组
     /// </summary>
     public object?[] Args { get; }
+
+    /// <summary>
+    ///     调用方法的参数字典
+    /// </summary>
+    internal Dictionary<ParameterInfo, object?> Parameters { get; }
 
     /// <summary>
     ///     构建 <see cref="HttpRequestBuilder" /> 实例
@@ -49,8 +56,15 @@ public sealed class HttpDeclarativeBuilder
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
+    /// <exception cref="InvalidOperationException"></exception>
     internal HttpRequestBuilder Build()
     {
+        // 检查调用方法是否贴有 [HttpMethod] 特性
+        if (!Method.IsDefined(typeof(HttpMethodAttribute), true))
+        {
+            throw new InvalidOperationException($"Method {Method.Name} does not have a HttpMethodAttribute.");
+        }
+
         // 获取 HttpMethodAttribute 实例
         var httpMethodAttribute = Method.GetCustomAttribute<HttpMethodAttribute>(true);
 
@@ -63,8 +77,6 @@ public sealed class HttpDeclarativeBuilder
         // 初始化 HttpRequestBuilder 实例
         var httpRequestBuilder =
             HttpRequestBuilder.Create(httpMethodAttribute.Method, httpMethodAttribute.RequestUri, configure);
-
-        // TODO: 查询参数，路径参数
 
         // 尝试解析 Action<HttpMultipartFormDataBuilder> 参数
         if (Args.FirstOrDefault(u => u is Action<HttpMultipartFormDataBuilder>) is Action<HttpMultipartFormDataBuilder>
@@ -85,6 +97,69 @@ public sealed class HttpDeclarativeBuilder
             httpRequestBuilder.DisableCache(Method.GetCustomAttribute<DisableCacheAttribute>()!.Disabled);
         }
 
+        // 解析查询参数
+        ExtractQueryParameters(httpRequestBuilder);
+
+        // TODO: 查询参数，路径参数，Body 参数
+
+        // TODO：处理请求头（移除请求头）
+
+        // TODO：处理超时
+
         return httpRequestBuilder;
+    }
+
+    /// <summary>
+    ///     解析查询参数
+    /// </summary>
+    /// <param name="httpRequestBuilder">
+    ///     <see cref="HttpRequestBuilder" />
+    /// </param>
+    internal void ExtractQueryParameters(HttpRequestBuilder httpRequestBuilder)
+    {
+        // 查找所有贴有 [Query] 特性的参数
+        var queryParameters = Parameters.Where(u =>
+            !_specialArgumentTypes.Contains(u.Key.ParameterType) && u.Key.IsDefined(typeof(QueryAttribute))).ToArray();
+
+        // 空检查
+        if (queryParameters.Length <= 0)
+        {
+            return;
+        }
+
+        foreach (var (parameter, value) in queryParameters)
+        {
+            var parameterType = parameter.ParameterType;
+
+            // 获取 QueryAttribute 实例
+            var queryAttribute = parameter.GetCustomAttribute<QueryAttribute>()!;
+
+            // 检查参数类型是否是基本类型或枚举类型
+            if (parameterType.IsBasicType() || parameterType.IsEnum ||
+                (parameterType.IsArray && (parameterType.GetElementType()!.IsBasicType() ||
+                                           parameterType.GetElementType()!.IsEnum)))
+            {
+                httpRequestBuilder.WithQueryParameters(
+                    new Dictionary<string, object?>
+                    {
+                        {
+                            string.IsNullOrWhiteSpace(queryAttribute.AliasAs)
+                                ? parameter.Name!
+                                : queryAttribute.AliasAs,
+                            value
+                        }
+                    }, queryAttribute.Escape);
+
+                continue;
+            }
+
+            // 空检查
+            if (value is null)
+            {
+                continue;
+            }
+
+            httpRequestBuilder.WithQueryParameters(value, queryAttribute.Prefix, queryAttribute.Escape);
+        }
     }
 }

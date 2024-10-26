@@ -327,4 +327,48 @@ public partial interface IHttpRemoteService
     /// </returns>
     Task SendAsync(HttpLongPollingBuilder httpLongPollingBuilder,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     发送 HTTP 声明式请求
+    /// </summary>
+    /// <param name="method">调用方法</param>
+    /// <param name="args">调用方法的参数值数组</param>
+    /// <returns>
+    ///     <see cref="object" />
+    /// </returns>
+    object? Declarative(MethodInfo method, object[] args);
+
+    /// <summary>
+    ///     发送 HTTP 声明式请求
+    /// </summary>
+    /// <param name="method">调用方法</param>
+    /// <param name="args">调用方法的参数值数组</param>
+    /// <typeparam name="T">转换的目标类型</typeparam>
+    /// <returns>
+    ///     <typeparamref name="T" />
+    /// </returns>
+    Task<T?> DeclarativeAsync<T>(MethodInfo method, object[] args);
+
+    /// <summary>
+    ///     发送 HTTP 声明式请求
+    /// </summary>
+    /// <param name="httpDeclarativeBuilder">
+    ///     <see cref="HttpDeclarativeBuilder" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="object" />
+    /// </returns>
+    object? SendAs(HttpDeclarativeBuilder httpDeclarativeBuilder);
+
+    /// <summary>
+    ///     发送 HTTP 声明式请求
+    /// </summary>
+    /// <param name="httpDeclarativeBuilder">
+    ///     <see cref="HttpDeclarativeBuilder" />
+    /// </param>
+    /// <typeparam name="T">转换的目标类型</typeparam>
+    /// <returns>
+    ///     <typeparamref name="T" />
+    /// </returns>
+    Task<T?> SendAsAsync<T>(HttpDeclarativeBuilder httpDeclarativeBuilder);
 }

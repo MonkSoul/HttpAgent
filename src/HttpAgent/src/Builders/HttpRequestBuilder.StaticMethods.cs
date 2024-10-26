@@ -513,7 +513,7 @@ public sealed partial class HttpRequestBuilder
     ///     创建 <see cref="HttpDeclarativeBuilder" /> 构建器
     /// </summary>
     /// <param name="method">调用方法</param>
-    /// <param name="args">调用方法的参数数组</param>
+    /// <param name="args">调用方法的参数值数组</param>
     /// <returns>
     ///     <see cref="HttpDeclarativeBuilder" />
     /// </returns>

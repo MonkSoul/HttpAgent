@@ -3,11 +3,12 @@
 [![license](https://img.shields.io/badge/license-MIT-orange?cacheSeconds=10800)](https://gitee.com/dotnetchina/HttpAgent/blob/master/LICENSE) [![nuget](https://img.shields.io/nuget/v/HttpAgent.svg?cacheSeconds=10800)](https://www.nuget.org/packages/HttpAgent) [![dotNET China](https://img.shields.io/badge/organization-dotNET%20China-yellow?cacheSeconds=10800)](https://gitee.com/dotnetchina)
 
 HttpAgent 是一个高性能、灵活且易用的开源库，提供了全面的 HTTP 功能支持，包括文件传输、轮询、测试工具、实时通信、请求管理、Media
-类型处理、MessagePack 支持等，并具有低资源消耗和高测试覆盖率的特点。
+类型处理、MessagePack 支持、声明式请求等，并具有低资源消耗和高测试覆盖率的特点。
 
 ![HttpAgent.drawio](https://gitee.com/dotnetchina/HttpAgent/raw/master/drawio/HttpAgent.drawio.png "HttpAgent.drawio.png")
 
-[**查看高清架构图**](https://diagram-viewer.giteeusercontent.com?repo=dotnetchina/HttpAgent&ref=master&file=drawio/HttpAgent.drawio)
+[**查看高清架构图
+**](https://diagram-viewer.giteeusercontent.com?repo=dotnetchina/HttpAgent&ref=master&file=drawio/HttpAgent.drawio)
 
 ## 特性
 
@@ -20,6 +21,7 @@ HttpAgent 是一个高性能、灵活且易用的开源库，提供了全面的 
 - **请求管理和日志审计**：内置请求拦截机制及 `HTTP` 请求日志审计功能。
 - **媒体类型处理**：预设主流 `MediaType` 的处理机制，并开放自定义处理接口。
 - **`MessagePack` 支持**：集成 `MessagePack` 序列化与反序列化功能，提高数据交换效率。
+- **声明式请求**：通过简单的属性注解或接口定义来指定请求的行为。
 - **响应转换灵活性**：提供常用的 `HTTP` 响应转换器，并支持自定义转换逻辑。
 - **高性能与资源管理**：采用内存优化技术和连接池管理，确保低资源消耗与高性能表现。
 - **架构设计**：架构设计灵活，易于使用与扩展。
