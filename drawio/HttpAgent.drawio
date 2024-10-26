@@ -1,11 +1,11 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0" version="24.7.17">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0" version="24.7.17">
   <diagram name="第 1 页" id="MidELUbckxybCgodSF5H">
-    <mxGraphModel dx="3773" dy="2322" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="4225" dy="2356" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="ZTVas6iXDJ7H-JZrCOrF-97" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
-          <mxGeometry x="-500" y="-30" width="2970" height="650" as="geometry" />
+          <mxGeometry x="-500" y="-30" width="2970" height="660" as="geometry" />
         </mxCell>
         <mxCell id="ZTVas6iXDJ7H-JZrCOrF-67" value="" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;fontStyle=1;labelBackgroundColor=none;glass=0;shadow=1;sketch=1;curveFitting=1;jiggle=2;dashed=1;fillColor=#ffff88;strokeColor=#36393d;" parent="1" vertex="1">
           <mxGeometry x="1848" y="134.5" width="572" height="403.5" as="geometry" />
@@ -17,19 +17,19 @@
           <mxGeometry x="-447" y="70" width="190" height="60" as="geometry" />
         </mxCell>
         <mxCell id="ZTVas6iXDJ7H-JZrCOrF-32" value="&lt;div style=&quot;line-height: 200%;&quot;&gt;HttpFileUploadBuilder&lt;/div&gt;&lt;div style=&quot;line-height: 200%;&quot;&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;文件上传构建器&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;fontStyle=1;labelBackgroundColor=none;glass=0;shadow=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#f9f7ed;strokeColor=#36393d;dashed=1;" parent="1" vertex="1">
-          <mxGeometry x="-448" y="160" width="180" height="60" as="geometry" />
+          <mxGeometry x="-448" y="143" width="180" height="60" as="geometry" />
         </mxCell>
         <mxCell id="ZTVas6iXDJ7H-JZrCOrF-33" value="&lt;div style=&quot;line-height: 200%;&quot;&gt;HttpLongPollingBuilder&lt;/div&gt;&lt;div style=&quot;line-height: 200%;&quot;&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;长轮询构建器&lt;/span&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;fontStyle=1;labelBackgroundColor=none;glass=0;shadow=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#ffcc99;strokeColor=#36393d;dashed=1;" parent="1" vertex="1">
-          <mxGeometry x="-449" y="250" width="190" height="60" as="geometry" />
+          <mxGeometry x="-449" y="220" width="190" height="60" as="geometry" />
         </mxCell>
         <mxCell id="ZTVas6iXDJ7H-JZrCOrF-34" value="&lt;div style=&quot;line-height: 200%;&quot;&gt;HttpServerSentEventsBuilder&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;line-height: 200%;&quot;&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;Server-Sent Events 构建器&lt;/span&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;fontStyle=1;labelBackgroundColor=none;glass=0;shadow=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#cce5ff;strokeColor=#36393d;dashed=1;" parent="1" vertex="1">
-          <mxGeometry x="-449" y="340" width="220" height="60" as="geometry" />
+          <mxGeometry x="-449" y="300" width="220" height="60" as="geometry" />
         </mxCell>
         <mxCell id="ZTVas6iXDJ7H-JZrCOrF-35" value="&lt;div style=&quot;line-height: 200%;&quot;&gt;HttpStressTestHarnessBuilder&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;line-height: 200%;&quot;&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;压力测试构建器&lt;/span&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;fontStyle=1;labelBackgroundColor=none;glass=0;shadow=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#ffff88;strokeColor=#36393d;dashed=1;" parent="1" vertex="1">
-          <mxGeometry x="-450" y="430" width="220" height="60" as="geometry" />
+          <mxGeometry x="-450" y="380" width="220" height="60" as="geometry" />
         </mxCell>
         <mxCell id="ZTVas6iXDJ7H-JZrCOrF-36" value="&lt;div style=&quot;line-height: 200%;&quot;&gt;HttpContextForwardBuilder&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;line-height: 200%;&quot;&gt;&lt;span style=&quot;background-color: initial; font-weight: 400;&quot;&gt;HttpContext 转发构建器&lt;/span&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;fontStyle=1;labelBackgroundColor=none;glass=0;shadow=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#cdeb8b;strokeColor=#36393d;dashed=1;" parent="1" vertex="1">
-          <mxGeometry x="-450" y="515.5" width="210" height="60" as="geometry" />
+          <mxGeometry x="-450" y="458.5" width="210" height="60" as="geometry" />
         </mxCell>
         <mxCell id="ZTVas6iXDJ7H-JZrCOrF-38" value="&lt;div style=&quot;line-height: 200%;&quot;&gt;HttpRequestBuilder&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;line-height: 200%;&quot;&gt;&lt;span style=&quot;background-color: initial; font-weight: 400;&quot;&gt;HttpRequestMessage&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial; font-weight: 400;&quot;&gt;构建器&lt;/span&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;fontStyle=1;labelBackgroundColor=none;glass=0;shadow=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#e3c800;strokeColor=#B09500;fontColor=#000000;" parent="1" vertex="1">
           <mxGeometry x="-201" y="300" width="210" height="60" as="geometry" />
@@ -58,16 +58,10 @@
             <mxPoint x="-90" y="340" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ZTVas6iXDJ7H-JZrCOrF-44" value="" style="endArrow=classic;html=1;rounded=0;sketch=1;curveFitting=1;jiggle=2;dashed=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" parent="1" target="ZTVas6iXDJ7H-JZrCOrF-38" edge="1">
+        <mxCell id="ZTVas6iXDJ7H-JZrCOrF-44" value="" style="endArrow=classic;html=1;rounded=0;sketch=1;curveFitting=1;jiggle=2;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" edge="1" source="ZTVas6iXDJ7H-JZrCOrF-35">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-230" y="460" as="sourcePoint" />
-            <mxPoint x="-90" y="340" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="ZTVas6iXDJ7H-JZrCOrF-45" value="" style="endArrow=classic;html=1;rounded=0;sketch=1;curveFitting=1;jiggle=2;dashed=1;entryX=0;entryY=1;entryDx=0;entryDy=0;" parent="1" target="ZTVas6iXDJ7H-JZrCOrF-38" edge="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="-240" y="550" as="sourcePoint" />
-            <mxPoint x="-90" y="350" as="targetPoint" />
+            <mxPoint x="-200" y="340" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="ZTVas6iXDJ7H-JZrCOrF-46" value="" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;fontStyle=1;labelBackgroundColor=none;glass=0;shadow=1;sketch=1;curveFitting=1;jiggle=2;dashed=1;fillColor=#ffff88;strokeColor=#36393d;" parent="1" vertex="1">
@@ -277,10 +271,25 @@
         <mxCell id="awtECVfnWK-pebtbf7MO-24" value="WebSocketClient" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="1530" y="503" width="150" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="fZrPMFSZ2sT8OrPW5bAN-1" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=1;sketch=1;curveFitting=1;jiggle=2;shadow=1;dashed=1;strokeColor=#666666;" edge="1" parent="1">
+        <mxCell id="fZrPMFSZ2sT8OrPW5bAN-1" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=1;sketch=1;curveFitting=1;jiggle=2;shadow=1;dashed=1;strokeColor=#666666;" parent="1" edge="1">
           <mxGeometry width="100" height="100" relative="1" as="geometry">
             <mxPoint x="1472" y="406" as="sourcePoint" />
             <mxPoint x="1512" y="456" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZTVas6iXDJ7H-JZrCOrF-45" value="" style="endArrow=classic;html=1;rounded=0;sketch=1;curveFitting=1;jiggle=2;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" edge="1" source="ZTVas6iXDJ7H-JZrCOrF-36">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-240" y="550" as="sourcePoint" />
+            <mxPoint x="-200" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="qrYnRkxwrIGWfmc0tUdM-1" value="&lt;div style=&quot;line-height: 200%;&quot;&gt;HttpDeclarativeBuilder&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;line-height: 200%;&quot;&gt;&lt;span style=&quot;background-color: initial; font-weight: 400;&quot;&gt;声明式构建器&lt;/span&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;fontStyle=1;labelBackgroundColor=none;glass=0;shadow=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#cdeb8b;strokeColor=#36393d;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="-449" y="538" width="210" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="qrYnRkxwrIGWfmc0tUdM-2" value="" style="endArrow=classic;html=1;rounded=0;sketch=1;curveFitting=1;jiggle=2;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="qrYnRkxwrIGWfmc0tUdM-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-230" y="500" as="sourcePoint" />
+            <mxPoint x="-200" y="360" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
