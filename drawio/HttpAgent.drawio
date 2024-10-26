@@ -5,7 +5,7 @@
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="ZTVas6iXDJ7H-JZrCOrF-97" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
-          <mxGeometry x="-500" y="-30" width="2970" height="660" as="geometry" />
+          <mxGeometry x="-500" y="-30" width="2970" height="670" as="geometry" />
         </mxCell>
         <mxCell id="ZTVas6iXDJ7H-JZrCOrF-67" value="" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;fontStyle=1;labelBackgroundColor=none;glass=0;shadow=1;sketch=1;curveFitting=1;jiggle=2;dashed=1;fillColor=#ffff88;strokeColor=#36393d;" parent="1" vertex="1">
           <mxGeometry x="1848" y="134.5" width="572" height="403.5" as="geometry" />
@@ -122,7 +122,7 @@
           <mxGeometry x="2016" y="155.5" width="240" height="30" as="geometry" />
         </mxCell>
         <mxCell id="ZTVas6iXDJ7H-JZrCOrF-75" value="&lt;div style=&quot;line-height: 200%;&quot;&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;自定义转换器&lt;/span&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;fontStyle=1;labelBackgroundColor=none;glass=0;shadow=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#ffcccc;strokeColor=#36393d;dashed=1;" parent="1" vertex="1">
-          <mxGeometry x="1882" y="448" width="120" height="60" as="geometry" />
+          <mxGeometry x="2269.5" y="451" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="ZTVas6iXDJ7H-JZrCOrF-76" value="&lt;p style=&quot;line-height: 100%;&quot;&gt;&lt;b&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;互联网资源&lt;/font&gt;&lt;/b&gt;&lt;/p&gt;" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;shadow=1;fillColor=#b1ddf0;strokeColor=#10739e;dashed=1;" parent="1" vertex="1">
           <mxGeometry x="1367" y="307.5" width="120" height="80" as="geometry" />
@@ -291,6 +291,9 @@
             <mxPoint x="-230" y="500" as="sourcePoint" />
             <mxPoint x="-200" y="360" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="UdDNNl8drQ1v_8VXzXZA-1" value="DoesNoReceiveContentConverter&lt;div style=&quot;line-height: 200%;&quot;&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;无需接收响应内容转换器&lt;/span&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;fontStyle=1;labelBackgroundColor=none;glass=0;shadow=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#d5e8d4;strokeColor=#82b366;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1881" y="451" width="249" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
