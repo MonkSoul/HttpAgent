@@ -20,6 +20,11 @@ public sealed class HttpRemoteBuilder
     internal IList<Func<IEnumerable<IHttpContentProcessor>>>? _httpContentProcessorProviders;
 
     /// <summary>
+    ///     <see cref="IHttpDeclarative" /> 集合
+    /// </summary>
+    internal HashSet<Type>? _httpDeclarativeTypes;
+
+    /// <summary>
     ///     <see cref="IObjectContentConverterFactory" /> 实现类型
     /// </summary>
     internal Type? _objectContentConverterFactoryType;
@@ -153,6 +158,90 @@ public sealed class HttpRemoteBuilder
     }
 
     /// <summary>
+    ///     添加 HTTP 声明式服务
+    /// </summary>
+    /// <typeparam name="TDeclarative">
+    ///     <see cref="IHttpDeclarative" />
+    /// </typeparam>
+    /// <returns>
+    ///     <see cref="HttpRemoteBuilder" />
+    /// </returns>
+    public HttpRemoteBuilder AddDeclarative<TDeclarative>()
+        where TDeclarative : IHttpDeclarative =>
+        AddDeclarative(typeof(TDeclarative));
+
+    /// <summary>
+    ///     添加 HTTP 声明式服务
+    /// </summary>
+    /// <param name="declarativeType">
+    ///     <see cref="IHttpDeclarative" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="HttpRemoteBuilder" />
+    /// </returns>
+    /// <exception cref="ArgumentException"></exception>
+    public HttpRemoteBuilder AddDeclarative(Type declarativeType)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(declarativeType);
+
+        // 检查类型是否是接口且实现了 IHttpDeclarative 接口
+        if (!declarativeType.IsInterface || !typeof(IHttpDeclarative).IsAssignableFrom(declarativeType))
+        {
+            throw new ArgumentException(
+                $"`{declarativeType}` type is not assignable from `{typeof(IHttpDeclarative)}` or interface.",
+                nameof(declarativeType));
+        }
+
+        _httpDeclarativeTypes ??= [];
+
+        _httpDeclarativeTypes.Add(declarativeType);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     扫描程序集并添加 HTTP 声明式服务
+    /// </summary>
+    /// <param name="assemblies"><see cref="Assembly" /> 集合</param>
+    /// <returns>
+    ///     <see cref="HttpRemoteBuilder" />
+    /// </returns>
+    public HttpRemoteBuilder AddDeclarativeFromAssemblies(params IEnumerable<Assembly> assemblies)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(assemblies);
+
+        AddDeclaratives(assemblies.SelectMany(s =>
+            s.GetExportedTypes().Where(t => t.IsInterface && typeof(IHttpDeclarative).IsAssignableFrom(t))));
+
+        return this;
+    }
+
+    /// <summary>
+    ///     添加 HTTP 声明式服务
+    /// </summary>
+    /// <param name="declarativeTypes">
+    ///     <see cref="IHttpDeclarative" /> 集合
+    /// </param>
+    /// <returns>
+    ///     <see cref="HttpRemoteBuilder" />
+    /// </returns>
+    /// <exception cref="ArgumentException"></exception>
+    public HttpRemoteBuilder AddDeclaratives(params IEnumerable<Type> declarativeTypes)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(declarativeTypes);
+
+        foreach (var declarativeType in declarativeTypes)
+        {
+            AddDeclarative(declarativeType);
+        }
+
+        return this;
+    }
+
+    /// <summary>
     ///     构建模块服务
     /// </summary>
     /// <param name="services">
@@ -201,6 +290,46 @@ public sealed class HttpRemoteBuilder
         {
             services.Replace(ServiceDescriptor.Singleton(typeof(IObjectContentConverterFactory),
                 _objectContentConverterFactoryType));
+        }
+
+        // 构建 HTTP 远程请求声明式服务
+        BuildHttpDeclarativeServices(services);
+    }
+
+    /// <summary>
+    ///     构建 HTTP 远程请求声明式服务
+    /// </summary>
+    /// <param name="services">
+    ///     <see cref="IServiceCollection" />
+    /// </param>
+    internal void BuildHttpDeclarativeServices(IServiceCollection services)
+    {
+        // 空检查
+        if (_httpDeclarativeTypes is null)
+        {
+            return;
+        }
+
+        // 初始化 HTTP 远程请求声明式代理类类型
+        var httpDeclarativeDispatchProxyType = typeof(HttpDeclarativeDispatchProxy);
+
+        // 遍历 HTTP 远程请求声明式类型并注册为服务
+        foreach (var httpDeclarativeType in _httpDeclarativeTypes)
+        {
+            services.TryAddSingleton(httpDeclarativeType, provider =>
+            {
+                // 创建 HTTP 远程请求声明式代理实例
+                dynamic httpDeclarative =
+                    DispatchProxyAsync.Create(httpDeclarativeType, httpDeclarativeDispatchProxyType);
+
+                // 解析 IHttpRemoteService 服务并设置给 RemoteService 属性
+                httpDeclarative.RemoteService = provider.GetRequiredService<IHttpRemoteService>();
+
+                // 设置 ServiceProvider 属性值
+                httpDeclarative.ServiceProvider = provider;
+
+                return httpDeclarative;
+            });
         }
     }
 

@@ -175,7 +175,7 @@ internal static partial class StringExtensions
     /// <param name="replacementSource">
     ///     <see cref="object" />
     /// </param>
-    /// <param name="modelName">模板字符串中对象名；默认值为：<c>model</c>。</param>
+    /// <param name="prefix">模板字符串前缀；默认值为：<c>model</c>。</param>
     /// <param name="bindingFlags">
     ///     <see cref="BindingFlags" />
     /// </param>
@@ -183,7 +183,7 @@ internal static partial class StringExtensions
     ///     <see cref="string" />
     /// </returns>
     internal static string? ReplacePlaceholders(this string? template, object replacementSource,
-        string modelName = "model",
+        string prefix = "model",
         BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)
     {
         // 空检查
@@ -197,7 +197,7 @@ internal static partial class StringExtensions
                     // 获取模板解析后的值
                     var replacement =
                         replacementSource.GetPropertyValueFromPath(match.Groups[1].Value.Trim(), out var isMatch,
-                            modelName, bindingFlags);
+                            prefix, bindingFlags);
 
                     return isMatch
                         // 如果找到匹配则替换

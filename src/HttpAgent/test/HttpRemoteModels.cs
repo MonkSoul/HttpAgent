@@ -189,3 +189,15 @@ public class MessagePackModel1
 
     [Key(1)] public string? Name { get; set; }
 }
+
+public interface INonHttpTest;
+
+public interface IHttpTest : IHttpDeclarative
+{
+    [Get("https://furion.net/")]
+    Task<string> GetContent();
+}
+
+public interface IHttpTest2 : IHttpDeclarative;
+
+public class HttpTest : IHttpDeclarative;

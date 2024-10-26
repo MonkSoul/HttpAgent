@@ -496,13 +496,13 @@ public class HttpRequestBuilderMethodsTests
 
         httpRequestBuilder.QueryParameters.Clear();
 
-        httpRequestBuilder.WithQueryParameters(new { name = "furi on" }, true);
+        httpRequestBuilder.WithQueryParameters(new { name = "furi on" }, escape: true);
         Assert.Equal("furi%20on", httpRequestBuilder.QueryParameters["name"].First());
 
         httpRequestBuilder.QueryParameters.Clear();
 
         var dateNow = new DateTime(2024, 08, 30, 23, 59, 59, 999, DateTimeKind.Local);
-        httpRequestBuilder.WithQueryParameters(new { date = dateNow }, false, CultureInfo.InvariantCulture);
+        httpRequestBuilder.WithQueryParameters(new { date = dateNow }, null, false, CultureInfo.InvariantCulture);
         Assert.Equal("2024-08-30T23:59:59.9990000+08:00", httpRequestBuilder.QueryParameters["date"].First());
 
         var httpRequestBuilder2 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
@@ -519,6 +519,15 @@ public class HttpRequestBuilderMethodsTests
         Assert.Equal(2, httpRequestBuilder3.QueryParameters!["name"].Count);
         Assert.Equal("furion", httpRequestBuilder3.QueryParameters!["name"].First());
         Assert.Equal("furion2", httpRequestBuilder3.QueryParameters!["name"].Last());
+
+        var httpRequestBuilder4 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+
+        httpRequestBuilder4.WithQueryParameters(new { name = "furion" })
+            .WithQueryParameters(new { id = 10, name = "furion2" }, "user");
+        Assert.Equal("10", httpRequestBuilder4.QueryParameters!["user.id"].First());
+        Assert.Equal("furion2", httpRequestBuilder4.QueryParameters!["user.name"].First());
+        Assert.Single(httpRequestBuilder4.QueryParameters!["name"]);
+        Assert.Equal("furion", httpRequestBuilder4.QueryParameters!["name"].First());
     }
 
     [Fact]
@@ -570,13 +579,13 @@ public class HttpRequestBuilderMethodsTests
 
         httpRequestBuilder.PathParameters.Clear();
 
-        httpRequestBuilder.WithPathParameters(new { name = "furi on" }, true);
+        httpRequestBuilder.WithPathParameters(new { name = "furi on" }, escape: true);
         Assert.Equal("furi%20on", httpRequestBuilder.PathParameters["name"]);
 
         httpRequestBuilder.PathParameters.Clear();
 
         var dateNow = new DateTime(2024, 08, 30, 23, 59, 59, 999, DateTimeKind.Local);
-        httpRequestBuilder.WithPathParameters(new { date = dateNow }, false, CultureInfo.InvariantCulture);
+        httpRequestBuilder.WithPathParameters(new { date = dateNow }, null, false, CultureInfo.InvariantCulture);
         Assert.Equal("2024-08-30T23:59:59.9990000+08:00", httpRequestBuilder.PathParameters["date"]);
 
         var httpRequestBuilder2 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
@@ -595,31 +604,13 @@ public class HttpRequestBuilderMethodsTests
     }
 
     [Fact]
-    public void WithObjectPathParameter_Invalid_Parameters()
+    public void WithObjectPathParameter_WithModelName_ReturnOK()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
 
-        Assert.Throws<ArgumentNullException>(() =>
-        {
-            httpRequestBuilder.WithObjectPathParameter(null!, null!);
-        });
-
-        Assert.Throws<ArgumentNullException>(() =>
-            httpRequestBuilder.WithObjectPathParameter(new ObjectModel(), null!));
-        Assert.Throws<ArgumentException>(() =>
-            httpRequestBuilder.WithObjectPathParameter(new ObjectModel(), string.Empty));
-        Assert.Throws<ArgumentException>(() =>
-            httpRequestBuilder.WithObjectPathParameter(new ObjectModel(), " "));
-    }
-
-    [Fact]
-    public void WithObjectPathParameter_ReturnOK()
-    {
-        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-
-        httpRequestBuilder.WithObjectPathParameter(new ObjectModel(), "model");
-        httpRequestBuilder.WithObjectPathParameter(new ObjectModel(), "model");
-        httpRequestBuilder.WithObjectPathParameter(new ObjectModel(), "Model");
+        httpRequestBuilder.WithPathParameters(new ObjectModel(), "model");
+        httpRequestBuilder.WithPathParameters(new ObjectModel(), "model");
+        httpRequestBuilder.WithPathParameters(new ObjectModel(), "Model");
 
         Assert.NotNull(httpRequestBuilder.ObjectPathParameters);
         Assert.Equal(2, httpRequestBuilder.ObjectPathParameters.Count);

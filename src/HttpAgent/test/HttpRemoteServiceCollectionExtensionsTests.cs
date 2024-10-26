@@ -57,14 +57,15 @@ public class HttpRemoteServiceCollectionExtensionsTests
     public void AddHttpRemote_Duplicate_ReturnOK()
     {
         var services = new ServiceCollection();
-        services.AddHttpRemote();
-        services.AddHttpRemote();
-        services.AddHttpRemote();
+        services.AddHttpRemote(s => s.AddDeclarative<IHttpTest>());
+        services.AddHttpRemote(s => s.AddDeclarative<IHttpTest>());
+        services.AddHttpRemote(s => s.AddDeclarative<IHttpTest>());
 
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpClientFactory));
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpContentProcessorFactory));
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpContentConverterFactory));
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpRemoteService));
-        Assert.Equal(29, services.Count);
+        Assert.Contains(services, u => u.ServiceType == typeof(IHttpTest));
+        Assert.Equal(30, services.Count);
     }
 }

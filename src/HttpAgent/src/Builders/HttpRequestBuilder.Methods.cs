@@ -427,6 +427,7 @@ public sealed partial class HttpRequestBuilder
     /// </summary>
     /// <remarks>支持多次调用。</remarks>
     /// <param name="parameterSource">查询参数集合</param>
+    /// <param name="prefix">参数前缀。对于对象类型可生成如 <c>prefix.Name=furion</c> 与 <c>prefix.Age=30</c> 参数格式。</param>
     /// <param name="escape">是否转义字符串，默认 <c>false</c></param>
     /// <param name="culture">
     ///     <see cref="CultureInfo" />
@@ -437,7 +438,7 @@ public sealed partial class HttpRequestBuilder
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
-    public HttpRequestBuilder WithQueryParameters(object parameterSource, bool escape = false,
+    public HttpRequestBuilder WithQueryParameters(object parameterSource, string? prefix = null, bool escape = false,
         CultureInfo? culture = null,
         IEqualityComparer<string>? comparer = null)
     {
@@ -448,7 +449,9 @@ public sealed partial class HttpRequestBuilder
 
         // 存在则合并否则添加
         QueryParameters.AddOrUpdate(parameterSource.ObjectToDictionary()!
-            .ToDictionary(u => u.Key.ToCultureString(culture ?? CultureInfo.InvariantCulture)!,
+            .ToDictionary(
+                u =>
+                    $"{(string.IsNullOrWhiteSpace(prefix) ? null : $"{prefix}.")}{u.Key.ToCultureString(culture ?? CultureInfo.InvariantCulture)!}",
                 u => u.Value?.ToCultureString(culture ?? CultureInfo.InvariantCulture)?.EscapeDataString(escape),
                 comparer));
 
@@ -493,6 +496,7 @@ public sealed partial class HttpRequestBuilder
     /// </summary>
     /// <remarks>支持多次调用。</remarks>
     /// <param name="parameterSource">路径参数源对象</param>
+    /// <param name="prefix">模板字符串前缀。若该参数值不为空，则支持 <c>{prefix.Prop.SubProp}</c> 对象路径方式。</param>
     /// <param name="escape">是否转义字符串，默认 <c>false</c></param>
     /// <param name="culture">
     ///     <see cref="CultureInfo" />
@@ -503,46 +507,31 @@ public sealed partial class HttpRequestBuilder
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
-    public HttpRequestBuilder WithPathParameters(object parameterSource, bool escape = false,
+    public HttpRequestBuilder WithPathParameters(object parameterSource, string? prefix = null, bool escape = false,
         CultureInfo? culture = null,
         IEqualityComparer<string>? comparer = null)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(parameterSource);
 
-        PathParameters ??= new Dictionary<string, string?>(comparer);
+        // 检查是否设置了模板字符串前缀
+        if (string.IsNullOrWhiteSpace(prefix))
+        {
+            PathParameters ??= new Dictionary<string, string?>(comparer);
 
-        // 存在则更新否则添加
-        PathParameters.AddOrUpdate(parameterSource.ObjectToDictionary()!
-            .ToDictionary(u => u.Key.ToCultureString(culture ?? CultureInfo.InvariantCulture)!,
-                u => u.Value?.ToCultureString(culture ?? CultureInfo.InvariantCulture)?.EscapeDataString(escape),
-                comparer));
+            // 存在则更新否则添加
+            PathParameters.AddOrUpdate(parameterSource.ObjectToDictionary()!
+                .ToDictionary(u => u.Key.ToCultureString(culture ?? CultureInfo.InvariantCulture)!,
+                    u => u.Value?.ToCultureString(culture ?? CultureInfo.InvariantCulture)?.EscapeDataString(escape),
+                    comparer));
+        }
+        else
+        {
+            ObjectPathParameters ??= new Dictionary<string, object>();
 
-        return this;
-    }
-
-    /// <summary>
-    ///     设置路径参数集合
-    /// </summary>
-    /// <remarks>
-    ///     支持多次调用。区别于 <c>WithPathParameters</c> 方法，<c>WithObjectPathParameter</c> 主要用于对象路径方式。如：
-    ///     <c>{model.Prop.SubProp}</c>。
-    /// </remarks>
-    /// <param name="parameterSource">路径参数源对象</param>
-    /// <param name="modelName">模板字符串中对象名</param>
-    /// <returns>
-    ///     <see cref="HttpRequestBuilder" />
-    /// </returns>
-    public HttpRequestBuilder WithObjectPathParameter(object parameterSource, string modelName)
-    {
-        // 空检查
-        ArgumentNullException.ThrowIfNull(parameterSource);
-        ArgumentException.ThrowIfNullOrWhiteSpace(modelName);
-
-        ObjectPathParameters ??= new Dictionary<string, object>();
-
-        // 存在则更新否则添加
-        ObjectPathParameters[modelName] = parameterSource;
+            // 存在则更新否则添加
+            ObjectPathParameters[prefix] = parameterSource;
+        }
 
         return this;
     }

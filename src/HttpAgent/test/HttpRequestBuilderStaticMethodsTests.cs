@@ -449,4 +449,16 @@ public class HttpRequestBuilderStaticMethodsTests
         Assert.NotNull(httpLongPollingBuilder6.RequestUri);
         Assert.Equal("http://localhost/", httpLongPollingBuilder6.RequestUri.ToString());
     }
+
+    [Fact]
+    public void Declarative_ReturnOK()
+    {
+        var method = typeof(IHttpTest).GetMethod("GetContent")!;
+        var httpDeclarativeBuilder =
+            HttpRequestBuilder.Declarative(typeof(IHttpTest).GetMethod("GetContent")!, null!);
+
+        Assert.NotNull(httpDeclarativeBuilder);
+        Assert.Equal(method, httpDeclarativeBuilder.Method);
+        Assert.Null(httpDeclarativeBuilder.Args);
+    }
 }

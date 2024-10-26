@@ -508,4 +508,15 @@ public sealed partial class HttpRequestBuilder
         LongPolling(HttpMethod.Get,
             string.IsNullOrWhiteSpace(requestUri) ? null : new Uri(requestUri, UriKind.RelativeOrAbsolute),
             onDataReceived);
+
+    /// <summary>
+    ///     创建 <see cref="HttpDeclarativeBuilder" /> 构建器
+    /// </summary>
+    /// <param name="method">调用方法</param>
+    /// <param name="args">调用方法的参数数组</param>
+    /// <returns>
+    ///     <see cref="HttpDeclarativeBuilder" />
+    /// </returns>
+    public static HttpDeclarativeBuilder Declarative(MethodInfo method, object?[] args) =>
+        new(method, args);
 }

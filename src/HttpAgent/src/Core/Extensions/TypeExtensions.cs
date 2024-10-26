@@ -105,7 +105,7 @@ internal static class TypeExtensions
             baseType = baseType.BaseType;
         }
 
-        // 检查所有实现接口定义是否一致
+        // 检查所有实现的接口定义是否一致
         return compareType.GetInterfaces().Any(type.IsDefinitionEqual);
     }
 

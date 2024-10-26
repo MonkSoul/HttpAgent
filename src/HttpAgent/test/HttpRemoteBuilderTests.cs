@@ -14,6 +14,7 @@ public class HttpRemoteBuilderTests
         Assert.Null(builder._httpContentConverterProviders);
         Assert.Null(builder._httpContentProcessorProviders);
         Assert.Null(builder._objectContentConverterFactoryType);
+        Assert.Null(builder._httpDeclarativeTypes);
         Assert.Null(builder.DefaultContentType);
         Assert.Null(builder.DefaultFileDownloadDirectory);
     }
@@ -186,6 +187,77 @@ public class HttpRemoteBuilderTests
     }
 
     [Fact]
+    public void AddDeclarative_Invalid_Parameters()
+    {
+        var builder = new HttpRemoteBuilder();
+
+        Assert.Throws<ArgumentNullException>(() => builder.AddDeclarative(null!));
+
+        var exception = Assert.Throws<ArgumentException>(() =>
+            builder.AddDeclarative(typeof(INonHttpTest)));
+        Assert.Equal(
+            $"`{typeof(INonHttpTest)}` type is not assignable from `{typeof(IHttpDeclarative)}` or interface. (Parameter 'declarativeType')",
+            exception.Message);
+        Assert.Throws<ArgumentException>(() =>
+            builder.AddDeclarative(typeof(HttpTest)));
+    }
+
+    [Fact]
+    public void AddDeclarative_ReturnOK()
+    {
+        var builder = new HttpRemoteBuilder();
+        builder.AddDeclarative(typeof(IHttpTest));
+
+        Assert.NotNull(builder._httpDeclarativeTypes);
+        Assert.Single(builder._httpDeclarativeTypes);
+        Assert.Equal(typeof(IHttpTest), builder._httpDeclarativeTypes.First());
+
+        builder.AddDeclarative<IHttpTest>();
+        Assert.Single(builder._httpDeclarativeTypes);
+        Assert.Equal(typeof(IHttpTest), builder._httpDeclarativeTypes.First());
+    }
+
+    [Fact]
+    public void AddDeclaratives_Invalid_Parameters()
+    {
+        var builder = new HttpRemoteBuilder();
+        Assert.Throws<ArgumentNullException>(() => builder.AddDeclaratives(null!));
+    }
+
+    [Fact]
+    public void AddDeclaratives_ReturnOK()
+    {
+        var builder = new HttpRemoteBuilder();
+        // ReSharper disable once RedundantExplicitParamsArrayCreation
+        builder.AddDeclaratives([typeof(IHttpTest), typeof(IHttpTest), typeof(IHttpTest2)]);
+
+        Assert.NotNull(builder._httpDeclarativeTypes);
+        Assert.Equal(2, builder._httpDeclarativeTypes.Count);
+        Assert.Equal(typeof(IHttpTest), builder._httpDeclarativeTypes.First());
+        Assert.Equal(typeof(IHttpTest2), builder._httpDeclarativeTypes.Last());
+    }
+
+    [Fact]
+    public void AddDeclarativeFromAssemblies_Invalid_Parameters()
+    {
+        var builder = new HttpRemoteBuilder();
+        Assert.Throws<ArgumentNullException>(() => builder.AddDeclarativeFromAssemblies(null!));
+    }
+
+    [Fact]
+    public void AddDeclarativeFromAssemblies_ReturnOK()
+    {
+        var builder = new HttpRemoteBuilder();
+        // ReSharper disable once RedundantExplicitParamsArrayCreation
+        builder.AddDeclarativeFromAssemblies([typeof(HttpRemoteBuilderTests).Assembly]);
+
+        Assert.NotNull(builder._httpDeclarativeTypes);
+        Assert.Equal(2, builder._httpDeclarativeTypes.Count);
+        Assert.Equal(typeof(IHttpTest), builder._httpDeclarativeTypes.First());
+        Assert.Equal(typeof(IHttpTest2), builder._httpDeclarativeTypes.Last());
+    }
+
+    [Fact]
     public void EnsureLegalData_Invalid_Parameters()
     {
         var exception = Assert.Throws<ArgumentException>(() => HttpRemoteBuilder.EnsureLegalData("unknown"));
@@ -275,13 +347,27 @@ public class HttpRemoteBuilderTests
     }
 
     [Fact]
+    public void BuildHttpDeclarativeServices_ReturnOK()
+    {
+        var services = new ServiceCollection();
+        var builder = new HttpRemoteBuilder().AddDeclarative<IHttpTest>();
+
+        builder.BuildHttpDeclarativeServices(services);
+        builder.BuildHttpDeclarativeServices(services);
+
+        Assert.Contains(services, u => u.ServiceType == typeof(IHttpTest));
+        Assert.Single(services);
+    }
+
+    [Fact]
     public void Build_Resolve_ReturnOK()
     {
         var services = new ServiceCollection();
         var builder = new HttpRemoteBuilder().SetDefaultContentType("application/json")
             .SetDefaultFileDownloadDirectory(@"C:\Workspaces")
             .AddHttpContentProcessors(() => [new CustomStringContentProcessor()])
-            .AddHttpContentConverters(() => [new CustomStringContentConverter()]);
+            .AddHttpContentConverters(() => [new CustomStringContentConverter()])
+            .AddDeclarative<IHttpTest>();
 
         builder.Build(services);
 
@@ -305,12 +391,20 @@ public class HttpRemoteBuilderTests
         var httpContentConverterFactory =
             (HttpContentConverterFactory)serviceProvider.GetRequiredService(typeof(IHttpContentConverterFactory));
         Assert.NotNull(httpContentConverterFactory._converters);
-        Assert.Equal(4, httpContentConverterFactory._converters.Count);
+        Assert.Equal(5, httpContentConverterFactory._converters.Count);
         Assert.Equal(
             [
                 typeof(StringContentConverter), typeof(ByteArrayContentConverter),
-                typeof(StreamContentConverter), typeof(CustomStringContentConverter)
+                typeof(StreamContentConverter), typeof(DoesNoReceiveContentConverter),
+                typeof(CustomStringContentConverter)
             ],
             httpContentConverterFactory._converters.Select(u => u.Key));
+
+        var httpTest = serviceProvider.GetRequiredService<IHttpTest>();
+        Assert.NotNull(httpTest);
+
+        dynamic httpTestProxy = httpTest;
+        Assert.NotNull(httpTestProxy.RemoteService);
+        Assert.NotNull(httpTestProxy.ServiceProvider);
     }
 }

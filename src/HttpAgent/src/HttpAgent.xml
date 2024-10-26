@@ -714,6 +714,11 @@
                 <see cref="T:HttpAgent.IHttpContentProcessor" /> 集合
             </summary>
         </member>
+        <member name="F:HttpAgent.HttpRemoteBuilder._httpDeclarativeTypes">
+            <summary>
+                <see cref="T:HttpAgent.IHttpDeclarative" /> 集合
+            </summary>
+        </member>
         <member name="F:HttpAgent.HttpRemoteBuilder._objectContentConverterFactoryType">
             <summary>
                 <see cref="T:HttpAgent.IObjectContentConverterFactory" /> 实现类型
@@ -790,9 +795,61 @@
             </returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
+        <member name="M:HttpAgent.HttpRemoteBuilder.AddDeclarative``1">
+            <summary>
+                添加 HTTP 声明式服务
+            </summary>
+            <typeparam name="TDeclarative">
+                <see cref="T:HttpAgent.IHttpDeclarative" />
+            </typeparam>
+            <returns>
+                <see cref="T:HttpAgent.HttpRemoteBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRemoteBuilder.AddDeclarative(System.Type)">
+            <summary>
+                添加 HTTP 声明式服务
+            </summary>
+            <param name="declarativeType">
+                <see cref="T:HttpAgent.IHttpDeclarative" />
+            </param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRemoteBuilder" />
+            </returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:HttpAgent.HttpRemoteBuilder.AddDeclarativeFromAssemblies(System.Collections.Generic.IEnumerable{System.Reflection.Assembly})">
+            <summary>
+                扫描程序集并添加 HTTP 声明式服务
+            </summary>
+            <param name="assemblies"><see cref="T:System.Reflection.Assembly" /> 集合</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRemoteBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRemoteBuilder.AddDeclaratives(System.Collections.Generic.IEnumerable{System.Type})">
+            <summary>
+                添加 HTTP 声明式服务
+            </summary>
+            <param name="declarativeTypes">
+                <see cref="T:HttpAgent.IHttpDeclarative" /> 集合
+            </param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRemoteBuilder" />
+            </returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
         <member name="M:HttpAgent.HttpRemoteBuilder.Build(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
                 构建模块服务
+            </summary>
+            <param name="services">
+                <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.HttpRemoteBuilder.BuildHttpDeclarativeServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+                构建 HTTP 远程请求声明式服务
             </summary>
             <param name="services">
                 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
@@ -1140,12 +1197,13 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.WithQueryParameters(System.Object,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
+        <member name="M:HttpAgent.HttpRequestBuilder.WithQueryParameters(System.Object,System.String,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
             <summary>
                 设置查询参数集合
             </summary>
             <remarks>支持多次调用。</remarks>
             <param name="parameterSource">查询参数集合</param>
+            <param name="prefix">参数前缀。对于对象类型可生成如 <c>prefix.Name=furion</c> 与 <c>prefix.Age=30</c> 参数格式。</param>
             <param name="escape">是否转义字符串，默认 <c>false</c></param>
             <param name="culture">
                 <see cref="T:System.Globalization.CultureInfo" />
@@ -1174,12 +1232,13 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.WithPathParameters(System.Object,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
+        <member name="M:HttpAgent.HttpRequestBuilder.WithPathParameters(System.Object,System.String,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
             <summary>
                 设置路径参数集合
             </summary>
             <remarks>支持多次调用。</remarks>
             <param name="parameterSource">路径参数源对象</param>
+            <param name="prefix">模板字符串前缀。若该参数值不为空，则支持 <c>{prefix.Prop.SubProp}</c> 对象路径方式。</param>
             <param name="escape">是否转义字符串，默认 <c>false</c></param>
             <param name="culture">
                 <see cref="T:System.Globalization.CultureInfo" />
@@ -1187,20 +1246,6 @@
             <param name="comparer">
                 <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
             </param>
-            <returns>
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
-            </returns>
-        </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.WithObjectPathParameter(System.Object,System.String)">
-            <summary>
-                设置路径参数集合
-            </summary>
-            <remarks>
-                支持多次调用。区别于 <c>WithPathParameters</c> 方法，<c>WithObjectPathParameter</c> 主要用于对象路径方式。如：
-                <c>{model.Prop.SubProp}</c>。
-            </remarks>
-            <param name="parameterSource">路径参数源对象</param>
-            <param name="modelName">模板字符串中对象名</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -2049,6 +2094,16 @@
                 <see cref="T:HttpAgent.HttpLongPollingBuilder" />
             </returns>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.Declarative(System.Reflection.MethodInfo,System.Object[])">
+            <summary>
+                创建 <see cref="T:HttpAgent.HttpDeclarativeBuilder" /> 构建器
+            </summary>
+            <param name="method">调用方法</param>
+            <param name="args">调用方法的参数数组</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpDeclarativeBuilder" />
+            </returns>
+        </member>
         <member name="T:HttpAgent.HttpServerSentEventsBuilder">
             <summary>
                 HTTP Server-Sent Events 构建器
@@ -2366,6 +2421,23 @@
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.ByteArrayContentConverter.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:HttpAgent.DoesNoReceiveContentConverter">
+            <summary>
+                <see cref="T:HttpAgent.DoesNoReceiveContent" /> 内容转换器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.DoesNoReceiveContentConverter.Read(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.DoesNoReceiveContentConverter.ReadAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.DoesNoReceiveContentConverter.Read(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.DoesNoReceiveContentConverter.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="T:HttpAgent.IHttpContentConverter">
@@ -2730,8 +2802,8 @@
                 <see cref="T:System.Object" />
             </param>
             <param name="path">模板路径。支持 <c>{Key}</c> 或 <c>{Key.Property}</c> 或 {Key.Property.NestProperty} 语法格式。</param>
-            <param name="modelName">模板字符串中对象名；默认值为：<c>model</c>。</param>
-            <param name="isMatch">用于检查是否以 <c>modelName.</c> 开头</param>
+            <param name="prefix">模板字符串前缀；默认值为：<c>model</c>。</param>
+            <param name="isMatch">用于检查是否以 <c>prefix.</c> 开头</param>
             <param name="bindingFlags">
                 <see cref="T:System.Reflection.BindingFlags" />
             </param>
@@ -2814,7 +2886,7 @@
             <param name="replacementSource">
                 <see cref="T:System.Object" />
             </param>
-            <param name="modelName">模板字符串中对象名；默认值为：<c>model</c>。</param>
+            <param name="prefix">模板字符串前缀；默认值为：<c>model</c>。</param>
             <param name="bindingFlags">
                 <see cref="T:System.Reflection.BindingFlags" />
             </param>
@@ -2990,6 +3062,250 @@
             <returns>
                 <see cref="T:System.String" />
             </returns>
+        </member>
+        <member name="T:HttpAgent.DisableCacheAttribute">
+            <summary>
+                禁用 HTTP 缓存特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.DisableCacheAttribute.#ctor">
+            <summary>
+                <inheritdoc cref="T:System.Runtime.CompilerServices.DiscardableAttribute" />
+            </summary>
+        </member>
+        <member name="M:HttpAgent.DisableCacheAttribute.#ctor(System.Boolean)">
+            <summary>
+                <inheritdoc cref="T:System.Runtime.CompilerServices.DiscardableAttribute" />
+            </summary>
+            <param name="disabled">是否禁用 HTTP 缓存</param>
+        </member>
+        <member name="P:HttpAgent.DisableCacheAttribute.Disabled">
+            <summary>
+                是否禁用 HTTP 缓存
+            </summary>
+        </member>
+        <member name="T:HttpAgent.DeleteAttribute">
+            <summary>
+                HTTP DELETE 远程请求声明式特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.DeleteAttribute.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.DeleteAttribute" />
+            </summary>
+            <param name="requestUri">请求地址</param>
+        </member>
+        <member name="T:HttpAgent.GetAttribute">
+            <summary>
+                HTTP GET 远程请求声明式特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.GetAttribute.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.GetAttribute" />
+            </summary>
+            <param name="requestUri">请求地址</param>
+        </member>
+        <member name="T:HttpAgent.HeadAttribute">
+            <summary>
+                HTTP HEAD 远程请求声明式特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.HeadAttribute.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.HeadAttribute" />
+            </summary>
+            <param name="requestUri">请求地址</param>
+        </member>
+        <member name="T:HttpAgent.HttpMethodAttribute">
+            <summary>
+                HTTP 远程请求声明式请求方式特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.HttpMethodAttribute.#ctor(System.String,System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.HttpMethodAttribute" />
+            </summary>
+            <param name="httpMethod">请求方式</param>
+            <param name="requestUri">请求地址</param>
+        </member>
+        <member name="M:HttpAgent.HttpMethodAttribute.#ctor(System.Net.Http.HttpMethod,System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.HttpMethodAttribute" />
+            </summary>
+            <param name="httpMethod">请求方式</param>
+            <param name="requestUri">请求地址</param>
+        </member>
+        <member name="P:HttpAgent.HttpMethodAttribute.Method">
+            <summary>
+                请求方式
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HttpMethodAttribute.RequestUri">
+            <summary>
+                请求地址
+            </summary>
+        </member>
+        <member name="T:HttpAgent.OptionsAttribute">
+            <summary>
+                HTTP OPTIONS 远程请求声明式特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.OptionsAttribute.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.OptionsAttribute" />
+            </summary>
+            <param name="requestUri">请求地址</param>
+        </member>
+        <member name="T:HttpAgent.PatchAttribute">
+            <summary>
+                HTTP PATCH 远程请求声明式特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.PatchAttribute.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.PatchAttribute" />
+            </summary>
+            <param name="requestUri">请求地址</param>
+        </member>
+        <member name="T:HttpAgent.PostAttribute">
+            <summary>
+                HTTP POST 远程请求声明式特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.PostAttribute.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.PostAttribute" />
+            </summary>
+            <param name="requestUri">请求地址</param>
+        </member>
+        <member name="T:HttpAgent.PutAttribute">
+            <summary>
+                HTTP PUT 远程请求声明式特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.PutAttribute.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.PutAttribute" />
+            </summary>
+            <param name="requestUri">请求地址</param>
+        </member>
+        <member name="T:HttpAgent.TraceAttribute">
+            <summary>
+                HTTP TRACE 远程请求声明式特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.TraceAttribute.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.TraceAttribute" />
+            </summary>
+            <param name="requestUri">请求地址</param>
+        </member>
+        <member name="T:HttpAgent.ProfilerAttribute">
+            <summary>
+                启用请求分析工具特性
+            </summary>
+        </member>
+        <member name="T:HttpAgent.QueryAttribute">
+            <summary>
+                查询参数特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.QueryAttribute.#ctor">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.QueryAttribute" />
+            </summary>
+        </member>
+        <member name="M:HttpAgent.QueryAttribute.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.QueryAttribute" />
+            </summary>
+            <param name="aliasAs">别名</param>
+        </member>
+        <member name="P:HttpAgent.QueryAttribute.AliasAs">
+            <summary>
+                别名
+            </summary>
+        </member>
+        <member name="P:HttpAgent.QueryAttribute.Escape">
+            <summary>
+                是否转义
+            </summary>
+        </member>
+        <member name="P:HttpAgent.QueryAttribute.Prefix">
+            <summary>
+                参数前缀
+            </summary>
+        </member>
+        <member name="T:HttpAgent.HttpDeclarativeBuilder">
+            <summary>
+                HTTP 远程请求声明式构建器
+            </summary>
+            <remarks>使用 <c>HttpRequestBuilder.Declarative(method, args)</c> 静态方法创建。</remarks>
+        </member>
+        <member name="F:HttpAgent.HttpDeclarativeBuilder._specialArgumentTypes">
+            <summary>
+                特殊参数类型
+            </summary>
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeBuilder.#ctor(System.Reflection.MethodInfo,System.Object[])">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.HttpDeclarativeBuilder" />
+            </summary>
+            <param name="method">调用方法</param>
+            <param name="args">调用方法的参数数组</param>
+        </member>
+        <member name="P:HttpAgent.HttpDeclarativeBuilder.Method">
+            <summary>
+                调用方法
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HttpDeclarativeBuilder.Args">
+            <summary>
+                调用方法的参数数组
+            </summary>
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeBuilder.Build">
+            <summary>
+                构建 <see cref="T:HttpAgent.HttpRequestBuilder" /> 实例
+            </summary>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
+        <member name="T:HttpAgent.HttpDeclarativeDispatchProxy">
+            <summary>
+                HTTP 远程请求声明式代理类
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HttpDeclarativeDispatchProxy.RemoteService">
+            <inheritdoc cref="T:HttpAgent.IHttpRemoteService" />
+        </member>
+        <member name="P:HttpAgent.HttpDeclarativeDispatchProxy.ServiceProvider">
+            <inheritdoc cref="T:System.IServiceProvider" />
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeDispatchProxy.Invoke(System.Reflection.MethodInfo,System.Object[])">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeDispatchProxy.InvokeAsync(System.Reflection.MethodInfo,System.Object[])">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeDispatchProxy.InvokeAsyncT``1(System.Reflection.MethodInfo,System.Object[])">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeDispatchProxy.ExtractSpecialArguments(System.Object[])">
+            <summary>
+                解析特殊类型参数实例
+            </summary>
+            <param name="args">调用方法的参数数组</param>
+            <returns>
+                <see cref="T:System.Tuple`2" />
+            </returns>
+        </member>
+        <member name="T:HttpAgent.IHttpDeclarative">
+            <summary>
+                HTTP 远程请求声明式依赖接口
+            </summary>
         </member>
         <member name="T:HttpAgent.ProfilerDelegatingHandler">
             <summary>
@@ -3975,6 +4291,11 @@
             <returns>
                 <see cref="T:System.Threading.Tasks.Task`1" />
             </returns>
+        </member>
+        <member name="T:HttpAgent.DoesNoReceiveContent">
+            <summary>
+                用于标识无需接收 HTTP 远程请求返回值
+            </summary>
         </member>
         <member name="T:HttpAgent.FileTransferProgress">
             <summary>

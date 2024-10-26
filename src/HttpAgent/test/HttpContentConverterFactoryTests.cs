@@ -13,22 +13,23 @@ public class HttpContentConverterFactoryTests
         var httpContentConverterFactory1 = new HttpContentConverterFactory(serviceProvider, null);
         Assert.NotNull(httpContentConverterFactory1._serviceProvider);
         Assert.NotNull(httpContentConverterFactory1._converters);
-        Assert.Equal(3, httpContentConverterFactory1._converters.Count);
+        Assert.Equal(4, httpContentConverterFactory1._converters.Count);
         Assert.Equal(
             [
                 typeof(StringContentConverter), typeof(ByteArrayContentConverter),
-                typeof(StreamContentConverter)
+                typeof(StreamContentConverter), typeof(DoesNoReceiveContentConverter)
             ],
             httpContentConverterFactory1._converters.Select(u => u.Key));
 
         var httpContentConverterFactory2 =
             new HttpContentConverterFactory(serviceProvider, [new CustomStringContentConverter()]);
         Assert.NotNull(httpContentConverterFactory2._converters);
-        Assert.Equal(4, httpContentConverterFactory2._converters.Count);
+        Assert.Equal(5, httpContentConverterFactory2._converters.Count);
         Assert.Equal(
             [
                 typeof(StringContentConverter), typeof(ByteArrayContentConverter),
-                typeof(StreamContentConverter), typeof(CustomStringContentConverter)
+                typeof(StreamContentConverter), typeof(DoesNoReceiveContentConverter),
+                typeof(CustomStringContentConverter)
             ],
             httpContentConverterFactory2._converters.Select(u => u.Key));
 
@@ -36,11 +37,11 @@ public class HttpContentConverterFactoryTests
             new HttpContentConverterFactory(serviceProvider,
                 [new StringContentConverter(), new ByteArrayContentConverter()]);
         Assert.NotNull(httpContentConverterFactory3._converters);
-        Assert.Equal(3, httpContentConverterFactory3._converters.Count);
+        Assert.Equal(4, httpContentConverterFactory3._converters.Count);
         Assert.Equal(
             [
                 typeof(StringContentConverter), typeof(ByteArrayContentConverter),
-                typeof(StreamContentConverter)
+                typeof(StreamContentConverter), typeof(DoesNoReceiveContentConverter)
             ],
             httpContentConverterFactory3._converters.Select(u => u.Key));
     }
@@ -68,6 +69,8 @@ public class HttpContentConverterFactoryTests
         Assert.Equal(typeof(StringContentConverter), httpContentConverterFactory.GetConverter<string>().GetType());
         Assert.Equal(typeof(ByteArrayContentConverter), httpContentConverterFactory.GetConverter<byte[]>().GetType());
         Assert.Equal(typeof(StreamContentConverter), httpContentConverterFactory.GetConverter<Stream>().GetType());
+        Assert.Equal(typeof(DoesNoReceiveContentConverter),
+            httpContentConverterFactory.GetConverter<DoesNoReceiveContent>().GetType());
         Assert.Equal(typeof(ObjectContentConverter<int>), httpContentConverterFactory.GetConverter<int>().GetType());
         Assert.Equal(typeof(ObjectContentConverter<ObjectModel>),
             httpContentConverterFactory.GetConverter<ObjectModel>().GetType());

@@ -124,7 +124,7 @@ public class ObjectContentConverterTests
         httpResponseMessage.Content = stringContent;
 
         var converter = new ObjectContentConverter<ObjectModel>();
-        var objectModel = (await converter.ReadAsync(typeof(ObjectModel), httpResponseMessage)) as ObjectModel;
+        var objectModel = await converter.ReadAsync(typeof(ObjectModel), httpResponseMessage) as ObjectModel;
         Assert.NotNull(objectModel);
         Assert.Equal(10, objectModel.Id);
         Assert.Equal("furion", objectModel.Name);
@@ -134,7 +134,7 @@ public class ObjectContentConverterTests
         httpResponseMessage2.Content = stringContent2;
 
         var converter2 = new ObjectContentConverter<ObjectModel>();
-        var objectModel2 = (await converter2.ReadAsync(typeof(ObjectModel), httpResponseMessage2)) as ObjectModel;
+        var objectModel2 = await converter2.ReadAsync(typeof(ObjectModel), httpResponseMessage2) as ObjectModel;
         Assert.NotNull(objectModel2);
         Assert.Equal(10, objectModel2.Id);
         Assert.Equal("furion", objectModel2.Name);
@@ -151,8 +151,8 @@ public class ObjectContentConverterTests
 
         var converter = new ObjectContentConverter<ObjectModel>();
         var objectModel =
-            (await converter.ReadAsync(typeof(ObjectModel), httpResponseMessage, cancellationTokenSource.Token)) as
-            ObjectModel;
+            await converter.ReadAsync(typeof(ObjectModel), httpResponseMessage, cancellationTokenSource.Token) as
+                ObjectModel;
         Assert.NotNull(objectModel);
         Assert.Equal(10, objectModel.Id);
         Assert.Equal("furion", objectModel.Name);
@@ -165,8 +165,8 @@ public class ObjectContentConverterTests
 
         var converter2 = new ObjectContentConverter<ObjectModel>();
         var objectModel2 =
-            (await converter2.ReadAsync(typeof(ObjectModel), httpResponseMessage2, cancellationTokenSource2.Token)) as
-            ObjectModel;
+            await converter2.ReadAsync(typeof(ObjectModel), httpResponseMessage2, cancellationTokenSource2.Token) as
+                ObjectModel;
         Assert.NotNull(objectModel2);
         Assert.Equal(10, objectModel2.Id);
         Assert.Equal("furion", objectModel2.Name);

@@ -25,6 +25,7 @@ global using System.Net.NetworkInformation;
 global using System.Net.WebSockets;
 global using System.Reflection;
 global using System.Reflection.Emit;
+global using System.Runtime.ExceptionServices;
 global using System.Security.Cryptography;
 global using System.Text.RegularExpressions;
 global using System.Threading.Channels;

@@ -55,7 +55,7 @@ public class StringContentForFormUrlEncodedContentProcessor : FormUrlEncodedCont
     /// <returns>
     ///     <see cref="string" />
     /// </returns>
-    internal static string GetContentString(IEnumerable<KeyValuePair<string, string?>> nameValueCollection)
+    internal static string GetContentString(params IEnumerable<KeyValuePair<string, string?>> nameValueCollection)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(nameValueCollection);
