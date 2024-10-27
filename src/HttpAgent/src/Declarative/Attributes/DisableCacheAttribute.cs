@@ -11,7 +11,7 @@ namespace HttpAgent;
 public sealed class DisableCacheAttribute : Attribute
 {
     /// <summary>
-    ///     <inheritdoc cref="DiscardableAttribute" />
+    ///     <inheritdoc cref="DisableCacheAttribute" />
     /// </summary>
     public DisableCacheAttribute()
         : this(true)
@@ -19,7 +19,7 @@ public sealed class DisableCacheAttribute : Attribute
     }
 
     /// <summary>
-    ///     <inheritdoc cref="DiscardableAttribute" />
+    ///     <inheritdoc cref="DisableCacheAttribute" />
     /// </summary>
     /// <param name="disabled">是否禁用 HTTP 缓存</param>
     public DisableCacheAttribute(bool disabled) => Disabled = disabled;

@@ -3286,12 +3286,12 @@
         </member>
         <member name="M:HttpAgent.DisableCacheAttribute.#ctor">
             <summary>
-                <inheritdoc cref="T:System.Runtime.CompilerServices.DiscardableAttribute" />
+                <inheritdoc cref="T:HttpAgent.DisableCacheAttribute" />
             </summary>
         </member>
         <member name="M:HttpAgent.DisableCacheAttribute.#ctor(System.Boolean)">
             <summary>
-                <inheritdoc cref="T:System.Runtime.CompilerServices.DiscardableAttribute" />
+                <inheritdoc cref="T:HttpAgent.DisableCacheAttribute" />
             </summary>
             <param name="disabled">是否禁用 HTTP 缓存</param>
         </member>
