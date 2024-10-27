@@ -59,6 +59,9 @@ public sealed partial class HttpRequestBuilder
         // 追加 Cookies
         AppendCookies(httpRequestMessage);
 
+        // 移除 Cookies
+        RemoveCookies(httpRequestMessage);
+
         // 移除请求标头
         RemoveHeaders(httpRequestMessage);
 
@@ -135,7 +138,12 @@ public sealed partial class HttpRequestBuilder
 
         // 构建查询字符串赋值给 UriBuilder 的 Query 属性
         uriBuilder.Query =
-            "?" + string.Join('&', queryParameters.Select(u => $"{u.Key}={u.Value}"));
+            "?" + string.Join('&',
+                queryParameters
+                    // 过滤已标记为移除的查询参数
+                    .WhereIf(QueryParametersToRemove is { Count: > 0 },
+                        u => QueryParametersToRemove?.TryGetValue(u.Key, out _) == false)
+                    .Select(u => $"{u.Key}={u.Value}"));
     }
 
     /// <summary>
@@ -246,7 +254,45 @@ public sealed partial class HttpRequestBuilder
         }
 
         httpRequestMessage.Headers.TryAddWithoutValidation(HeaderNames.Cookie,
-            string.Join("; ", Cookies.Select(u => $"{u.Key}={u.Value}")));
+            string.Join("; ", Cookies.Select(u => $"{u.Key}={u.Value.EscapeDataString(true)}")));
+    }
+
+    /// <summary>
+    ///     移除 Cookies
+    /// </summary>
+    /// <param name="httpRequestMessage">
+    ///     <see cref="HttpRequestMessage" />
+    /// </param>
+    internal void RemoveCookies(HttpRequestMessage httpRequestMessage)
+    {
+        // 空检查
+        if (CookiesToRemove.IsNullOrEmpty())
+        {
+            return;
+        }
+
+        // 获取已经设置的 Cookies
+        if (!httpRequestMessage.Headers.TryGetValues(HeaderNames.Cookie, out var cookies))
+        {
+            return;
+        }
+
+        // 解析 Cookies 标头值
+        var cookieList = CookieHeaderValue.ParseList(cookies.ToList());
+
+        // 空检查
+        if (cookieList.Count == 0)
+        {
+            return;
+        }
+
+        // 重新设置 Cookies
+        httpRequestMessage.Headers.Remove(HeaderNames.Cookie);
+        httpRequestMessage.Headers.TryAddWithoutValidation(HeaderNames.Cookie,
+            // 过滤已标记为移除的 Cookie 键
+            string.Join("; ", cookieList.WhereIf(CookiesToRemove is { Count: > 0 },
+                    u => CookiesToRemove?.TryGetValue(u.Name.ToString(), out _) == false)
+                .Select(u => $"{u.Name}={u.Value}")));
     }
 
     /// <summary>

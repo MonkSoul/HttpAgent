@@ -558,9 +558,9 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         // 检查是否设置了 HttpClient 实例提供器
         if (httpRequestBuilder.HttpClientProvider is null)
         {
-            httpClient = string.IsNullOrWhiteSpace(httpRequestBuilder.HttpClientFactoryName)
+            httpClient = string.IsNullOrWhiteSpace(httpRequestBuilder.HttpClientName)
                 ? _httpClientFactory.CreateClient()
-                : _httpClientFactory.CreateClient(httpRequestBuilder.HttpClientFactoryName);
+                : _httpClientFactory.CreateClient(httpRequestBuilder.HttpClientName);
         }
         else
         {

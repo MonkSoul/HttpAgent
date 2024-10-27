@@ -228,6 +228,13 @@ public class HttpRequestBuilderMethodsTests
         {
             httpRequestBuilder.SetRawContent(null, "unknown");
         });
+
+        var exception =
+            Assert.Throws<NotSupportedException>(() =>
+                httpRequestBuilder.SetRawContent(new { }, "multipart/form-data"));
+        Assert.Equal(
+            "The method does not support setting the request content type to `multipart/form-data`. Please use the `SetMultipartContent` method instead. If you are using an HTTP declarative requests, define the parameter with the `Action<HttpMultipartFormDataBuilder>` type.",
+            exception.Message);
     }
 
     [Fact]
@@ -253,6 +260,11 @@ public class HttpRequestBuilderMethodsTests
         httpRequestBuilder.SetRawContent("furion", "text/plain;charset=unicode");
         Assert.Equal("furion", httpRequestBuilder.RawContent);
         Assert.Equal("text/plain", httpRequestBuilder.ContentType);
+        Assert.Equal(Encoding.Unicode, httpRequestBuilder.ContentEncoding);
+
+        httpRequestBuilder.SetRawContent(new MultipartContent(), "multipart/form-data");
+        Assert.True(httpRequestBuilder.RawContent is MultipartContent);
+        Assert.Equal("multipart/form-data", httpRequestBuilder.ContentType);
         Assert.Equal(Encoding.Unicode, httpRequestBuilder.ContentEncoding);
     }
 
@@ -616,6 +628,59 @@ public class HttpRequestBuilderMethodsTests
     }
 
     [Fact]
+    public void RemoveQueryParameters_Invalid_Parameters()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.RemoveQueryParameters(null!));
+    }
+
+    [Fact]
+    public void RemoveQueryParameters_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder.RemoveQueryParameters(null!, string.Empty, " ");
+
+        Assert.NotNull(httpRequestBuilder.QueryParametersToRemove);
+        Assert.Empty(httpRequestBuilder.QueryParametersToRemove);
+
+        httpRequestBuilder.RemoveQueryParameters("name");
+        httpRequestBuilder.RemoveQueryParameters("name");
+        Assert.Single(httpRequestBuilder.QueryParametersToRemove);
+    }
+
+    [Fact]
+    public void WithPathParameter_Invalid_Parameters()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+
+        Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.WithPathParameter(null!, null));
+        Assert.Throws<ArgumentException>(() => httpRequestBuilder.WithPathParameter(string.Empty, null));
+        Assert.Throws<ArgumentException>(() => httpRequestBuilder.WithPathParameter(" ", null));
+    }
+
+    [Fact]
+    public void WithPathParameter_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+
+        httpRequestBuilder.WithPathParameter("id", 10).WithPathParameter("name", "furion");
+        Assert.NotNull(httpRequestBuilder.PathParameters);
+        Assert.Equal(2, httpRequestBuilder.PathParameters.Count);
+        Assert.Equal("10", httpRequestBuilder.PathParameters["id"]);
+        Assert.Equal("furion", httpRequestBuilder.PathParameters["name"]);
+
+        httpRequestBuilder.PathParameters.Clear();
+
+        httpRequestBuilder.WithPathParameter("name", "furi on");
+        Assert.Equal("furi on", httpRequestBuilder.PathParameters["name"]);
+
+        httpRequestBuilder.PathParameters.Clear();
+
+        httpRequestBuilder.WithPathParameter("name", "furi on", true);
+        Assert.Equal("furi%20on", httpRequestBuilder.PathParameters["name"]);
+    }
+
+    [Fact]
     public void WithPathParameters_Invalid_Parameters()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
@@ -806,23 +871,44 @@ public class HttpRequestBuilderMethodsTests
     }
 
     [Fact]
-    public void SetHttpClientFactoryName_Invalid_Parameters()
+    public void RemoveCookies_Invalid_Parameters()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.RemoveCookies((string[])null!));
+    }
+
+    [Fact]
+    public void RemoveCookies_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder.RemoveCookies(null!, string.Empty, " ");
+
+        Assert.NotNull(httpRequestBuilder.CookiesToRemove);
+        Assert.Empty(httpRequestBuilder.CookiesToRemove);
+
+        httpRequestBuilder.RemoveCookies("name");
+        httpRequestBuilder.RemoveCookies("name");
+        Assert.Single(httpRequestBuilder.CookiesToRemove);
+    }
+
+    [Fact]
+    public void SetHttpClientName_Invalid_Parameters()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
 
         Assert.Throws<ArgumentNullException>(() =>
         {
-            httpRequestBuilder.SetHttpClientFactoryName(null!);
+            httpRequestBuilder.SetHttpClientName(null!);
         });
     }
 
     [Fact]
-    public void SetHttpClientFactoryName_ReturnOK()
+    public void SetHttpClientName_ReturnOK()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
 
-        httpRequestBuilder.SetHttpClientFactoryName("furion");
-        Assert.Equal("furion", httpRequestBuilder.HttpClientFactoryName);
+        httpRequestBuilder.SetHttpClientName("furion");
+        Assert.Equal("furion", httpRequestBuilder.HttpClientName);
     }
 
     [Fact]

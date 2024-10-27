@@ -94,7 +94,6 @@ public class HttpRequestBuilderTests
         httpRequestBuilder.AppendQueryParameters(uriBuilder);
         Assert.Equal("?v=1&id=10&name=furion&name=monksoul", uriBuilder.Query);
 
-
         var httpRequestBuilder2 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
         var uriBuilder2 = new UriBuilder(httpRequestBuilder2.RequestUri!);
 
@@ -106,6 +105,13 @@ public class HttpRequestBuilderTests
 
         httpRequestBuilder2.AppendQueryParameters(uriBuilder2);
         Assert.Equal("?id=10&name=furion&name=monksoul", uriBuilder2.Query);
+
+        var httpRequestBuilder3 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost?v=1&name=10&c=20"))
+            .WithQueryParameters(new { id = 10 }).RemoveQueryParameters("C");
+        var uriBuilder3 = new UriBuilder(httpRequestBuilder3.RequestUri!);
+
+        httpRequestBuilder3.AppendQueryParameters(uriBuilder3);
+        Assert.Equal("?v=1&name=10&id=10", uriBuilder3.Query);
     }
 
     [Fact]
@@ -171,6 +177,10 @@ public class HttpRequestBuilderTests
         Assert.True(httpRequestMessage.Headers.CacheControl.NoCache);
         Assert.True(httpRequestMessage.Headers.CacheControl.NoStore);
         Assert.True(httpRequestMessage.Headers.CacheControl.MustRevalidate);
+
+        httpRequestBuilder.WithHeader("null", null);
+        httpRequestBuilder.AppendHeaders(httpRequestMessage);
+        Assert.Equal([""], httpRequestMessage.Headers.GetValues("null"));
     }
 
     [Fact]
@@ -188,6 +198,22 @@ public class HttpRequestBuilderTests
 
         Assert.Single(httpRequestMessage.Headers);
         Assert.Equal("id=10; name=furion", httpRequestMessage.Headers.GetValues("Cookie").First());
+    }
+
+    [Fact]
+    public void RemoveCookies_ReturnOK()
+    {
+        var httpRequestBuilder =
+            new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"))
+                .WithCookies(new { id = 10, name = "furion", age = 30, address = "广东省" }).RemoveCookies("age", "id");
+        var finalRequestUri = httpRequestBuilder.BuildFinalRequestUri(null);
+        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.Method!, finalRequestUri);
+        httpRequestBuilder.AppendCookies(httpRequestMessage);
+        httpRequestBuilder.RemoveCookies(httpRequestMessage);
+
+        Assert.Single(httpRequestMessage.Headers);
+        Assert.Equal("name=furion; address=%E5%B9%BF%E4%B8%9C%E7%9C%81",
+            httpRequestMessage.Headers.GetValues("Cookie").First());
     }
 
     [Fact]

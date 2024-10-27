@@ -57,7 +57,7 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
-    ///     设置内容类型
+    ///     设置内容编码
     /// </summary>
     /// <param name="encoding">内容编码</param>
     /// <returns>
@@ -74,7 +74,7 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
-    ///     设置内容类型
+    ///     设置内容编码
     /// </summary>
     /// <param name="encodingName">内容编码名</param>
     /// <returns>
@@ -172,6 +172,21 @@ public sealed partial class HttpRequestBuilder
     public HttpRequestBuilder SetRawContent(object? rawContent, string? contentType = null,
         Encoding? contentEncoding = null)
     {
+        // 空检查
+        if (!string.IsNullOrWhiteSpace(contentType))
+        {
+            // 解析内容类型字符串
+            var mediaTypeHeaderValue = MediaTypeHeaderValue.Parse(contentType);
+
+            // 禁止使用该方法设置 multipart/form-data 类型内容
+            if (mediaTypeHeaderValue.MediaType == MediaTypeNames.Multipart.FormData &&
+                rawContent is not MultipartContent)
+            {
+                throw new NotSupportedException(
+                    $"The method does not support setting the request content type to `{MediaTypeNames.Multipart.FormData}`. Please use the `{nameof(SetMultipartContent)}` method instead. If you are using an HTTP declarative requests, define the parameter with the `Action<HttpMultipartFormDataBuilder>` type.");
+            }
+        }
+
         RawContent = rawContent;
 
         // 空检查
@@ -513,6 +528,64 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
+    ///     设置需要从 URL 中移除的查询参数集合
+    /// </summary>
+    /// <remarks>支持多次调用。</remarks>
+    /// <param name="parameterNames">查询参数名集合</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder RemoveQueryParameters(params string[] parameterNames)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(parameterNames);
+
+        // 检查是否为空元素数组
+        if (parameterNames.Length == 0)
+        {
+            return this;
+        }
+
+        QueryParametersToRemove ??= new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        // 逐条添加到集合中
+        foreach (var parameterName in parameterNames)
+        {
+            if (!string.IsNullOrWhiteSpace(parameterName))
+            {
+                QueryParametersToRemove.Add(parameterName);
+            }
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    ///     设置路径参数
+    /// </summary>
+    /// <remarks>支持多次调用。</remarks>
+    /// <param name="key">键</param>
+    /// <param name="value">值</param>
+    /// <param name="escape">是否转义字符串，默认 <c>false</c></param>
+    /// <param name="culture">
+    ///     <see cref="CultureInfo" />
+    /// </param>
+    /// <param name="comparer">
+    ///     <see cref="IEqualityComparer{T}" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder WithPathParameter(string key, object? value, bool escape = false,
+        CultureInfo? culture = null, IEqualityComparer<string>? comparer = null)
+    {
+        // 空检查
+        ArgumentException.ThrowIfNullOrWhiteSpace(key);
+
+        return WithPathParameters(new Dictionary<string, object?> { { key, value } }, escape, culture, comparer);
+    }
+
+    /// <summary>
     ///     设置路径参数
     /// </summary>
     /// <remarks>支持多次调用。</remarks>
@@ -673,18 +746,51 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
-    ///     设置 <see cref="HttpClient" /> 实例的配置名称
+    ///     需要从请求中移除的 Cookie 集合
     /// </summary>
-    /// <param name="httpClientFactoryName"><see cref="HttpClient" /> 实例的配置名称</param>
+    /// <remarks>支持多次调用。</remarks>
+    /// <param name="cookieNames">Cookie 名集合</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
-    public HttpRequestBuilder SetHttpClientFactoryName(string httpClientFactoryName)
+    public HttpRequestBuilder RemoveCookies(params string[] cookieNames)
     {
         // 空检查
-        ArgumentNullException.ThrowIfNull(httpClientFactoryName);
+        ArgumentNullException.ThrowIfNull(cookieNames);
 
-        HttpClientFactoryName = httpClientFactoryName;
+        // 检查是否为空元素数组
+        if (cookieNames.Length == 0)
+        {
+            return this;
+        }
+
+        CookiesToRemove ??= new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        // 逐条添加到集合中
+        foreach (var cookieName in cookieNames)
+        {
+            if (!string.IsNullOrWhiteSpace(cookieName))
+            {
+                CookiesToRemove.Add(cookieName);
+            }
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    ///     设置 <see cref="HttpClient" /> 实例的配置名称
+    /// </summary>
+    /// <param name="httpClientName"><see cref="HttpClient" /> 实例的配置名称</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder SetHttpClientName(string httpClientName)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(httpClientName);
+
+        HttpClientName = httpClientName;
 
         return this;
     }
@@ -846,7 +952,7 @@ public sealed partial class HttpRequestBuilder
     /// <summary>
     ///     设置是否如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常。
     /// </summary>
-    /// <param name="enabled">布尔值</param>
+    /// <param name="enabled">是否启用如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>

@@ -74,6 +74,11 @@ public sealed partial class HttpRequestBuilder
     public IDictionary<string, List<string?>>? QueryParameters { get; private set; }
 
     /// <summary>
+    ///     需要从 URL 中移除的查询参数集合
+    /// </summary>
+    public HashSet<string>? QueryParametersToRemove { get; private set; }
+
+    /// <summary>
     ///     路径参数集合
     /// </summary>
     /// <remarks>用于替换请求地址中符合 <c>\{\s*(\w+\s*(\.\s*\w+\s*)*)\s*\}</c> 正则表达式匹配的数据。</remarks>
@@ -96,13 +101,18 @@ public sealed partial class HttpRequestBuilder
     public IDictionary<string, string?>? Cookies { get; private set; }
 
     /// <summary>
-    ///     <see cref="HttpClient" /> 实例的配置名称。
+    ///     需要从请求中移除的 Cookie 集合
+    /// </summary>
+    public HashSet<string>? CookiesToRemove { get; private set; }
+
+    /// <summary>
+    ///     <see cref="HttpClient" /> 实例的配置名称
     /// </summary>
     /// <remarks>
     ///     <para>此属性用于指定 <see cref="IHttpClientFactory" /> 创建 <see cref="HttpClient" /> 实例时传递的名称。</para>
     ///     <para>该名称用于标识在服务容器中与特定 <see cref="HttpClient" /> 实例相关的配置。</para>
     /// </remarks>
-    public string? HttpClientFactoryName { get; private set; }
+    public string? HttpClientName { get; private set; }
 
     /// <summary>
     ///     <see cref="HttpClient" /> 实例提供器

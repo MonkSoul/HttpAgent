@@ -92,7 +92,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
 
         var httpRequestBuilder2 =
             new HttpRequestBuilder(HttpMethod.Get, new Uri("/api/test", UriKind.RelativeOrAbsolute))
-                .SetHttpClientFactoryName("test");
+                .SetHttpClientName("test");
         var httpClientPooling2 = httpRemoteService.CreateHttpClientWithDefaults(httpRequestBuilder2);
         var httpClient2 = httpClientPooling2.Instance;
         Assert.NotNull(httpClient2);
@@ -157,7 +157,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
 
         var httpRequestBuilder2 =
             new HttpRequestBuilder(HttpMethod.Get, new Uri("/api/test", UriKind.RelativeOrAbsolute))
-                .SetHttpClientFactoryName("test");
+                .SetHttpClientName("test");
         var httpClientPooling2 = httpRemoteService.CreateHttpClientPooling(httpRequestBuilder2);
         var httpClient2 = httpClientPooling2.Instance;
         Assert.NotNull(httpClient2);

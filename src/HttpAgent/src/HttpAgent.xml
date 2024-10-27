@@ -958,6 +958,14 @@
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
             </param>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.RemoveCookies(System.Net.Http.HttpRequestMessage)">
+            <summary>
+                移除 Cookies
+            </summary>
+            <param name="httpRequestMessage">
+                <see cref="T:System.Net.Http.HttpRequestMessage" />
+            </param>
+        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.BuildAndSetContent(System.Net.Http.HttpRequestMessage,HttpAgent.IHttpContentProcessorFactory,HttpAgent.HttpRemoteOptions)">
             <summary>
                 构建并设置指定的 <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求消息的内容
@@ -999,7 +1007,7 @@
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.SetContentEncoding(System.Text.Encoding)">
             <summary>
-                设置内容类型
+                设置内容编码
             </summary>
             <param name="encoding">内容编码</param>
             <returns>
@@ -1008,7 +1016,7 @@
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.SetContentEncoding(System.String)">
             <summary>
-                设置内容类型
+                设置内容编码
             </summary>
             <param name="encodingName">内容编码名</param>
             <returns>
@@ -1251,6 +1259,34 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.RemoveQueryParameters(System.String[])">
+            <summary>
+                设置需要从 URL 中移除的查询参数集合
+            </summary>
+            <remarks>支持多次调用。</remarks>
+            <param name="parameterNames">查询参数名集合</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.WithPathParameter(System.String,System.Object,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
+            <summary>
+                设置路径参数
+            </summary>
+            <remarks>支持多次调用。</remarks>
+            <param name="key">键</param>
+            <param name="value">值</param>
+            <param name="escape">是否转义字符串，默认 <c>false</c></param>
+            <param name="culture">
+                <see cref="T:System.Globalization.CultureInfo" />
+            </param>
+            <param name="comparer">
+                <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
+            </param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.WithPathParameters(System.Collections.Generic.IDictionary{System.String,System.Object},System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
             <summary>
                 设置路径参数
@@ -1338,11 +1374,21 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.SetHttpClientFactoryName(System.String)">
+        <member name="M:HttpAgent.HttpRequestBuilder.RemoveCookies(System.String[])">
+            <summary>
+                需要从请求中移除的 Cookie 集合
+            </summary>
+            <remarks>支持多次调用。</remarks>
+            <param name="cookieNames">Cookie 名集合</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.SetHttpClientName(System.String)">
             <summary>
                 设置 <see cref="T:System.Net.Http.HttpClient" /> 实例的配置名称
             </summary>
-            <param name="httpClientFactoryName"><see cref="T:System.Net.Http.HttpClient" /> 实例的配置名称</param>
+            <param name="httpClientName"><see cref="T:System.Net.Http.HttpClient" /> 实例的配置名称</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -1424,7 +1470,7 @@
             <summary>
                 设置是否如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常。
             </summary>
-            <param name="enabled">布尔值</param>
+            <param name="enabled">是否启用如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -1631,6 +1677,11 @@
             </summary>
             <remarks>请求地址中位于 <c>?</c> 符号之后且 <c>#</c> 符号之前的部分。</remarks>
         </member>
+        <member name="P:HttpAgent.HttpRequestBuilder.QueryParametersToRemove">
+            <summary>
+                需要从 URL 中移除的查询参数集合
+            </summary>
+        </member>
         <member name="P:HttpAgent.HttpRequestBuilder.PathParameters">
             <summary>
                 路径参数集合
@@ -1653,9 +1704,14 @@
                 <para>使用该方式不会自动处理服务器返回的 <c>Set-Cookie</c> 头。</para>
             </remarks>
         </member>
-        <member name="P:HttpAgent.HttpRequestBuilder.HttpClientFactoryName">
+        <member name="P:HttpAgent.HttpRequestBuilder.CookiesToRemove">
             <summary>
-                <see cref="T:System.Net.Http.HttpClient" /> 实例的配置名称。
+                需要从请求中移除的 Cookie 集合
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HttpRequestBuilder.HttpClientName">
+            <summary>
+                <see cref="T:System.Net.Http.HttpClient" /> 实例的配置名称
             </summary>
             <remarks>
                 <para>此属性用于指定 <see cref="T:System.Net.Http.IHttpClientFactory" /> 创建 <see cref="T:System.Net.Http.HttpClient" /> 实例时传递的名称。</para>
@@ -2778,6 +2834,25 @@
                 <see cref="T:System.Collections.IEnumerable" />
             </returns>
         </member>
+        <member name="T:HttpAgent.Core.Extensions.LinqExpressionExtensions">
+            <summary>
+                <see cref="T:System.Linq.Expressions.Expression" /> 拓展类
+            </summary>
+        </member>
+        <member name="M:HttpAgent.Core.Extensions.LinqExpressionExtensions.WhereIf``1(System.Collections.Generic.IEnumerable{``0},System.Boolean,System.Func{``0,System.Boolean})">
+            <summary>
+                根据条件成立构建 <c>Where</c> 表达式
+            </summary>
+            <param name="source">
+                <see cref="T:System.Collections.Generic.IEnumerable`1" />
+            </param>
+            <param name="condition">条件</param>
+            <param name="predicate"><c>Where</c> 表达式</param>
+            <typeparam name="TSource">集合元素类型</typeparam>
+            <returns>
+                <see cref="T:System.Collections.Generic.IEnumerable`1" />
+            </returns>
+        </member>
         <member name="T:HttpAgent.Core.Extensions.NumberExtensions">
             <summary>
                 数值类型拓展类
@@ -3170,6 +3245,40 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
+        <member name="T:HttpAgent.BodyAttribute">
+            <summary>
+                请求内容特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.BodyAttribute.#ctor">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.BodyAttribute" />
+            </summary>
+        </member>
+        <member name="M:HttpAgent.BodyAttribute.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.BodyAttribute" />
+            </summary>
+            <param name="contentType">内容类型</param>
+        </member>
+        <member name="M:HttpAgent.BodyAttribute.#ctor(System.String,System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.QueryAttribute" />
+            </summary>
+            <param name="contentType">内容类型</param>
+            <param name="contentEncoding">内容编码</param>
+        </member>
+        <member name="P:HttpAgent.BodyAttribute.ContentType">
+            <summary>
+                内容类型
+            </summary>
+        </member>
+        <member name="P:HttpAgent.BodyAttribute.ContentEncoding">
+            <summary>
+                内容编码
+            </summary>
+            <remarks>默认值为 <c>utf-8</c> 编码。</remarks>
+        </member>
         <member name="T:HttpAgent.DisableCacheAttribute">
             <summary>
                 禁用 HTTP 缓存特性
@@ -3189,6 +3298,95 @@
         <member name="P:HttpAgent.DisableCacheAttribute.Disabled">
             <summary>
                 是否禁用 HTTP 缓存
+            </summary>
+        </member>
+        <member name="T:HttpAgent.EnsureSuccessStatusCodeAttribute">
+            <summary>
+                如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.EnsureSuccessStatusCodeAttribute.#ctor">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.EnsureSuccessStatusCodeAttribute" />
+            </summary>
+        </member>
+        <member name="M:HttpAgent.EnsureSuccessStatusCodeAttribute.#ctor(System.Boolean)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.EnsureSuccessStatusCodeAttribute" />
+            </summary>
+            <param name="enabled">是否启用如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常</param>
+        </member>
+        <member name="P:HttpAgent.EnsureSuccessStatusCodeAttribute.Enabled">
+            <summary>
+                是否启用如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常
+            </summary>
+        </member>
+        <member name="T:HttpAgent.HeadersAttribute">
+            <summary>
+                请求标头特性
+            </summary>
+            <remarks>支持指定多次。</remarks>
+        </member>
+        <member name="F:HttpAgent.HeadersAttribute._values">
+            <summary>
+                <see cref="P:HttpAgent.HeadersAttribute.Values" /> 私有字段
+            </summary>
+        </member>
+        <member name="M:HttpAgent.HeadersAttribute.#ctor">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.HeadersAttribute" />
+            </summary>
+            <remarks>作用于参数</remarks>
+        </member>
+        <member name="M:HttpAgent.HeadersAttribute.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.HeadersAttribute" />
+            </summary>
+            <remarks>当用于方法或接口时，则进行移除指定标头操作。</remarks>
+            <param name="name">标头</param>
+        </member>
+        <member name="M:HttpAgent.HeadersAttribute.#ctor(System.String,System.Object)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.HeadersAttribute" />
+            </summary>
+            <param name="name">标头</param>
+            <param name="value">标头的值</param>
+        </member>
+        <member name="P:HttpAgent.HeadersAttribute.Name">
+            <summary>
+                标头
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HeadersAttribute.Values">
+            <summary>
+                标头的值
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HeadersAttribute.AliasAs">
+            <summary>
+                别名
+            </summary>
+            <remarks>当用于参数时有效。</remarks>
+        </member>
+        <member name="P:HttpAgent.HeadersAttribute.HasSetValues">
+            <summary>
+                是否设置了标头的值
+            </summary>
+        </member>
+        <member name="T:HttpAgent.HttpClientNameAttribute">
+            <summary>
+                <see cref="T:System.Net.Http.HttpClient" /> 实例的配置名称特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.HttpClientNameAttribute.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.HttpClientNameAttribute" />
+            </summary>
+            <param name="name"><see cref="T:System.Net.Http.HttpClient" /> 实例的配置名称</param>
+        </member>
+        <member name="P:HttpAgent.HttpClientNameAttribute.Name">
+            <summary>
+                <see cref="T:System.Net.Http.HttpClient" /> 实例的配置名称
             </summary>
         </member>
         <member name="T:HttpAgent.DeleteAttribute">
@@ -3344,6 +3542,43 @@
                 参数前缀
             </summary>
         </member>
+        <member name="T:HttpAgent.SimulateBrowserAttribute">
+            <summary>
+                模拟浏览器环境特性
+            </summary>
+        </member>
+        <member name="T:HttpAgent.TimeoutAttribute">
+            <summary>
+                超时时间特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.TimeoutAttribute.#ctor(System.Double)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.TimeoutAttribute" />
+            </summary>
+            <param name="timeoutMilliseconds">超时时间（毫秒）</param>
+        </member>
+        <member name="P:HttpAgent.TimeoutAttribute.Timeout">
+            <summary>
+                超时时间（毫秒）
+            </summary>
+        </member>
+        <member name="T:HttpAgent.TraceIdentifierAttribute">
+            <summary>
+                跟踪标识特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.TraceIdentifierAttribute.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.TraceIdentifierAttribute" />
+            </summary>
+            <param name="traceIdentifier">跟踪标识</param>
+        </member>
+        <member name="P:HttpAgent.TraceIdentifierAttribute.Identifier">
+            <summary>
+                跟踪标识
+            </summary>
+        </member>
         <member name="T:HttpAgent.HttpDeclarativeBuilder">
             <summary>
                 HTTP 远程请求声明式构建器
@@ -3386,9 +3621,114 @@
             </returns>
             <exception cref="T:System.InvalidOperationException"></exception>
         </member>
+        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractMethod(HttpAgent.HttpRequestBuilder,System.Action{HttpAgent.HttpRequestBuilder}[])">
+            <summary>
+                解析被调用方法信息
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+            <param name="actions">解析动作集合</param>
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractHttpClientName(HttpAgent.HttpRequestBuilder)">
+            <summary>
+                解析 <see cref="T:System.Net.Http.HttpClient" /> 实例的配置名称
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractTraceIdentifier(HttpAgent.HttpRequestBuilder)">
+            <summary>
+                解析跟踪标识
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractProfiler(HttpAgent.HttpRequestBuilder)">
+            <summary>
+                解析请求分析工具
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractSimulateBrowser(HttpAgent.HttpRequestBuilder)">
+            <summary>
+                解析模拟浏览器环境
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractDisableCache(HttpAgent.HttpRequestBuilder)">
+            <summary>
+                解析禁用 HTTP 缓存
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractEnsureSuccessStatusCode(HttpAgent.HttpRequestBuilder)">
+            <summary>
+                解析如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常特性
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractTimeout(HttpAgent.HttpRequestBuilder)">
+            <summary>
+                解析超时时间
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+        </member>
         <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractQueryParameters(HttpAgent.HttpRequestBuilder)">
             <summary>
                 解析查询参数
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractPathParameters(HttpAgent.HttpRequestBuilder)">
+            <summary>
+                解析路径参数
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractHeaders(HttpAgent.HttpRequestBuilder)">
+            <summary>
+                解析请求标头
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractBodyContent(HttpAgent.HttpRequestBuilder)">
+            <summary>
+                解析请求内容参数
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractMultipartContent(HttpAgent.HttpRequestBuilder)">
+            <summary>
+                解析多部分表单内容
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractHttpRequestBuilderConfigure(HttpAgent.HttpRequestBuilder)">
+            <summary>
+                解析 <inheritdoc cref="T:HttpAgent.HttpRequestBuilder" /> 自定义配置
             </summary>
             <param name="httpRequestBuilder">
                 <see cref="T:HttpAgent.HttpRequestBuilder" />

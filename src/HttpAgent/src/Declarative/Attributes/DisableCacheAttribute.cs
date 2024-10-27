@@ -8,7 +8,7 @@ namespace HttpAgent;
 ///     禁用 HTTP 缓存特性
 /// </summary>
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Interface)]
-public class DisableCacheAttribute : Attribute
+public sealed class DisableCacheAttribute : Attribute
 {
     /// <summary>
     ///     <inheritdoc cref="DiscardableAttribute" />

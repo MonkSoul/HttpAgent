@@ -16,6 +16,7 @@ global using System.Text;
 global using System.Diagnostics;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Globalization;
+global using System.Linq.Expressions;
 global using System.Net;
 global using System.Net.Http.Json;
 global using System.Net.Mime;
