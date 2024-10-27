@@ -714,6 +714,11 @@
                 <see cref="T:HttpAgent.IHttpContentProcessor" /> 集合
             </summary>
         </member>
+        <member name="F:HttpAgent.HttpRemoteBuilder._httpDeclarativeExtractors">
+            <summary>
+                <see cref="T:HttpAgent.IHttpDeclarativeExtractor" /> 集合
+            </summary>
+        </member>
         <member name="F:HttpAgent.HttpRemoteBuilder._httpDeclarativeTypes">
             <summary>
                 <see cref="T:HttpAgent.IHttpDeclarative" /> 集合
@@ -795,7 +800,7 @@
             </returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:HttpAgent.HttpRemoteBuilder.AddDeclarative``1">
+        <member name="M:HttpAgent.HttpRemoteBuilder.AddHttpDeclarative``1">
             <summary>
                 添加 HTTP 声明式服务
             </summary>
@@ -806,7 +811,7 @@
                 <see cref="T:HttpAgent.HttpRemoteBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRemoteBuilder.AddDeclarative(System.Type)">
+        <member name="M:HttpAgent.HttpRemoteBuilder.AddHttpDeclarative(System.Type)">
             <summary>
                 添加 HTTP 声明式服务
             </summary>
@@ -818,7 +823,7 @@
             </returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:HttpAgent.HttpRemoteBuilder.AddDeclarativeFromAssemblies(System.Collections.Generic.IEnumerable{System.Reflection.Assembly})">
+        <member name="M:HttpAgent.HttpRemoteBuilder.AddHttpDeclarativeFromAssemblies(System.Collections.Generic.IEnumerable{System.Reflection.Assembly})">
             <summary>
                 扫描程序集并添加 HTTP 声明式服务
             </summary>
@@ -827,7 +832,7 @@
                 <see cref="T:HttpAgent.HttpRemoteBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRemoteBuilder.AddDeclaratives(System.Collections.Generic.IEnumerable{System.Type})">
+        <member name="M:HttpAgent.HttpRemoteBuilder.AddHttpDeclaratives(System.Collections.Generic.IEnumerable{System.Type})">
             <summary>
                 添加 HTTP 声明式服务
             </summary>
@@ -838,6 +843,16 @@
                 <see cref="T:HttpAgent.HttpRemoteBuilder" />
             </returns>
             <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:HttpAgent.HttpRemoteBuilder.AddHttpDeclarativeExtractors(System.Func{System.Collections.Generic.IEnumerable{HttpAgent.IHttpDeclarativeExtractor}})">
+            <summary>
+                添加 HTTP 声明式 <see cref="T:HttpAgent.IHttpDeclarativeExtractor" /> 集合提取器
+            </summary>
+            <remarks>支持多次调用。</remarks>
+            <param name="configure"><see cref="T:HttpAgent.IHttpDeclarativeExtractor" /> 实例提供器</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRemoteBuilder" />
+            </returns>
         </member>
         <member name="M:HttpAgent.HttpRemoteBuilder.Build(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
@@ -3610,9 +3625,14 @@
             </summary>
             <remarks>使用 <c>HttpRequestBuilder.Declarative(method, args)</c> 静态方法创建。</remarks>
         </member>
-        <member name="F:HttpAgent.HttpDeclarativeBuilder._specialArgumentTypes">
+        <member name="F:HttpAgent.HttpDeclarativeBuilder._extractors">
             <summary>
-                特殊参数类型
+                <see cref="T:HttpAgent.IHttpDeclarativeExtractor" /> 提取器集合
+            </summary>
+        </member>
+        <member name="F:HttpAgent.HttpDeclarativeBuilder._hasLoadedExtractors">
+            <summary>
+                标识是否已加载自定义 HTTP 声明式提取器
             </summary>
         </member>
         <member name="M:HttpAgent.HttpDeclarativeBuilder.#ctor(System.Reflection.MethodInfo,System.Object[])">
@@ -3632,132 +3652,137 @@
                 被调用方法的参数值数组
             </summary>
         </member>
-        <member name="P:HttpAgent.HttpDeclarativeBuilder.Parameters">
-            <summary>
-                被调用方法的参数键值字典
-            </summary>
-        </member>
-        <member name="M:HttpAgent.HttpDeclarativeBuilder.Build">
+        <member name="M:HttpAgent.HttpDeclarativeBuilder.Build(HttpAgent.HttpRemoteOptions)">
             <summary>
                 构建 <see cref="T:HttpAgent.HttpRequestBuilder" /> 实例
             </summary>
+            <param name="httpRemoteOptions">
+                <see cref="T:HttpAgent.HttpRemoteOptions" />
+            </param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
             <exception cref="T:System.InvalidOperationException"></exception>
         </member>
-        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractMethod(HttpAgent.HttpRequestBuilder,System.Action{HttpAgent.HttpRequestBuilder}[])">
+        <member name="T:HttpAgent.BodyDeclarativeExtractor">
             <summary>
-                解析被调用方法信息
+                <see cref="T:HttpAgent.BodyAttribute" /> 特性提取器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.BodyDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <inheritdoc />
+        </member>
+        <member name="T:HttpAgent.DisableCacheDeclarativeExtractor">
+            <summary>
+                <see cref="T:HttpAgent.DisableCacheAttribute" /> 特性提取器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.DisableCacheDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <inheritdoc />
+        </member>
+        <member name="T:HttpAgent.EnsureSuccessStatusCodeDeclarativeExtractor">
+            <summary>
+                <see cref="T:HttpAgent.EnsureSuccessStatusCodeAttribute" /> 特性提取器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.EnsureSuccessStatusCodeDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <inheritdoc />
+        </member>
+        <member name="T:HttpAgent.HeadersDeclarativeExtractor">
+            <summary>
+                <see cref="T:HttpAgent.HeadersAttribute" /> 特性提取器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.HeadersDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <inheritdoc />
+        </member>
+        <member name="T:HttpAgent.HttpClientNameDeclarativeExtractor">
+            <summary>
+                <see cref="T:HttpAgent.HttpClientNameAttribute" /> 特性提取器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.HttpClientNameDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <inheritdoc />
+        </member>
+        <member name="T:HttpAgent.HttpRequestBuilderConfigureDeclarativeExtractor">
+            <summary>
+                <see cref="T:HttpAgent.HttpRequestBuilder" /> 自定义配置提取器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilderConfigureDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <inheritdoc />
+        </member>
+        <member name="T:HttpAgent.IHttpDeclarativeExtractor">
+            <summary>
+                HTTP 声明式提取器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.IHttpDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <summary>
+                提取方法信息
             </summary>
             <param name="httpRequestBuilder">
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </param>
-            <param name="actions">解析动作集合</param>
-        </member>
-        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractHttpClientName(HttpAgent.HttpRequestBuilder)">
-            <summary>
-                解析 <see cref="T:System.Net.Http.HttpClient" /> 实例的配置名称
-            </summary>
-            <param name="httpRequestBuilder">
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
-            </param>
-        </member>
-        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractTraceIdentifier(HttpAgent.HttpRequestBuilder)">
-            <summary>
-                解析跟踪标识
-            </summary>
-            <param name="httpRequestBuilder">
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
-            </param>
-        </member>
-        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractProfiler(HttpAgent.HttpRequestBuilder)">
-            <summary>
-                解析请求分析工具
-            </summary>
-            <param name="httpRequestBuilder">
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
-            </param>
-        </member>
-        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractSimulateBrowser(HttpAgent.HttpRequestBuilder)">
-            <summary>
-                解析模拟浏览器环境
-            </summary>
-            <param name="httpRequestBuilder">
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
-            </param>
-        </member>
-        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractDisableCache(HttpAgent.HttpRequestBuilder)">
-            <summary>
-                解析禁用 HTTP 缓存
-            </summary>
-            <param name="httpRequestBuilder">
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
-            </param>
-        </member>
-        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractEnsureSuccessStatusCode(HttpAgent.HttpRequestBuilder)">
-            <summary>
-                解析如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常特性
-            </summary>
-            <param name="httpRequestBuilder">
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
-            </param>
-        </member>
-        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractTimeout(HttpAgent.HttpRequestBuilder)">
-            <summary>
-                解析超时时间
-            </summary>
-            <param name="httpRequestBuilder">
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
-            </param>
-        </member>
-        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractQueryParameters(HttpAgent.HttpRequestBuilder)">
-            <summary>
-                解析查询参数
-            </summary>
-            <param name="httpRequestBuilder">
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            <param name="context">
+                <see cref="T:HttpAgent.HttpDeclarativeExtractorContext" />
             </param>
         </member>
-        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractPathParameters(HttpAgent.HttpRequestBuilder)">
+        <member name="T:HttpAgent.MultipartBodyDeclarativeExtractor">
             <summary>
-                解析路径参数
+                <see cref="T:System.Net.Http.MultipartContent" /> 请求内容提取器
             </summary>
-            <param name="httpRequestBuilder">
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
-            </param>
         </member>
-        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractHeaders(HttpAgent.HttpRequestBuilder)">
-            <summary>
-                解析请求标头
-            </summary>
-            <param name="httpRequestBuilder">
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
-            </param>
+        <member name="M:HttpAgent.MultipartBodyDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractBodyContent(HttpAgent.HttpRequestBuilder)">
+        <member name="T:HttpAgent.PathDeclarativeExtractor">
             <summary>
-                解析请求内容参数
+                路径参数提取器
             </summary>
-            <param name="httpRequestBuilder">
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
-            </param>
         </member>
-        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractMultipartContent(HttpAgent.HttpRequestBuilder)">
-            <summary>
-                解析多部分表单内容
-            </summary>
-            <param name="httpRequestBuilder">
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
-            </param>
+        <member name="M:HttpAgent.PathDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpDeclarativeBuilder.ExtractHttpRequestBuilderConfigure(HttpAgent.HttpRequestBuilder)">
+        <member name="T:HttpAgent.ProfilerDeclarativeExtractor">
             <summary>
-                解析 <inheritdoc cref="T:HttpAgent.HttpRequestBuilder" /> 自定义配置
+                <see cref="T:HttpAgent.ProfilerAttribute" /> 特性提取器
             </summary>
-            <param name="httpRequestBuilder">
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
-            </param>
+        </member>
+        <member name="M:HttpAgent.ProfilerDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <inheritdoc />
+        </member>
+        <member name="T:HttpAgent.QueryDeclarativeExtractor">
+            <summary>
+                <see cref="T:HttpAgent.QueryAttribute" /> 特性提取器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.QueryDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <inheritdoc />
+        </member>
+        <member name="T:HttpAgent.SimulateBrowserDeclarativeExtractor">
+            <summary>
+                <see cref="T:HttpAgent.SimulateBrowserAttribute" /> 特性提取器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.SimulateBrowserDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <inheritdoc />
+        </member>
+        <member name="T:HttpAgent.TimeoutCacheDeclarativeExtractor">
+            <summary>
+                <see cref="T:HttpAgent.TimeoutAttribute" /> 特性提取器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.TimeoutCacheDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <inheritdoc />
+        </member>
+        <member name="T:HttpAgent.TraceIdentifierDeclarativeExtractor">
+            <summary>
+                <see cref="T:HttpAgent.TraceIdentifierAttribute" /> 特性提取器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.TraceIdentifierDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <inheritdoc />
         </member>
         <member name="T:HttpAgent.HttpDeclarativeDispatchProxy">
             <summary>
@@ -3775,6 +3800,38 @@
         </member>
         <member name="M:HttpAgent.HttpDeclarativeDispatchProxy.InvokeAsyncT``1(System.Reflection.MethodInfo,System.Object[])">
             <inheritdoc />
+        </member>
+        <member name="T:HttpAgent.HttpDeclarativeExtractorContext">
+            <summary>
+                HTTP 声明式提取器上下文
+            </summary>
+        </member>
+        <member name="F:HttpAgent.HttpDeclarativeExtractorContext.SpecialArgumentTypes">
+            <summary>
+                特殊参数类型
+            </summary>
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeExtractorContext.#ctor(System.Reflection.MethodInfo,System.Object[])">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.HttpDeclarativeExtractorContext" />
+            </summary>
+            <param name="method">被调用方法</param>
+            <param name="args">被调用方法的参数值数组</param>
+        </member>
+        <member name="P:HttpAgent.HttpDeclarativeExtractorContext.Method">
+            <summary>
+                被调用方法
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HttpDeclarativeExtractorContext.Args">
+            <summary>
+                被调用方法的参数值数组
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HttpDeclarativeExtractorContext.Parameters">
+            <summary>
+                被调用方法的参数键值字典
+            </summary>
         </member>
         <member name="T:HttpAgent.IHttpDeclarative">
             <summary>
@@ -5355,6 +5412,12 @@
             <summary>
                 默认文件下载保存目录
             </summary>
+        </member>
+        <member name="P:HttpAgent.HttpRemoteOptions.HttpDeclarativeExtractors">
+            <summary>
+                自定义 HTTP 声明式 <see cref="T:HttpAgent.IHttpDeclarativeExtractor" /> 集合提供器
+            </summary>
+            <value>返回多个包含实现 <see cref="T:HttpAgent.IHttpDeclarativeExtractor" /> 集合的集合。</value>
         </member>
         <member name="T:HttpAgent.ByteArrayContentProcessor">
             <summary>

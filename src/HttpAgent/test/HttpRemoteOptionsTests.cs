@@ -12,5 +12,6 @@ public class HttpRemoteOptionsTests
         var options = new HttpRemoteOptions();
         Assert.Equal("text/plain", options.DefaultContentType);
         Assert.Null(options.DefaultFileDownloadDirectory);
+        Assert.Null(options.HttpDeclarativeExtractors);
     }
 }

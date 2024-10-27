@@ -1362,7 +1362,7 @@ public class HttpRequestBuilderMethodsTests
         httpRequestBuilder.Profiler();
 
         Assert.True(httpRequestBuilder.ProfilerEnabled);
-        
+
         httpRequestBuilder.Profiler(false);
         Assert.False(httpRequestBuilder.ProfilerEnabled);
     }

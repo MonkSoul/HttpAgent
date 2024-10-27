@@ -57,9 +57,9 @@ public class HttpRemoteServiceCollectionExtensionsTests
     public void AddHttpRemote_Duplicate_ReturnOK()
     {
         var services = new ServiceCollection();
-        services.AddHttpRemote(s => s.AddDeclarative<IHttpTest>());
-        services.AddHttpRemote(s => s.AddDeclarative<IHttpTest>());
-        services.AddHttpRemote(s => s.AddDeclarative<IHttpTest>());
+        services.AddHttpRemote(s => s.AddHttpDeclarative<IHttpTest>());
+        services.AddHttpRemote(s => s.AddHttpDeclarative<IHttpTest>());
+        services.AddHttpRemote(s => s.AddHttpDeclarative<IHttpTest>());
 
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpClientFactory));
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpContentProcessorFactory));

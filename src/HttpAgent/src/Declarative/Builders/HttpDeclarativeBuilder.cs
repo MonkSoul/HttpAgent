@@ -11,13 +11,32 @@ namespace HttpAgent;
 public sealed class HttpDeclarativeBuilder
 {
     /// <summary>
-    ///     特殊参数类型
+    ///     <see cref="IHttpDeclarativeExtractor" /> 提取器集合
     /// </summary>
-    internal static Type[] _specialArgumentTypes =
-    [
-        typeof(Action<HttpRequestBuilder>), typeof(Action<HttpMultipartFormDataBuilder>), typeof(HttpCompletionOption),
-        typeof(CancellationToken)
-    ];
+    internal static readonly Dictionary<Type, IHttpDeclarativeExtractor> _extractors = new()
+    {
+        { typeof(HttpClientNameDeclarativeExtractor), new HttpClientNameDeclarativeExtractor() },
+        { typeof(TraceIdentifierDeclarativeExtractor), new TraceIdentifierDeclarativeExtractor() },
+        { typeof(ProfilerDeclarativeExtractor), new ProfilerDeclarativeExtractor() },
+        { typeof(SimulateBrowserDeclarativeExtractor), new SimulateBrowserDeclarativeExtractor() },
+        { typeof(DisableCacheDeclarativeExtractor), new DisableCacheDeclarativeExtractor() },
+        { typeof(EnsureSuccessStatusCodeDeclarativeExtractor), new EnsureSuccessStatusCodeDeclarativeExtractor() },
+        { typeof(TimeoutCacheDeclarativeExtractor), new TimeoutCacheDeclarativeExtractor() },
+        { typeof(QueryDeclarativeExtractor), new QueryDeclarativeExtractor() },
+        { typeof(PathDeclarativeExtractor), new PathDeclarativeExtractor() },
+        { typeof(HeadersDeclarativeExtractor), new HeadersDeclarativeExtractor() },
+        { typeof(BodyDeclarativeExtractor), new BodyDeclarativeExtractor() },
+        { typeof(MultipartBodyDeclarativeExtractor), new MultipartBodyDeclarativeExtractor() },
+        {
+            typeof(HttpRequestBuilderConfigureDeclarativeExtractor),
+            new HttpRequestBuilderConfigureDeclarativeExtractor()
+        }
+    };
+
+    /// <summary>
+    ///     标识是否已加载自定义 HTTP 声明式提取器
+    /// </summary>
+    internal bool _hasLoadedExtractors;
 
     /// <summary>
     ///     <inheritdoc cref="HttpDeclarativeBuilder" />
@@ -31,9 +50,6 @@ public sealed class HttpDeclarativeBuilder
 
         Method = method;
         Args = args;
-
-        // 初始化被调用方法的参数键值字典
-        Parameters = method.GetParameters().Select((p, i) => new { p, v = args[i] }).ToDictionary(u => u.p, u => u.v);
     }
 
     /// <summary>
@@ -47,18 +63,16 @@ public sealed class HttpDeclarativeBuilder
     public object?[] Args { get; }
 
     /// <summary>
-    ///     被调用方法的参数键值字典
-    /// </summary>
-    internal Dictionary<ParameterInfo, object?> Parameters { get; }
-
-    /// <summary>
     ///     构建 <see cref="HttpRequestBuilder" /> 实例
     /// </summary>
+    /// <param name="httpRemoteOptions">
+    ///     <see cref="HttpRemoteOptions" />
+    /// </param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
     /// <exception cref="InvalidOperationException"></exception>
-    internal HttpRequestBuilder Build()
+    internal HttpRequestBuilder Build(HttpRemoteOptions httpRemoteOptions)
     {
         // 检查被调用方法是否贴有 [HttpMethod] 特性
         if (!Method.IsDefined(typeof(HttpMethodAttribute), true))
@@ -76,376 +90,25 @@ public sealed class HttpDeclarativeBuilder
         var httpRequestBuilder =
             HttpRequestBuilder.Create(httpMethodAttribute.Method, httpMethodAttribute.RequestUri);
 
-        // 解析被调用方法信息
-        ExtractMethod(httpRequestBuilder, ExtractHttpClientName, ExtractTraceIdentifier, ExtractProfiler,
-            ExtractSimulateBrowser, ExtractDisableCache, ExtractEnsureSuccessStatusCode, ExtractTimeout,
-            ExtractQueryParameters, ExtractPathParameters, ExtractHeaders, ExtractBodyContent, ExtractMultipartContent,
-            ExtractHttpRequestBuilderConfigure);
+        // 初始化 HttpDeclarativeExtractorContext 实例
+        var httpDeclarativeExtractorContext = new HttpDeclarativeExtractorContext(Method, Args);
+
+        // 检查是否已加载自定义 HTTP 声明式提取器
+        if (!_hasLoadedExtractors)
+        {
+            _hasLoadedExtractors = true;
+
+            // 添加自定义 IHttpDeclarativeExtractor 数组
+            _extractors.TryAdd(httpRemoteOptions.HttpDeclarativeExtractors?.SelectMany(u => u.Invoke()).ToArray(),
+                value => value.GetType());
+        }
+
+        // 遍历 HTTP 声明提取器集合并提取信息设置给 HttpRequestBuilder 实例
+        foreach (var extractor in _extractors.Values)
+        {
+            extractor.Extract(httpRequestBuilder, httpDeclarativeExtractorContext);
+        }
 
         return httpRequestBuilder;
-    }
-
-    /// <summary>
-    ///     解析被调用方法信息
-    /// </summary>
-    /// <param name="httpRequestBuilder">
-    ///     <see cref="HttpRequestBuilder" />
-    /// </param>
-    /// <param name="actions">解析动作集合</param>
-    internal static void ExtractMethod(HttpRequestBuilder httpRequestBuilder,
-        params Action<HttpRequestBuilder>[] actions)
-    {
-        // 空检查
-        ArgumentNullException.ThrowIfNull(httpRequestBuilder);
-        ArgumentNullException.ThrowIfNull(actions);
-
-        // 逐条调用
-        foreach (var action in actions)
-        {
-            action(httpRequestBuilder);
-        }
-    }
-
-    /// <summary>
-    ///     解析 <see cref="HttpClient" /> 实例的配置名称
-    /// </summary>
-    /// <param name="httpRequestBuilder">
-    ///     <see cref="HttpRequestBuilder" />
-    /// </param>
-    internal void ExtractHttpClientName(HttpRequestBuilder httpRequestBuilder)
-    {
-        // 检查方法或接口是否定义了 [HttpClientName] 特性
-        if (!Method.IsDefined(typeof(HttpClientNameAttribute), true))
-        {
-            return;
-        }
-
-        httpRequestBuilder.SetHttpClientName(Method.GetCustomAttribute<HttpClientNameAttribute>(true)!.Name);
-    }
-
-    /// <summary>
-    ///     解析跟踪标识
-    /// </summary>
-    /// <param name="httpRequestBuilder">
-    ///     <see cref="HttpRequestBuilder" />
-    /// </param>
-    internal void ExtractTraceIdentifier(HttpRequestBuilder httpRequestBuilder)
-    {
-        // 检查方法或接口是否定义了 [TraceIdentifier] 特性
-        if (!Method.IsDefined(typeof(TraceIdentifierAttribute), true))
-        {
-            return;
-        }
-
-        httpRequestBuilder.SetTraceIdentifier(Method.GetCustomAttribute<TraceIdentifierAttribute>(true)!.Identifier);
-    }
-
-    /// <summary>
-    ///     解析请求分析工具
-    /// </summary>
-    /// <param name="httpRequestBuilder">
-    ///     <see cref="HttpRequestBuilder" />
-    /// </param>
-    internal void ExtractProfiler(HttpRequestBuilder httpRequestBuilder)
-    {
-        // 检查方法或接口是否定义了 [Profiler] 特性
-        if (!Method.IsDefined(typeof(ProfilerAttribute), true))
-        {
-            return;
-        }
-
-        httpRequestBuilder.Profiler(Method.GetCustomAttribute<ProfilerAttribute>(true)!.Enabled);
-    }
-
-    /// <summary>
-    ///     解析模拟浏览器环境
-    /// </summary>
-    /// <param name="httpRequestBuilder">
-    ///     <see cref="HttpRequestBuilder" />
-    /// </param>
-    internal void ExtractSimulateBrowser(HttpRequestBuilder httpRequestBuilder)
-    {
-        // 检查方法或接口是否定义了 [SimulateBrowser] 特性
-        if (!Method.IsDefined(typeof(SimulateBrowserAttribute), true))
-        {
-            return;
-        }
-
-        httpRequestBuilder.SimulateBrowser();
-    }
-
-    /// <summary>
-    ///     解析禁用 HTTP 缓存
-    /// </summary>
-    /// <param name="httpRequestBuilder">
-    ///     <see cref="HttpRequestBuilder" />
-    /// </param>
-    internal void ExtractDisableCache(HttpRequestBuilder httpRequestBuilder)
-    {
-        // 检查方法或接口是否定义了 [DisableCache] 特性
-        if (!Method.IsDefined(typeof(DisableCacheAttribute), true))
-        {
-            return;
-        }
-
-        httpRequestBuilder.DisableCache(Method.GetCustomAttribute<DisableCacheAttribute>(true)!.Disabled);
-    }
-
-    /// <summary>
-    ///     解析如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常特性
-    /// </summary>
-    /// <param name="httpRequestBuilder">
-    ///     <see cref="HttpRequestBuilder" />
-    /// </param>
-    internal void ExtractEnsureSuccessStatusCode(HttpRequestBuilder httpRequestBuilder)
-    {
-        // 检查方法或接口是否定义了 [EnsureSuccessStatusCode] 特性
-        if (!Method.IsDefined(typeof(EnsureSuccessStatusCodeAttribute), true))
-        {
-            return;
-        }
-
-        httpRequestBuilder.EnsureSuccessStatusCode(Method.GetCustomAttribute<EnsureSuccessStatusCodeAttribute>(true)!
-            .Enabled);
-    }
-
-    /// <summary>
-    ///     解析超时时间
-    /// </summary>
-    /// <param name="httpRequestBuilder">
-    ///     <see cref="HttpRequestBuilder" />
-    /// </param>
-    internal void ExtractTimeout(HttpRequestBuilder httpRequestBuilder)
-    {
-        // 检查方法或接口是否定义了 [Timeout] 特性
-        if (!Method.IsDefined(typeof(TimeoutAttribute), true))
-        {
-            return;
-        }
-
-        httpRequestBuilder.SetTimeout(Method.GetCustomAttribute<TimeoutAttribute>(true)!.Timeout);
-    }
-
-    /// <summary>
-    ///     解析查询参数
-    /// </summary>
-    /// <param name="httpRequestBuilder">
-    ///     <see cref="HttpRequestBuilder" />
-    /// </param>
-    internal void ExtractQueryParameters(HttpRequestBuilder httpRequestBuilder)
-    {
-        // 查找所有贴有 [Query] 特性的参数
-        var queryParameters = Parameters.Where(u =>
-            !_specialArgumentTypes.Contains(u.Key.ParameterType) && u.Key.IsDefined(typeof(QueryAttribute))).ToArray();
-
-        // 空检查
-        if (queryParameters.Length == 0)
-        {
-            return;
-        }
-
-        // 遍历查询参数集合并添加到 HttpRequestBuilder 构建器中
-        foreach (var (parameter, value) in queryParameters)
-        {
-            // 获取 QueryAttribute 实例
-            var queryAttribute = parameter.GetCustomAttribute<QueryAttribute>()!;
-
-            // 获取参数名
-            var parameterName = AliasAsUtility.GetParameterName(parameter, out var aliasAsDefined);
-
-            // 检查参数是否贴了 [AliasAs] 特性
-            if (!aliasAsDefined)
-            {
-                parameterName = string.IsNullOrWhiteSpace(queryAttribute.AliasAs)
-                    ? parameterName
-                    : queryAttribute.AliasAs.Trim();
-            }
-
-            // 检查参数类型是否是基本类型或枚举类型或由它们组成的数组或集合类型
-            if (parameter.ParameterType.IsBaseTypeOrEnumOrCollection())
-            {
-                httpRequestBuilder.WithQueryParameter(parameterName, value, queryAttribute.Escape);
-
-                continue;
-            }
-
-            // 空检查
-            if (value is not null)
-            {
-                httpRequestBuilder.WithQueryParameters(value, queryAttribute.Prefix, queryAttribute.Escape);
-            }
-        }
-    }
-
-    /// <summary>
-    ///     解析路径参数
-    /// </summary>
-    /// <param name="httpRequestBuilder">
-    ///     <see cref="HttpRequestBuilder" />
-    /// </param>
-    internal void ExtractPathParameters(HttpRequestBuilder httpRequestBuilder)
-    {
-        // 查找所有符合的参数
-        var pathParameters = Parameters.Where(u => !_specialArgumentTypes.Contains(u.Key.ParameterType)).ToArray();
-
-        // 空检查
-        if (pathParameters.Length == 0)
-        {
-            return;
-        }
-
-        // 遍历符合的参数集合并添加到 HttpRequestBuilder 构建器中
-        foreach (var (parameter, value) in pathParameters)
-        {
-            // 获取参数名
-            var parameterName = AliasAsUtility.GetParameterName(parameter, out var aliasAsDefined);
-
-            // 检查参数类型是否是基本类型或枚举类型或由它们组成的数组或集合类型
-            if (parameter.ParameterType.IsBaseTypeOrEnumOrCollection())
-            {
-                httpRequestBuilder.WithPathParameter(parameterName, value);
-
-                continue;
-            }
-
-            // 空检查
-            if (value is not null)
-            {
-                httpRequestBuilder.WithPathParameters(value, parameterName);
-            }
-        }
-    }
-
-    /// <summary>
-    ///     解析请求标头
-    /// </summary>
-    /// <param name="httpRequestBuilder">
-    ///     <see cref="HttpRequestBuilder" />
-    /// </param>
-    internal void ExtractHeaders(HttpRequestBuilder httpRequestBuilder)
-    {
-        // ++++ 情况一：当为方法或接口添加 [Headers] 特性时 ++++
-
-        // 获取 HeadersAttribute 特性集合
-        var headersAttributes = Method.GetCustomAttributes<HeadersAttribute>(true).ToArray();
-
-        // 空检查
-        if (headersAttributes.Length > 0)
-        {
-            foreach (var headersAttribute in headersAttributes)
-            {
-                // 判断是否是添加请求标头的操作
-                if (headersAttribute.HasSetValues)
-                {
-                    httpRequestBuilder.WithHeader(headersAttribute.Name, headersAttribute.Values);
-                }
-                // 移除请求标头
-                else
-                {
-                    httpRequestBuilder.RemoveHeaders(headersAttribute.Name);
-                }
-            }
-        }
-
-        // ++++ 情况二：当为参数添加 [Headers] 特性时 ++++
-
-        // 查找所有贴有 [Headers] 特性的参数
-        var headersParameters = Parameters.Where(u =>
-                !_specialArgumentTypes.Contains(u.Key.ParameterType) && u.Key.IsDefined(typeof(HeadersAttribute)))
-            .ToArray();
-
-        // 空检查
-        if (headersParameters.Length == 0)
-        {
-            return;
-        }
-
-        // 遍历请求标头参数集合并添加到 HttpRequestBuilder 构建器中
-        foreach (var (parameter, value) in headersParameters)
-        {
-            // 获取 HeadersAttribute 特性集合
-            var parameterHeadersAttributes = parameter.GetCustomAttributes<HeadersAttribute>()!;
-
-            // 获取参数名
-            var parameterName = AliasAsUtility.GetParameterName(parameter, out var aliasAsDefined);
-
-            // 遍历 HeadersAttribute 特性集合
-            foreach (var headersAttribute in parameterHeadersAttributes)
-            {
-                // 检查参数是否贴了 [AliasAs] 特性
-                if (!aliasAsDefined)
-                {
-                    parameterName = string.IsNullOrWhiteSpace(headersAttribute.AliasAs)
-                        ? parameterName
-                        : headersAttribute.AliasAs.Trim();
-                }
-
-                httpRequestBuilder.WithHeader(parameterName, value ?? headersAttribute.Values);
-            }
-        }
-    }
-
-    /// <summary>
-    ///     解析请求内容参数
-    /// </summary>
-    /// <param name="httpRequestBuilder">
-    ///     <see cref="HttpRequestBuilder" />
-    /// </param>
-    internal void ExtractBodyContent(HttpRequestBuilder httpRequestBuilder)
-    {
-        // 查找所有贴有 [Body] 特性的参数
-        var bodyParameters = Parameters.Where(u =>
-            !_specialArgumentTypes.Contains(u.Key.ParameterType) && u.Key.IsDefined(typeof(BodyAttribute))).ToArray();
-
-        // 空检查
-        if (bodyParameters.Length == 0)
-        {
-            return;
-        }
-
-        // 获取首个贴有 [Body] 特性的参数
-        var firstBodyParameter = bodyParameters.First();
-
-        // 获取 BodyAttribute 实例
-        var bodyAttribute = firstBodyParameter.Key.GetCustomAttribute<BodyAttribute>()!;
-
-        // 设置原始请求内容
-        httpRequestBuilder.SetRawContent(firstBodyParameter.Value, bodyAttribute.ContentType);
-
-        // 设置内容编码
-        if (!string.IsNullOrWhiteSpace(bodyAttribute.ContentEncoding))
-        {
-            httpRequestBuilder.SetContentEncoding(bodyAttribute.ContentEncoding);
-        }
-    }
-
-    /// <summary>
-    ///     解析多部分表单内容
-    /// </summary>
-    /// <param name="httpRequestBuilder">
-    ///     <see cref="HttpRequestBuilder" />
-    /// </param>
-    internal void ExtractMultipartContent(HttpRequestBuilder httpRequestBuilder)
-    {
-        // 尝试解析 Action<HttpMultipartFormDataBuilder> 参数
-        if (Args.FirstOrDefault(u => u is Action<HttpMultipartFormDataBuilder>) is Action<HttpMultipartFormDataBuilder>
-            multipartContentBuilderAction)
-        {
-            httpRequestBuilder.SetMultipartContent(multipartContentBuilderAction);
-        }
-    }
-
-    /// <summary>
-    ///     解析 <inheritdoc cref="HttpRequestBuilder" /> 自定义配置
-    /// </summary>
-    /// <param name="httpRequestBuilder">
-    ///     <see cref="HttpRequestBuilder" />
-    /// </param>
-    internal void ExtractHttpRequestBuilderConfigure(HttpRequestBuilder httpRequestBuilder)
-    {
-        // 尝试解析 Action<HttpRequestBuilder> 参数
-        var configure = Args.FirstOrDefault(u => u is Action<HttpRequestBuilder>) as Action<HttpRequestBuilder>;
-
-        configure?.Invoke(httpRequestBuilder);
     }
 }
