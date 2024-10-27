@@ -331,8 +331,8 @@ public partial interface IHttpRemoteService
     /// <summary>
     ///     发送 HTTP 声明式请求
     /// </summary>
-    /// <param name="method">调用方法</param>
-    /// <param name="args">调用方法的参数值数组</param>
+    /// <param name="method">被调用方法</param>
+    /// <param name="args">被调用方法的参数值数组</param>
     /// <returns>
     ///     <see cref="object" />
     /// </returns>
@@ -341,8 +341,8 @@ public partial interface IHttpRemoteService
     /// <summary>
     ///     发送 HTTP 声明式请求
     /// </summary>
-    /// <param name="method">调用方法</param>
-    /// <param name="args">调用方法的参数值数组</param>
+    /// <param name="method">被调用方法</param>
+    /// <param name="args">被调用方法的参数值数组</param>
     /// <typeparam name="T">转换的目标类型</typeparam>
     /// <returns>
     ///     <typeparamref name="T" />

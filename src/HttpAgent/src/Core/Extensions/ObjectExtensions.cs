@@ -204,7 +204,8 @@ internal static class ObjectExtensions
             // 尝试查找对象类型的所有公开且可读的实例属性集合并转换为字典类型并返回
             return objType.GetProperties(bindingFlags)
                 .Where(property => property.CanRead)
-                .ToDictionary(object (property) => property.Name, property => property.GetValue(obj));
+                .ToDictionary(object (property) => AliasAsUtility.GetPropertyName(property, out _),
+                    property => property.GetValue(obj));
         }
         catch (Exception e)
         {
@@ -212,7 +213,7 @@ internal static class ObjectExtensions
                 new NotSupportedException(notSupportedExceptionMessage), e);
         }
     }
-    
+
     /// <summary>
     ///     根据模板路径从对象中获取属性值
     /// </summary>

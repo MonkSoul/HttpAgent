@@ -1108,6 +1108,24 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.WithHeader(System.String,System.Object,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
+            <summary>
+                设置请求标头
+            </summary>
+            <remarks>支持多次调用。</remarks>
+            <param name="key">键</param>
+            <param name="value">值</param>
+            <param name="escape">是否转义字符串，默认 <c>false</c></param>
+            <param name="culture">
+                <see cref="T:System.Globalization.CultureInfo" />
+            </param>
+            <param name="comparer">
+                <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
+            </param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.WithHeaders(System.Collections.Generic.IDictionary{System.String,System.Object},System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
             <summary>
                 设置请求标头
@@ -1180,9 +1198,27 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.WithQueryParameter(System.String,System.Object,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
+            <summary>
+                设置查询参数
+            </summary>
+            <remarks>支持多次调用。</remarks>
+            <param name="key">键</param>
+            <param name="value">值</param>
+            <param name="escape">是否转义字符串，默认 <c>false</c></param>
+            <param name="culture">
+                <see cref="T:System.Globalization.CultureInfo" />
+            </param>
+            <param name="comparer">
+                <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
+            </param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.WithQueryParameters(System.Collections.Generic.IDictionary{System.String,System.Object},System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
             <summary>
-                设置查询参数集合
+                设置查询参数
             </summary>
             <remarks>支持多次调用。</remarks>
             <param name="parameters">查询参数集合</param>
@@ -1199,7 +1235,7 @@
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.WithQueryParameters(System.Object,System.String,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
             <summary>
-                设置查询参数集合
+                设置查询参数
             </summary>
             <remarks>支持多次调用。</remarks>
             <param name="parameterSource">查询参数集合</param>
@@ -1217,7 +1253,7 @@
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.WithPathParameters(System.Collections.Generic.IDictionary{System.String,System.Object},System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
             <summary>
-                设置路径参数集合
+                设置路径参数
             </summary>
             <remarks>支持多次调用。</remarks>
             <param name="parameters">路径参数集合</param>
@@ -1234,7 +1270,7 @@
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.WithPathParameters(System.Object,System.String,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
             <summary>
-                设置路径参数集合
+                设置路径参数
             </summary>
             <remarks>支持多次调用。</remarks>
             <param name="parameterSource">路径参数源对象</param>
@@ -1250,9 +1286,27 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.WithCookie(System.String,System.Object,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
+            <summary>
+                设置 Cookies
+            </summary>
+            <remarks>支持多次调用。</remarks>
+            <param name="key">键</param>
+            <param name="value">值</param>
+            <param name="escape">是否转义字符串，默认 <c>false</c></param>
+            <param name="culture">
+                <see cref="T:System.Globalization.CultureInfo" />
+            </param>
+            <param name="comparer">
+                <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
+            </param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.WithCookies(System.Collections.Generic.IDictionary{System.String,System.Object},System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
             <summary>
-                设置 Cookies 集合
+                设置 Cookies
             </summary>
             <remarks>支持多次调用。</remarks>
             <param name="cookies">Cookies 集合</param>
@@ -1269,7 +1323,7 @@
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.WithCookies(System.Object,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
             <summary>
-                设置 Cookies 集合
+                设置 Cookies
             </summary>
             <remarks>支持多次调用。</remarks>
             <param name="cookieSource">Cookie 参数源对象</param>
@@ -2098,8 +2152,8 @@
             <summary>
                 创建 <see cref="T:HttpAgent.HttpDeclarativeBuilder" /> 构建器
             </summary>
-            <param name="method">调用方法</param>
-            <param name="args">调用方法的参数值数组</param>
+            <param name="method">被调用方法</param>
+            <param name="args">被调用方法的参数值数组</param>
             <returns>
                 <see cref="T:HttpAgent.HttpDeclarativeBuilder" />
             </returns>
@@ -2664,7 +2718,7 @@
                 <see cref="T:System.Collections.Generic.IDictionary`2" /> 拓展类
             </summary>
         </member>
-        <member name="M:HttpAgent.Core.Extensions.IDictionaryExtensions.AddOrUpdate``2(System.Collections.Generic.IDictionary{``0,System.Collections.Generic.List{``1}},System.Collections.Generic.IDictionary{``0,``1},System.Boolean)">
+        <member name="M:HttpAgent.Core.Extensions.IDictionaryExtensions.AddOrUpdate``2(System.Collections.Generic.IDictionary{``0,System.Collections.Generic.List{``1}},System.Collections.Generic.IDictionary{``0,``1},System.Boolean,System.Boolean)">
             <summary>
                 添加或更新
             </summary>
@@ -2677,6 +2731,7 @@
                 <see cref="T:System.Collections.Generic.IDictionary`2" />
             </param>
             <param name="allowDuplicates">是否允许重复添加。默认值为：<c>true</c>。</param>
+            <param name="addRange">是否采用 <c>AddRange</c> 方式添加存在的值。默认值为 <c>false</c>。</param>
         </member>
         <member name="M:HttpAgent.Core.Extensions.IDictionaryExtensions.AddOrUpdate``2(System.Collections.Generic.IDictionary{``0,``1},System.Collections.Generic.IDictionary{``0,``1})">
             <summary>
@@ -2921,9 +2976,32 @@
                 <see cref="T:System.Type" /> 拓展类
             </summary>
         </member>
+        <member name="M:HttpAgent.Core.Extensions.TypeExtensions.IsArrayOrCollection(System.Type,System.Type@)">
+            <summary>
+                检查类型是否是数组或集合类型
+            </summary>
+            <param name="type">
+                <see cref="T:System.Type" />
+            </param>
+            <param name="underlyingType">元素类型</param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.Core.Extensions.TypeExtensions.IsBasicType(System.Type)">
             <summary>
                 检查类型是否是基本类型
+            </summary>
+            <param name="type">
+                <see cref="T:System.Type" />
+            </param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Core.Extensions.TypeExtensions.IsBaseTypeOrEnumOrCollection(System.Type)">
+            <summary>
+                检查类型是否是基本类型或枚举类型或由它们组成的数组或集合类型
             </summary>
             <param name="type">
                 <see cref="T:System.Type" />
@@ -2996,6 +3074,21 @@
             </returns>
             <exception cref="T:System.InvalidOperationException"></exception>
         </member>
+        <member name="M:HttpAgent.Core.Extensions.TypeExtensions.CreatePropertySetter(System.Type,System.Reflection.PropertyInfo)">
+            <summary>
+                创建实例属性值设置器
+            </summary>
+            <param name="type">
+                <see cref="T:System.Type" />
+            </param>
+            <remarks>不支持 <c>struct</c> 类型设置属性值。</remarks>
+            <param name="propertyInfo">
+                <see cref="T:System.Reflection.PropertyInfo" />
+            </param>
+            <returns>
+                <see cref="T:System.Action`2" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.Core.Extensions.TypeExtensions.CreatePropertyGetter(System.Type,System.Reflection.PropertyInfo)">
             <summary>
                 创建实例属性值访问器
@@ -3010,19 +3103,33 @@
                 <see cref="T:System.Func`2" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Core.Extensions.TypeExtensions.CreatePropertySetter(System.Type,System.Reflection.PropertyInfo)">
+        <member name="T:HttpAgent.Core.Utilities.AliasAsUtility">
             <summary>
-                创建实例属性值设置器
+                提供别名获取实用方法
             </summary>
-            <param name="type">
-                <see cref="T:System.Type" />
-            </param>
-            <remarks>不支持 <c>struct</c> 类型设置属性值。</remarks>
-            <param name="propertyInfo">
+        </member>
+        <member name="M:HttpAgent.Core.Utilities.AliasAsUtility.GetPropertyName(System.Reflection.PropertyInfo,System.Boolean@)">
+            <summary>
+                获取属性名
+            </summary>
+            <param name="property">
                 <see cref="T:System.Reflection.PropertyInfo" />
             </param>
+            <param name="isDefined">是否定义特性</param>
             <returns>
-                <see cref="T:System.Action`2" />
+                <see cref="T:System.String" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Core.Utilities.AliasAsUtility.GetParameterName(System.Reflection.ParameterInfo,System.Boolean@)">
+            <summary>
+                获取参数名
+            </summary>
+            <param name="parameter">
+                <see cref="T:System.Reflection.ParameterInfo" />
+            </param>
+            <param name="isDefined">是否定义特性</param>
+            <returns>
+                <see cref="T:System.String" />
             </returns>
         </member>
         <member name="T:HttpAgent.Core.Utilities.NetworkUtility">
@@ -3252,22 +3359,22 @@
             <summary>
                 <inheritdoc cref="T:HttpAgent.HttpDeclarativeBuilder" />
             </summary>
-            <param name="method">调用方法</param>
-            <param name="args">调用方法的参数值数组</param>
+            <param name="method">被调用方法</param>
+            <param name="args">被调用方法的参数值数组</param>
         </member>
         <member name="P:HttpAgent.HttpDeclarativeBuilder.Method">
             <summary>
-                调用方法
+                被调用方法
             </summary>
         </member>
         <member name="P:HttpAgent.HttpDeclarativeBuilder.Args">
             <summary>
-                调用方法的参数值数组
+                被调用方法的参数值数组
             </summary>
         </member>
         <member name="P:HttpAgent.HttpDeclarativeBuilder.Parameters">
             <summary>
-                调用方法的参数字典
+                被调用方法的参数键值字典
             </summary>
         </member>
         <member name="M:HttpAgent.HttpDeclarativeBuilder.Build">
@@ -3843,10 +3950,11 @@
                 开始请求
             </summary>
         </member>
-        <member name="M:HttpAgent.DeclarativeManager.ExtractSpecialArguments">
+        <member name="M:HttpAgent.DeclarativeManager.ExtractSpecialArguments(System.Object[])">
             <summary>
                 解析特殊类型参数实例
             </summary>
+            <param name="args">被调用方法的参数值数组</param>
             <returns>
                 <see cref="T:System.Tuple`2" />
             </returns>
@@ -6447,8 +6555,8 @@
             <summary>
                 发送 HTTP 声明式请求
             </summary>
-            <param name="method">调用方法</param>
-            <param name="args">调用方法的参数值数组</param>
+            <param name="method">被调用方法</param>
+            <param name="args">被调用方法的参数值数组</param>
             <returns>
                 <see cref="T:System.Object" />
             </returns>
@@ -6457,8 +6565,8 @@
             <summary>
                 发送 HTTP 声明式请求
             </summary>
-            <param name="method">调用方法</param>
-            <param name="args">调用方法的参数值数组</param>
+            <param name="method">被调用方法</param>
+            <param name="args">被调用方法的参数值数组</param>
             <typeparam name="T">转换的目标类型</typeparam>
             <returns>
                 <typeparamref name="T" />
@@ -9647,6 +9755,22 @@
         <member name="P:HttpAgent.WebSocketReceiveResult`1.Result">
             <summary>
                 <typeparamref name="TResult" />
+            </summary>
+        </member>
+        <member name="T:System.AliasAsAttribute">
+            <summary>
+                设置别名特性
+            </summary>
+        </member>
+        <member name="M:System.AliasAsAttribute.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:System.AliasAsAttribute" />
+            </summary>
+            <param name="aliasAs">别名</param>
+        </member>
+        <member name="P:System.AliasAsAttribute.AliasAs">
+            <summary>
+                别名
             </summary>
         </member>
         <member name="T:System.Debugging">

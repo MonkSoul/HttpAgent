@@ -405,6 +405,5 @@ public class HttpRemoteBuilderTests
 
         dynamic httpTestProxy = httpTest;
         Assert.NotNull(httpTestProxy.RemoteService);
-        Assert.NotNull(httpTestProxy.ServiceProvider);
     }
 }

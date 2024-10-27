@@ -22,8 +22,8 @@ public sealed class HttpDeclarativeBuilder
     /// <summary>
     ///     <inheritdoc cref="HttpDeclarativeBuilder" />
     /// </summary>
-    /// <param name="method">调用方法</param>
-    /// <param name="args">调用方法的参数值数组</param>
+    /// <param name="method">被调用方法</param>
+    /// <param name="args">被调用方法的参数值数组</param>
     internal HttpDeclarativeBuilder(MethodInfo method, object?[] args)
     {
         // 空检查
@@ -32,21 +32,22 @@ public sealed class HttpDeclarativeBuilder
         Method = method;
         Args = args;
 
+        // 初始化被调用方法的参数键值字典
         Parameters = method.GetParameters().Select((p, i) => new { p, v = args[i] }).ToDictionary(u => u.p, u => u.v);
     }
 
     /// <summary>
-    ///     调用方法
+    ///     被调用方法
     /// </summary>
     public MethodInfo Method { get; }
 
     /// <summary>
-    ///     调用方法的参数值数组
+    ///     被调用方法的参数值数组
     /// </summary>
     public object?[] Args { get; }
 
     /// <summary>
-    ///     调用方法的参数字典
+    ///     被调用方法的参数键值字典
     /// </summary>
     internal Dictionary<ParameterInfo, object?> Parameters { get; }
 
@@ -59,7 +60,7 @@ public sealed class HttpDeclarativeBuilder
     /// <exception cref="InvalidOperationException"></exception>
     internal HttpRequestBuilder Build()
     {
-        // 检查调用方法是否贴有 [HttpMethod] 特性
+        // 检查被调用方法是否贴有 [HttpMethod] 特性
         if (!Method.IsDefined(typeof(HttpMethodAttribute), true))
         {
             throw new InvalidOperationException($"Method {Method.Name} does not have a HttpMethodAttribute.");
@@ -100,7 +101,7 @@ public sealed class HttpDeclarativeBuilder
         // 解析查询参数
         ExtractQueryParameters(httpRequestBuilder);
 
-        // TODO: 查询参数，路径参数，Body 参数
+        // TODO: 路径参数，Body 参数
 
         // TODO：处理请求头（移除请求头）
 
@@ -122,44 +123,38 @@ public sealed class HttpDeclarativeBuilder
             !_specialArgumentTypes.Contains(u.Key.ParameterType) && u.Key.IsDefined(typeof(QueryAttribute))).ToArray();
 
         // 空检查
-        if (queryParameters.Length <= 0)
+        if (queryParameters.Length == 0)
         {
             return;
         }
 
         foreach (var (parameter, value) in queryParameters)
         {
-            var parameterType = parameter.ParameterType;
-
             // 获取 QueryAttribute 实例
             var queryAttribute = parameter.GetCustomAttribute<QueryAttribute>()!;
 
-            // 检查参数类型是否是基本类型或枚举类型
-            if (parameterType.IsBasicType() || parameterType.IsEnum ||
-                (parameterType.IsArray && (parameterType.GetElementType()!.IsBasicType() ||
-                                           parameterType.GetElementType()!.IsEnum)))
+            // 获取参数名
+            var parameterName = AliasAsUtility.GetParameterName(parameter, out var aliasAsDefined);
+            if (!aliasAsDefined)
             {
-                httpRequestBuilder.WithQueryParameters(
-                    new Dictionary<string, object?>
-                    {
-                        {
-                            string.IsNullOrWhiteSpace(queryAttribute.AliasAs)
-                                ? parameter.Name!
-                                : queryAttribute.AliasAs,
-                            value
-                        }
-                    }, queryAttribute.Escape);
+                parameterName = string.IsNullOrWhiteSpace(queryAttribute.AliasAs)
+                    ? parameterName
+                    : queryAttribute.AliasAs.Trim();
+            }
+
+            // 检查参数类型是否是基本类型或枚举类型或由它们组成的数组或集合类型
+            if (parameter.ParameterType.IsBaseTypeOrEnumOrCollection())
+            {
+                httpRequestBuilder.WithQueryParameter(parameterName, value, queryAttribute.Escape);
 
                 continue;
             }
 
             // 空检查
-            if (value is null)
+            if (value is not null)
             {
-                continue;
+                httpRequestBuilder.WithQueryParameters(value, queryAttribute.Prefix, queryAttribute.Escape);
             }
-
-            httpRequestBuilder.WithQueryParameters(value, queryAttribute.Prefix, queryAttribute.Escape);
         }
     }
 }

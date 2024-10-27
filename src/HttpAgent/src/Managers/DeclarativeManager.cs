@@ -47,10 +47,10 @@ internal sealed class DeclarativeManager
     /// </summary>
     internal object? Start()
     {
-        // 检查调用方法是否需要被代理
-        var (completionOption, cancellationToken) = ExtractSpecialArguments();
+        // 解析特殊类型参数实例
+        var (completionOption, cancellationToken) = ExtractSpecialArguments(_httpDeclarativeBuilder.Args);
 
-        // 获取调用方法返回值类型
+        // 获取被调用方法返回值类型
         var method = _httpDeclarativeBuilder.Method;
         var returnType = method.ReturnType == typeof(void) ? typeof(DoesNoReceiveContent) : method.ReturnType;
 
@@ -63,8 +63,8 @@ internal sealed class DeclarativeManager
     /// </summary>
     internal async Task<T?> StartAsync<T>()
     {
-        // 检查调用方法是否需要被代理
-        var (completionOption, cancellationToken) = ExtractSpecialArguments();
+        // 解析特殊类型参数实例
+        var (completionOption, cancellationToken) = ExtractSpecialArguments(_httpDeclarativeBuilder.Args);
 
         // 发送 HTTP 远程请求
         return await _httpRemoteService.SendAsAsync<T>(RequestBuilder, completionOption, cancellationToken);
@@ -73,14 +73,13 @@ internal sealed class DeclarativeManager
     /// <summary>
     ///     解析特殊类型参数实例
     /// </summary>
+    /// <param name="args">被调用方法的参数值数组</param>
     /// <returns>
     ///     <see cref="Tuple{T1, T2}" />
     /// </returns>
-    internal (HttpCompletionOption CompletionOption, CancellationToken CancellationToken)
-        ExtractSpecialArguments()
+    internal static (HttpCompletionOption CompletionOption, CancellationToken CancellationToken)
+        ExtractSpecialArguments(object?[] args)
     {
-        var args = _httpDeclarativeBuilder.Args;
-
         // 尝试解析 HttpCompletionOption 参数
         var completionOption = args.FirstOrDefault(u => u is HttpCompletionOption) as HttpCompletionOption?;
 

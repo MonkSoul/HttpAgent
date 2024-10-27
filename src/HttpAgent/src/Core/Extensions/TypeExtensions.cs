@@ -10,6 +10,46 @@ namespace HttpAgent.Core.Extensions;
 internal static class TypeExtensions
 {
     /// <summary>
+    ///     检查类型是否是数组或集合类型
+    /// </summary>
+    /// <param name="type">
+    ///     <see cref="Type" />
+    /// </param>
+    /// <param name="underlyingType">元素类型</param>
+    /// <returns>
+    ///     <see cref="bool" />
+    /// </returns>
+    internal static bool IsArrayOrCollection(this Type type, [NotNullWhen(true)] out Type? underlyingType)
+    {
+        underlyingType = null;
+
+        // 检查类型是否是数组类型
+        if (type.IsArray)
+        {
+            underlyingType = type.GetElementType()!;
+            return true;
+        }
+
+        // 如果不是泛型类型
+        if (!type.IsGenericType)
+        {
+            return false;
+        }
+
+        // 获取泛型参数
+        var genericArguments = type.GetGenericArguments();
+
+        // 检查类型是否是为单个泛型参数类型且实现了 IEnumerable<> 接口
+        if (genericArguments.Length != 1 || !typeof(IEnumerable<>).IsDefinitionEquals(type))
+        {
+            return false;
+        }
+
+        underlyingType = genericArguments[0];
+        return true;
+    }
+
+    /// <summary>
     ///     检查类型是否是基本类型
     /// </summary>
     /// <param name="type">
@@ -43,6 +83,19 @@ internal static class TypeExtensions
             type = underlyingType;
         }
     }
+
+    /// <summary>
+    ///     检查类型是否是基本类型或枚举类型或由它们组成的数组或集合类型
+    /// </summary>
+    /// <param name="type">
+    ///     <see cref="Type" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="bool" />
+    /// </returns>
+    internal static bool IsBaseTypeOrEnumOrCollection(this Type type) =>
+        type.IsBasicType() || type.IsEnum || (type.IsArrayOrCollection(out var underlyingType) &&
+                                              underlyingType.IsBaseTypeOrEnumOrCollection());
 
     /// <summary>
     ///     检查类型和指定类型定义是否相等
@@ -226,61 +279,6 @@ internal static class TypeExtensions
     }
 
     /// <summary>
-    ///     创建实例属性值访问器
-    /// </summary>
-    /// <param name="type">
-    ///     <see cref="Type" />
-    /// </param>
-    /// <param name="propertyInfo">
-    ///     <see cref="PropertyInfo" />
-    /// </param>
-    /// <returns>
-    ///     <see cref="Func{T1, T2}" />
-    /// </returns>
-    internal static Func<object, object?> CreatePropertyGetter(this Type type, PropertyInfo propertyInfo)
-    {
-        // 空检查
-        ArgumentNullException.ThrowIfNull(propertyInfo);
-
-        // 创建一个新的动态方法，并为其命名，命名格式为类型全名_获取_属性名
-        var dynamicMethod = new DynamicMethod(
-            $"{type.FullName}_Get_{propertyInfo.Name}",
-            typeof(object),
-            [typeof(object)],
-            typeof(TypeExtensions).Module,
-            true
-        );
-
-        // 获取动态方法的 IL 生成器
-        var ilGenerator = dynamicMethod.GetILGenerator();
-
-        // 获取属性的获取方法，并允许非公开访问
-        var getMethod = propertyInfo.GetGetMethod(true);
-
-        // 空检查
-        ArgumentNullException.ThrowIfNull(getMethod);
-
-        // 将目标对象加载到堆栈上
-        ilGenerator.Emit(OpCodes.Ldarg_0);
-        ilGenerator.Emit(type.IsValueType ? OpCodes.Unbox : OpCodes.Castclass, type);
-
-        // 调用获取方法
-        ilGenerator.EmitCall(OpCodes.Callvirt, getMethod, null);
-
-        // 如果属性类型为值类型，则装箱为 object 类型
-        if (propertyInfo.PropertyType.IsValueType)
-        {
-            ilGenerator.Emit(OpCodes.Box, propertyInfo.PropertyType);
-        }
-
-        // 从动态方法返回
-        ilGenerator.Emit(OpCodes.Ret);
-
-        // 创建一个委托并将其转换为适当的 Func 类型
-        return (Func<object, object?>)dynamicMethod.CreateDelegate(typeof(Func<object, object?>));
-    }
-
-    /// <summary>
     ///     创建实例属性值设置器
     /// </summary>
     /// <param name="type">
@@ -337,5 +335,60 @@ internal static class TypeExtensions
 
         // 创建一个委托并将其转换为适当的 Action 类型
         return (Action<object, object?>)setterMethod.CreateDelegate(typeof(Action<object, object?>));
+    }
+
+    /// <summary>
+    ///     创建实例属性值访问器
+    /// </summary>
+    /// <param name="type">
+    ///     <see cref="Type" />
+    /// </param>
+    /// <param name="propertyInfo">
+    ///     <see cref="PropertyInfo" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="Func{T1, T2}" />
+    /// </returns>
+    internal static Func<object, object?> CreatePropertyGetter(this Type type, PropertyInfo propertyInfo)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(propertyInfo);
+
+        // 创建一个新的动态方法，并为其命名，命名格式为类型全名_获取_属性名
+        var dynamicMethod = new DynamicMethod(
+            $"{type.FullName}_Get_{propertyInfo.Name}",
+            typeof(object),
+            [typeof(object)],
+            typeof(TypeExtensions).Module,
+            true
+        );
+
+        // 获取动态方法的 IL 生成器
+        var ilGenerator = dynamicMethod.GetILGenerator();
+
+        // 获取属性的获取方法，并允许非公开访问
+        var getMethod = propertyInfo.GetGetMethod(true);
+
+        // 空检查
+        ArgumentNullException.ThrowIfNull(getMethod);
+
+        // 将目标对象加载到堆栈上
+        ilGenerator.Emit(OpCodes.Ldarg_0);
+        ilGenerator.Emit(type.IsValueType ? OpCodes.Unbox : OpCodes.Castclass, type);
+
+        // 调用获取方法
+        ilGenerator.EmitCall(OpCodes.Callvirt, getMethod, null);
+
+        // 如果属性类型为值类型，则装箱为 object 类型
+        if (propertyInfo.PropertyType.IsValueType)
+        {
+            ilGenerator.Emit(OpCodes.Box, propertyInfo.PropertyType);
+        }
+
+        // 从动态方法返回
+        ilGenerator.Emit(OpCodes.Ret);
+
+        // 创建一个委托并将其转换为适当的 Func 类型
+        return (Func<object, object?>)dynamicMethod.CreateDelegate(typeof(Func<object, object?>));
     }
 }
