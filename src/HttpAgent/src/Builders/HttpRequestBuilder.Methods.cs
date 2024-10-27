@@ -952,7 +952,7 @@ public sealed partial class HttpRequestBuilder
     /// <summary>
     ///     设置是否如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常。
     /// </summary>
-    /// <param name="enabled">是否启用如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常</param>
+    /// <param name="enabled">是否启用</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
