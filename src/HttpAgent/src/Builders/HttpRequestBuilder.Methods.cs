@@ -1037,7 +1037,7 @@ public sealed partial class HttpRequestBuilder
     /// <summary>
     ///     设置禁用 HTTP 缓存
     /// </summary>
-    /// <param name="disabled">布尔值</param>
+    /// <param name="disabled">是否禁用</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
@@ -1183,6 +1183,20 @@ public sealed partial class HttpRequestBuilder
     public HttpRequestBuilder Profiler()
     {
         ProfilerEnabled = true;
+
+        return this;
+    }
+
+    /// <summary>
+    ///     设置是否启用请求分析工具
+    /// </summary>
+    /// <param name="enabled">是否启用</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder Profiler(bool enabled)
+    {
+        ProfilerEnabled = enabled;
 
         return this;
     }

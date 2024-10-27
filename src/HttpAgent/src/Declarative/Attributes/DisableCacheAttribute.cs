@@ -21,11 +21,11 @@ public sealed class DisableCacheAttribute : Attribute
     /// <summary>
     ///     <inheritdoc cref="DisableCacheAttribute" />
     /// </summary>
-    /// <param name="disabled">是否禁用 HTTP 缓存</param>
+    /// <param name="disabled">是否禁用</param>
     public DisableCacheAttribute(bool disabled) => Disabled = disabled;
 
     /// <summary>
-    ///     是否禁用 HTTP 缓存
+    ///     是否禁用
     /// </summary>
     public bool Disabled { get; set; }
 }

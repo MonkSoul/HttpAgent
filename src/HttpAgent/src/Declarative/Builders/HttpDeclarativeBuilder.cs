@@ -154,7 +154,7 @@ public sealed class HttpDeclarativeBuilder
             return;
         }
 
-        httpRequestBuilder.Profiler();
+        httpRequestBuilder.Profiler(Method.GetCustomAttribute<ProfilerAttribute>(true)!.Enabled);
     }
 
     /// <summary>

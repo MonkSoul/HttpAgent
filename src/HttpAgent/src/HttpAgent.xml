@@ -1517,7 +1517,7 @@
             <summary>
                 设置禁用 HTTP 缓存
             </summary>
-            <param name="disabled">布尔值</param>
+            <param name="disabled">是否禁用</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -1593,6 +1593,15 @@
             <summary>
                 设置是否启用请求分析工具
             </summary>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.Profiler(System.Boolean)">
+            <summary>
+                设置是否启用请求分析工具
+            </summary>
+            <param name="enabled">是否启用</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -3293,11 +3302,11 @@
             <summary>
                 <inheritdoc cref="T:HttpAgent.DisableCacheAttribute" />
             </summary>
-            <param name="disabled">是否禁用 HTTP 缓存</param>
+            <param name="disabled">是否禁用</param>
         </member>
         <member name="P:HttpAgent.DisableCacheAttribute.Disabled">
             <summary>
-                是否禁用 HTTP 缓存
+                是否禁用
             </summary>
         </member>
         <member name="T:HttpAgent.EnsureSuccessStatusCodeAttribute">
@@ -3314,11 +3323,11 @@
             <summary>
                 <inheritdoc cref="T:HttpAgent.EnsureSuccessStatusCodeAttribute" />
             </summary>
-            <param name="enabled">是否启用如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常</param>
+            <param name="enabled">是否启用</param>
         </member>
         <member name="P:HttpAgent.EnsureSuccessStatusCodeAttribute.Enabled">
             <summary>
-                是否启用如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常
+                是否启用
             </summary>
         </member>
         <member name="T:HttpAgent.HeadersAttribute">
@@ -3509,6 +3518,22 @@
         <member name="T:HttpAgent.ProfilerAttribute">
             <summary>
                 启用请求分析工具特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.ProfilerAttribute.#ctor">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.ProfilerAttribute" />
+            </summary>
+        </member>
+        <member name="M:HttpAgent.ProfilerAttribute.#ctor(System.Boolean)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.ProfilerAttribute" />
+            </summary>
+            <param name="enabled">是否启用</param>
+        </member>
+        <member name="P:HttpAgent.ProfilerAttribute.Enabled">
+            <summary>
+                是否启用
             </summary>
         </member>
         <member name="T:HttpAgent.QueryAttribute">

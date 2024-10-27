@@ -21,11 +21,11 @@ public sealed class EnsureSuccessStatusCodeAttribute : Attribute
     /// <summary>
     ///     <inheritdoc cref="EnsureSuccessStatusCodeAttribute" />
     /// </summary>
-    /// <param name="enabled">是否启用如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常</param>
+    /// <param name="enabled">是否启用</param>
     public EnsureSuccessStatusCodeAttribute(bool enabled) => Enabled = enabled;
 
     /// <summary>
-    ///     是否启用如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常
+    ///     是否启用
     /// </summary>
     public bool Enabled { get; set; }
 }
