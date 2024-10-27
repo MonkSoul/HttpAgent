@@ -11,7 +11,7 @@ namespace HttpAgent;
 public sealed class HttpDeclarativeBuilder
 {
     /// <summary>
-    ///     <see cref="IHttpDeclarativeExtractor" /> 提取器集合
+    ///     HTTP 声明式 <see cref="IHttpDeclarativeExtractor" /> 提取器集合
     /// </summary>
     internal static readonly Dictionary<Type, IHttpDeclarativeExtractor> _extractors = new()
     {

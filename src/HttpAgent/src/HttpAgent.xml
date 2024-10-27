@@ -3627,7 +3627,7 @@
         </member>
         <member name="F:HttpAgent.HttpDeclarativeBuilder._extractors">
             <summary>
-                <see cref="T:HttpAgent.IHttpDeclarativeExtractor" /> 提取器集合
+                HTTP 声明式 <see cref="T:HttpAgent.IHttpDeclarativeExtractor" /> 提取器集合
             </summary>
         </member>
         <member name="F:HttpAgent.HttpDeclarativeBuilder._hasLoadedExtractors">
