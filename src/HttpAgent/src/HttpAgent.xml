@@ -2900,7 +2900,7 @@
                 <see cref="T:System.Boolean" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Core.Extensions.MethodInfoExtensions.GetDefinedCustomAttributes``1(System.Reflection.MethodInfo,System.Boolean)">
+        <member name="M:HttpAgent.Core.Extensions.MethodInfoExtensions.GetDefinedCustomAttributes``1(System.Reflection.MethodInfo,System.Boolean,System.Boolean)">
             <summary>
                 获取指定特性的所有实例
             </summary>
@@ -2908,6 +2908,7 @@
                 <see cref="T:System.Reflection.MethodInfo" />
             </param>
             <param name="inherit">是否在基类中搜索</param>
+            <param name="methodSearchFirst">是否优先查找 <see cref="T:System.Reflection.MethodInfo"/> 的特性。默认值为：<c>true</c>。</param>
             <typeparam name="TAttribute">
                 <see cref="T:System.Attribute" />
             </typeparam>
@@ -3382,59 +3383,59 @@
                 是否启用
             </summary>
         </member>
-        <member name="T:HttpAgent.HeadersAttribute">
+        <member name="T:HttpAgent.HeaderAttribute">
             <summary>
                 请求标头特性
             </summary>
-            <remarks>支持指定多次。</remarks>
+            <remarks>支持多次指定。</remarks>
         </member>
-        <member name="F:HttpAgent.HeadersAttribute._values">
+        <member name="F:HttpAgent.HeaderAttribute._value">
             <summary>
-                <see cref="P:HttpAgent.HeadersAttribute.Values" /> 私有字段
+                <see cref="P:HttpAgent.HeaderAttribute.Value" /> 私有字段
             </summary>
         </member>
-        <member name="M:HttpAgent.HeadersAttribute.#ctor">
+        <member name="M:HttpAgent.HeaderAttribute.#ctor">
             <summary>
-                <inheritdoc cref="T:HttpAgent.HeadersAttribute" />
+                <inheritdoc cref="T:HttpAgent.HeaderAttribute" />
             </summary>
             <remarks>特性作用于参数时有效。</remarks>
         </member>
-        <member name="M:HttpAgent.HeadersAttribute.#ctor(System.String)">
+        <member name="M:HttpAgent.HeaderAttribute.#ctor(System.String)">
             <summary>
-                <inheritdoc cref="T:HttpAgent.HeadersAttribute" />
+                <inheritdoc cref="T:HttpAgent.HeaderAttribute" />
             </summary>
             <remarks>当特性作用于方法或接口时，则表示移除指定标头操作。</remarks>
             <param name="name">标头</param>
         </member>
-        <member name="M:HttpAgent.HeadersAttribute.#ctor(System.String,System.Object)">
+        <member name="M:HttpAgent.HeaderAttribute.#ctor(System.String,System.Object)">
             <summary>
-                <inheritdoc cref="T:HttpAgent.HeadersAttribute" />
+                <inheritdoc cref="T:HttpAgent.HeaderAttribute" />
             </summary>
             <param name="name">标头</param>
             <param name="value">标头的值</param>
         </member>
-        <member name="P:HttpAgent.HeadersAttribute.Name">
+        <member name="P:HttpAgent.HeaderAttribute.Name">
             <summary>
                 标头
             </summary>
         </member>
-        <member name="P:HttpAgent.HeadersAttribute.Values">
+        <member name="P:HttpAgent.HeaderAttribute.Value">
             <summary>
                 标头的值
             </summary>
         </member>
-        <member name="P:HttpAgent.HeadersAttribute.HasSetValues">
+        <member name="P:HttpAgent.HeaderAttribute.HasSetValue">
             <summary>
                 是否设置了标头的值
             </summary>
         </member>
-        <member name="P:HttpAgent.HeadersAttribute.AliasAs">
+        <member name="P:HttpAgent.HeaderAttribute.AliasAs">
             <summary>
                 别名
             </summary>
             <remarks>特性用于参数时有效。</remarks>
         </member>
-        <member name="P:HttpAgent.HeadersAttribute.Escape">
+        <member name="P:HttpAgent.HeaderAttribute.Escape">
             <summary>
                 是否转义
             </summary>
@@ -3571,6 +3572,28 @@
                 <inheritdoc cref="T:HttpAgent.TraceAttribute" />
             </summary>
             <param name="requestUri">请求地址</param>
+        </member>
+        <member name="T:HttpAgent.PathAttribute">
+            <summary>
+                路径参数特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.PathAttribute.#ctor(System.String,System.Object)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.PathAttribute" />
+            </summary>
+            <param name="name">参数名称</param>
+            <param name="value">参数值</param>
+        </member>
+        <member name="P:HttpAgent.PathAttribute.Name">
+            <summary>
+                参数名称
+            </summary>
+        </member>
+        <member name="P:HttpAgent.PathAttribute.Value">
+            <summary>
+                参数值
+            </summary>
         </member>
         <member name="T:HttpAgent.ProfilerAttribute">
             <summary>
@@ -3731,12 +3754,12 @@
         <member name="M:HttpAgent.EnsureSuccessStatusCodeDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
             <inheritdoc />
         </member>
-        <member name="T:HttpAgent.HeadersDeclarativeExtractor">
+        <member name="T:HttpAgent.HeaderDeclarativeExtractor">
             <summary>
-                <see cref="T:HttpAgent.HeadersAttribute" /> 特性提取器
+                <see cref="T:HttpAgent.HeaderAttribute" /> 特性提取器
             </summary>
         </member>
-        <member name="M:HttpAgent.HeadersDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+        <member name="M:HttpAgent.HeaderDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
             <inheritdoc />
         </member>
         <member name="T:HttpAgent.HttpClientNameDeclarativeExtractor">

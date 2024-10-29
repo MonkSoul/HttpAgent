@@ -58,43 +58,64 @@ public class DeclarativeAttributeTests
     }
 
     [Fact]
-    public void HeadersAttribute_Invalid_Parameters()
+    public void PathAttribute_Invalid_Parameters()
     {
-        Assert.Throws<ArgumentNullException>(() => new HeadersAttribute(null!));
-        Assert.Throws<ArgumentException>(() => new HeadersAttribute(string.Empty));
-        Assert.Throws<ArgumentException>(() => new HeadersAttribute(" "));
-
-        Assert.Throws<ArgumentNullException>(() => new HeadersAttribute(null!, null));
-        Assert.Throws<ArgumentException>(() => new HeadersAttribute(string.Empty, null));
-        Assert.Throws<ArgumentException>(() => new HeadersAttribute(" ", null));
+        Assert.Throws<ArgumentNullException>(() => new PathAttribute(null!, null));
+        Assert.Throws<ArgumentException>(() => new PathAttribute(string.Empty, null));
+        Assert.Throws<ArgumentException>(() => new PathAttribute(" ", null));
     }
 
     [Fact]
-    public void HeadersAttribute_ReturnOK()
+    public void PathAttribute_ReturnOK()
     {
-        var attributeUsage = typeof(HeadersAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        var attributeUsage = typeof(PathAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface, attributeUsage.ValidOn);
+        Assert.True(attributeUsage.AllowMultiple);
+
+        var attribute = new PathAttribute("name", "furion");
+        Assert.Equal("name", attribute.Name);
+        Assert.Equal("furion", attribute.Value);
+    }
+
+    [Fact]
+    public void HeaderAttribute_Invalid_Parameters()
+    {
+        Assert.Throws<ArgumentNullException>(() => new HeaderAttribute(null!));
+        Assert.Throws<ArgumentException>(() => new HeaderAttribute(string.Empty));
+        Assert.Throws<ArgumentException>(() => new HeaderAttribute(" "));
+
+        Assert.Throws<ArgumentNullException>(() => new HeaderAttribute(null!, null));
+        Assert.Throws<ArgumentException>(() => new HeaderAttribute(string.Empty, null));
+        Assert.Throws<ArgumentException>(() => new HeaderAttribute(" ", null));
+    }
+
+    [Fact]
+    public void HeaderAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(HeaderAttribute).GetCustomAttribute<AttributeUsageAttribute>();
         Assert.NotNull(attributeUsage);
         Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface | AttributeTargets.Parameter,
             attributeUsage.ValidOn);
         Assert.True(attributeUsage.AllowMultiple);
 
-        var attribute = new HeadersAttribute();
+        var attribute = new HeaderAttribute();
         Assert.Null(attribute.Name);
-        Assert.Null(attribute.Values);
+        Assert.Null(attribute.Value);
         Assert.Null(attribute.AliasAs);
-        Assert.False(attribute.HasSetValues);
+        Assert.False(attribute.HasSetValue);
 
-        var attribute2 = new HeadersAttribute("Set-Cookie");
+        var attribute2 = new HeaderAttribute("Set-Cookie");
         Assert.Equal("Set-Cookie", attribute2.Name);
-        Assert.Null(attribute2.Values);
+        Assert.Null(attribute2.Value);
         Assert.Null(attribute2.AliasAs);
-        Assert.False(attribute2.HasSetValues);
+        Assert.False(attribute2.HasSetValue);
 
-        var attribute3 = new HeadersAttribute("Set-Cookie", null);
+        var attribute3 = new HeaderAttribute("Set-Cookie", null);
         Assert.Equal("Set-Cookie", attribute3.Name);
-        Assert.Null(attribute3.Values);
+        Assert.Null(attribute3.Value);
         Assert.Null(attribute3.AliasAs);
-        Assert.True(attribute3.HasSetValues);
+        Assert.True(attribute3.HasSetValue);
         Assert.False(attribute3.Escape);
     }
 

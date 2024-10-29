@@ -12,6 +12,24 @@ internal sealed class PathDeclarativeExtractor : IHttpDeclarativeExtractor
     /// <inheritdoc />
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
+        /* 情况一：当特性作用于方法或接口时 */
+
+        // 获取 PathAttribute 特性集合
+        var pathAttributes = context.Method.GetDefinedCustomAttributes<PathAttribute>(true, false)?.ToArray();
+
+        // 空检查
+        if (pathAttributes is { Length: > 0 })
+        {
+            // 遍历所有 [Path] 特性并添加到 HttpRequestBuilder 中
+            foreach (var pathAttribute in pathAttributes)
+            {
+                // 设置路径参数
+                httpRequestBuilder.WithPathParameter(pathAttribute.Name, pathAttribute.Value);
+            }
+        }
+
+        /* 情况二：将所有非特殊参数添加到路径参数中 */
+
         // 查找所有路径参数
         var pathParameters = context.Parameters
             .Where(u => HttpDeclarativeExtractorContext.FilterSpecialParameter(u.Key)).ToArray();

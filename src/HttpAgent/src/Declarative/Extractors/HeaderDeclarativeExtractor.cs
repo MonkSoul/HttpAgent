@@ -5,34 +5,34 @@
 namespace HttpAgent;
 
 /// <summary>
-///     <see cref="HeadersAttribute" /> 特性提取器
+///     <see cref="HeaderAttribute" /> 特性提取器
 /// </summary>
-internal sealed class HeadersDeclarativeExtractor : IHttpDeclarativeExtractor
+internal sealed class HeaderDeclarativeExtractor : IHttpDeclarativeExtractor
 {
     /// <inheritdoc />
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
         /* 情况一：当特性作用于方法或接口时 */
 
-        // 获取 HeadersAttribute 特性集合
-        var headersAttributes = context.Method.GetDefinedCustomAttributes<HeadersAttribute>(true)?.ToArray();
+        // 获取 HeaderAttribute 特性集合
+        var headerAttributes = context.Method.GetDefinedCustomAttributes<HeaderAttribute>(true, false)?.ToArray();
 
         // 空检查
-        if (headersAttributes is { Length: > 0 })
+        if (headerAttributes is { Length: > 0 })
         {
-            // 遍历所有 [Headers] 特性并添加到 HttpRequestBuilder 中
-            foreach (var headersAttribute in headersAttributes)
+            // 遍历所有 [Header] 特性并添加到 HttpRequestBuilder 中
+            foreach (var headerAttribute in headerAttributes)
             {
                 // 获取标头
-                var headerName = headersAttribute.Name;
+                var headerName = headerAttribute.Name;
 
                 // 空检查
                 ArgumentException.ThrowIfNullOrEmpty(headerName);
 
                 // 添加请求标头
-                if (headersAttribute.HasSetValues)
+                if (headerAttribute.HasSetValue)
                 {
-                    httpRequestBuilder.WithHeader(headerName, headersAttribute.Values, headersAttribute.Escape);
+                    httpRequestBuilder.WithHeader(headerName, headerAttribute.Value, headerAttribute.Escape);
                 }
                 // 移除请求标头
                 else
@@ -44,10 +44,10 @@ internal sealed class HeadersDeclarativeExtractor : IHttpDeclarativeExtractor
 
         /* 情况二：当特性作用于参数时 */
 
-        // 查找所有贴有 [Headers] 特性的参数
+        // 查找所有贴有 [Header] 特性的参数
         var headersParameters = context.Parameters.Where(u =>
                 HttpDeclarativeExtractorContext.FilterSpecialParameter(u.Key) &&
-                u.Key.IsDefined(typeof(HeadersAttribute), true))
+                u.Key.IsDefined(typeof(HeaderAttribute), true))
             .ToArray();
 
         // 空检查
@@ -56,28 +56,28 @@ internal sealed class HeadersDeclarativeExtractor : IHttpDeclarativeExtractor
             return;
         }
 
-        // 遍历所有贴有 [Headers] 特性的参数
+        // 遍历所有贴有 [Header] 特性的参数
         foreach (var (parameter, value) in headersParameters)
         {
-            // 获取 HeadersAttribute 特性集合
-            var parameterHeadersAttributes = parameter.GetCustomAttributes<HeadersAttribute>(true);
+            // 获取 HeaderAttribute 特性集合
+            var parameterHeaderAttributes = parameter.GetCustomAttributes<HeaderAttribute>(true);
 
             // 获取参数名
             var parameterName = AliasAsUtility.GetParameterName(parameter, out var aliasAsDefined);
 
-            // 遍历所有 [Headers] 特性并添加到 HttpRequestBuilder 中
-            foreach (var headersAttribute in parameterHeadersAttributes)
+            // 遍历所有 [Header] 特性并添加到 HttpRequestBuilder 中
+            foreach (var headerAttribute in parameterHeaderAttributes)
             {
                 // 检查参数是否贴了 [AliasAs] 特性
                 if (!aliasAsDefined)
                 {
-                    parameterName = string.IsNullOrWhiteSpace(headersAttribute.AliasAs)
+                    parameterName = string.IsNullOrWhiteSpace(headerAttribute.AliasAs)
                         ? parameterName
-                        : headersAttribute.AliasAs.Trim();
+                        : headerAttribute.AliasAs.Trim();
                 }
 
                 // 添加请求标头
-                httpRequestBuilder.WithHeader(parameterName, value ?? headersAttribute.Values, headersAttribute.Escape);
+                httpRequestBuilder.WithHeader(parameterName, value ?? headerAttribute.Value, headerAttribute.Escape);
             }
         }
     }

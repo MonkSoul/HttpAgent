@@ -24,7 +24,7 @@ public sealed class HttpDeclarativeBuilder
         { typeof(TimeoutCacheDeclarativeExtractor), new TimeoutCacheDeclarativeExtractor() },
         { typeof(QueryDeclarativeExtractor), new QueryDeclarativeExtractor() },
         { typeof(PathDeclarativeExtractor), new PathDeclarativeExtractor() },
-        { typeof(HeadersDeclarativeExtractor), new HeadersDeclarativeExtractor() },
+        { typeof(HeaderDeclarativeExtractor), new HeaderDeclarativeExtractor() },
         { typeof(BodyDeclarativeExtractor), new BodyDeclarativeExtractor() },
         { typeof(MultipartBodyDeclarativeExtractor), new MultipartBodyDeclarativeExtractor() },
         {

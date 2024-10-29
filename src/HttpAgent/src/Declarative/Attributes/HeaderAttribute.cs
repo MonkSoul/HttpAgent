@@ -7,30 +7,30 @@ namespace HttpAgent;
 /// <summary>
 ///     请求标头特性
 /// </summary>
-/// <remarks>支持指定多次。</remarks>
+/// <remarks>支持多次指定。</remarks>
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Interface | AttributeTargets.Parameter,
     AllowMultiple = true)]
-public sealed class HeadersAttribute : Attribute
+public sealed class HeaderAttribute : Attribute
 {
     /// <summary>
-    ///     <see cref="Values" /> 私有字段
+    ///     <see cref="Value" /> 私有字段
     /// </summary>
-    private object? _values;
+    private object? _value;
 
     /// <summary>
-    ///     <inheritdoc cref="HeadersAttribute" />
+    ///     <inheritdoc cref="HeaderAttribute" />
     /// </summary>
     /// <remarks>特性作用于参数时有效。</remarks>
-    public HeadersAttribute()
+    public HeaderAttribute()
     {
     }
 
     /// <summary>
-    ///     <inheritdoc cref="HeadersAttribute" />
+    ///     <inheritdoc cref="HeaderAttribute" />
     /// </summary>
     /// <remarks>当特性作用于方法或接口时，则表示移除指定标头操作。</remarks>
     /// <param name="name">标头</param>
-    public HeadersAttribute(string name)
+    public HeaderAttribute(string name)
     {
         // 空检查
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
@@ -39,13 +39,13 @@ public sealed class HeadersAttribute : Attribute
     }
 
     /// <summary>
-    ///     <inheritdoc cref="HeadersAttribute" />
+    ///     <inheritdoc cref="HeaderAttribute" />
     /// </summary>
     /// <param name="name">标头</param>
     /// <param name="value">标头的值</param>
-    public HeadersAttribute(string name, object? value)
+    public HeaderAttribute(string name, object? value)
         : this(name) =>
-        Values = value;
+        Value = value;
 
     /// <summary>
     ///     标头
@@ -55,27 +55,27 @@ public sealed class HeadersAttribute : Attribute
     /// <summary>
     ///     标头的值
     /// </summary>
-    public object? Values
+    public object? Value
     {
-        get => _values;
+        get => _value;
         set
         {
-            _values = value;
-            HasSetValues = true;
+            _value = value;
+            HasSetValue = true;
         }
     }
 
     /// <summary>
     ///     是否设置了标头的值
     /// </summary>
-    internal bool HasSetValues { get; private set; }
+    internal bool HasSetValue { get; private set; }
 
     /// <summary>
     ///     别名
     /// </summary>
     /// <remarks>特性用于参数时有效。</remarks>
     public string? AliasAs { get; set; }
-    
+
     /// <summary>
     ///     是否转义
     /// </summary>
