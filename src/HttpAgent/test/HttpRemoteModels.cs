@@ -201,3 +201,17 @@ public interface IHttpTest : IHttpDeclarative
 public interface IHttpTest2 : IHttpDeclarative;
 
 public class HttpTest : IHttpDeclarative;
+
+public interface IHttpDeclarativeTest : IHttpDeclarative
+{
+    [Get("https://furion.net/")]
+    Task<string> Method1();
+
+    [Get("https://furion.net/?name={name}")]
+    Task<string> Method2([Query] int id, string name);
+
+    [Get("https://furion.net/")]
+    Task<string> Special(int id, string name, Action<HttpRequestBuilder> builder,
+        Action<HttpMultipartFormDataBuilder> formBuilder, HttpCompletionOption completionOption,
+        CancellationToken cancellationToken);
+}

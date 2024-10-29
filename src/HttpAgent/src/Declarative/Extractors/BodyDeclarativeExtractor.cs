@@ -12,10 +12,10 @@ internal sealed class BodyDeclarativeExtractor : IHttpDeclarativeExtractor
     /// <inheritdoc />
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
-        // 查找所有贴有 [Body] 特性的参数
+        // 查找贴有 [Body] 特性的参数集合
         var bodyParameters = context.Parameters.Where(u =>
-            !HttpDeclarativeExtractorContext.SpecialArgumentTypes.Contains(u.Key.ParameterType) &&
-            u.Key.IsDefined(typeof(BodyAttribute))).ToArray();
+            HttpDeclarativeExtractorContext.FilterSpecialParameter(u.Key) &&
+            u.Key.IsDefined(typeof(BodyAttribute), true)).ToArray();
 
         // 空检查
         if (bodyParameters.Length == 0)
@@ -23,14 +23,17 @@ internal sealed class BodyDeclarativeExtractor : IHttpDeclarativeExtractor
             return;
         }
 
-        // 获取首个贴有 [Body] 特性的参数
-        var firstBodyParameter = bodyParameters.First();
+        // 获取单个贴有 [Body] 特性的参数
+        var (parameter, value) = bodyParameters.Single();
 
         // 获取 BodyAttribute 实例
-        var bodyAttribute = firstBodyParameter.Key.GetCustomAttribute<BodyAttribute>()!;
+        var bodyAttribute = parameter.GetCustomAttribute<BodyAttribute>(true);
+
+        // 空检查
+        ArgumentNullException.ThrowIfNull(bodyAttribute);
 
         // 设置原始请求内容
-        httpRequestBuilder.SetRawContent(firstBodyParameter.Value, bodyAttribute.ContentType);
+        httpRequestBuilder.SetRawContent(value, bodyAttribute.ContentType);
 
         // 设置内容编码
         if (!string.IsNullOrWhiteSpace(bodyAttribute.ContentEncoding))

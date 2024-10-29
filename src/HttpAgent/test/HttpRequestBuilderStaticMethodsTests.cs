@@ -453,12 +453,11 @@ public class HttpRequestBuilderStaticMethodsTests
     [Fact]
     public void Declarative_ReturnOK()
     {
-        var method = typeof(IHttpTest).GetMethod("GetContent")!;
-        var httpDeclarativeBuilder =
-            HttpRequestBuilder.Declarative(typeof(IHttpTest).GetMethod("GetContent")!, null!);
+        var method = typeof(IHttpTest).GetMethod(nameof(IHttpTest.GetContent))!;
+        var httpDeclarativeBuilder = HttpRequestBuilder.Declarative(method, []);
 
         Assert.NotNull(httpDeclarativeBuilder);
         Assert.Equal(method, httpDeclarativeBuilder.Method);
-        Assert.Null(httpDeclarativeBuilder.Args);
+        Assert.Equal([], httpDeclarativeBuilder.Args);
     }
 }

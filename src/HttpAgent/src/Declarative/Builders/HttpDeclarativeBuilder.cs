@@ -47,6 +47,7 @@ public sealed class HttpDeclarativeBuilder
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(method);
+        ArgumentNullException.ThrowIfNull(args);
 
         Method = method;
         Args = args;

@@ -25,7 +25,7 @@ public sealed class HttpRemoteBuilder
     internal IList<Func<IEnumerable<IHttpDeclarativeExtractor>>>? _httpDeclarativeExtractors;
 
     /// <summary>
-    ///     <see cref="IHttpDeclarative" /> 集合
+    ///     <see cref="IHttpDeclarative" /> 类型集合
     /// </summary>
     internal HashSet<Type>? _httpDeclarativeTypes;
 

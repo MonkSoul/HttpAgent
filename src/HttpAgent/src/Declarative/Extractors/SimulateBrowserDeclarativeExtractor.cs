@@ -13,11 +13,12 @@ internal sealed class SimulateBrowserDeclarativeExtractor : IHttpDeclarativeExtr
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
         // 检查方法或接口是否定义了 [SimulateBrowser] 特性
-        if (!context.Method.IsDefined(typeof(SimulateBrowserAttribute), true))
+        if (!context.Method.IsDefined<SimulateBrowserAttribute>(out _, true))
         {
             return;
         }
 
+        // 设置模拟浏览器环境
         httpRequestBuilder.SimulateBrowser();
     }
 }

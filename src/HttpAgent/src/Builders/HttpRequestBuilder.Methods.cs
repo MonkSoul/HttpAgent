@@ -634,23 +634,23 @@ public sealed partial class HttpRequestBuilder
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
-    public HttpRequestBuilder WithPathParameters(object parameterSource, string? prefix = null, bool escape = false,
+    public HttpRequestBuilder WithPathParameters(object? parameterSource, string? prefix = null, bool escape = false,
         CultureInfo? culture = null,
         IEqualityComparer<string>? comparer = null)
     {
-        // 空检查
-        ArgumentNullException.ThrowIfNull(parameterSource);
-
         // 检查是否设置了模板字符串前缀
         if (string.IsNullOrWhiteSpace(prefix))
         {
+            // 空检查
+            ArgumentNullException.ThrowIfNull(parameterSource);
+
             return WithPathParameters(
                 parameterSource.ObjectToDictionary()!.ToDictionary(
                     u => u.Key.ToCultureString(culture ?? CultureInfo.InvariantCulture)!, u => u.Value), escape,
                 culture, comparer);
         }
 
-        ObjectPathParameters ??= new Dictionary<string, object>();
+        ObjectPathParameters ??= new Dictionary<string, object?>();
 
         // 存在则更新否则添加
         ObjectPathParameters[prefix] = parameterSource;
@@ -950,7 +950,7 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
-    ///     设置是否如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常。
+    ///     设置是否如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常
     /// </summary>
     /// <param name="enabled">是否启用</param>
     /// <returns>
@@ -1102,7 +1102,7 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
-    ///     模拟浏览器环境
+    ///     设置模拟浏览器环境
     /// </summary>
     /// <remarks>设置此配置后，将在单次请求标头中添加主流浏览器的 <c>User-Agent</c> 值。</remarks>
     /// <returns>

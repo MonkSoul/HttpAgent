@@ -12,9 +12,9 @@ internal sealed class PathDeclarativeExtractor : IHttpDeclarativeExtractor
     /// <inheritdoc />
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
-        // 查找所有符合的参数
+        // 查找所有路径参数
         var pathParameters = context.Parameters
-            .Where(u => !HttpDeclarativeExtractorContext.SpecialArgumentTypes.Contains(u.Key.ParameterType)).ToArray();
+            .Where(u => HttpDeclarativeExtractorContext.FilterSpecialParameter(u.Key)).ToArray();
 
         // 空检查
         if (pathParameters.Length == 0)
@@ -22,25 +22,23 @@ internal sealed class PathDeclarativeExtractor : IHttpDeclarativeExtractor
             return;
         }
 
-        // 遍历符合的参数集合并添加到 HttpRequestBuilder 构建器中
+        // 遍历所有路径参数
         foreach (var (parameter, value) in pathParameters)
         {
             // 获取参数名
-            var parameterName = AliasAsUtility.GetParameterName(parameter, out var aliasAsDefined);
+            var parameterName = AliasAsUtility.GetParameterName(parameter, out _);
 
-            // 检查参数类型是否是基本类型或枚举类型或由它们组成的数组或集合类型
+            // 检查类型是否是基本类型或枚举类型或由它们组成的数组或集合类型
             if (parameter.ParameterType.IsBaseTypeOrEnumOrCollection())
             {
+                // 设置路径参数
                 httpRequestBuilder.WithPathParameter(parameterName, value);
 
                 continue;
             }
 
-            // 空检查
-            if (value is not null)
-            {
-                httpRequestBuilder.WithPathParameters(value, parameterName);
-            }
+            // 设置路径参数
+            httpRequestBuilder.WithPathParameters(value, parameterName);
         }
     }
 }

@@ -7,12 +7,12 @@ namespace HttpAgent;
 /// <summary>
 ///     HTTP 声明式提取器上下文
 /// </summary>
-public class HttpDeclarativeExtractorContext
+public sealed class HttpDeclarativeExtractorContext
 {
     /// <summary>
     ///     特殊参数类型
     /// </summary>
-    public static Type[] SpecialArgumentTypes =
+    internal static Type[] _specialParameterTypes =
     [
         typeof(Action<HttpRequestBuilder>), typeof(Action<HttpMultipartFormDataBuilder>), typeof(HttpCompletionOption),
         typeof(CancellationToken)
@@ -27,12 +27,14 @@ public class HttpDeclarativeExtractorContext
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(method);
+        ArgumentNullException.ThrowIfNull(args);
 
         Method = method;
         Args = args;
 
         // 初始化被调用方法的参数键值字典
-        Parameters = method.GetParameters().Select((p, i) => new { p, v = args[i] }).ToDictionary(u => u.p, u => u.v);
+        Parameters = method.GetParameters().Select((p, i) => new { Parameter = p, Value = args[i] })
+            .ToDictionary(u => u.Parameter, u => u.Value).AsReadOnly();
     }
 
     /// <summary>
@@ -48,5 +50,22 @@ public class HttpDeclarativeExtractorContext
     /// <summary>
     ///     被调用方法的参数键值字典
     /// </summary>
-    public Dictionary<ParameterInfo, object?> Parameters { get; }
+    public IReadOnlyDictionary<ParameterInfo, object?> Parameters { get; }
+
+    /// <summary>
+    ///     过滤特殊参数类型
+    /// </summary>
+    /// <param name="parameter">
+    ///     <see cref="ParameterInfo" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="bool" />
+    /// </returns>
+    public static bool FilterSpecialParameter(ParameterInfo parameter)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(parameter);
+
+        return !_specialParameterTypes.Contains(parameter.ParameterType);
+    }
 }

@@ -88,7 +88,7 @@ public sealed partial class HttpRequestBuilder
     ///     路径参数集合
     /// </summary>
     /// <remarks>支持自定义类类型。用于替换请求地址中符合 <c>\{\s*(\w+\s*(\.\s*\w+\s*)*)\s*\}</c> 正则表达式匹配的数据。</remarks>
-    public IDictionary<string, object>? ObjectPathParameters { get; private set; }
+    public IDictionary<string, object?>? ObjectPathParameters { get; private set; }
 
     /// <summary>
     ///     Cookies 集合

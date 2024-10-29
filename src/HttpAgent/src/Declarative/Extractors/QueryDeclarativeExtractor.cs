@@ -14,8 +14,8 @@ internal sealed class QueryDeclarativeExtractor : IHttpDeclarativeExtractor
     {
         // 查找所有贴有 [Query] 特性的参数
         var queryParameters = context.Parameters.Where(u =>
-            !HttpDeclarativeExtractorContext.SpecialArgumentTypes.Contains(u.Key.ParameterType) &&
-            u.Key.IsDefined(typeof(QueryAttribute))).ToArray();
+            HttpDeclarativeExtractorContext.FilterSpecialParameter(u.Key) &&
+            u.Key.IsDefined(typeof(QueryAttribute), true)).ToArray();
 
         // 空检查
         if (queryParameters.Length == 0)
@@ -27,7 +27,7 @@ internal sealed class QueryDeclarativeExtractor : IHttpDeclarativeExtractor
         foreach (var (parameter, value) in queryParameters)
         {
             // 获取 QueryAttribute 实例
-            var queryAttribute = parameter.GetCustomAttribute<QueryAttribute>()!;
+            var queryAttribute = parameter.GetCustomAttribute<QueryAttribute>(true)!;
 
             // 获取参数名
             var parameterName = AliasAsUtility.GetParameterName(parameter, out var aliasAsDefined);
@@ -40,7 +40,7 @@ internal sealed class QueryDeclarativeExtractor : IHttpDeclarativeExtractor
                     : queryAttribute.AliasAs.Trim();
             }
 
-            // 检查参数类型是否是基本类型或枚举类型或由它们组成的数组或集合类型
+            // 检查类型是否是基本类型或枚举类型或由它们组成的数组或集合类型
             if (parameter.ParameterType.IsBaseTypeOrEnumOrCollection())
             {
                 httpRequestBuilder.WithQueryParameter(parameterName, value, queryAttribute.Escape);

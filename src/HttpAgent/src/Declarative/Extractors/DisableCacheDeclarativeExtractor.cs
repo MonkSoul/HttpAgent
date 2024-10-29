@@ -13,11 +13,12 @@ internal sealed class DisableCacheDeclarativeExtractor : IHttpDeclarativeExtract
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
         // 检查方法或接口是否定义了 [DisableCache] 特性
-        if (!context.Method.IsDefined(typeof(DisableCacheAttribute), true))
+        if (!context.Method.IsDefined<DisableCacheAttribute>(out var disableCacheAttribute, true))
         {
             return;
         }
 
-        httpRequestBuilder.DisableCache(context.Method.GetCustomAttribute<DisableCacheAttribute>(true)!.Disabled);
+        // 设置禁用 HTTP 缓存
+        httpRequestBuilder.DisableCache(disableCacheAttribute.Disabled);
     }
 }

@@ -13,11 +13,12 @@ internal sealed class ProfilerDeclarativeExtractor : IHttpDeclarativeExtractor
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
         // 检查方法或接口是否定义了 [Profiler] 特性
-        if (!context.Method.IsDefined(typeof(ProfilerAttribute), true))
+        if (!context.Method.IsDefined<ProfilerAttribute>(out var profilerAttribute, true))
         {
             return;
         }
 
-        httpRequestBuilder.Profiler(context.Method.GetCustomAttribute<ProfilerAttribute>(true)!.Enabled);
+        // 设置是否启用请求分析工具
+        httpRequestBuilder.Profiler(profilerAttribute.Enabled);
     }
 }

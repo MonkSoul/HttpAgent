@@ -721,7 +721,7 @@
         </member>
         <member name="F:HttpAgent.HttpRemoteBuilder._httpDeclarativeTypes">
             <summary>
-                <see cref="T:HttpAgent.IHttpDeclarative" /> 集合
+                <see cref="T:HttpAgent.IHttpDeclarative" /> 类型集合
             </summary>
         </member>
         <member name="F:HttpAgent.HttpRemoteBuilder._objectContentConverterFactoryType">
@@ -1483,7 +1483,7 @@
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.EnsureSuccessStatusCode(System.Boolean)">
             <summary>
-                设置是否如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常。
+                设置是否如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常
             </summary>
             <param name="enabled">是否启用</param>
             <returns>
@@ -1569,7 +1569,7 @@
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.SimulateBrowser">
             <summary>
-                模拟浏览器环境
+                设置模拟浏览器环境
             </summary>
             <remarks>设置此配置后，将在单次请求标头中添加主流浏览器的 <c>User-Agent</c> 值。</remarks>
             <returns>
@@ -2877,6 +2877,44 @@
                 <see cref="T:System.Collections.Generic.IEnumerable`1" />
             </returns>
         </member>
+        <member name="T:HttpAgent.Core.Extensions.MethodInfoExtensions">
+            <summary>
+                <see cref="T:System.Reflection.MethodInfo" /> 拓展类
+            </summary>
+        </member>
+        <member name="M:HttpAgent.Core.Extensions.MethodInfoExtensions.IsDefined``1(System.Reflection.MethodInfo,``0@,System.Boolean)">
+            <summary>
+                检查是否定义了指定特性
+            </summary>
+            <param name="method">
+                <see cref="T:System.Reflection.MethodInfo" />
+            </param>
+            <param name="attribute">
+                <typeparamref name="TAttribute" />
+            </param>
+            <param name="inherit">是否在基类中搜索</param>
+            <typeparam name="TAttribute">
+                <see cref="T:System.Attribute" />
+            </typeparam>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Core.Extensions.MethodInfoExtensions.GetDefinedCustomAttributes``1(System.Reflection.MethodInfo,System.Boolean)">
+            <summary>
+                获取指定特性的所有实例
+            </summary>
+            <param name="method">
+                <see cref="T:System.Reflection.MethodInfo" />
+            </param>
+            <param name="inherit">是否在基类中搜索</param>
+            <typeparam name="TAttribute">
+                <see cref="T:System.Attribute" />
+            </typeparam>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
         <member name="T:HttpAgent.Core.Extensions.NumberExtensions">
             <summary>
                 数值类型拓展类
@@ -3301,7 +3339,6 @@
             <summary>
                 内容编码
             </summary>
-            <remarks>默认值为 <c>utf-8</c> 编码。</remarks>
         </member>
         <member name="T:HttpAgent.DisableCacheAttribute">
             <summary>
@@ -3360,13 +3397,13 @@
             <summary>
                 <inheritdoc cref="T:HttpAgent.HeadersAttribute" />
             </summary>
-            <remarks>作用于参数</remarks>
+            <remarks>特性作用于参数时有效。</remarks>
         </member>
         <member name="M:HttpAgent.HeadersAttribute.#ctor(System.String)">
             <summary>
                 <inheritdoc cref="T:HttpAgent.HeadersAttribute" />
             </summary>
-            <remarks>当用于方法或接口时，则进行移除指定标头操作。</remarks>
+            <remarks>当特性作用于方法或接口时，则表示移除指定标头操作。</remarks>
             <param name="name">标头</param>
         </member>
         <member name="M:HttpAgent.HeadersAttribute.#ctor(System.String,System.Object)">
@@ -3386,15 +3423,20 @@
                 标头的值
             </summary>
         </member>
+        <member name="P:HttpAgent.HeadersAttribute.HasSetValues">
+            <summary>
+                是否设置了标头的值
+            </summary>
+        </member>
         <member name="P:HttpAgent.HeadersAttribute.AliasAs">
             <summary>
                 别名
             </summary>
-            <remarks>当用于参数时有效。</remarks>
+            <remarks>特性用于参数时有效。</remarks>
         </member>
-        <member name="P:HttpAgent.HeadersAttribute.HasSetValues">
+        <member name="P:HttpAgent.HeadersAttribute.Escape">
             <summary>
-                是否设置了标头的值
+                是否转义
             </summary>
         </member>
         <member name="T:HttpAgent.HttpClientNameAttribute">
@@ -3581,6 +3623,7 @@
             <summary>
                 参数前缀
             </summary>
+            <remarks>作用于对象类型时有效。</remarks>
         </member>
         <member name="T:HttpAgent.SimulateBrowserAttribute">
             <summary>
@@ -3806,7 +3849,7 @@
                 HTTP 声明式提取器上下文
             </summary>
         </member>
-        <member name="F:HttpAgent.HttpDeclarativeExtractorContext.SpecialArgumentTypes">
+        <member name="F:HttpAgent.HttpDeclarativeExtractorContext._specialParameterTypes">
             <summary>
                 特殊参数类型
             </summary>
@@ -3832,6 +3875,17 @@
             <summary>
                 被调用方法的参数键值字典
             </summary>
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeExtractorContext.FilterSpecialParameter(System.Reflection.ParameterInfo)">
+            <summary>
+                过滤特殊参数类型
+            </summary>
+            <param name="parameter">
+                <see cref="T:System.Reflection.ParameterInfo" />
+            </param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
         </member>
         <member name="T:HttpAgent.IHttpDeclarative">
             <summary>

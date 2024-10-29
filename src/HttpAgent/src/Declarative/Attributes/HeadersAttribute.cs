@@ -20,17 +20,15 @@ public sealed class HeadersAttribute : Attribute
     /// <summary>
     ///     <inheritdoc cref="HeadersAttribute" />
     /// </summary>
-    /// <remarks>作用于参数</remarks>
-#pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
+    /// <remarks>特性作用于参数时有效。</remarks>
     public HeadersAttribute()
-#pragma warning restore CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
     {
     }
 
     /// <summary>
     ///     <inheritdoc cref="HeadersAttribute" />
     /// </summary>
-    /// <remarks>当用于方法或接口时，则进行移除指定标头操作。</remarks>
+    /// <remarks>当特性作用于方法或接口时，则表示移除指定标头操作。</remarks>
     /// <param name="name">标头</param>
     public HeadersAttribute(string name)
     {
@@ -52,7 +50,7 @@ public sealed class HeadersAttribute : Attribute
     /// <summary>
     ///     标头
     /// </summary>
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     /// <summary>
     ///     标头的值
@@ -68,13 +66,18 @@ public sealed class HeadersAttribute : Attribute
     }
 
     /// <summary>
-    ///     别名
-    /// </summary>
-    /// <remarks>当用于参数时有效。</remarks>
-    public string? AliasAs { get; set; }
-
-    /// <summary>
     ///     是否设置了标头的值
     /// </summary>
     internal bool HasSetValues { get; private set; }
+
+    /// <summary>
+    ///     别名
+    /// </summary>
+    /// <remarks>特性用于参数时有效。</remarks>
+    public string? AliasAs { get; set; }
+    
+    /// <summary>
+    ///     是否转义
+    /// </summary>
+    public bool Escape { get; set; }
 }

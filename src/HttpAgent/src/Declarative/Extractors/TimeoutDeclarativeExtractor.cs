@@ -13,11 +13,12 @@ internal sealed class TimeoutCacheDeclarativeExtractor : IHttpDeclarativeExtract
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
         // 检查方法或接口是否定义了 [Timeout] 特性
-        if (!context.Method.IsDefined(typeof(TimeoutAttribute), true))
+        if (!context.Method.IsDefined<TimeoutAttribute>(out var timeoutAttribute, true))
         {
             return;
         }
 
-        httpRequestBuilder.SetTimeout(context.Method.GetCustomAttribute<TimeoutAttribute>(true)!.Timeout);
+        // 设置超时时间
+        httpRequestBuilder.SetTimeout(timeoutAttribute.Timeout);
     }
 }

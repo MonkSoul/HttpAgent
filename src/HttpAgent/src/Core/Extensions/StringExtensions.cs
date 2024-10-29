@@ -182,14 +182,10 @@ internal static partial class StringExtensions
     /// <returns>
     ///     <see cref="string" />
     /// </returns>
-    internal static string? ReplacePlaceholders(this string? template, object replacementSource,
+    internal static string? ReplacePlaceholders(this string? template, object? replacementSource,
         string prefix = "model",
-        BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)
-    {
-        // 空检查
-        ArgumentNullException.ThrowIfNull(replacementSource);
-
-        return template is null
+        BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public) =>
+        template is null
             ? null
             : PlaceholderRegex().Replace(template,
                 match =>
@@ -205,7 +201,6 @@ internal static partial class StringExtensions
                         // 否则返回原始字符串
                         : match.ToString();
                 });
-    }
 
     /// <summary>
     ///     占位符匹配正则表达式

@@ -12,9 +12,10 @@ internal sealed class HttpRequestBuilderConfigureDeclarativeExtractor : IHttpDec
     /// <inheritdoc />
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
-        // 尝试解析 Action<HttpRequestBuilder> 参数
-        var configure = context.Args.FirstOrDefault(u => u is Action<HttpRequestBuilder>) as Action<HttpRequestBuilder>;
-
-        configure?.Invoke(httpRequestBuilder);
+        // 尝试解析单个 Action<HttpRequestBuilder> 参数
+        if (context.Args.SingleOrDefault(u => u is Action<HttpRequestBuilder>) is Action<HttpRequestBuilder> configure)
+        {
+            configure.Invoke(httpRequestBuilder);
+        }
     }
 }

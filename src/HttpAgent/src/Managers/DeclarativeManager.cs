@@ -80,11 +80,11 @@ internal sealed class DeclarativeManager
     internal static (HttpCompletionOption CompletionOption, CancellationToken CancellationToken)
         ExtractSpecialArguments(object?[] args)
     {
-        // 尝试解析 HttpCompletionOption 参数
-        var completionOption = args.FirstOrDefault(u => u is HttpCompletionOption) as HttpCompletionOption?;
+        // 尝试解析单个 HttpCompletionOption 参数
+        var completionOption = args.SingleOrDefault(u => u is HttpCompletionOption) as HttpCompletionOption?;
 
-        // 尝试解析 CancellationToken
-        var cancellationToken = args.FirstOrDefault(u => u is CancellationToken) as CancellationToken?;
+        // 尝试解析单个 CancellationToken
+        var cancellationToken = args.SingleOrDefault(u => u is CancellationToken) as CancellationToken?;
 
         return (completionOption ?? HttpCompletionOption.ResponseContentRead,
             cancellationToken ?? CancellationToken.None);

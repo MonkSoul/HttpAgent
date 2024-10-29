@@ -751,6 +751,12 @@ public class HttpRequestBuilderMethodsTests
         Assert.Equal("10", httpRequestBuilder3.PathParameters!["id"]);
         Assert.Equal(2, httpRequestBuilder3.PathParameters.Count);
         Assert.Equal("furion2", httpRequestBuilder3.PathParameters!["name"]);
+
+        var httpRequestBuilder4 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder4.WithPathParameters(null!, "model");
+        Assert.NotNull(httpRequestBuilder4.ObjectPathParameters);
+        Assert.Single(httpRequestBuilder4.ObjectPathParameters);
+        Assert.Null(httpRequestBuilder4.ObjectPathParameters["model"]);
     }
 
     [Fact]

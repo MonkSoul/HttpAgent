@@ -13,12 +13,12 @@ internal sealed class TraceIdentifierDeclarativeExtractor : IHttpDeclarativeExtr
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
         // 检查方法或接口是否定义了 [TraceIdentifier] 特性
-        if (!context.Method.IsDefined(typeof(TraceIdentifierAttribute), true))
+        if (!context.Method.IsDefined<TraceIdentifierAttribute>(out var traceIdentifierAttribute, true))
         {
             return;
         }
 
-        httpRequestBuilder.SetTraceIdentifier(context.Method.GetCustomAttribute<TraceIdentifierAttribute>(true)!
-            .Identifier);
+        // 设置跟踪标识
+        httpRequestBuilder.SetTraceIdentifier(traceIdentifierAttribute.Identifier);
     }
 }

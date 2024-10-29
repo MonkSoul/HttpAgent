@@ -36,5 +36,6 @@ public sealed class QueryAttribute : Attribute
     /// <summary>
     ///     参数前缀
     /// </summary>
+    /// <remarks>作用于对象类型时有效。</remarks>
     public string? Prefix { get; set; }
 }

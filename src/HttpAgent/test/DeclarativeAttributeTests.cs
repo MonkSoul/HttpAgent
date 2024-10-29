@@ -1,0 +1,182 @@
+﻿// 版权归百小僧及百签科技（广东）有限公司所有。
+// 
+// 此源代码遵循位于源代码树根目录中的 LICENSE 文件的许可证。
+
+namespace HttpAgent.Tests;
+
+public class DeclarativeAttributeTests
+{
+    [Fact]
+    public void BodyAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(BodyAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Parameter, attributeUsage.ValidOn);
+        Assert.False(attributeUsage.AllowMultiple);
+
+        var attribute = new BodyAttribute();
+        Assert.Null(attribute.ContentType);
+        Assert.Null(attribute.ContentEncoding);
+
+        var attribute2 = new BodyAttribute("application/json");
+        Assert.Equal("application/json", attribute2.ContentType);
+        Assert.Null(attribute2.ContentEncoding);
+
+        var attribute3 = new BodyAttribute("application/json", "utf-32");
+        Assert.Equal("application/json", attribute3.ContentType);
+        Assert.Equal("utf-32", attribute3.ContentEncoding);
+    }
+
+    [Fact]
+    public void DisableCacheAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(DisableCacheAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface, attributeUsage.ValidOn);
+        Assert.False(attributeUsage.AllowMultiple);
+
+        var attribute = new DisableCacheAttribute();
+        Assert.True(attribute.Disabled);
+
+        var attribute2 = new DisableCacheAttribute(false);
+        Assert.False(attribute2.Disabled);
+    }
+
+    [Fact]
+    public void EnsureSuccessStatusCodeAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(EnsureSuccessStatusCodeAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface, attributeUsage.ValidOn);
+        Assert.False(attributeUsage.AllowMultiple);
+
+        var attribute = new EnsureSuccessStatusCodeAttribute();
+        Assert.True(attribute.Enabled);
+
+        var attribute2 = new EnsureSuccessStatusCodeAttribute(false);
+        Assert.False(attribute2.Enabled);
+    }
+
+    [Fact]
+    public void HeadersAttribute_Invalid_Parameters()
+    {
+        Assert.Throws<ArgumentNullException>(() => new HeadersAttribute(null!));
+        Assert.Throws<ArgumentException>(() => new HeadersAttribute(string.Empty));
+        Assert.Throws<ArgumentException>(() => new HeadersAttribute(" "));
+
+        Assert.Throws<ArgumentNullException>(() => new HeadersAttribute(null!, null));
+        Assert.Throws<ArgumentException>(() => new HeadersAttribute(string.Empty, null));
+        Assert.Throws<ArgumentException>(() => new HeadersAttribute(" ", null));
+    }
+
+    [Fact]
+    public void HeadersAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(HeadersAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface | AttributeTargets.Parameter,
+            attributeUsage.ValidOn);
+        Assert.True(attributeUsage.AllowMultiple);
+
+        var attribute = new HeadersAttribute();
+        Assert.Null(attribute.Name);
+        Assert.Null(attribute.Values);
+        Assert.Null(attribute.AliasAs);
+        Assert.False(attribute.HasSetValues);
+
+        var attribute2 = new HeadersAttribute("Set-Cookie");
+        Assert.Equal("Set-Cookie", attribute2.Name);
+        Assert.Null(attribute2.Values);
+        Assert.Null(attribute2.AliasAs);
+        Assert.False(attribute2.HasSetValues);
+
+        var attribute3 = new HeadersAttribute("Set-Cookie", null);
+        Assert.Equal("Set-Cookie", attribute3.Name);
+        Assert.Null(attribute3.Values);
+        Assert.Null(attribute3.AliasAs);
+        Assert.True(attribute3.HasSetValues);
+        Assert.False(attribute3.Escape);
+    }
+
+    [Fact]
+    public void HttpClientNameAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(HttpClientNameAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface, attributeUsage.ValidOn);
+        Assert.False(attributeUsage.AllowMultiple);
+
+        var attribute = new HttpClientNameAttribute(null);
+        Assert.Equal(string.Empty, attribute.Name);
+
+        var attribute2 = new HttpClientNameAttribute("client-name");
+        Assert.Equal("client-name", attribute2.Name);
+    }
+
+    [Fact]
+    public void ProfilerAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(ProfilerAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface, attributeUsage.ValidOn);
+        Assert.False(attributeUsage.AllowMultiple);
+
+        var attribute = new ProfilerAttribute();
+        Assert.True(attribute.Enabled);
+
+        var attribute2 = new ProfilerAttribute(false);
+        Assert.False(attribute2.Enabled);
+    }
+
+    [Fact]
+    public void QueryAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(QueryAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Parameter, attributeUsage.ValidOn);
+        Assert.False(attributeUsage.AllowMultiple);
+
+        var attribute = new QueryAttribute();
+        Assert.Null(attribute.AliasAs);
+        Assert.False(attribute.Escape);
+        Assert.Null(attribute.Prefix);
+
+        var attribute2 = new QueryAttribute("user");
+        Assert.Equal("user", attribute2.AliasAs);
+        Assert.False(attribute2.Escape);
+        Assert.Null(attribute2.Prefix);
+    }
+
+    [Fact]
+    public void SimulateBrowserAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(SimulateBrowserAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface, attributeUsage.ValidOn);
+        Assert.False(attributeUsage.AllowMultiple);
+    }
+
+    [Fact]
+    public void TimeoutAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(TimeoutAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface, attributeUsage.ValidOn);
+        Assert.False(attributeUsage.AllowMultiple);
+
+        var attribute = new TimeoutAttribute(200);
+        Assert.Equal(200, attribute.Timeout);
+    }
+
+    [Fact]
+    public void TraceIdentifierAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(TraceIdentifierAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface, attributeUsage.ValidOn);
+        Assert.False(attributeUsage.AllowMultiple);
+
+        var attribute = new TraceIdentifierAttribute("furion");
+        Assert.Equal("furion", attribute.Identifier);
+    }
+}

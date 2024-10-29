@@ -229,12 +229,11 @@ internal static class ObjectExtensions
     /// <returns>
     ///     <see cref="object" />
     /// </returns>
-    internal static object? GetPropertyValueFromPath(this object obj, string path, out bool isMatch,
+    internal static object? GetPropertyValueFromPath(this object? obj, string path, out bool isMatch,
         string prefix = "model",
         BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)
     {
         // 空检查
-        ArgumentNullException.ThrowIfNull(obj);
         ArgumentException.ThrowIfNullOrWhiteSpace(path);
         ArgumentException.ThrowIfNullOrWhiteSpace(prefix);
 
@@ -258,6 +257,12 @@ internal static class ObjectExtensions
         {
             isMatch = true;
             parts = parts.Skip(1).ToArray();
+        }
+
+        // 空检查
+        if (obj is null)
+        {
+            return obj;
         }
 
         // 初始化当前对象作为传入的模型对象

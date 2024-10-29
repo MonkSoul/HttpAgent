@@ -13,11 +13,12 @@ internal sealed class HttpClientNameDeclarativeExtractor : IHttpDeclarativeExtra
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
         // 检查方法或接口是否定义了 [HttpClientName] 特性
-        if (!context.Method.IsDefined(typeof(HttpClientNameAttribute), true))
+        if (!context.Method.IsDefined<HttpClientNameAttribute>(out var httpClientNameAttribute, true))
         {
             return;
         }
 
-        httpRequestBuilder.SetHttpClientName(context.Method.GetCustomAttribute<HttpClientNameAttribute>(true)!.Name);
+        // 设置 HttpClient 实例的配置名称
+        httpRequestBuilder.SetHttpClientName(httpClientNameAttribute.Name);
     }
 }

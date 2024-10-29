@@ -13,9 +13,8 @@ internal sealed class MultipartBodyDeclarativeExtractor : IHttpDeclarativeExtrac
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
         // 尝试解析 Action<HttpMultipartFormDataBuilder> 参数
-        if (context.Args.FirstOrDefault(u => u is Action<HttpMultipartFormDataBuilder>) is
-            Action<HttpMultipartFormDataBuilder>
-            multipartContentBuilderAction)
+        if (context.Args.SingleOrDefault(u => u is Action<HttpMultipartFormDataBuilder>) is
+            Action<HttpMultipartFormDataBuilder> multipartContentBuilderAction)
         {
             httpRequestBuilder.SetMultipartContent(multipartContentBuilderAction);
         }

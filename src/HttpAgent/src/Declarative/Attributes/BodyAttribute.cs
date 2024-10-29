@@ -40,6 +40,5 @@ public sealed class BodyAttribute : Attribute
     /// <summary>
     ///     内容编码
     /// </summary>
-    /// <remarks>默认值为 <c>utf-8</c> 编码。</remarks>
-    public string? ContentEncoding { get; set; } = Constants.UTF8_ENCODING;
+    public string? ContentEncoding { get; set; }
 }
