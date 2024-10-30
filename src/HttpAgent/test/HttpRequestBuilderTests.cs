@@ -63,6 +63,14 @@ public class HttpRequestBuilderTests
 
         var finalRequestUri3 = httpRequestBuilder3.BuildFinalRequestUri(new Uri("http://localhost"));
         Assert.Equal("https://furion.net/10/furion?id=10&name=furion#furion", finalRequestUri3);
+
+        var httpRequestBuilder4 =
+            new HttpRequestBuilder(HttpMethod.Get,
+                new Uri("{url}", UriKind.RelativeOrAbsolute));
+        httpRequestBuilder4.WithPathParameters(new { url = "http://localhost/id=10" });
+
+        var finalRequestUri4 = httpRequestBuilder4.BuildFinalRequestUri(new Uri("http://localhost"));
+        Assert.Equal("http://localhost/id=10", finalRequestUri4);
     }
 
     [Fact]
@@ -121,12 +129,12 @@ public class HttpRequestBuilderTests
             new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost/{id}/{name}?v=1&id={id}"));
         var uriBuilder = new UriBuilder(httpRequestBuilder.RequestUri!);
 
-        var newUri = httpRequestBuilder.ReplacePathPlaceholders(uriBuilder);
+        var newUri = httpRequestBuilder.ReplacePathPlaceholders(uriBuilder.Uri.ToString());
         Assert.Equal("http://localhost/{id}/{name}?v=1&id={id}", newUri);
 
         httpRequestBuilder.WithPathParameters(new { id = 10, name = "furion" })
             .WithPathParameters(new { name = "monksoul" });
-        var newUri2 = httpRequestBuilder.ReplacePathPlaceholders(uriBuilder);
+        var newUri2 = httpRequestBuilder.ReplacePathPlaceholders(uriBuilder.Uri.ToString());
         Assert.Equal("http://localhost/10/monksoul?v=1&id=10", newUri2);
 
         // Object
@@ -138,7 +146,7 @@ public class HttpRequestBuilderTests
             .WithPathParameters(new { name = "monksoul" })
             .WithPathParameters(new { id = 10 }, "user")
             .WithPathParameters(new { name = "furion" }, "author");
-        var newUri3 = httpRequestBuilder2.ReplacePathPlaceholders(uriBuilder2);
+        var newUri3 = httpRequestBuilder2.ReplacePathPlaceholders(uriBuilder2.Uri.ToString());
         Assert.Equal("http://localhost/10/furion/{unknown.test}?v=1&id=10", newUri3);
 
         var httpRequestBuilder3 =
@@ -146,7 +154,7 @@ public class HttpRequestBuilderTests
                 new Uri("http://localhost/{user.id}"));
         httpRequestBuilder3.WithPathParameters(null!, "user");
         var uriBuilder3 = new UriBuilder(httpRequestBuilder3.RequestUri!);
-        var newUri4 = httpRequestBuilder3.ReplacePathPlaceholders(uriBuilder3);
+        var newUri4 = httpRequestBuilder3.ReplacePathPlaceholders(uriBuilder3.Uri.ToString());
         Assert.Equal("http://localhost/", newUri4);
     }
 

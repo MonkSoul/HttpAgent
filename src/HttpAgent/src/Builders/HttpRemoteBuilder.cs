@@ -308,7 +308,7 @@ public sealed class HttpRemoteBuilder
                 {
                     DefaultContentType = DefaultContentType ?? Constants.DEFAULT_CONTENT_TYPE,
                     DefaultFileDownloadDirectory = DefaultFileDownloadDirectory,
-                    HttpDeclarativeExtractors = _httpDeclarativeExtractors
+                    HttpDeclarativeExtractors = _httpDeclarativeExtractors?.AsReadOnly()
                 }));
 
         // 注册或替换 IObjectContentConverterFactory 工厂
@@ -345,8 +345,12 @@ public sealed class HttpRemoteBuilder
             services.TryAddSingleton(httpDeclarativeType, provider =>
             {
                 // 创建 HTTP 远程请求声明式代理实例
-                dynamic httpDeclarative =
-                    DispatchProxyAsync.Create(httpDeclarativeType, httpDeclarativeDispatchProxyType);
+                var httpDeclarative =
+                    DispatchProxyAsync.Create(httpDeclarativeType, httpDeclarativeDispatchProxyType) as
+                        HttpDeclarativeDispatchProxy;
+
+                // 空检查
+                ArgumentNullException.ThrowIfNull(httpDeclarative);
 
                 // 解析 IHttpRemoteService 服务并设置给 RemoteService 属性
                 httpDeclarative.RemoteService = provider.GetRequiredService<IHttpRemoteService>();

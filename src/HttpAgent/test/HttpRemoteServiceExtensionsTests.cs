@@ -3238,4 +3238,259 @@ public class HttpRemoteServiceExtensionsTests
         await app.StopAsync();
         await serviceProvider.DisposeAsync();
     }
+
+    [Fact]
+    public async Task Declarative_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+        await using var app = builder.Build();
+
+        app.MapGet("/test", async context =>
+        {
+            await Task.Delay(50);
+
+            await context.Response.WriteAsync("Hello World!");
+        });
+
+        await app.StartAsync();
+
+        var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
+        var method = typeof(IHttpDeclarativeTest).GetMethod(nameof(IHttpDeclarativeTest.GetUrl))!;
+
+        // ReSharper disable once MethodHasAsyncOverload
+        var result = httpRemoteService.Declarative(method, [$"http://localhost:{port}/test", CancellationToken.None]);
+        Assert.Equal("Hello World!", result);
+
+        await app.StopAsync();
+        await serviceProvider.DisposeAsync();
+    }
+
+    [Fact]
+    public async Task Declarative_WithCancellationToken_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+        await using var app = builder.Build();
+
+        app.MapGet("/test", async context =>
+        {
+            await Task.Delay(200);
+
+            await context.Response.WriteAsync("Hello World!");
+        });
+
+        await app.StartAsync();
+
+        var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
+
+        using var cancellationTokenSource = new CancellationTokenSource();
+        cancellationTokenSource.CancelAfter(100);
+
+        var method = typeof(IHttpDeclarativeTest).GetMethod(nameof(IHttpDeclarativeTest.GetUrl))!;
+
+        Assert.Throws<TaskCanceledException>(() =>
+        {
+            // ReSharper disable once MethodHasAsyncOverload
+            _ = httpRemoteService.Declarative(method, [$"http://localhost:{port}/test", cancellationTokenSource.Token]);
+        });
+
+        await app.StopAsync();
+        await serviceProvider.DisposeAsync();
+    }
+
+    [Fact]
+    public async Task DeclarativeAsync_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+        await using var app = builder.Build();
+
+        app.MapGet("/test", async context =>
+        {
+            await Task.Delay(50);
+
+            await context.Response.WriteAsync("Hello World!");
+        });
+
+        await app.StartAsync();
+
+        var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
+
+        var method = typeof(IHttpDeclarativeTest).GetMethod(nameof(IHttpDeclarativeTest.GetUrlAsync))!;
+
+        var result =
+            await httpRemoteService.DeclarativeAsync<string>(method,
+                [$"http://localhost:{port}/test", CancellationToken.None]);
+        Assert.Equal("Hello World!", result);
+
+        await app.StopAsync();
+        await serviceProvider.DisposeAsync();
+    }
+
+    [Fact]
+    public async Task DeclarativeAsync_WithCancellationToken_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+        await using var app = builder.Build();
+
+        app.MapGet("/test", async context =>
+        {
+            await Task.Delay(200);
+
+            await context.Response.WriteAsync("Hello World!");
+        });
+
+        await app.StartAsync();
+
+        var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
+
+        using var cancellationTokenSource = new CancellationTokenSource();
+        cancellationTokenSource.CancelAfter(100);
+
+        var method = typeof(IHttpDeclarativeTest).GetMethod(nameof(IHttpDeclarativeTest.GetUrlAsync))!;
+
+        await Assert.ThrowsAsync<TaskCanceledException>(async () =>
+        {
+            _ = await httpRemoteService.DeclarativeAsync<string>(method,
+                [$"http://localhost:{port}/test", cancellationTokenSource.Token]);
+        });
+
+        await app.StopAsync();
+        await serviceProvider.DisposeAsync();
+    }
+
+    [Fact]
+    public async Task SendAs_WithDeclarative_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+        await using var app = builder.Build();
+
+        app.MapGet("/test", async context =>
+        {
+            await Task.Delay(50);
+
+            await context.Response.WriteAsync("Hello World!");
+        });
+
+        await app.StartAsync();
+
+        var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
+        var method = typeof(IHttpDeclarativeTest).GetMethod(nameof(IHttpDeclarativeTest.GetUrl))!;
+
+        // ReSharper disable once MethodHasAsyncOverload
+        var result =
+            httpRemoteService.SendAs(HttpRequestBuilder.Declarative(method,
+                [$"http://localhost:{port}/test", CancellationToken.None]));
+        Assert.Equal("Hello World!", result);
+
+        await app.StopAsync();
+        await serviceProvider.DisposeAsync();
+    }
+
+    [Fact]
+    public async Task SendAs_WithDeclarative_WithCancellationToken_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+        await using var app = builder.Build();
+
+        app.MapGet("/test", async context =>
+        {
+            await Task.Delay(200);
+
+            await context.Response.WriteAsync("Hello World!");
+        });
+
+        await app.StartAsync();
+
+        var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
+
+        using var cancellationTokenSource = new CancellationTokenSource();
+        cancellationTokenSource.CancelAfter(100);
+
+        var method = typeof(IHttpDeclarativeTest).GetMethod(nameof(IHttpDeclarativeTest.GetUrl))!;
+
+        Assert.Throws<TaskCanceledException>(() =>
+        {
+            // ReSharper disable once MethodHasAsyncOverload
+            _ = httpRemoteService.SendAs(HttpRequestBuilder.Declarative(method,
+                [$"http://localhost:{port}/test", cancellationTokenSource.Token]));
+        });
+
+        await app.StopAsync();
+        await serviceProvider.DisposeAsync();
+    }
+
+    [Fact]
+    public async Task SendAs_WithDeclarativeAsync_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+        await using var app = builder.Build();
+
+        app.MapGet("/test", async context =>
+        {
+            await Task.Delay(50);
+
+            await context.Response.WriteAsync("Hello World!");
+        });
+
+        await app.StartAsync();
+
+        var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
+
+        var method = typeof(IHttpDeclarativeTest).GetMethod(nameof(IHttpDeclarativeTest.GetUrlAsync))!;
+
+        var result =
+            await httpRemoteService.SendAsAsync<string>(HttpRequestBuilder.Declarative(method,
+                [$"http://localhost:{port}/test", CancellationToken.None]));
+        Assert.Equal("Hello World!", result);
+
+        await app.StopAsync();
+        await serviceProvider.DisposeAsync();
+    }
+
+    [Fact]
+    public async Task SendAs_WithDeclarativeAsync_WithCancellationToken_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+        await using var app = builder.Build();
+
+        app.MapGet("/test", async context =>
+        {
+            await Task.Delay(200);
+
+            await context.Response.WriteAsync("Hello World!");
+        });
+
+        await app.StartAsync();
+
+        var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
+
+        using var cancellationTokenSource = new CancellationTokenSource();
+        cancellationTokenSource.CancelAfter(100);
+
+        var method = typeof(IHttpDeclarativeTest).GetMethod(nameof(IHttpDeclarativeTest.GetUrlAsync))!;
+
+        await Assert.ThrowsAsync<TaskCanceledException>(async () =>
+        {
+            _ = await httpRemoteService.SendAsAsync<string>(HttpRequestBuilder.Declarative(method,
+                [$"http://localhost:{port}/test", cancellationTokenSource.Token]));
+        });
+
+        await app.StopAsync();
+        await serviceProvider.DisposeAsync();
+    }
 }

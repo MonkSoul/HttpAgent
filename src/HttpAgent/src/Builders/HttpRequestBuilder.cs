@@ -80,8 +80,13 @@ public sealed partial class HttpRequestBuilder
     /// </returns>
     internal string BuildFinalRequestUri(Uri? baseUri)
     {
+        // 替换路径参数，处理非标准 HTTP URI 的应用场景（如 {url}），此时需优先解决路径参数问题
+        var newRequestUri = RequestUri is null or { OriginalString: null }
+            ? RequestUri
+            : new Uri(ReplacePathPlaceholders(RequestUri.OriginalString), UriKind.RelativeOrAbsolute);
+
         // 初始化 UriBuilder 实例
-        var uriBuilder = new UriBuilder(baseUri is null ? RequestUri! : new Uri(baseUri, RequestUri!));
+        var uriBuilder = new UriBuilder(baseUri is null ? newRequestUri! : new Uri(baseUri, newRequestUri!));
 
         // 追加片段标识符
         AppendFragment(uriBuilder);
@@ -90,7 +95,7 @@ public sealed partial class HttpRequestBuilder
         AppendQueryParameters(uriBuilder);
 
         // 替换路径参数
-        var finalRequestUri = ReplacePathPlaceholders(uriBuilder);
+        var finalRequestUri = ReplacePathPlaceholders(uriBuilder.Uri.ToString());
 
         return finalRequestUri;
     }
@@ -149,15 +154,13 @@ public sealed partial class HttpRequestBuilder
     /// <summary>
     ///     替换路径参数
     /// </summary>
-    /// <param name="uriBuilder">
-    ///     <see cref="UriBuilder" />
-    /// </param>
+    /// <param name="originalUri">源请求地址</param>
     /// <returns>
     ///     <see cref="string" />
     /// </returns>
-    internal string ReplacePathPlaceholders(UriBuilder uriBuilder)
+    internal string ReplacePathPlaceholders(string originalUri)
     {
-        var newUri = uriBuilder.Uri.ToString();
+        var newUri = originalUri;
 
         // 空检查
         if (!PathParameters.IsNullOrEmpty())

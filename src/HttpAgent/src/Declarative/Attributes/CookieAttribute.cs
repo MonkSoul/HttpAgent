@@ -5,12 +5,12 @@
 namespace HttpAgent;
 
 /// <summary>
-///     查询参数特性
+///     Cookie 特性
 /// </summary>
 /// <remarks>支持多次指定。</remarks>
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Interface | AttributeTargets.Parameter,
     AllowMultiple = true)]
-public sealed class QueryAttribute : Attribute
+public sealed class CookieAttribute : Attribute
 {
     /// <summary>
     ///     <see cref="Value" /> 私有字段
@@ -18,19 +18,19 @@ public sealed class QueryAttribute : Attribute
     private object? _value;
 
     /// <summary>
-    ///     <inheritdoc cref="QueryAttribute" />
+    ///     <inheritdoc cref="CookieAttribute" />
     /// </summary>
     /// <remarks>特性作用于参数时有效。</remarks>
-    public QueryAttribute()
+    public CookieAttribute()
     {
     }
 
     /// <summary>
-    ///     <inheritdoc cref="QueryAttribute" />
+    ///     <inheritdoc cref="CookieAttribute" />
     /// </summary>
-    /// <remarks>当特性作用于方法或接口时，则表示移除指定查询参数操作。</remarks>
-    /// <param name="name">查询参数</param>
-    public QueryAttribute(string name)
+    /// <remarks>当特性作用于方法或接口时，则表示移除指定 Cookie 操作。</remarks>
+    /// <param name="name">Cookie</param>
+    public CookieAttribute(string name)
     {
         // 空检查
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
@@ -39,21 +39,21 @@ public sealed class QueryAttribute : Attribute
     }
 
     /// <summary>
-    ///     <inheritdoc cref="QueryAttribute" />
+    ///     <inheritdoc cref="CookieAttribute" />
     /// </summary>
-    /// <param name="name">查询参数</param>
-    /// <param name="value">查询参数的值</param>
-    public QueryAttribute(string name, object? value)
+    /// <param name="name">Cookie</param>
+    /// <param name="value">Cookie 的值</param>
+    public CookieAttribute(string name, object? value)
         : this(name) =>
         Value = value;
 
     /// <summary>
-    ///     查询参数
+    ///     Cookie
     /// </summary>
     public string? Name { get; set; }
 
     /// <summary>
-    ///     查询参数的值
+    ///     Cookie 的值
     /// </summary>
     public object? Value
     {
@@ -75,12 +75,6 @@ public sealed class QueryAttribute : Attribute
     ///     是否转义
     /// </summary>
     public bool Escape { get; set; }
-
-    /// <summary>
-    ///     参数前缀
-    /// </summary>
-    /// <remarks>作用于对象类型时有效。</remarks>
-    public string? Prefix { get; set; }
 
     /// <summary>
     ///     是否设置了值

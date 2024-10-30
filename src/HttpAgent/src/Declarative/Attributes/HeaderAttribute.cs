@@ -66,11 +66,6 @@ public sealed class HeaderAttribute : Attribute
     }
 
     /// <summary>
-    ///     是否设置了标头的值
-    /// </summary>
-    internal bool HasSetValue { get; private set; }
-
-    /// <summary>
     ///     别名
     /// </summary>
     /// <remarks>特性用于参数时有效。</remarks>
@@ -80,4 +75,9 @@ public sealed class HeaderAttribute : Attribute
     ///     是否转义
     /// </summary>
     public bool Escape { get; set; }
+
+    /// <summary>
+    ///     是否设置了值
+    /// </summary>
+    internal bool HasSetValue { get; private set; }
 }

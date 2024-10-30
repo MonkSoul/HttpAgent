@@ -45,10 +45,13 @@ internal sealed class DeclarativeManager
     /// <summary>
     ///     开始请求
     /// </summary>
+    /// <returns>
+    ///     <see cref="object" />
+    /// </returns>
     internal object? Start()
     {
-        // 解析特殊类型参数实例
-        var (completionOption, cancellationToken) = ExtractSpecialArguments(_httpDeclarativeBuilder.Args);
+        // 尝试解析单个特殊类型参数
+        var (completionOption, cancellationToken) = ExtractSingleSpecialArguments(_httpDeclarativeBuilder.Args);
 
         // 获取被调用方法返回值类型
         var method = _httpDeclarativeBuilder.Method;
@@ -61,29 +64,33 @@ internal sealed class DeclarativeManager
     /// <summary>
     ///     开始请求
     /// </summary>
+    /// <typeparam name="T">转换的目标类型</typeparam>
+    /// <returns>
+    ///     <typeparamref name="T" />
+    /// </returns>
     internal async Task<T?> StartAsync<T>()
     {
-        // 解析特殊类型参数实例
-        var (completionOption, cancellationToken) = ExtractSpecialArguments(_httpDeclarativeBuilder.Args);
+        // 尝试解析单个特殊类型参数
+        var (completionOption, cancellationToken) = ExtractSingleSpecialArguments(_httpDeclarativeBuilder.Args);
 
         // 发送 HTTP 远程请求
         return await _httpRemoteService.SendAsAsync<T>(RequestBuilder, completionOption, cancellationToken);
     }
 
     /// <summary>
-    ///     解析特殊类型参数实例
+    ///     尝试解析单个特殊类型参数
     /// </summary>
     /// <param name="args">被调用方法的参数值数组</param>
     /// <returns>
     ///     <see cref="Tuple{T1, T2}" />
     /// </returns>
     internal static (HttpCompletionOption CompletionOption, CancellationToken CancellationToken)
-        ExtractSpecialArguments(object?[] args)
+        ExtractSingleSpecialArguments(object?[] args)
     {
         // 尝试解析单个 HttpCompletionOption 参数
         var completionOption = args.SingleOrDefault(u => u is HttpCompletionOption) as HttpCompletionOption?;
 
-        // 尝试解析单个 CancellationToken
+        // 尝试解析单个 CancellationToken 参数
         var cancellationToken = args.SingleOrDefault(u => u is CancellationToken) as CancellationToken?;
 
         return (completionOption ?? HttpCompletionOption.ResponseContentRead,

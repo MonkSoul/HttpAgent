@@ -18,7 +18,7 @@ public class HeaderDeclarativeExtractorTests
     [Fact]
     public void Extract_ReturnOK()
     {
-        var method1 = typeof(IHeadersDeclarativeTest).GetMethod(nameof(IHeadersDeclarativeTest.Test1))!;
+        var method1 = typeof(IHeaderDeclarativeTest).GetMethod(nameof(IHeaderDeclarativeTest.Test1))!;
         var context1 = new HttpDeclarativeExtractorContext(method1, []);
         var httpRequestBuilder1 = HttpRequestBuilder.Get("http://localhost");
         new HeaderDeclarativeExtractor().Extract(httpRequestBuilder1, context1);
@@ -32,7 +32,7 @@ public class HeaderDeclarativeExtractorTests
         Assert.Equal("header3", httpRequestBuilder1.HeadersToRemove.First());
         Assert.Equal("header4", httpRequestBuilder1.HeadersToRemove.Last());
 
-        var method2 = typeof(IHeadersDeclarativeTest).GetMethod(nameof(IHeadersDeclarativeTest.Test2))!;
+        var method2 = typeof(IHeaderDeclarativeTest).GetMethod(nameof(IHeaderDeclarativeTest.Test2))!;
         var context2 = new HttpDeclarativeExtractorContext(method2, []);
         var httpRequestBuilder2 = HttpRequestBuilder.Get("http://localhost");
         new HeaderDeclarativeExtractor().Extract(httpRequestBuilder2, context2);
@@ -43,7 +43,7 @@ public class HeaderDeclarativeExtractorTests
         Assert.Equal("value2", httpRequestBuilder2.Headers["header2"].First());
         Assert.Equal("value3", httpRequestBuilder2.Headers["header3"].First());
 
-        var method3 = typeof(IHeadersDeclarativeTest).GetMethod(nameof(IHeadersDeclarativeTest.Test3))!;
+        var method3 = typeof(IHeaderDeclarativeTest).GetMethod(nameof(IHeaderDeclarativeTest.Test3))!;
         var context3 = new HttpDeclarativeExtractorContext(method3, []);
         var httpRequestBuilder3 = HttpRequestBuilder.Get("http://localhost");
         new HeaderDeclarativeExtractor().Extract(httpRequestBuilder3, context3);
@@ -54,7 +54,7 @@ public class HeaderDeclarativeExtractorTests
         Assert.Equal(["value2", "value21"], httpRequestBuilder3.Headers["header2"]);
         Assert.Equal("value4", httpRequestBuilder3.Headers["header4"].First());
 
-        var method4 = typeof(IHeadersDeclarativeTest).GetMethod(nameof(IHeadersDeclarativeTest.Test4))!;
+        var method4 = typeof(IHeaderDeclarativeTest).GetMethod(nameof(IHeaderDeclarativeTest.Test4))!;
         var context4 = new HttpDeclarativeExtractorContext(method4, [1, "furion", 31]);
         var httpRequestBuilder4 = HttpRequestBuilder.Get("http://localhost");
         new HeaderDeclarativeExtractor().Extract(httpRequestBuilder4, context4);
@@ -82,13 +82,23 @@ public class HeaderDeclarativeExtractorTests
         Assert.Equal("furion", httpRequestBuilder5.Headers["name"].First());
         Assert.Equal("furion", httpRequestBuilder5.Headers["myName"].First());
         Assert.Equal("30", httpRequestBuilder5.Headers["age"].First());
+
+        var method5 = typeof(IHeaderDeclarativeTest).GetMethod(nameof(IHeaderDeclarativeTest.Test5))!;
+        var context6 = new HttpDeclarativeExtractorContext(method5, [new { id = 10, name = "furion" }]);
+        var httpRequestBuilder6 = HttpRequestBuilder.Get("http://localhost");
+        new HeaderDeclarativeExtractor().Extract(httpRequestBuilder6, context6);
+
+        Assert.NotNull(httpRequestBuilder6.Headers);
+        Assert.Equal(4, httpRequestBuilder6.Headers.Count);
+        Assert.Equal("10", httpRequestBuilder6.Headers["id"].First());
+        Assert.Equal("furion", httpRequestBuilder6.Headers["name"].First());
     }
 }
 
 [Header("header1", "value1")]
 [Header("header2", "value2")]
 [Header("header3")]
-public interface IHeadersDeclarativeTest : IHttpDeclarativeExtractor
+public interface IHeaderDeclarativeTest : IHttpDeclarativeExtractor
 {
     [Post("http://localhost:5000")]
     [Header("header4")]
@@ -106,4 +116,7 @@ public interface IHeadersDeclarativeTest : IHttpDeclarativeExtractor
     [Post("http://localhost:5000")]
     [Header("header3", "value3")]
     Task Test4([Header] int id, [Header] [Header(AliasAs = "myName")] string name, [Header(Value = 30)] int? age);
+
+    [Post("http://localhost:5000")]
+    Task Test5([Header] object obj);
 }

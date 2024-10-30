@@ -331,6 +331,7 @@ public partial interface IHttpRemoteService
     /// <summary>
     ///     发送 HTTP 声明式请求
     /// </summary>
+    /// <remarks>仅支持同步方法。</remarks>
     /// <param name="method">被调用方法</param>
     /// <param name="args">被调用方法的参数值数组</param>
     /// <returns>
@@ -341,6 +342,7 @@ public partial interface IHttpRemoteService
     /// <summary>
     ///     发送 HTTP 声明式请求
     /// </summary>
+    /// <remarks>仅支持异步方法。若无返回值则泛型传入 <see cref="DoesNoReceiveContent" /> 类型。</remarks>
     /// <param name="method">被调用方法</param>
     /// <param name="args">被调用方法的参数值数组</param>
     /// <typeparam name="T">转换的目标类型</typeparam>
@@ -352,6 +354,7 @@ public partial interface IHttpRemoteService
     /// <summary>
     ///     发送 HTTP 声明式请求
     /// </summary>
+    /// <remarks>仅支持同步方法。</remarks>
     /// <param name="httpDeclarativeBuilder">
     ///     <see cref="HttpDeclarativeBuilder" />
     /// </param>
@@ -363,6 +366,7 @@ public partial interface IHttpRemoteService
     /// <summary>
     ///     发送 HTTP 声明式请求
     /// </summary>
+    /// <remarks>仅支持异步方法。若无返回值则泛型传入 <see cref="DoesNoReceiveContent" /> 类型。</remarks>
     /// <param name="httpDeclarativeBuilder">
     ///     <see cref="HttpDeclarativeBuilder" />
     /// </param>

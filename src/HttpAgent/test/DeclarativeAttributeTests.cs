@@ -28,6 +28,47 @@ public class DeclarativeAttributeTests
     }
 
     [Fact]
+    public void CookieAttribute_Invalid_Parameters()
+    {
+        Assert.Throws<ArgumentNullException>(() => new CookieAttribute(null!));
+        Assert.Throws<ArgumentException>(() => new CookieAttribute(string.Empty));
+        Assert.Throws<ArgumentException>(() => new CookieAttribute(" "));
+
+        Assert.Throws<ArgumentNullException>(() => new CookieAttribute(null!, null));
+        Assert.Throws<ArgumentException>(() => new CookieAttribute(string.Empty, null));
+        Assert.Throws<ArgumentException>(() => new CookieAttribute(" ", null));
+    }
+
+    [Fact]
+    public void CookieAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(CookieAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface | AttributeTargets.Parameter,
+            attributeUsage.ValidOn);
+        Assert.True(attributeUsage.AllowMultiple);
+
+        var attribute = new CookieAttribute();
+        Assert.Null(attribute.Name);
+        Assert.Null(attribute.Value);
+        Assert.Null(attribute.AliasAs);
+        Assert.False(attribute.HasSetValue);
+
+        var attribute2 = new CookieAttribute("name");
+        Assert.Equal("name", attribute2.Name);
+        Assert.Null(attribute2.Value);
+        Assert.Null(attribute2.AliasAs);
+        Assert.False(attribute2.HasSetValue);
+
+        var attribute3 = new CookieAttribute("name", null);
+        Assert.Equal("name", attribute3.Name);
+        Assert.Null(attribute3.Value);
+        Assert.Null(attribute3.AliasAs);
+        Assert.True(attribute3.HasSetValue);
+        Assert.False(attribute3.Escape);
+    }
+
+    [Fact]
     public void DisableCacheAttribute_ReturnOK()
     {
         var attributeUsage = typeof(DisableCacheAttribute).GetCustomAttribute<AttributeUsageAttribute>();
@@ -150,22 +191,45 @@ public class DeclarativeAttributeTests
     }
 
     [Fact]
+    public void QueryAttribute_Invalid_Parameters()
+    {
+        Assert.Throws<ArgumentNullException>(() => new QueryAttribute(null!));
+        Assert.Throws<ArgumentException>(() => new QueryAttribute(string.Empty));
+        Assert.Throws<ArgumentException>(() => new QueryAttribute(" "));
+
+        Assert.Throws<ArgumentNullException>(() => new QueryAttribute(null!, null));
+        Assert.Throws<ArgumentException>(() => new QueryAttribute(string.Empty, null));
+        Assert.Throws<ArgumentException>(() => new QueryAttribute(" ", null));
+    }
+
+    [Fact]
     public void QueryAttribute_ReturnOK()
     {
         var attributeUsage = typeof(QueryAttribute).GetCustomAttribute<AttributeUsageAttribute>();
         Assert.NotNull(attributeUsage);
-        Assert.Equal(AttributeTargets.Parameter, attributeUsage.ValidOn);
-        Assert.False(attributeUsage.AllowMultiple);
+        Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface | AttributeTargets.Parameter,
+            attributeUsage.ValidOn);
+        Assert.True(attributeUsage.AllowMultiple);
 
         var attribute = new QueryAttribute();
+        Assert.Null(attribute.Name);
+        Assert.Null(attribute.Value);
         Assert.Null(attribute.AliasAs);
-        Assert.False(attribute.Escape);
+        Assert.False(attribute.HasSetValue);
         Assert.Null(attribute.Prefix);
 
-        var attribute2 = new QueryAttribute("user");
-        Assert.Equal("user", attribute2.AliasAs);
-        Assert.False(attribute2.Escape);
-        Assert.Null(attribute2.Prefix);
+        var attribute2 = new QueryAttribute("name");
+        Assert.Equal("name", attribute2.Name);
+        Assert.Null(attribute2.Value);
+        Assert.Null(attribute2.AliasAs);
+        Assert.False(attribute2.HasSetValue);
+
+        var attribute3 = new QueryAttribute("name", null);
+        Assert.Equal("name", attribute3.Name);
+        Assert.Null(attribute3.Value);
+        Assert.Null(attribute3.AliasAs);
+        Assert.True(attribute3.HasSetValue);
+        Assert.False(attribute3.Escape);
     }
 
     [Fact]

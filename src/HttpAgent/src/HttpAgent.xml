@@ -938,13 +938,11 @@
                 <see cref="T:System.UriBuilder" />
             </param>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.ReplacePathPlaceholders(System.UriBuilder)">
+        <member name="M:HttpAgent.HttpRequestBuilder.ReplacePathPlaceholders(System.String)">
             <summary>
                 替换路径参数
             </summary>
-            <param name="uriBuilder">
-                <see cref="T:System.UriBuilder" />
-            </param>
+            <param name="originalUri">源请求地址</param>
             <returns>
                 <see cref="T:System.String" />
             </returns>
@@ -3341,6 +3339,63 @@
                 内容编码
             </summary>
         </member>
+        <member name="T:HttpAgent.CookieAttribute">
+            <summary>
+                Cookie 特性
+            </summary>
+            <remarks>支持多次指定。</remarks>
+        </member>
+        <member name="F:HttpAgent.CookieAttribute._value">
+            <summary>
+                <see cref="P:HttpAgent.CookieAttribute.Value" /> 私有字段
+            </summary>
+        </member>
+        <member name="M:HttpAgent.CookieAttribute.#ctor">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.CookieAttribute" />
+            </summary>
+            <remarks>特性作用于参数时有效。</remarks>
+        </member>
+        <member name="M:HttpAgent.CookieAttribute.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.CookieAttribute" />
+            </summary>
+            <remarks>当特性作用于方法或接口时，则表示移除指定 Cookie 操作。</remarks>
+            <param name="name">Cookie</param>
+        </member>
+        <member name="M:HttpAgent.CookieAttribute.#ctor(System.String,System.Object)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.CookieAttribute" />
+            </summary>
+            <param name="name">Cookie</param>
+            <param name="value">Cookie 的值</param>
+        </member>
+        <member name="P:HttpAgent.CookieAttribute.Name">
+            <summary>
+                Cookie
+            </summary>
+        </member>
+        <member name="P:HttpAgent.CookieAttribute.Value">
+            <summary>
+                Cookie 的值
+            </summary>
+        </member>
+        <member name="P:HttpAgent.CookieAttribute.AliasAs">
+            <summary>
+                别名
+            </summary>
+            <remarks>特性用于参数时有效。</remarks>
+        </member>
+        <member name="P:HttpAgent.CookieAttribute.Escape">
+            <summary>
+                是否转义
+            </summary>
+        </member>
+        <member name="P:HttpAgent.CookieAttribute.HasSetValue">
+            <summary>
+                是否设置了值
+            </summary>
+        </member>
         <member name="T:HttpAgent.DisableCacheAttribute">
             <summary>
                 禁用 HTTP 缓存特性
@@ -3424,11 +3479,6 @@
                 标头的值
             </summary>
         </member>
-        <member name="P:HttpAgent.HeaderAttribute.HasSetValue">
-            <summary>
-                是否设置了标头的值
-            </summary>
-        </member>
         <member name="P:HttpAgent.HeaderAttribute.AliasAs">
             <summary>
                 别名
@@ -3438,6 +3488,11 @@
         <member name="P:HttpAgent.HeaderAttribute.Escape">
             <summary>
                 是否转义
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HeaderAttribute.HasSetValue">
+            <summary>
+                是否设置了值
             </summary>
         </member>
         <member name="T:HttpAgent.HttpClientNameAttribute">
@@ -3620,22 +3675,48 @@
             <summary>
                 查询参数特性
             </summary>
+            <remarks>支持多次指定。</remarks>
+        </member>
+        <member name="F:HttpAgent.QueryAttribute._value">
+            <summary>
+                <see cref="P:HttpAgent.QueryAttribute.Value" /> 私有字段
+            </summary>
         </member>
         <member name="M:HttpAgent.QueryAttribute.#ctor">
             <summary>
                 <inheritdoc cref="T:HttpAgent.QueryAttribute" />
             </summary>
+            <remarks>特性作用于参数时有效。</remarks>
         </member>
         <member name="M:HttpAgent.QueryAttribute.#ctor(System.String)">
             <summary>
                 <inheritdoc cref="T:HttpAgent.QueryAttribute" />
             </summary>
-            <param name="aliasAs">别名</param>
+            <remarks>当特性作用于方法或接口时，则表示移除指定查询参数操作。</remarks>
+            <param name="name">查询参数</param>
+        </member>
+        <member name="M:HttpAgent.QueryAttribute.#ctor(System.String,System.Object)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.QueryAttribute" />
+            </summary>
+            <param name="name">查询参数</param>
+            <param name="value">查询参数的值</param>
+        </member>
+        <member name="P:HttpAgent.QueryAttribute.Name">
+            <summary>
+                查询参数
+            </summary>
+        </member>
+        <member name="P:HttpAgent.QueryAttribute.Value">
+            <summary>
+                查询参数的值
+            </summary>
         </member>
         <member name="P:HttpAgent.QueryAttribute.AliasAs">
             <summary>
                 别名
             </summary>
+            <remarks>特性用于参数时有效。</remarks>
         </member>
         <member name="P:HttpAgent.QueryAttribute.Escape">
             <summary>
@@ -3647,6 +3728,11 @@
                 参数前缀
             </summary>
             <remarks>作用于对象类型时有效。</remarks>
+        </member>
+        <member name="P:HttpAgent.QueryAttribute.HasSetValue">
+            <summary>
+                是否设置了值
+            </summary>
         </member>
         <member name="T:HttpAgent.SimulateBrowserAttribute">
             <summary>
@@ -3730,12 +3816,73 @@
             </returns>
             <exception cref="T:System.InvalidOperationException"></exception>
         </member>
+        <member name="T:HttpAgent.DeclarativeManager">
+            <summary>
+                HTTP 声明式管理器
+            </summary>
+        </member>
+        <member name="F:HttpAgent.DeclarativeManager._httpDeclarativeBuilder">
+            <inheritdoc cref="T:HttpAgent.HttpDeclarativeBuilder" />
+        </member>
+        <member name="F:HttpAgent.DeclarativeManager._httpRemoteService">
+            <inheritdoc cref="T:HttpAgent.IHttpRemoteService" />
+        </member>
+        <member name="M:HttpAgent.DeclarativeManager.#ctor(HttpAgent.IHttpRemoteService,HttpAgent.HttpDeclarativeBuilder)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.DeclarativeManager" />
+            </summary>
+            <param name="httpRemoteService">
+                <see cref="T:HttpAgent.IHttpRemoteService" />
+            </param>
+            <param name="httpDeclarativeBuilder">
+                <see cref="T:HttpAgent.HttpDeclarativeBuilder" />
+            </param>
+        </member>
+        <member name="P:HttpAgent.DeclarativeManager.RequestBuilder">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.HttpRequestBuilder" />
+            </summary>
+        </member>
+        <member name="M:HttpAgent.DeclarativeManager.Start">
+            <summary>
+                开始请求
+            </summary>
+            <returns>
+                <see cref="T:System.Object" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.DeclarativeManager.StartAsync``1">
+            <summary>
+                开始请求
+            </summary>
+            <typeparam name="T">转换的目标类型</typeparam>
+            <returns>
+                <typeparamref name="T" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.DeclarativeManager.ExtractSingleSpecialArguments(System.Object[])">
+            <summary>
+                尝试解析单个特殊类型参数
+            </summary>
+            <param name="args">被调用方法的参数值数组</param>
+            <returns>
+                <see cref="T:System.Tuple`2" />
+            </returns>
+        </member>
         <member name="T:HttpAgent.BodyDeclarativeExtractor">
             <summary>
                 <see cref="T:HttpAgent.BodyAttribute" /> 特性提取器
             </summary>
         </member>
         <member name="M:HttpAgent.BodyDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <inheritdoc />
+        </member>
+        <member name="T:HttpAgent.CookieDeclarativeExtractor">
+            <summary>
+                <see cref="T:HttpAgent.CookieAttribute" /> 特性提取器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.CookieDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
             <inheritdoc />
         </member>
         <member name="T:HttpAgent.DisableCacheDeclarativeExtractor">
@@ -3834,12 +3981,12 @@
         <member name="M:HttpAgent.SimulateBrowserDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
             <inheritdoc />
         </member>
-        <member name="T:HttpAgent.TimeoutCacheDeclarativeExtractor">
+        <member name="T:HttpAgent.TimeoutDeclarativeExtractor">
             <summary>
                 <see cref="T:HttpAgent.TimeoutAttribute" /> 特性提取器
             </summary>
         </member>
-        <member name="M:HttpAgent.TimeoutCacheDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+        <member name="M:HttpAgent.TimeoutDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
             <inheritdoc />
         </member>
         <member name="T:HttpAgent.TraceIdentifierDeclarativeExtractor">
@@ -4411,52 +4558,6 @@
             ○ Match if at the end of the string or if before an ending newline.<br/>
             </code>
             </remarks>
-        </member>
-        <member name="T:HttpAgent.DeclarativeManager">
-            <summary>
-                HTTP 声明式管理器
-            </summary>
-        </member>
-        <member name="F:HttpAgent.DeclarativeManager._httpDeclarativeBuilder">
-            <inheritdoc cref="T:HttpAgent.HttpDeclarativeBuilder" />
-        </member>
-        <member name="F:HttpAgent.DeclarativeManager._httpRemoteService">
-            <inheritdoc cref="T:HttpAgent.IHttpRemoteService" />
-        </member>
-        <member name="M:HttpAgent.DeclarativeManager.#ctor(HttpAgent.IHttpRemoteService,HttpAgent.HttpDeclarativeBuilder)">
-            <summary>
-                <inheritdoc cref="T:HttpAgent.DeclarativeManager" />
-            </summary>
-            <param name="httpRemoteService">
-                <see cref="T:HttpAgent.IHttpRemoteService" />
-            </param>
-            <param name="httpDeclarativeBuilder">
-                <see cref="T:HttpAgent.HttpDeclarativeBuilder" />
-            </param>
-        </member>
-        <member name="P:HttpAgent.DeclarativeManager.RequestBuilder">
-            <summary>
-                <inheritdoc cref="T:HttpAgent.HttpRequestBuilder" />
-            </summary>
-        </member>
-        <member name="M:HttpAgent.DeclarativeManager.Start">
-            <summary>
-                开始请求
-            </summary>
-        </member>
-        <member name="M:HttpAgent.DeclarativeManager.StartAsync``1">
-            <summary>
-                开始请求
-            </summary>
-        </member>
-        <member name="M:HttpAgent.DeclarativeManager.ExtractSpecialArguments(System.Object[])">
-            <summary>
-                解析特殊类型参数实例
-            </summary>
-            <param name="args">被调用方法的参数值数组</param>
-            <returns>
-                <see cref="T:System.Tuple`2" />
-            </returns>
         </member>
         <member name="T:HttpAgent.FileDownloadManager">
             <summary>
@@ -7060,6 +7161,7 @@
             <summary>
                 发送 HTTP 声明式请求
             </summary>
+            <remarks>仅支持同步方法。</remarks>
             <param name="method">被调用方法</param>
             <param name="args">被调用方法的参数值数组</param>
             <returns>
@@ -7070,6 +7172,7 @@
             <summary>
                 发送 HTTP 声明式请求
             </summary>
+            <remarks>仅支持异步方法。若无返回值则泛型传入 <see cref="T:HttpAgent.DoesNoReceiveContent" /> 类型。</remarks>
             <param name="method">被调用方法</param>
             <param name="args">被调用方法的参数值数组</param>
             <typeparam name="T">转换的目标类型</typeparam>
@@ -7081,6 +7184,7 @@
             <summary>
                 发送 HTTP 声明式请求
             </summary>
+            <remarks>仅支持同步方法。</remarks>
             <param name="httpDeclarativeBuilder">
                 <see cref="T:HttpAgent.HttpDeclarativeBuilder" />
             </param>
@@ -7092,6 +7196,7 @@
             <summary>
                 发送 HTTP 声明式请求
             </summary>
+            <remarks>仅支持异步方法。若无返回值则泛型传入 <see cref="T:HttpAgent.DoesNoReceiveContent" /> 类型。</remarks>
             <param name="httpDeclarativeBuilder">
                 <see cref="T:HttpAgent.HttpDeclarativeBuilder" />
             </param>

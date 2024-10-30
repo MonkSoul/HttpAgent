@@ -19,21 +19,24 @@ public class DisableCacheDeclarativeExtractorTests
     public void Extract_ReturnOK()
     {
         var method1 =
-            typeof(IDisableCacheDeclarativeExtractorTest1).GetMethod(nameof(IDisableCacheDeclarativeExtractorTest1.Test1))!;
+            typeof(IDisableCacheDeclarativeExtractorTest1).GetMethod(
+                nameof(IDisableCacheDeclarativeExtractorTest1.Test1))!;
         var context1 = new HttpDeclarativeExtractorContext(method1, []);
         var httpRequestBuilder1 = HttpRequestBuilder.Get("http://localhost");
         new DisableCacheDeclarativeExtractor().Extract(httpRequestBuilder1, context1);
         Assert.False(httpRequestBuilder1.DisableCacheEnabled);
 
         var method2 =
-            typeof(IDisableCacheDeclarativeExtractorTest2).GetMethod(nameof(IDisableCacheDeclarativeExtractorTest2.Test1))!;
+            typeof(IDisableCacheDeclarativeExtractorTest2).GetMethod(
+                nameof(IDisableCacheDeclarativeExtractorTest2.Test1))!;
         var context2 = new HttpDeclarativeExtractorContext(method2, []);
         var httpRequestBuilder2 = HttpRequestBuilder.Get("http://localhost");
         new DisableCacheDeclarativeExtractor().Extract(httpRequestBuilder2, context2);
         Assert.True(httpRequestBuilder2.DisableCacheEnabled);
-        
+
         var method3 =
-            typeof(IDisableCacheDeclarativeExtractorTest2).GetMethod(nameof(IDisableCacheDeclarativeExtractorTest2.Test2))!;
+            typeof(IDisableCacheDeclarativeExtractorTest2).GetMethod(
+                nameof(IDisableCacheDeclarativeExtractorTest2.Test2))!;
         var context3 = new HttpDeclarativeExtractorContext(method3, []);
         var httpRequestBuilder3 = HttpRequestBuilder.Get("http://localhost");
         new DisableCacheDeclarativeExtractor().Extract(httpRequestBuilder3, context3);

@@ -29,7 +29,7 @@ internal sealed class HeaderDeclarativeExtractor : IHttpDeclarativeExtractor
                 // 空检查
                 ArgumentException.ThrowIfNullOrEmpty(headerName);
 
-                // 添加请求标头
+                // 设置请求标头
                 if (headerAttribute.HasSetValue)
                 {
                     httpRequestBuilder.WithHeader(headerName, headerAttribute.Value, headerAttribute.Escape);
@@ -45,19 +45,19 @@ internal sealed class HeaderDeclarativeExtractor : IHttpDeclarativeExtractor
         /* 情况二：当特性作用于参数时 */
 
         // 查找所有贴有 [Header] 特性的参数
-        var headersParameters = context.Parameters.Where(u =>
+        var headerParameters = context.Parameters.Where(u =>
                 HttpDeclarativeExtractorContext.FilterSpecialParameter(u.Key) &&
                 u.Key.IsDefined(typeof(HeaderAttribute), true))
             .ToArray();
 
         // 空检查
-        if (headersParameters.Length == 0)
+        if (headerParameters.Length == 0)
         {
             return;
         }
 
         // 遍历所有贴有 [Header] 特性的参数
-        foreach (var (parameter, value) in headersParameters)
+        foreach (var (parameter, value) in headerParameters)
         {
             // 获取 HeaderAttribute 特性集合
             var parameterHeaderAttributes = parameter.GetCustomAttributes<HeaderAttribute>(true);
@@ -76,8 +76,20 @@ internal sealed class HeaderDeclarativeExtractor : IHttpDeclarativeExtractor
                         : headerAttribute.AliasAs.Trim();
                 }
 
-                // 添加请求标头
-                httpRequestBuilder.WithHeader(parameterName, value ?? headerAttribute.Value, headerAttribute.Escape);
+                // 检查类型是否是基本类型或枚举类型或由它们组成的数组或集合类型
+                if (parameter.ParameterType.IsBaseTypeOrEnumOrCollection())
+                {
+                    httpRequestBuilder.WithHeader(parameterName, value ?? headerAttribute.Value,
+                        headerAttribute.Escape);
+
+                    continue;
+                }
+
+                // 空检查
+                if (value is not null)
+                {
+                    httpRequestBuilder.WithHeaders(value, headerAttribute.Escape);
+                }
             }
         }
     }

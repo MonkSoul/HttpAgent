@@ -21,9 +21,10 @@ public sealed class HttpDeclarativeBuilder
         { typeof(SimulateBrowserDeclarativeExtractor), new SimulateBrowserDeclarativeExtractor() },
         { typeof(DisableCacheDeclarativeExtractor), new DisableCacheDeclarativeExtractor() },
         { typeof(EnsureSuccessStatusCodeDeclarativeExtractor), new EnsureSuccessStatusCodeDeclarativeExtractor() },
-        { typeof(TimeoutCacheDeclarativeExtractor), new TimeoutCacheDeclarativeExtractor() },
+        { typeof(TimeoutDeclarativeExtractor), new TimeoutDeclarativeExtractor() },
         { typeof(QueryDeclarativeExtractor), new QueryDeclarativeExtractor() },
         { typeof(PathDeclarativeExtractor), new PathDeclarativeExtractor() },
+        { typeof(CookieDeclarativeExtractor), new CookieDeclarativeExtractor() },
         { typeof(HeaderDeclarativeExtractor), new HeaderDeclarativeExtractor() },
         { typeof(BodyDeclarativeExtractor), new BodyDeclarativeExtractor() },
         { typeof(MultipartBodyDeclarativeExtractor), new MultipartBodyDeclarativeExtractor() },
@@ -75,6 +76,9 @@ public sealed class HttpDeclarativeBuilder
     /// <exception cref="InvalidOperationException"></exception>
     internal HttpRequestBuilder Build(HttpRemoteOptions httpRemoteOptions)
     {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(httpRemoteOptions);
+
         // 检查被调用方法是否贴有 [HttpMethod] 特性
         if (!Method.IsDefined(typeof(HttpMethodAttribute), true))
         {
@@ -104,7 +108,7 @@ public sealed class HttpDeclarativeBuilder
                 value => value.GetType());
         }
 
-        // 遍历 HTTP 声明提取器集合并提取信息设置给 HttpRequestBuilder 实例
+        // 遍历 HTTP 声明式提取器集合
         foreach (var extractor in _extractors.Values)
         {
             extractor.Extract(httpRequestBuilder, httpDeclarativeExtractorContext);

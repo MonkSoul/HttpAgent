@@ -7,7 +7,7 @@ namespace HttpAgent;
 /// <summary>
 ///     <see cref="TimeoutAttribute" /> 特性提取器
 /// </summary>
-internal sealed class TimeoutCacheDeclarativeExtractor : IHttpDeclarativeExtractor
+internal sealed class TimeoutDeclarativeExtractor : IHttpDeclarativeExtractor
 {
     /// <inheritdoc />
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)

@@ -204,6 +204,8 @@ public class HttpTest : IHttpDeclarative;
 
 public interface IHttpDeclarativeTest : IHttpDeclarative
 {
+    Task InvalidMethod();
+
     [Get("https://furion.net/")]
     Task<string> Method1();
 
@@ -214,4 +216,18 @@ public interface IHttpDeclarativeTest : IHttpDeclarative
     Task<string> Special(int id, string name, Action<HttpRequestBuilder> builder,
         Action<HttpMultipartFormDataBuilder> formBuilder, HttpCompletionOption completionOption,
         CancellationToken cancellationToken);
+
+    [Get("{url}")]
+    string GetUrl(string url, CancellationToken cancellationToken);
+
+    [Get("{url}")]
+    Task<string> GetUrlAsync(string url, CancellationToken cancellationToken);
+}
+
+public class CustomHttpDeclarativeExtractor : IHttpDeclarativeExtractor
+{
+    /// <inheritdoc />
+    public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
+    {
+    }
 }
