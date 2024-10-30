@@ -39,6 +39,7 @@ public class HttpRequestBuilderPropertiesTests
         Assert.Null(httpRequestBuilder2.Cookies);
         Assert.Null(httpRequestBuilder2.CookiesToRemove);
         Assert.Null(httpRequestBuilder2.HttpClientName);
+        Assert.Null(httpRequestBuilder2.MaxResponseContentBufferSize);
         Assert.Null(httpRequestBuilder2.HttpClientProvider);
         Assert.Null(httpRequestBuilder2.HttpContentProcessorProviders);
         Assert.Null(httpRequestBuilder2.HttpContentConverterProviders);

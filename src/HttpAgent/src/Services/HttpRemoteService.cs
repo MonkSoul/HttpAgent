@@ -399,6 +399,9 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
                 ProfilerDelegatingHandler.LogResponseHeadersAndSummary(_logger, httpResponseMessage, requestDuration);
             }
 
+            // 检查 HTTP 响应内容长度是否在设定的最大缓冲区大小限制内
+            CheckContentLengthWithinLimit(httpRequestBuilder, httpResponseMessage);
+
             // 如果 HTTP 响应的 IsSuccessStatusCode 属性是 false，则引发异常
             if (httpRequestBuilder.EnsureSuccessStatusCodeEnabled)
             {
@@ -599,6 +602,34 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         httpClient.DefaultRequestHeaders.UserAgent.Add(typeof(HttpRemoteService).Assembly.ConvertTo(ass =>
             new ProductInfoHeaderValue(ass.GetName().Name!,
                 ass.GetVersion()?.ToString() ?? Constants.UNKNOWN_USER_AGENT_VERSION)));
+    }
+
+    /// <summary>
+    ///     检查 HTTP 响应内容长度是否在设定的最大缓冲区大小限制内
+    /// </summary>
+    /// <param name="httpRequestBuilder">
+    ///     <see cref="HttpRequestBuilder" />
+    /// </param>
+    /// <param name="httpResponseMessage">
+    ///     <see cref="HttpResponseMessage" />
+    /// </param>
+    /// <exception cref="HttpRequestException"></exception>
+    internal static void CheckContentLengthWithinLimit(HttpRequestBuilder httpRequestBuilder,
+        HttpResponseMessage httpResponseMessage)
+    {
+        // 空检查
+        if (httpRequestBuilder.MaxResponseContentBufferSize is null)
+        {
+            return;
+        }
+
+        // 检查响应内容长度
+        if (httpResponseMessage.Content.Headers.ContentLength is { } contentLength &&
+            contentLength > httpRequestBuilder.MaxResponseContentBufferSize)
+        {
+            throw new HttpRequestException(
+                $"Cannot write more bytes to the buffer than the configured maximum buffer size: {httpRequestBuilder.MaxResponseContentBufferSize}.");
+        }
     }
 
     /// <summary>

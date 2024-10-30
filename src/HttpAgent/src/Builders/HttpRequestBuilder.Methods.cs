@@ -796,6 +796,28 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
+    ///     设置响应内容最大缓存字节数
+    /// </summary>
+    /// <param name="maxResponseContentBufferSize">响应内容最大缓存字节数</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    /// <exception cref="ArgumentException"></exception>
+    public HttpRequestBuilder SetMaxResponseContentBufferSize(long maxResponseContentBufferSize)
+    {
+        // 小于或等于 0 检查
+        if (maxResponseContentBufferSize <= 0)
+        {
+            throw new ArgumentException("Max response content buffer size must be greater than 0.",
+                nameof(maxResponseContentBufferSize));
+        }
+
+        MaxResponseContentBufferSize = maxResponseContentBufferSize;
+
+        return this;
+    }
+
+    /// <summary>
     ///     设置 <see cref="HttpClient" /> 实例提供器
     /// </summary>
     /// <param name="configure"><inheritdoc cref="HttpClient" /> 实例提供器</param>

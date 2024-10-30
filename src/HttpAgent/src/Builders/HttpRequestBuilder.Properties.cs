@@ -115,6 +115,12 @@ public sealed partial class HttpRequestBuilder
     public string? HttpClientName { get; private set; }
 
     /// <summary>
+    ///     响应内容最大缓存字节数
+    /// </summary>
+    /// <remarks>可为单次请求设置最大缓存字节数。</remarks>
+    public long? MaxResponseContentBufferSize { get; private set; }
+
+    /// <summary>
     ///     <see cref="HttpClient" /> 实例提供器
     /// </summary>
     /// <value>

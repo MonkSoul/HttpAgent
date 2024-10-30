@@ -1406,6 +1406,16 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.SetMaxResponseContentBufferSize(System.Int64)">
+            <summary>
+                设置响应内容最大缓存字节数
+            </summary>
+            <param name="maxResponseContentBufferSize">响应内容最大缓存字节数</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.SetHttpClientProvider(System.Func{System.ValueTuple{System.Net.Http.HttpClient,System.Action{System.Net.Http.HttpClient}}})">
             <summary>
                 设置 <see cref="T:System.Net.Http.HttpClient" /> 实例提供器
@@ -1739,6 +1749,12 @@
                 <para>此属性用于指定 <see cref="T:System.Net.Http.IHttpClientFactory" /> 创建 <see cref="T:System.Net.Http.HttpClient" /> 实例时传递的名称。</para>
                 <para>该名称用于标识在服务容器中与特定 <see cref="T:System.Net.Http.HttpClient" /> 实例相关的配置。</para>
             </remarks>
+        </member>
+        <member name="P:HttpAgent.HttpRequestBuilder.MaxResponseContentBufferSize">
+            <summary>
+                响应内容最大缓存字节数
+            </summary>
+            <remarks>可为单次请求设置最大缓存字节数。</remarks>
         </member>
         <member name="P:HttpAgent.HttpRequestBuilder.HttpClientProvider">
             <summary>
@@ -5900,6 +5916,18 @@
             <param name="httpClient">
                 <see cref="T:System.Net.Http.HttpClient" />
             </param>
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.CheckContentLengthWithinLimit(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpResponseMessage)">
+            <summary>
+                检查 HTTP 响应内容长度是否在设定的最大缓冲区大小限制内
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+            <param name="httpResponseMessage">
+                <see cref="T:System.Net.Http.HttpResponseMessage" />
+            </param>
+            <exception cref="T:System.Net.Http.HttpRequestException"></exception>
         </member>
         <member name="M:HttpAgent.HttpRemoteService.InvokeStatusCodeHandlers(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <summary>
