@@ -53,7 +53,7 @@ internal static class MethodInfoExtensions
     ///     <see cref="MethodInfo" />
     /// </param>
     /// <param name="inherit">是否在基类中搜索</param>
-    /// <param name="methodSearchFirst">是否优先查找 <see cref="MethodInfo"/> 的特性。默认值为：<c>true</c>。</param>
+    /// <param name="methodSearchFirst">是否优先查找 <see cref="MethodInfo" /> 的特性。默认值为：<c>true</c>。</param>
     /// <typeparam name="TAttribute">
     ///     <see cref="Attribute" />
     /// </typeparam>

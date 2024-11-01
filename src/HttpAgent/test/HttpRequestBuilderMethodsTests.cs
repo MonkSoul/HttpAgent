@@ -916,16 +916,18 @@ public class HttpRequestBuilderMethodsTests
         httpRequestBuilder.SetHttpClientName("furion");
         Assert.Equal("furion", httpRequestBuilder.HttpClientName);
     }
-    
+
     [Fact]
     public void SetMaxResponseContentBufferSize_Invalid_Parameters()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
 
         var exception = Assert.Throws<ArgumentException>(() => httpRequestBuilder.SetMaxResponseContentBufferSize(0));
-        Assert.Equal("Max response content buffer size must be greater than 0. (Parameter 'maxResponseContentBufferSize')", exception.Message);
+        Assert.Equal(
+            "Max response content buffer size must be greater than 0. (Parameter 'maxResponseContentBufferSize')",
+            exception.Message);
     }
-    
+
     [Fact]
     public void SetMaxResponseContentBufferSize_ReturnOK()
     {
