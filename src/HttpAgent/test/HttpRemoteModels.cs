@@ -185,9 +185,9 @@ public class CustomLongPollingEventHandler2 : IHttpLongPollingEventHandler, IHtt
 [MessagePackObject]
 public class MessagePackModel1
 {
-    [Key(0)] public int Id { get; set; }
+    [MessagePack.Key(0)] public int Id { get; set; }
 
-    [Key(1)] public string? Name { get; set; }
+    [MessagePack.Key(1)] public string? Name { get; set; }
 }
 
 public interface INonHttpTest;
