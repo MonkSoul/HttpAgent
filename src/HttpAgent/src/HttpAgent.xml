@@ -854,6 +854,65 @@
                 <see cref="T:HttpAgent.HttpRemoteBuilder" />
             </returns>
         </member>
+        <member name="M:HttpAgent.HttpRemoteBuilder.IPv4ConnectCallback(System.Net.Http.SocketsHttpConnectionContext,System.Threading.CancellationToken)">
+            <summary>
+                获取使用 IPv4 连接到服务器的回调
+            </summary>
+            <param name="context">
+                <see cref="T:System.Net.Http.SocketsHttpConnectionContext" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.IO.Stream" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRemoteBuilder.IPv6ConnectCallback(System.Net.Http.SocketsHttpConnectionContext,System.Threading.CancellationToken)">
+            <summary>
+                获取使用 IPv6 连接到服务器的回调
+            </summary>
+            <param name="context">
+                <see cref="T:System.Net.Http.SocketsHttpConnectionContext" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.IO.Stream" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRemoteBuilder.UnspecifiedConnectCallback(System.Net.Http.SocketsHttpConnectionContext,System.Threading.CancellationToken)">
+            <summary>
+                获取使用 IPv4 或 IPv6 连接到服务器的回调
+            </summary>
+            <param name="context">
+                <see cref="T:System.Net.Http.SocketsHttpConnectionContext" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.IO.Stream" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRemoteBuilder.IPAddressConnectCallback(System.Net.Sockets.AddressFamily,System.Net.Http.SocketsHttpConnectionContext,System.Threading.CancellationToken)">
+            <summary>
+                获取使用指定 IP 地址类型连接到服务器的回调
+            </summary>
+            <param name="addressFamily">
+                <see cref="T:System.Net.Sockets.AddressFamily" />
+            </param>
+            <param name="context">
+                <see cref="T:System.Net.Http.SocketsHttpConnectionContext" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.IO.Stream" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.HttpRemoteBuilder.Build(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
                 构建模块服务

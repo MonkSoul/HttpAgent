@@ -17,6 +17,7 @@ global using System.Net.Mime;
 global using System.Text;
 global using Xunit;
 global using System.Net.Http.Headers;
+global using System.Net.Sockets;
 global using System.Net.WebSockets;
 global using System.Reflection;
 global using System.Text.Json;

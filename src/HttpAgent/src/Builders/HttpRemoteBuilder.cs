@@ -267,6 +267,109 @@ public sealed class HttpRemoteBuilder
     }
 
     /// <summary>
+    ///     获取使用 IPv4 连接到服务器的回调
+    /// </summary>
+    /// <param name="context">
+    ///     <see cref="SocketsHttpConnectionContext" />
+    /// </param>
+    /// <param name="cancellationToken">
+    ///     <see cref="CancellationToken" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="Stream" />
+    /// </returns>
+    public static ValueTask<Stream> IPv4ConnectCallback(SocketsHttpConnectionContext context,
+        CancellationToken cancellationToken) =>
+        IPAddressConnectCallback(AddressFamily.InterNetwork, context, cancellationToken);
+
+    /// <summary>
+    ///     获取使用 IPv6 连接到服务器的回调
+    /// </summary>
+    /// <param name="context">
+    ///     <see cref="SocketsHttpConnectionContext" />
+    /// </param>
+    /// <param name="cancellationToken">
+    ///     <see cref="CancellationToken" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="Stream" />
+    /// </returns>
+    public static ValueTask<Stream> IPv6ConnectCallback(SocketsHttpConnectionContext context,
+        CancellationToken cancellationToken) =>
+        IPAddressConnectCallback(AddressFamily.InterNetworkV6, context, cancellationToken);
+
+    /// <summary>
+    ///     获取使用 IPv4 或 IPv6 连接到服务器的回调
+    /// </summary>
+    /// <param name="context">
+    ///     <see cref="SocketsHttpConnectionContext" />
+    /// </param>
+    /// <param name="cancellationToken">
+    ///     <see cref="CancellationToken" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="Stream" />
+    /// </returns>
+    public static ValueTask<Stream> UnspecifiedConnectCallback(SocketsHttpConnectionContext context,
+        CancellationToken cancellationToken) =>
+        IPAddressConnectCallback(AddressFamily.Unspecified, context, cancellationToken);
+
+    /// <summary>
+    ///     获取使用指定 IP 地址类型连接到服务器的回调
+    /// </summary>
+    /// <param name="addressFamily">
+    ///     <see cref="AddressFamily" />
+    /// </param>
+    /// <param name="context">
+    ///     <see cref="SocketsHttpConnectionContext" />
+    /// </param>
+    /// <param name="cancellationToken">
+    ///     <see cref="CancellationToken" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="Stream" />
+    /// </returns>
+    internal static async ValueTask<Stream> IPAddressConnectCallback(AddressFamily addressFamily,
+        SocketsHttpConnectionContext context,
+        CancellationToken cancellationToken)
+    {
+        // 参考文献：
+        // - https://www.meziantou.net/forcing-httpclient-to-use-ipv4-or-ipv6-addresses.htm
+        // - https://learn.microsoft.com/en-us/dotnet/core/runtime-config/#runtimeconfigjson
+
+        // 使用 DNS 查找目标主机的 IP 地址：
+        // - IPv4: AddressFamily.InterNetwork
+        // - IPv6: AddressFamily.InterNetworkV6
+        // - IPv4 或 IPv6: AddressFamily.Unspecified
+        // 注意：当主机没有 IP 地址时，此方法会抛出一个 SocketException 异常
+        var entry = await Dns.GetHostEntryAsync(context.DnsEndPoint.Host, addressFamily, cancellationToken);
+
+        // 打开与目标主机/端口的连接
+        var socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+
+        // 关闭 Nagle 算法，因为这在大多数 HttpClient 场景中会降低性能。
+        socket.NoDelay = true;
+
+        try
+        {
+            await socket.ConnectAsync(entry.AddressList, context.DnsEndPoint.Port, cancellationToken);
+
+            // 如果你想选择特定的 IP 地址来连接服务器
+            // await socket.ConnectAsync(
+            //    entry.AddressList[Random.Shared.Next(0, entry.AddressList.Length)],
+            //    context.DnsEndPoint.Port, cancellationToken);
+
+            // 返回 NetworkStream 给调用者
+            return new NetworkStream(socket, true);
+        }
+        catch
+        {
+            socket.Dispose();
+            throw;
+        }
+    }
+
+    /// <summary>
     ///     构建模块服务
     /// </summary>
     /// <param name="services">

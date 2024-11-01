@@ -23,6 +23,7 @@ global using System.Net.Mime;
 global using System.Text.Json;
 global using System.Net.Http.Headers;
 global using System.Net.NetworkInformation;
+global using System.Net.Sockets;
 global using System.Net.WebSockets;
 global using System.Reflection;
 global using System.Reflection.Emit;
