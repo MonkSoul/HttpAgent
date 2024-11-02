@@ -5,7 +5,7 @@
 namespace HttpAgent;
 
 /// <summary>
-///     <see cref="CookieAttribute" /> 特性提取器
+///     HTTP 声明式 <see cref="CookieAttribute" /> 特性提取器
 /// </summary>
 internal sealed class CookieDeclarativeExtractor : IHttpDeclarativeExtractor
 {
@@ -34,7 +34,7 @@ internal sealed class CookieDeclarativeExtractor : IHttpDeclarativeExtractor
                 {
                     httpRequestBuilder.WithCookie(cookieName, cookieAttribute.Value, cookieAttribute.Escape);
                 }
-                // 设置 Cookies
+                // 移除 Cookies
                 else
                 {
                     httpRequestBuilder.RemoveCookies(cookieName);
@@ -44,7 +44,7 @@ internal sealed class CookieDeclarativeExtractor : IHttpDeclarativeExtractor
 
         /* 情况二：当特性作用于参数时 */
 
-        // 查找所有贴有 [Cookie] 特性的参数
+        // 查找所有贴有 [Cookie] 特性的参数集合
         var cookieParameters = context.Parameters.Where(u =>
                 HttpDeclarativeExtractorContext.FilterSpecialParameter(u.Key) &&
                 u.Key.IsDefined(typeof(CookieAttribute), true))

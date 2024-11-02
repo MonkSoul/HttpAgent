@@ -5,7 +5,7 @@
 namespace HttpAgent;
 
 /// <summary>
-///     HTTP 远程请求声明式构建器
+///     HTTP 声明式远程请求构建器
 /// </summary>
 /// <remarks>使用 <c>HttpRequestBuilder.Declarative(method, args)</c> 静态方法创建。</remarks>
 public sealed class HttpDeclarativeBuilder
@@ -15,7 +15,7 @@ public sealed class HttpDeclarativeBuilder
     /// </summary>
     internal static readonly Dictionary<Type, IHttpDeclarativeExtractor> _extractors = new()
     {
-        { typeof(ValidationAttributeDeclarativeExtractor), new ValidationAttributeDeclarativeExtractor() },
+        { typeof(ValidationDeclarativeExtractor), new ValidationDeclarativeExtractor() },
         { typeof(HttpClientNameDeclarativeExtractor), new HttpClientNameDeclarativeExtractor() },
         { typeof(TraceIdentifierDeclarativeExtractor), new TraceIdentifierDeclarativeExtractor() },
         { typeof(ProfilerDeclarativeExtractor), new ProfilerDeclarativeExtractor() },
@@ -29,10 +29,7 @@ public sealed class HttpDeclarativeBuilder
         { typeof(HeaderDeclarativeExtractor), new HeaderDeclarativeExtractor() },
         { typeof(BodyDeclarativeExtractor), new BodyDeclarativeExtractor() },
         { typeof(MultipartBodyDeclarativeExtractor), new MultipartBodyDeclarativeExtractor() },
-        {
-            typeof(HttpRequestBuilderConfigureDeclarativeExtractor),
-            new HttpRequestBuilderConfigureDeclarativeExtractor()
-        }
+        { typeof(HttpRequestBuilderDeclarativeExtractor), new HttpRequestBuilderDeclarativeExtractor() }
     };
 
     /// <summary>
@@ -87,10 +84,7 @@ public sealed class HttpDeclarativeBuilder
         }
 
         // 获取 HttpMethodAttribute 实例
-        var httpMethodAttribute = Method.GetCustomAttribute<HttpMethodAttribute>(true);
-
-        // 空检查
-        ArgumentNullException.ThrowIfNull(httpMethodAttribute);
+        var httpMethodAttribute = Method.GetCustomAttribute<HttpMethodAttribute>(true)!;
 
         // 初始化 HttpRequestBuilder 实例
         var httpRequestBuilder =
@@ -112,6 +106,7 @@ public sealed class HttpDeclarativeBuilder
         // 遍历 HTTP 声明式提取器集合
         foreach (var extractor in _extractors.Values)
         {
+            // 提取方法信息构建 HttpRequestBuilder 实例
             extractor.Extract(httpRequestBuilder, httpDeclarativeExtractorContext);
         }
 

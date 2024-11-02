@@ -5,14 +5,14 @@
 namespace HttpAgent;
 
 /// <summary>
-///     <see cref="HttpClientNameAttribute" /> 特性提取器
+///     HTTP 声明式 <see cref="HttpClientNameAttribute" /> 特性提取器
 /// </summary>
 internal sealed class HttpClientNameDeclarativeExtractor : IHttpDeclarativeExtractor
 {
     /// <inheritdoc />
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
-        // 检查方法或接口是否定义了 [HttpClientName] 特性
+        // 检查方法或接口是否贴有 [HttpClientName] 特性
         if (!context.Method.IsDefined<HttpClientNameAttribute>(out var httpClientNameAttribute, true))
         {
             return;

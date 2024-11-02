@@ -5,7 +5,7 @@
 namespace HttpAgent;
 
 /// <summary>
-///     请求标头特性
+///     HTTP 声明式请求标头特性
 /// </summary>
 /// <remarks>支持多次指定。</remarks>
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Interface | AttributeTargets.Parameter,

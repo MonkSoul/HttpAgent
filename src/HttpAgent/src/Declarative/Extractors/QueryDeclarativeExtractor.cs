@@ -5,7 +5,7 @@
 namespace HttpAgent;
 
 /// <summary>
-///     <see cref="QueryAttribute" /> 特性提取器
+///     HTTP 声明式 <see cref="QueryAttribute" /> 特性提取器
 /// </summary>
 internal sealed class QueryDeclarativeExtractor : IHttpDeclarativeExtractor
 {
@@ -44,7 +44,7 @@ internal sealed class QueryDeclarativeExtractor : IHttpDeclarativeExtractor
 
         /* 情况二：当特性作用于参数时 */
 
-        // 查找所有贴有 [Query] 特性的参数
+        // 查找所有贴有 [Query] 特性的参数集合
         var queryParameters = context.Parameters.Where(u =>
                 HttpDeclarativeExtractorContext.FilterSpecialParameter(u.Key) &&
                 u.Key.IsDefined(typeof(QueryAttribute), true))

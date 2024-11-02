@@ -5,7 +5,7 @@
 namespace HttpAgent;
 
 /// <summary>
-///     请求内容特性
+///     HTTP 声明式请求内容特性
 /// </summary>
 [AttributeUsage(AttributeTargets.Parameter)]
 public sealed class BodyAttribute : Attribute

@@ -5,6 +5,6 @@
 namespace HttpAgent;
 
 /// <summary>
-///     HTTP 远程请求声明式依赖接口
+///     HTTP 声明式远程请求依赖接口
 /// </summary>
 public interface IHttpDeclarative;

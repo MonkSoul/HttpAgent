@@ -5,9 +5,9 @@
 namespace HttpAgent;
 
 /// <summary>
-///     <see cref="ValidationAttribute" /> 特性提取器
+///     HTTP 声明式 <see cref="ValidationAttribute" /> 特性提取器
 /// </summary>
-internal sealed class ValidationAttributeDeclarativeExtractor : IHttpDeclarativeExtractor
+internal sealed class ValidationDeclarativeExtractor : IHttpDeclarativeExtractor
 {
     /// <inheritdoc />
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
@@ -49,7 +49,7 @@ internal sealed class ValidationAttributeDeclarativeExtractor : IHttpDeclarative
         // 空检查
         if (value is null)
         {
-            // 验证 [Required] 特性
+            // 优先验证 [Required] 特性
             if (parameter.IsDefined(typeof(RequiredAttribute), true))
             {
                 throw new ValidationException(parameter.GetCustomAttribute<RequiredAttribute>(true)
@@ -74,7 +74,7 @@ internal sealed class ValidationAttributeDeclarativeExtractor : IHttpDeclarative
         }
         else
         {
-            // 验证复杂类型
+            // 验证复杂对象类型
             Validator.ValidateObject(value, new ValidationContext(value), true);
         }
     }

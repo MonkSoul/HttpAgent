@@ -5,26 +5,26 @@
 namespace HttpAgent;
 
 /// <summary>
-///     <see cref="BodyAttribute" /> 特性提取器
+///     HTTP 声明式 <see cref="BodyAttribute" /> 特性提取器
 /// </summary>
 internal sealed class BodyDeclarativeExtractor : IHttpDeclarativeExtractor
 {
     /// <inheritdoc />
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
-        // 查找贴有 [Body] 特性的参数集合
-        var bodyParameters = context.Parameters.Where(u =>
+        // 查找单个贴有 [Body] 特性的参数
+        var bodyParameter = context.Parameters.SingleOrDefault(u =>
             HttpDeclarativeExtractorContext.FilterSpecialParameter(u.Key) &&
-            u.Key.IsDefined(typeof(BodyAttribute), true)).ToArray();
+            u.Key.IsDefined(typeof(BodyAttribute), true));
+
+        // 解析参数信息
+        var (parameter, value) = bodyParameter;
 
         // 空检查
-        if (bodyParameters.Length == 0)
+        if (parameter is null)
         {
             return;
         }
-
-        // 获取单个贴有 [Body] 特性的参数
-        var (parameter, value) = bodyParameters.Single();
 
         // 获取 BodyAttribute 实例
         var bodyAttribute = parameter.GetCustomAttribute<BodyAttribute>(true);

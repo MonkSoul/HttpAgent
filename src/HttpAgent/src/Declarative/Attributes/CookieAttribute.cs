@@ -5,7 +5,7 @@
 namespace HttpAgent;
 
 /// <summary>
-///     Cookie 特性
+///     HTTP 声明式 Cookie 特性
 /// </summary>
 /// <remarks>支持多次指定。</remarks>
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Interface | AttributeTargets.Parameter,

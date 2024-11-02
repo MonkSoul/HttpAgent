@@ -5,7 +5,7 @@
 namespace HttpAgent;
 
 /// <summary>
-///     如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常特性
+///     HTTP 声明式如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常特性
 /// </summary>
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Interface)]
 public sealed class EnsureSuccessStatusCodeAttribute : Attribute

@@ -27,7 +27,7 @@ public class HttpDeclarativeBuilderTests
 
         Dictionary<Type, IHttpDeclarativeExtractor> extractors = new()
         {
-            { typeof(ValidationAttributeDeclarativeExtractor), new ValidationAttributeDeclarativeExtractor() },
+            { typeof(ValidationDeclarativeExtractor), new ValidationDeclarativeExtractor() },
             { typeof(HttpClientNameDeclarativeExtractor), new HttpClientNameDeclarativeExtractor() },
             { typeof(TraceIdentifierDeclarativeExtractor), new TraceIdentifierDeclarativeExtractor() },
             { typeof(ProfilerDeclarativeExtractor), new ProfilerDeclarativeExtractor() },
@@ -44,10 +44,7 @@ public class HttpDeclarativeBuilderTests
             { typeof(HeaderDeclarativeExtractor), new HeaderDeclarativeExtractor() },
             { typeof(BodyDeclarativeExtractor), new BodyDeclarativeExtractor() },
             { typeof(MultipartBodyDeclarativeExtractor), new MultipartBodyDeclarativeExtractor() },
-            {
-                typeof(HttpRequestBuilderConfigureDeclarativeExtractor),
-                new HttpRequestBuilderConfigureDeclarativeExtractor()
-            }
+            { typeof(HttpRequestBuilderDeclarativeExtractor), new HttpRequestBuilderDeclarativeExtractor() }
         };
 
         Assert.Equal(extractors.Keys, HttpDeclarativeBuilder._extractors.Keys);
@@ -93,7 +90,7 @@ public class HttpDeclarativeBuilderTests
 
         Dictionary<Type, IHttpDeclarativeExtractor> extractors = new()
         {
-            { typeof(ValidationAttributeDeclarativeExtractor), new ValidationAttributeDeclarativeExtractor() },
+            { typeof(ValidationDeclarativeExtractor), new ValidationDeclarativeExtractor() },
             { typeof(HttpClientNameDeclarativeExtractor), new HttpClientNameDeclarativeExtractor() },
             { typeof(TraceIdentifierDeclarativeExtractor), new TraceIdentifierDeclarativeExtractor() },
             { typeof(ProfilerDeclarativeExtractor), new ProfilerDeclarativeExtractor() },
@@ -110,10 +107,7 @@ public class HttpDeclarativeBuilderTests
             { typeof(HeaderDeclarativeExtractor), new HeaderDeclarativeExtractor() },
             { typeof(BodyDeclarativeExtractor), new BodyDeclarativeExtractor() },
             { typeof(MultipartBodyDeclarativeExtractor), new MultipartBodyDeclarativeExtractor() },
-            {
-                typeof(HttpRequestBuilderConfigureDeclarativeExtractor),
-                new HttpRequestBuilderConfigureDeclarativeExtractor()
-            },
+            { typeof(HttpRequestBuilderDeclarativeExtractor), new HttpRequestBuilderDeclarativeExtractor() },
             { typeof(CustomHttpDeclarativeExtractor), new CustomHttpDeclarativeExtractor() }
         };
 

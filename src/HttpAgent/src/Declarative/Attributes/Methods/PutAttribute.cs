@@ -5,7 +5,7 @@
 namespace HttpAgent;
 
 /// <summary>
-///     HTTP PUT 远程请求声明式特性
+///     HTTP 声明式 PUT 请求方式特性
 /// </summary>
 [AttributeUsage(AttributeTargets.Method)]
 public sealed class PutAttribute : HttpMethodAttribute

@@ -5,7 +5,7 @@
 namespace HttpAgent;
 
 /// <summary>
-///     <see cref="HttpClient" /> 实例的配置名称特性
+///     HTTP 声明式 <see cref="HttpClient" /> 实例的配置名称特性
 /// </summary>
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Interface)]
 public sealed class HttpClientNameAttribute : Attribute

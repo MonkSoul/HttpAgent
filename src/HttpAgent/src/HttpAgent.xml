@@ -923,7 +923,7 @@
         </member>
         <member name="M:HttpAgent.HttpRemoteBuilder.BuildHttpDeclarativeServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
-                构建 HTTP 远程请求声明式服务
+                构建 HTTP 声明式远程请求服务
             </summary>
             <param name="services">
                 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
@@ -3383,7 +3383,7 @@
         </member>
         <member name="T:HttpAgent.BodyAttribute">
             <summary>
-                请求内容特性
+                HTTP 声明式请求内容特性
             </summary>
         </member>
         <member name="M:HttpAgent.BodyAttribute.#ctor">
@@ -3416,7 +3416,7 @@
         </member>
         <member name="T:HttpAgent.CookieAttribute">
             <summary>
-                Cookie 特性
+                HTTP 声明式 Cookie 特性
             </summary>
             <remarks>支持多次指定。</remarks>
         </member>
@@ -3473,7 +3473,7 @@
         </member>
         <member name="T:HttpAgent.DisableCacheAttribute">
             <summary>
-                禁用 HTTP 缓存特性
+                HTTP 声明式禁用 HTTP 缓存特性
             </summary>
         </member>
         <member name="M:HttpAgent.DisableCacheAttribute.#ctor">
@@ -3494,7 +3494,7 @@
         </member>
         <member name="T:HttpAgent.EnsureSuccessStatusCodeAttribute">
             <summary>
-                如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常特性
+                HTTP 声明式如果 HTTP 响应的 IsSuccessStatusCode 属性是 <c>false</c>，则引发异常特性
             </summary>
         </member>
         <member name="M:HttpAgent.EnsureSuccessStatusCodeAttribute.#ctor">
@@ -3515,7 +3515,7 @@
         </member>
         <member name="T:HttpAgent.HeaderAttribute">
             <summary>
-                请求标头特性
+                HTTP 声明式请求标头特性
             </summary>
             <remarks>支持多次指定。</remarks>
         </member>
@@ -3572,7 +3572,7 @@
         </member>
         <member name="T:HttpAgent.HttpClientNameAttribute">
             <summary>
-                <see cref="T:System.Net.Http.HttpClient" /> 实例的配置名称特性
+                HTTP 声明式 <see cref="T:System.Net.Http.HttpClient" /> 实例的配置名称特性
             </summary>
         </member>
         <member name="M:HttpAgent.HttpClientNameAttribute.#ctor(System.String)">
@@ -3588,7 +3588,7 @@
         </member>
         <member name="T:HttpAgent.DeleteAttribute">
             <summary>
-                HTTP DELETE 远程请求声明式特性
+                HTTP 声明式 DELETE 请求方式特性
             </summary>
         </member>
         <member name="M:HttpAgent.DeleteAttribute.#ctor(System.String)">
@@ -3599,7 +3599,7 @@
         </member>
         <member name="T:HttpAgent.GetAttribute">
             <summary>
-                HTTP GET 远程请求声明式特性
+                HTTP 声明式 GET 请求方式特性
             </summary>
         </member>
         <member name="M:HttpAgent.GetAttribute.#ctor(System.String)">
@@ -3610,7 +3610,7 @@
         </member>
         <member name="T:HttpAgent.HeadAttribute">
             <summary>
-                HTTP HEAD 远程请求声明式特性
+                HTTP 声明式 HEAD 请求方式特性
             </summary>
         </member>
         <member name="M:HttpAgent.HeadAttribute.#ctor(System.String)">
@@ -3621,7 +3621,7 @@
         </member>
         <member name="T:HttpAgent.HttpMethodAttribute">
             <summary>
-                HTTP 远程请求声明式请求方式特性
+                HTTP 声明式请求方式特性
             </summary>
         </member>
         <member name="M:HttpAgent.HttpMethodAttribute.#ctor(System.String,System.String)">
@@ -3650,7 +3650,7 @@
         </member>
         <member name="T:HttpAgent.OptionsAttribute">
             <summary>
-                HTTP OPTIONS 远程请求声明式特性
+                HTTP 声明式 OPTIONS 请求方式特性
             </summary>
         </member>
         <member name="M:HttpAgent.OptionsAttribute.#ctor(System.String)">
@@ -3661,7 +3661,7 @@
         </member>
         <member name="T:HttpAgent.PatchAttribute">
             <summary>
-                HTTP PATCH 远程请求声明式特性
+                HTTP 声明式 PATCH 请求方式特性
             </summary>
         </member>
         <member name="M:HttpAgent.PatchAttribute.#ctor(System.String)">
@@ -3672,7 +3672,7 @@
         </member>
         <member name="T:HttpAgent.PostAttribute">
             <summary>
-                HTTP POST 远程请求声明式特性
+                HTTP 声明式 POST 请求方式特性
             </summary>
         </member>
         <member name="M:HttpAgent.PostAttribute.#ctor(System.String)">
@@ -3683,7 +3683,7 @@
         </member>
         <member name="T:HttpAgent.PutAttribute">
             <summary>
-                HTTP PUT 远程请求声明式特性
+                HTTP 声明式 PUT 请求方式特性
             </summary>
         </member>
         <member name="M:HttpAgent.PutAttribute.#ctor(System.String)">
@@ -3694,7 +3694,7 @@
         </member>
         <member name="T:HttpAgent.TraceAttribute">
             <summary>
-                HTTP TRACE 远程请求声明式特性
+                HTTP 声明式 TRACE 请求方式特性
             </summary>
         </member>
         <member name="M:HttpAgent.TraceAttribute.#ctor(System.String)">
@@ -3705,7 +3705,7 @@
         </member>
         <member name="T:HttpAgent.PathAttribute">
             <summary>
-                路径参数特性
+                HTTP 声明式路径参数特性
             </summary>
         </member>
         <member name="M:HttpAgent.PathAttribute.#ctor(System.String,System.Object)">
@@ -3727,7 +3727,7 @@
         </member>
         <member name="T:HttpAgent.ProfilerAttribute">
             <summary>
-                启用请求分析工具特性
+                HTTP 声明式启用请求分析工具特性
             </summary>
         </member>
         <member name="M:HttpAgent.ProfilerAttribute.#ctor">
@@ -3748,7 +3748,7 @@
         </member>
         <member name="T:HttpAgent.QueryAttribute">
             <summary>
-                查询参数特性
+                HTTP 声明式查询参数特性
             </summary>
             <remarks>支持多次指定。</remarks>
         </member>
@@ -3811,12 +3811,12 @@
         </member>
         <member name="T:HttpAgent.SimulateBrowserAttribute">
             <summary>
-                模拟浏览器环境特性
+                HTTP 声明式模拟浏览器环境特性
             </summary>
         </member>
         <member name="T:HttpAgent.TimeoutAttribute">
             <summary>
-                超时时间特性
+                HTTP 声明式超时时间特性
             </summary>
         </member>
         <member name="M:HttpAgent.TimeoutAttribute.#ctor(System.Double)">
@@ -3832,7 +3832,7 @@
         </member>
         <member name="T:HttpAgent.TraceIdentifierAttribute">
             <summary>
-                跟踪标识特性
+                HTTP 声明式跟踪标识特性
             </summary>
         </member>
         <member name="M:HttpAgent.TraceIdentifierAttribute.#ctor(System.String)">
@@ -3848,7 +3848,7 @@
         </member>
         <member name="T:HttpAgent.HttpDeclarativeBuilder">
             <summary>
-                HTTP 远程请求声明式构建器
+                HTTP 声明式远程请求构建器
             </summary>
             <remarks>使用 <c>HttpRequestBuilder.Declarative(method, args)</c> 静态方法创建。</remarks>
         </member>
@@ -3946,7 +3946,7 @@
         </member>
         <member name="T:HttpAgent.BodyDeclarativeExtractor">
             <summary>
-                <see cref="T:HttpAgent.BodyAttribute" /> 特性提取器
+                HTTP 声明式 <see cref="T:HttpAgent.BodyAttribute" /> 特性提取器
             </summary>
         </member>
         <member name="M:HttpAgent.BodyDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
@@ -3954,7 +3954,7 @@
         </member>
         <member name="T:HttpAgent.CookieDeclarativeExtractor">
             <summary>
-                <see cref="T:HttpAgent.CookieAttribute" /> 特性提取器
+                HTTP 声明式 <see cref="T:HttpAgent.CookieAttribute" /> 特性提取器
             </summary>
         </member>
         <member name="M:HttpAgent.CookieDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
@@ -3962,7 +3962,7 @@
         </member>
         <member name="T:HttpAgent.DisableCacheDeclarativeExtractor">
             <summary>
-                <see cref="T:HttpAgent.DisableCacheAttribute" /> 特性提取器
+                HTTP 声明式 <see cref="T:HttpAgent.DisableCacheAttribute" /> 特性提取器
             </summary>
         </member>
         <member name="M:HttpAgent.DisableCacheDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
@@ -3970,7 +3970,7 @@
         </member>
         <member name="T:HttpAgent.EnsureSuccessStatusCodeDeclarativeExtractor">
             <summary>
-                <see cref="T:HttpAgent.EnsureSuccessStatusCodeAttribute" /> 特性提取器
+                HTTP 声明式 <see cref="T:HttpAgent.EnsureSuccessStatusCodeAttribute" /> 特性提取器
             </summary>
         </member>
         <member name="M:HttpAgent.EnsureSuccessStatusCodeDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
@@ -3978,7 +3978,7 @@
         </member>
         <member name="T:HttpAgent.HeaderDeclarativeExtractor">
             <summary>
-                <see cref="T:HttpAgent.HeaderAttribute" /> 特性提取器
+                HTTP 声明式 <see cref="T:HttpAgent.HeaderAttribute" /> 特性提取器
             </summary>
         </member>
         <member name="M:HttpAgent.HeaderDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
@@ -3986,18 +3986,18 @@
         </member>
         <member name="T:HttpAgent.HttpClientNameDeclarativeExtractor">
             <summary>
-                <see cref="T:HttpAgent.HttpClientNameAttribute" /> 特性提取器
+                HTTP 声明式 <see cref="T:HttpAgent.HttpClientNameAttribute" /> 特性提取器
             </summary>
         </member>
         <member name="M:HttpAgent.HttpClientNameDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
             <inheritdoc />
         </member>
-        <member name="T:HttpAgent.HttpRequestBuilderConfigureDeclarativeExtractor">
+        <member name="T:HttpAgent.HttpRequestBuilderDeclarativeExtractor">
             <summary>
-                <see cref="T:HttpAgent.HttpRequestBuilder" /> 自定义配置提取器
+                HTTP 声明式 <see cref="T:HttpAgent.HttpRequestBuilder" /> 自定义配置提取器
             </summary>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilderConfigureDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+        <member name="M:HttpAgent.HttpRequestBuilderDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
             <inheritdoc />
         </member>
         <member name="T:HttpAgent.IHttpDeclarativeExtractor">
@@ -4007,7 +4007,7 @@
         </member>
         <member name="M:HttpAgent.IHttpDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
             <summary>
-                提取方法信息
+                提取方法信息构建 <see cref="T:HttpAgent.HttpRequestBuilder"/> 实例
             </summary>
             <param name="httpRequestBuilder">
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
@@ -4018,7 +4018,7 @@
         </member>
         <member name="T:HttpAgent.MultipartBodyDeclarativeExtractor">
             <summary>
-                <see cref="T:System.Net.Http.MultipartContent" /> 请求内容提取器
+                HTTP 声明式 <see cref="T:System.Net.Http.MultipartContent" /> 请求内容提取器
             </summary>
         </member>
         <member name="M:HttpAgent.MultipartBodyDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
@@ -4026,7 +4026,7 @@
         </member>
         <member name="T:HttpAgent.PathDeclarativeExtractor">
             <summary>
-                路径参数提取器
+                HTTP 声明式 路径参数提取器
             </summary>
         </member>
         <member name="M:HttpAgent.PathDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
@@ -4034,7 +4034,7 @@
         </member>
         <member name="T:HttpAgent.ProfilerDeclarativeExtractor">
             <summary>
-                <see cref="T:HttpAgent.ProfilerAttribute" /> 特性提取器
+                HTTP 声明式 <see cref="T:HttpAgent.ProfilerAttribute" /> 特性提取器
             </summary>
         </member>
         <member name="M:HttpAgent.ProfilerDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
@@ -4042,7 +4042,7 @@
         </member>
         <member name="T:HttpAgent.QueryDeclarativeExtractor">
             <summary>
-                <see cref="T:HttpAgent.QueryAttribute" /> 特性提取器
+                HTTP 声明式 <see cref="T:HttpAgent.QueryAttribute" /> 特性提取器
             </summary>
         </member>
         <member name="M:HttpAgent.QueryDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
@@ -4050,7 +4050,7 @@
         </member>
         <member name="T:HttpAgent.SimulateBrowserDeclarativeExtractor">
             <summary>
-                <see cref="T:HttpAgent.SimulateBrowserAttribute" /> 特性提取器
+                HTTP 声明式 <see cref="T:HttpAgent.SimulateBrowserAttribute" /> 特性提取器
             </summary>
         </member>
         <member name="M:HttpAgent.SimulateBrowserDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
@@ -4058,7 +4058,7 @@
         </member>
         <member name="T:HttpAgent.TimeoutDeclarativeExtractor">
             <summary>
-                <see cref="T:HttpAgent.TimeoutAttribute" /> 特性提取器
+                HTTP 声明式 <see cref="T:HttpAgent.TimeoutAttribute" /> 特性提取器
             </summary>
         </member>
         <member name="M:HttpAgent.TimeoutDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
@@ -4066,21 +4066,21 @@
         </member>
         <member name="T:HttpAgent.TraceIdentifierDeclarativeExtractor">
             <summary>
-                <see cref="T:HttpAgent.TraceIdentifierAttribute" /> 特性提取器
+                HTTP 声明式 <see cref="T:HttpAgent.TraceIdentifierAttribute" /> 特性提取器
             </summary>
         </member>
         <member name="M:HttpAgent.TraceIdentifierDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
             <inheritdoc />
         </member>
-        <member name="T:HttpAgent.ValidationAttributeDeclarativeExtractor">
+        <member name="T:HttpAgent.ValidationDeclarativeExtractor">
             <summary>
-                <see cref="T:System.ComponentModel.DataAnnotations.ValidationAttribute" /> 特性提取器
+                HTTP 声明式 <see cref="T:System.ComponentModel.DataAnnotations.ValidationAttribute" /> 特性提取器
             </summary>
         </member>
-        <member name="M:HttpAgent.ValidationAttributeDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+        <member name="M:HttpAgent.ValidationDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.ValidationAttributeDeclarativeExtractor.ValidateParameter(System.Reflection.ParameterInfo,System.Object)">
+        <member name="M:HttpAgent.ValidationDeclarativeExtractor.ValidateParameter(System.Reflection.ParameterInfo,System.Object)">
             <summary>
                 验证参数
             </summary>
@@ -4092,7 +4092,7 @@
         </member>
         <member name="T:HttpAgent.HttpDeclarativeDispatchProxy">
             <summary>
-                HTTP 远程请求声明式代理类
+                HTTP 声明式远程请求代理类
             </summary>
         </member>
         <member name="P:HttpAgent.HttpDeclarativeDispatchProxy.RemoteService">
@@ -4114,7 +4114,7 @@
         </member>
         <member name="F:HttpAgent.HttpDeclarativeExtractorContext._specialParameterTypes">
             <summary>
-                特殊参数类型
+                特殊类型参数集合
             </summary>
         </member>
         <member name="M:HttpAgent.HttpDeclarativeExtractorContext.#ctor(System.Reflection.MethodInfo,System.Object[])">
@@ -4141,7 +4141,7 @@
         </member>
         <member name="M:HttpAgent.HttpDeclarativeExtractorContext.FilterSpecialParameter(System.Reflection.ParameterInfo)">
             <summary>
-                过滤特殊参数类型
+                过滤特殊类型参数
             </summary>
             <param name="parameter">
                 <see cref="T:System.Reflection.ParameterInfo" />
@@ -4152,7 +4152,7 @@
         </member>
         <member name="T:HttpAgent.IHttpDeclarative">
             <summary>
-                HTTP 远程请求声明式依赖接口
+                HTTP 声明式远程请求依赖接口
             </summary>
         </member>
         <member name="T:HttpAgent.ProfilerDelegatingHandler">
@@ -5738,6 +5738,27 @@
             <returns>
                 <see cref="T:System.Net.Http.HttpContent" />
             </returns>
+        </member>
+        <member name="T:HttpAgent.MessagePackContentProcessor">
+            <summary>
+                <c>application/msgpack</c> 内容处理器
+            </summary>
+        </member>
+        <member name="F:HttpAgent.MessagePackContentProcessor._messagePackSerializerLazy">
+            <summary>
+                初始化 MessagePack 序列化器委托
+            </summary>
+        </member>
+        <member name="P:HttpAgent.MessagePackContentProcessor._messagePackSerializer">
+            <summary>
+                获取 MessagePack 序列化器委托
+            </summary>
+        </member>
+        <member name="M:HttpAgent.MessagePackContentProcessor.CanProcess(System.Object,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.MessagePackContentProcessor.Process(System.Object,System.String,System.Text.Encoding)">
+            <inheritdoc />
         </member>
         <member name="T:HttpAgent.MultipartFormDataContentProcessor">
             <summary>

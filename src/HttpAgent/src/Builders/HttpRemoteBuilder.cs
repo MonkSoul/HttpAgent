@@ -421,12 +421,12 @@ public sealed class HttpRemoteBuilder
                 _objectContentConverterFactoryType));
         }
 
-        // 构建 HTTP 远程请求声明式服务
+        // 构建 HTTP 声明式远程请求服务
         BuildHttpDeclarativeServices(services);
     }
 
     /// <summary>
-    ///     构建 HTTP 远程请求声明式服务
+    ///     构建 HTTP 声明式远程请求服务
     /// </summary>
     /// <param name="services">
     ///     <see cref="IServiceCollection" />
@@ -439,15 +439,15 @@ public sealed class HttpRemoteBuilder
             return;
         }
 
-        // 初始化 HTTP 远程请求声明式代理类类型
+        // 初始化 HTTP 声明式远程请求代理类类型
         var httpDeclarativeDispatchProxyType = typeof(HttpDeclarativeDispatchProxy);
 
-        // 遍历 HTTP 远程请求声明式类型并注册为服务
+        // 遍历 HTTP 声明式远程请求类型并注册为服务
         foreach (var httpDeclarativeType in _httpDeclarativeTypes)
         {
             services.TryAddSingleton(httpDeclarativeType, provider =>
             {
-                // 创建 HTTP 远程请求声明式代理实例
+                // 创建 HTTP 声明式远程请求代理实例
                 var httpDeclarative =
                     DispatchProxyAsync.Create(httpDeclarativeType, httpDeclarativeDispatchProxyType) as
                         HttpDeclarativeDispatchProxy;

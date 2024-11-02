@@ -10,7 +10,7 @@ namespace HttpAgent;
 public interface IHttpDeclarativeExtractor
 {
     /// <summary>
-    ///     提取方法信息
+    ///     提取方法信息构建 <see cref="HttpRequestBuilder"/> 实例
     /// </summary>
     /// <param name="httpRequestBuilder">
     ///     <see cref="HttpRequestBuilder" />

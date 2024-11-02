@@ -5,14 +5,14 @@
 namespace HttpAgent;
 
 /// <summary>
-///     <see cref="ProfilerAttribute" /> 特性提取器
+///     HTTP 声明式 <see cref="ProfilerAttribute" /> 特性提取器
 /// </summary>
 internal sealed class ProfilerDeclarativeExtractor : IHttpDeclarativeExtractor
 {
     /// <inheritdoc />
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
-        // 检查方法或接口是否定义了 [Profiler] 特性
+        // 检查方法或接口是否贴有 [Profiler] 特性
         if (!context.Method.IsDefined<ProfilerAttribute>(out var profilerAttribute, true))
         {
             return;

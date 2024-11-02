@@ -5,14 +5,14 @@
 namespace HttpAgent;
 
 /// <summary>
-///     <see cref="MultipartContent" /> 请求内容提取器
+///     HTTP 声明式 <see cref="MultipartContent" /> 请求内容提取器
 /// </summary>
 internal sealed class MultipartBodyDeclarativeExtractor : IHttpDeclarativeExtractor
 {
     /// <inheritdoc />
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
-        // 尝试解析 Action<HttpMultipartFormDataBuilder> 参数
+        // 尝试解析单个 Action<HttpMultipartFormDataBuilder> 类型参数
         if (context.Args.SingleOrDefault(u => u is Action<HttpMultipartFormDataBuilder>) is
             Action<HttpMultipartFormDataBuilder> multipartContentBuilderAction)
         {

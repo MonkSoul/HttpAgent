@@ -182,7 +182,14 @@ public class CustomLongPollingEventHandler2 : IHttpLongPollingEventHandler, IHtt
         throw new NotImplementedException();
 }
 
-[MessagePackObject]
+public class MessagePackModel0
+{
+    public int Id { get; set; }
+
+    public string? Name { get; set; }
+}
+
+[MessagePack.MessagePackObject]
 public class MessagePackModel1
 {
     [MessagePack.Key(0)] public int Id { get; set; }

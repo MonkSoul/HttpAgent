@@ -5,7 +5,7 @@
 namespace HttpAgent;
 
 /// <summary>
-///     模拟浏览器环境特性
+///     HTTP 声明式模拟浏览器环境特性
 /// </summary>
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Interface)]
 public sealed class SimulateBrowserAttribute : Attribute;

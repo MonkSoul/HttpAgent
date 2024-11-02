@@ -5,7 +5,7 @@
 namespace HttpAgent;
 
 /// <summary>
-///     路径参数特性
+///     HTTP 声明式路径参数特性
 /// </summary>
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Interface, AllowMultiple = true)]
 public sealed class PathAttribute : Attribute

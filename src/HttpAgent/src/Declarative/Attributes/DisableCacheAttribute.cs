@@ -5,7 +5,7 @@
 namespace HttpAgent;
 
 /// <summary>
-///     禁用 HTTP 缓存特性
+///     HTTP 声明式禁用 HTTP 缓存特性
 /// </summary>
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Interface)]
 public sealed class DisableCacheAttribute : Attribute

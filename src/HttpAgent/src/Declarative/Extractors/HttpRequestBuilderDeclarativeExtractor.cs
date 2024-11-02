@@ -5,14 +5,14 @@
 namespace HttpAgent;
 
 /// <summary>
-///     <see cref="HttpRequestBuilder" /> 自定义配置提取器
+///     HTTP 声明式 <see cref="HttpRequestBuilder" /> 自定义配置提取器
 /// </summary>
-internal sealed class HttpRequestBuilderConfigureDeclarativeExtractor : IHttpDeclarativeExtractor
+internal sealed class HttpRequestBuilderDeclarativeExtractor : IHttpDeclarativeExtractor
 {
     /// <inheritdoc />
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
-        // 尝试解析单个 Action<HttpRequestBuilder> 参数
+        // 尝试解析单个 Action<HttpRequestBuilder> 类型参数
         if (context.Args.SingleOrDefault(u => u is Action<HttpRequestBuilder>) is Action<HttpRequestBuilder> configure)
         {
             configure.Invoke(httpRequestBuilder);
