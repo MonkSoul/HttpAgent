@@ -7,6 +7,7 @@ namespace HttpAgent;
 /// <summary>
 ///     <c>application/msgpack</c> 内容处理器
 /// </summary>
+/// <remarks>要使用 <c>application/msgpack</c> 内容处理器需在项目中安装 <c>MessagePack</c> 依赖包。https://www.nuget.org/packages/MessagePack。</remarks>
 public class MessagePackContentProcessor : IHttpContentProcessor
 {
     /// <summary>
