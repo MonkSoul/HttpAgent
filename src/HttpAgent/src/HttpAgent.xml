@@ -5745,6 +5745,11 @@
             </summary>
             <remarks>要使用 <c>application/msgpack</c> 内容处理器需在项目中安装 <c>MessagePack</c> 依赖包。https://www.nuget.org/packages/MessagePack。</remarks>
         </member>
+        <member name="F:HttpAgent.MessagePackContentProcessor._serializerCache">
+            <summary>
+                MessagePack 序列化器委托字典缓存
+            </summary>
+        </member>
         <member name="F:HttpAgent.MessagePackContentProcessor._messagePackSerializerLazy">
             <summary>
                 初始化 MessagePack 序列化器委托
@@ -5752,7 +5757,7 @@
         </member>
         <member name="P:HttpAgent.MessagePackContentProcessor._messagePackSerializer">
             <summary>
-                获取 MessagePack 序列化器委托
+                MessagePack 序列化器委托
             </summary>
         </member>
         <member name="M:HttpAgent.MessagePackContentProcessor.CanProcess(System.Object,System.String)">
@@ -5760,6 +5765,17 @@
         </member>
         <member name="M:HttpAgent.MessagePackContentProcessor.Process(System.Object,System.String,System.Text.Encoding)">
             <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.MessagePackContentProcessor.CreateSerializerDelegate(System.Reflection.MethodInfo)">
+            <summary>
+                创建 MessagePack 序列化器委托
+            </summary>
+            <param name="serializeMethod">
+                <see cref="T:System.Reflection.MethodInfo" />
+            </param>
+            <returns>
+                <see cref="T:System.Func`2" />
+            </returns>
         </member>
         <member name="T:HttpAgent.MultipartFormDataContentProcessor">
             <summary>

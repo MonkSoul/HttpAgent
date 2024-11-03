@@ -11,6 +11,7 @@ global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.DependencyInjection.Extensions;
 global using Microsoft.Extensions.Logging;
 global using System.Collections;
+global using System.Collections.Concurrent;
 global using System.Collections.Specialized;
 global using System.ComponentModel.DataAnnotations;
 global using System.Text;

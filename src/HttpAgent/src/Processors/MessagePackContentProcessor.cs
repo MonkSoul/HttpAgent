@@ -11,6 +11,11 @@ namespace HttpAgent;
 public class MessagePackContentProcessor : IHttpContentProcessor
 {
     /// <summary>
+    ///     MessagePack 序列化器委托字典缓存
+    /// </summary>
+    internal static readonly ConcurrentDictionary<Type, Func<object, byte[]>> _serializerCache = new();
+
+    /// <summary>
     ///     初始化 MessagePack 序列化器委托
     /// </summary>
     internal static readonly Lazy<Func<object, byte[]>> _messagePackSerializerLazy = new(() =>
@@ -32,12 +37,11 @@ public class MessagePackContentProcessor : IHttpContentProcessor
                 u.GetGenericArguments().Length == 1)!;
 
         // 返回调用委托
-        return obj => (byte[])serializeMethod.MakeGenericMethod(obj.GetType())
-            .Invoke(null, [obj, null, default(CancellationToken)])!;
+        return CreateSerializerDelegate(serializeMethod);
     });
 
     /// <summary>
-    ///     获取 MessagePack 序列化器委托
+    ///     MessagePack 序列化器委托
     /// </summary>
     internal Func<object, byte[]> _messagePackSerializer => _messagePackSerializerLazy.Value;
 
@@ -72,5 +76,41 @@ public class MessagePackContentProcessor : IHttpContentProcessor
         };
 
         return byteArrayContent;
+    }
+
+    /// <summary>
+    ///     创建 MessagePack 序列化器委托
+    /// </summary>
+    /// <param name="serializeMethod">
+    ///     <see cref="MethodInfo" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="Func{T1, T2}" />
+    /// </returns>
+    internal static Func<object, byte[]> CreateSerializerDelegate(MethodInfo serializeMethod)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(serializeMethod);
+
+        return obj =>
+        {
+            // 获取对象类型
+            var objType = obj.GetType();
+
+            // 查找 MessagePack 序列化器委托字典缓存是否存在该类型
+            if (_serializerCache.TryGetValue(objType, out var serializer))
+            {
+                return serializer(obj);
+            }
+
+            // 创建 MessagePack 序列化器委托
+            serializer = o =>
+                (byte[])serializeMethod.MakeGenericMethod(objType).Invoke(null, [o, null, default(CancellationToken)])!;
+
+            // 添加到 MessagePack 序列化器委托字典缓存中
+            _serializerCache.TryAdd(objType, serializer);
+
+            return serializer(obj);
+        };
     }
 }

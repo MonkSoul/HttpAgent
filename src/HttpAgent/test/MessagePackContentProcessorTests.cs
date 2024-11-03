@@ -13,9 +13,11 @@ public class MessagePackContentProcessorTests
         Assert.NotNull(messagePackContentProcessor);
         Assert.True(typeof(IHttpContentProcessor).IsAssignableFrom(typeof(MessagePackContentProcessor)));
 
+        Assert.NotNull(MessagePackContentProcessor._serializerCache);
         Assert.NotNull(MessagePackContentProcessor._messagePackSerializerLazy);
         Assert.NotNull(MessagePackContentProcessor._messagePackSerializerLazy.Value);
         Assert.NotNull(messagePackContentProcessor._messagePackSerializer);
+
         Assert.Equal(MessagePackContentProcessor._messagePackSerializerLazy.Value,
             messagePackContentProcessor._messagePackSerializer);
     }
@@ -69,5 +71,34 @@ public class MessagePackContentProcessorTests
         Assert.NotNull(messagePackContent4.ReadAsStream());
         Assert.Equal("application/msgpack", messagePackContent4.Headers.ContentType?.MediaType);
         Assert.Equal("utf-8", messagePackContent4.Headers.ContentType?.CharSet);
+    }
+
+    [Fact]
+    public void CreateSerializerDelegate_Invalid_Parameters() =>
+        Assert.Throws<ArgumentNullException>(() => MessagePackContentProcessor.CreateSerializerDelegate(null!));
+
+    [Fact]
+    public void CreateSerializerDelegate_ReturnOK()
+    {
+        Assert.Throws<ArgumentNullException>(() => MessagePackContentProcessor.CreateSerializerDelegate(null!));
+
+        var messagePackSerializerType = Type.GetType("MessagePack.MessagePackSerializer, MessagePack")!;
+        var serializeMethod = messagePackSerializerType.GetMethods(BindingFlags.Public | BindingFlags.Static)
+            .SingleOrDefault(u =>
+                u is { Name: "Serialize", IsGenericMethod: true } && u.ReturnType == typeof(byte[]) &&
+                u.GetParameters().Length == 3 &&
+                u.GetGenericArguments().Length == 1)!;
+
+        var func = MessagePackContentProcessor.CreateSerializerDelegate(serializeMethod);
+        Assert.NotNull(func);
+        var bytes = func(new MessagePackModel1());
+        Assert.NotNull(bytes);
+        Assert.Single(MessagePackContentProcessor._serializerCache);
+
+        var func1 = MessagePackContentProcessor.CreateSerializerDelegate(serializeMethod);
+        Assert.NotNull(func1);
+        var bytes1 = func1(new MessagePackModel1());
+        Assert.NotNull(bytes1);
+        Assert.Single(MessagePackContentProcessor._serializerCache);
     }
 }
