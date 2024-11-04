@@ -555,9 +555,23 @@
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
         </member>
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddFileFromRemote(System.String,System.String,System.String,System.String,System.Text.Encoding)">
+            <summary>
+                从互联网 URL 中添加文件
+            </summary>
+            <remarks>文件大小限制在 <c>50MB</c> 以内。</remarks>
+            <param name="url">互联网 URL 地址</param>
+            <param name="name">表单名称</param>
+            <param name="fileName">文件名</param>
+            <param name="contentType">内容类型</param>
+            <param name="contentEncoding">内容编码</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddFileStream(System.String,System.String,System.String,System.Text.Encoding)">
             <summary>
-                添加文件
+                从本地路径中添加文件
             </summary>
             <param name="fileFullName">文件完整路径</param>
             <param name="name">表单名称</param>
@@ -569,7 +583,7 @@
         </member>
         <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddProgressFileStream(System.String,System.String,System.Threading.Channels.Channel{HttpAgent.FileTransferProgress},System.String,System.Text.Encoding)">
             <summary>
-                添加文件（带上传进度）
+                从本地路径中添加文件（带上传进度）
             </summary>
             <param name="fileFullName">文件完整路径</param>
             <param name="name">表单名称</param>
@@ -582,7 +596,7 @@
         </member>
         <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddFileBytes(System.String,System.String,System.String,System.Text.Encoding)">
             <summary>
-                添加文件
+                从本地路径中添加文件
             </summary>
             <param name="fileFullName">文件完整路径</param>
             <param name="name">表单名称</param>
@@ -3356,6 +3370,15 @@
                 <see cref="T:System.Boolean" />
             </returns>
         </member>
+        <member name="M:HttpAgent.Core.Utilities.NetworkUtility.IsWebUrl(System.String)">
+            <summary>
+                检查 URL 是否是一个互联网地址
+            </summary>
+            <param name="url">URL 地址</param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.Core.Utilities.NetworkUtility.IsPortInUse(System.Int32)">
             <summary>
                 检查指定端口是否正在使用
@@ -4583,6 +4606,15 @@
             <summary>
                 HTTP 远程请求模块帮助类
             </summary>
+        </member>
+        <member name="M:HttpAgent.Helpers.GetStreamFromRemote(System.String)">
+            <summary>
+                从互联网 URL 地址中加载流
+            </summary>
+            <param name="url">互联网 URL 地址</param>
+            <returns>
+                <see cref="T:System.Tuple`2" />
+            </returns>
         </member>
         <member name="M:HttpAgent.Helpers.GetFileNameFromUri(System.Uri)">
             <summary>

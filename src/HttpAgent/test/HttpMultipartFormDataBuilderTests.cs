@@ -241,6 +241,59 @@ public class HttpMultipartFormDataBuilderTests
     }
 
     [Fact]
+    public void AddFileFromRemote_Invalid_Parameters()
+    {
+        var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
+        var url =
+            "https://download2.huduntech.com/application/workspace/49/49d0cbe19a9bf7e54c1735b24fa41f27/Installer_%E8%BF%85%E6%8D%B7%E5%B1%8F%E5%B9%95%E5%BD%95%E5%83%8F%E5%B7%A5%E5%85%B7_1.7.9_123.exe";
+        var hasNotFileNameUrl = "https://furion.net";
+
+        // url 为空
+        Assert.Throws<ArgumentNullException>(() => builder.AddFileFromRemote(null!, null!, null!, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddFileFromRemote(string.Empty, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddFileFromRemote(" ", null!));
+
+        // name 为空
+        Assert.Throws<ArgumentNullException>(() => builder.AddFileFromRemote(url, null!, null!, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddFileFromRemote(url, string.Empty, null!, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddFileFromRemote(url, " ", null!, null!));
+
+        // fileName 为空
+        Assert.Throws<ArgumentException>(() => builder.AddFileFromRemote(hasNotFileNameUrl, "file", null!, null!));
+
+        // content-type 为空
+        Assert.Throws<ArgumentNullException>(() => builder.AddFileFromRemote(url, "test", null!, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddFileFromRemote(url, "test", null!, string.Empty));
+        Assert.Throws<ArgumentException>(() => builder.AddFileFromRemote(url, "test", null!, " "));
+    }
+
+    [Fact]
+    public void AddFileFromRemote_ReturnOK()
+    {
+        var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
+        var url =
+            "https://download2.huduntech.com/application/workspace/49/49d0cbe19a9bf7e54c1735b24fa41f27/Installer_%E8%BF%85%E6%8D%B7%E5%B1%8F%E5%B9%95%E5%BD%95%E5%83%8F%E5%B7%A5%E5%85%B7_1.7.9_123.exe";
+
+        builder.AddFileFromRemote(url, "test");
+        Assert.Single(builder._partContents);
+        Assert.Equal("test", builder._partContents[0].Name);
+        Assert.Equal("application/octet-stream", builder._partContents[0].ContentType);
+        Assert.Null(builder._partContents[0].ContentEncoding);
+        Assert.NotNull(builder._partContents[0].RawContent);
+        Assert.True(builder._partContents[0].RawContent is MemoryStream);
+        Assert.Equal("Installer_迅捷屏幕录像工具_1.7.9_123.exe",
+            builder._partContents[0].FileName);
+        Assert.Equal(2785992, builder._partContents[0].FileSize);
+        Assert.NotNull(builder._httpRequestBuilder.Disposables);
+        Assert.Single(builder._httpRequestBuilder.Disposables);
+        Assert.Equal(typeof(MemoryStream), builder._httpRequestBuilder.Disposables[0].GetType());
+
+        builder.AddFileFromRemote(url, "test", "test.exe");
+        Assert.Equal(2, builder._partContents.Count);
+        Assert.Equal("test.exe", builder._partContents[1].FileName);
+    }
+
+    [Fact]
     public void AddFileStream_Invalid_Parameters()
     {
         var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));

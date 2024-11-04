@@ -205,6 +205,43 @@ public class HttpRemoteCasesTests
     }
 
     [Fact]
+    public async Task SendFile3_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+
+        builder.Services.AddControllers()
+            .AddApplicationPart(typeof(HttpRemoteController).Assembly);
+        builder.Services.AddHttpRemote();
+
+        await using var app = builder.Build();
+
+        app.MapControllers();
+
+        await app.StartAsync();
+
+        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var httpRemoteService = app.Services.GetRequiredService<IHttpRemoteService>();
+
+        var httpRemoteResult =
+            await httpRemoteService.SendAsync<string>(
+                HttpRequestBuilder.Post($"http://localhost:{port}/HttpRemote/SendFile")
+                    .SetMultipartContent(mBuilder =>
+                    {
+                        mBuilder.AddFileFromRemote("" +
+                                                   "https://download2.huduntech.com/application/workspace/49/49d0cbe19a9bf7e54c1735b24fa41f27/Installer_%E8%BF%85%E6%8D%B7%E5%B1%8F%E5%B9%95%E5%BD%95%E5%83%8F%E5%B7%A5%E5%85%B7_1.7.9_123.exe",
+                            "file");
+                    }));
+
+        Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
+        Assert.NotNull(httpRemoteResult.Result);
+        Assert.Equal("Installer_迅捷屏幕录像工具_1.7.9_123.exe", httpRemoteResult.Result);
+
+        await app.StopAsync();
+    }
+
+    [Fact]
     public async Task SendFiles_ReturnOK()
     {
         var port = NetworkUtility.FindAvailableTcpPort();

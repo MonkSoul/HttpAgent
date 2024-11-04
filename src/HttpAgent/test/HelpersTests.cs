@@ -6,6 +6,33 @@ namespace HttpAgent.Tests;
 
 public class HelpersTests
 {
+    [Fact]
+    public void GetStreamFromRemote_Invalid_Parameters()
+    {
+        Assert.Throws<ArgumentNullException>(() => HttpAgent.Helpers.GetStreamFromRemote(null!));
+        Assert.Throws<ArgumentException>(() => HttpAgent.Helpers.GetStreamFromRemote(string.Empty));
+        Assert.Throws<ArgumentException>(() => HttpAgent.Helpers.GetStreamFromRemote(" "));
+
+        var exception =
+            Assert.Throws<ArgumentException>(() => HttpAgent.Helpers.GetStreamFromRemote(@"C:\Temp\text.txt"));
+        Assert.Equal(@"Invalid internet address: `C:\Temp\text.txt`. (Parameter 'url')", exception.Message);
+    }
+
+    [Fact]
+    public void GetStreamFromRemote_ReturnOK()
+    {
+        var tuple = HttpAgent.Helpers.GetStreamFromRemote(
+            "https://download2.huduntech.com/application/workspace/49/49d0cbe19a9bf7e54c1735b24fa41f27/Installer_%E8%BF%85%E6%8D%B7%E5%B1%8F%E5%B9%95%E5%BD%95%E5%83%8F%E5%B7%A5%E5%85%B7_1.7.9_123.exe");
+        Assert.NotNull(tuple);
+
+        using var stream = tuple.Item1;
+        Assert.NotNull(stream);
+
+        var length = tuple.Item2;
+        Assert.NotNull(length);
+        Assert.Equal(2785992, length);
+    }
+
     [Theory]
     [InlineData(null, null)]
     [InlineData("http://localhost", "")]

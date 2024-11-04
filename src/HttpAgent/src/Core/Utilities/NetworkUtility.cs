@@ -45,6 +45,22 @@ public static class NetworkUtility
     }
 
     /// <summary>
+    ///     检查 URL 是否是一个互联网地址
+    /// </summary>
+    /// <param name="url">URL 地址</param>
+    /// <returns>
+    ///     <see cref="bool" />
+    /// </returns>
+    public static bool IsWebUrl(string url)
+    {
+        // 空检查
+        ArgumentException.ThrowIfNullOrWhiteSpace(url);
+
+        return Uri.TryCreate(url, UriKind.Absolute, out var result) &&
+               (result.Scheme == Uri.UriSchemeHttp || result.Scheme == Uri.UriSchemeHttps);
+    }
+
+    /// <summary>
     ///     检查指定端口是否正在使用
     /// </summary>
     /// <remarks>如果端口正在使用则返回 <c>true</c>，否则返回 <c>false</c>。</remarks>

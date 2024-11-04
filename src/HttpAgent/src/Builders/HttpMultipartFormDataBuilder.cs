@@ -183,7 +183,41 @@ public sealed class HttpMultipartFormDataBuilder
     }
 
     /// <summary>
-    ///     添加文件
+    ///     从互联网 URL 中添加文件
+    /// </summary>
+    /// <remarks>文件大小限制在 <c>50MB</c> 以内。</remarks>
+    /// <param name="url">互联网 URL 地址</param>
+    /// <param name="name">表单名称</param>
+    /// <param name="fileName">文件名</param>
+    /// <param name="contentType">内容类型</param>
+    /// <param name="contentEncoding">内容编码</param>
+    /// <returns>
+    ///     <see cref="HttpMultipartFormDataBuilder" />
+    /// </returns>
+    public HttpMultipartFormDataBuilder AddFileFromRemote(string url, string name, string? fileName = null,
+        string contentType = "application/octet-stream", Encoding? contentEncoding = null)
+    {
+        // 空检查
+        ArgumentException.ThrowIfNullOrWhiteSpace(url);
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+
+        // 尝试获取文件名
+        var newFileName = fileName ?? Helpers.GetFileNameFromUri(new Uri(url, UriKind.Absolute));
+
+        // 空检查
+        ArgumentException.ThrowIfNullOrWhiteSpace(newFileName);
+
+        // 从互联网 URL 地址中加载流
+        var (fileStream, fileLength) = Helpers.GetStreamFromRemote(url);
+
+        // 添加文件流到请求结束时需要释放的集合中
+        _httpRequestBuilder.AddDisposable(fileStream);
+
+        return AddStream(fileStream, name, newFileName, fileLength, contentType, contentEncoding);
+    }
+
+    /// <summary>
+    ///     从本地路径中添加文件
     /// </summary>
     /// <param name="fileFullName">文件完整路径</param>
     /// <param name="name">表单名称</param>
@@ -225,7 +259,7 @@ public sealed class HttpMultipartFormDataBuilder
     }
 
     /// <summary>
-    ///     添加文件（带上传进度）
+    ///     从本地路径中添加文件（带上传进度）
     /// </summary>
     /// <param name="fileFullName">文件完整路径</param>
     /// <param name="name">表单名称</param>
@@ -273,7 +307,7 @@ public sealed class HttpMultipartFormDataBuilder
     }
 
     /// <summary>
-    ///     添加文件
+    ///     从本地路径中添加文件
     /// </summary>
     /// <param name="fileFullName">文件完整路径</param>
     /// <param name="name">表单名称</param>

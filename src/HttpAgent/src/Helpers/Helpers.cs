@@ -2,6 +2,8 @@
 //
 // 此源代码遵循位于源代码树根目录中的 LICENSE 文件的许可证。
 
+using Microsoft.Net.Http.Headers;
+
 namespace HttpAgent;
 
 /// <summary>
@@ -9,6 +11,52 @@ namespace HttpAgent;
 /// </summary>
 internal static partial class Helpers
 {
+    /// <summary>
+    ///     从互联网 URL 地址中加载流
+    /// </summary>
+    /// <param name="url">互联网 URL 地址</param>
+    /// <returns>
+    ///     <see cref="Tuple{T1, T2}" />
+    /// </returns>
+    internal static Tuple<Stream, long?> GetStreamFromRemote(string url)
+    {
+        // 空检查
+        ArgumentException.ThrowIfNullOrWhiteSpace(url);
+
+        // 检查 URL 地址是否是互联网地址
+        if (!NetworkUtility.IsWebUrl(url))
+        {
+            throw new ArgumentException($"Invalid internet address: `{url}`.", nameof(url));
+        }
+
+        // 初始化 HttpClient 实例
+        using var httpClient = new HttpClient();
+
+        // 限制流大小在 50MB 以内
+        httpClient.MaxResponseContentBufferSize = 52428800L;
+
+        // 设置默认 User-Agent
+        httpClient.DefaultRequestHeaders.TryAddWithoutValidation(HeaderNames.UserAgent,
+            Constants.USER_AGENT_OF_BROWSER);
+
+        try
+        {
+            // 发送 HTTP 远程请求
+            var httpResponseMessage = httpClient.Send(new HttpRequestMessage(HttpMethod.Get, url));
+            httpResponseMessage.EnsureSuccessStatusCode();
+
+            // 读取流和长度
+            var stream = httpResponseMessage.Content.ReadAsStream();
+            var length = httpResponseMessage.Content.Headers.ContentLength;
+
+            return Tuple.Create(stream, length);
+        }
+        catch (Exception e)
+        {
+            throw new InvalidOperationException($"Failed to load stream from internet address: `{url}`.", e);
+        }
+    }
+
     /// <summary>
     ///     从 <see cref="Uri" /> 中解析文件名
     /// </summary>
