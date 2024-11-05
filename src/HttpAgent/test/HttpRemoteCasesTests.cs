@@ -221,7 +221,6 @@ public class HttpRemoteCasesTests
 
         await app.StartAsync();
 
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var httpRemoteService = app.Services.GetRequiredService<IHttpRemoteService>();
 
         var httpRemoteResult =
@@ -237,6 +236,42 @@ public class HttpRemoteCasesTests
         Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
         Assert.NotNull(httpRemoteResult.Result);
         Assert.Equal("Installer_迅捷屏幕录像工具_1.7.9_123.exe", httpRemoteResult.Result);
+
+        await app.StopAsync();
+    }
+
+    [Fact]
+    public async Task SendFile4_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+
+        builder.Services.AddControllers()
+            .AddApplicationPart(typeof(HttpRemoteController).Assembly);
+        builder.Services.AddHttpRemote();
+
+        await using var app = builder.Build();
+
+        app.MapControllers();
+
+        await app.StartAsync();
+
+        var base64String =
+            Convert.ToBase64String(await File.ReadAllBytesAsync(Path.Combine(AppContext.BaseDirectory, "test.txt")));
+        var httpRemoteService = app.Services.GetRequiredService<IHttpRemoteService>();
+
+        var httpRemoteResult =
+            await httpRemoteService.SendAsync<string>(
+                HttpRequestBuilder.Post($"http://localhost:{port}/HttpRemote/SendFile")
+                    .SetMultipartContent(mBuilder =>
+                    {
+                        mBuilder.AddFileFromBase64String(base64String, "file", "test.txt");
+                    }));
+
+        Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
+        Assert.NotNull(httpRemoteResult.Result);
+        Assert.Equal("test.txt", httpRemoteResult.Result);
 
         await app.StopAsync();
     }

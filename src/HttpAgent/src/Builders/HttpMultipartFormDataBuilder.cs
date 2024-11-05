@@ -217,6 +217,35 @@ public sealed class HttpMultipartFormDataBuilder
     }
 
     /// <summary>
+    ///     从 Base64 字符串中添加文件
+    /// </summary>
+    /// <remarks>文件大小限制在 <c>50MB</c> 以内。</remarks>
+    /// <param name="base64String">Base64 字符串</param>
+    /// <param name="name">表单名称</param>
+    /// <param name="fileName">文件名</param>
+    /// <param name="contentType">内容类型</param>
+    /// <param name="contentEncoding">内容编码</param>
+    /// <returns>
+    ///     <see cref="HttpMultipartFormDataBuilder" />
+    /// </returns>
+    public HttpMultipartFormDataBuilder AddFileFromBase64String(string base64String, string name, string fileName,
+        string contentType = "application/octet-stream", Encoding? contentEncoding = null)
+    {
+        // 空检查
+        ArgumentException.ThrowIfNullOrWhiteSpace(base64String);
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
+
+        // 将 Base64 字符串转换成字节数组
+        var bytes = Convert.FromBase64String(base64String);
+
+        // 获取字节数组长度
+        var fileLength = bytes.Length;
+
+        return AddByteArray(bytes, name, fileName, fileLength, contentType, contentEncoding);
+    }
+
+    /// <summary>
     ///     从本地路径中添加文件
     /// </summary>
     /// <param name="fileFullName">文件完整路径</param>

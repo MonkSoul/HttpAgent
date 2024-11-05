@@ -294,6 +294,57 @@ public class HttpMultipartFormDataBuilderTests
     }
 
     [Fact]
+    public void AddFileFromBase64String_Invalid_Parameters()
+    {
+        var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
+        var base64String =
+            Convert.ToBase64String(File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "test.txt")));
+
+        // url 为空
+        Assert.Throws<ArgumentNullException>(() => builder.AddFileFromBase64String(null!, null!, null!, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddFileFromBase64String(string.Empty, null!, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddFileFromBase64String(" ", null!, null!));
+
+        // name 为空
+        Assert.Throws<ArgumentNullException>(() => builder.AddFileFromBase64String(base64String, null!, null!, null!));
+        Assert.Throws<ArgumentException>(
+            () => builder.AddFileFromBase64String(base64String, string.Empty, null!, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddFileFromBase64String(base64String, " ", null!, null!));
+
+        // fileName 为空
+        Assert.Throws<ArgumentNullException>(() => builder.AddFileFromBase64String(base64String, "file", null!, null!));
+        Assert.Throws<ArgumentException>(() =>
+            builder.AddFileFromBase64String(base64String, "file", string.Empty, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddFileFromBase64String(base64String, "file", " ", null!));
+
+        // content-type 为空
+        Assert.Throws<ArgumentNullException>(() =>
+            builder.AddFileFromBase64String(base64String, "test", "test.txt", null!));
+        Assert.Throws<ArgumentException>(() =>
+            builder.AddFileFromBase64String(base64String, "test", "test.txt", string.Empty));
+        Assert.Throws<ArgumentException>(() => builder.AddFileFromBase64String(base64String, "test", "test.txt", " "));
+    }
+
+    [Fact]
+    public void AddFileFromBase64String_ReturnOK()
+    {
+        var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
+        var base64String =
+            Convert.ToBase64String(File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "test.txt")));
+
+        builder.AddFileFromBase64String(base64String, "test", "test.txt");
+        Assert.Single(builder._partContents);
+        Assert.Equal("test", builder._partContents[0].Name);
+        Assert.Equal("application/octet-stream", builder._partContents[0].ContentType);
+        Assert.Null(builder._partContents[0].ContentEncoding);
+        Assert.NotNull(builder._partContents[0].RawContent);
+        Assert.True(builder._partContents[0].RawContent is byte[]);
+        Assert.Equal("test.txt", builder._partContents[0].FileName);
+        Assert.Equal(21, builder._partContents[0].FileSize);
+        Assert.Null(builder._httpRequestBuilder.Disposables);
+    }
+
+    [Fact]
     public void AddFileStream_Invalid_Parameters()
     {
         var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
