@@ -5834,6 +5834,17 @@
         <member name="M:HttpAgent.MultipartFormDataContentProcessor.Process(System.Object,System.String,System.Text.Encoding)">
             <inheritdoc />
         </member>
+        <member name="T:HttpAgent.ReadOnlyMemoryContentProcessor">
+            <summary>
+                <see cref="T:System.ReadOnlyMemory`1" /> 内容处理器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.ReadOnlyMemoryContentProcessor.CanProcess(System.Object,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.ReadOnlyMemoryContentProcessor.Process(System.Object,System.String,System.Text.Encoding)">
+            <inheritdoc />
+        </member>
         <member name="T:HttpAgent.StreamContentProcessor">
             <summary>
                 流内容处理器

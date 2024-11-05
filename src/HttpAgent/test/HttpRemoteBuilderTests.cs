@@ -414,12 +414,13 @@ public class HttpRemoteBuilderTests
         var httpContentProcessorFactory =
             (HttpContentProcessorFactory)serviceProvider.GetRequiredService(typeof(IHttpContentProcessorFactory));
         Assert.NotNull(httpContentProcessorFactory._processors);
-        Assert.Equal(6, httpContentProcessorFactory._processors.Count);
+        Assert.Equal(7, httpContentProcessorFactory._processors.Count);
         Assert.Equal(
             [
                 typeof(StringContentProcessor), typeof(FormUrlEncodedContentProcessor),
                 typeof(ByteArrayContentProcessor), typeof(StreamContentProcessor),
-                typeof(MultipartFormDataContentProcessor), typeof(CustomStringContentProcessor)
+                typeof(MultipartFormDataContentProcessor), typeof(ReadOnlyMemoryContentProcessor),
+                typeof(CustomStringContentProcessor)
             ],
             httpContentProcessorFactory._processors.Select(u => u.Key));
 
