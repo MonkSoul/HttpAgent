@@ -77,6 +77,11 @@ public sealed class HeaderAttribute : Attribute
     public bool Escape { get; set; }
 
     /// <summary>
+    ///     是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>
+    /// </summary>
+    public bool Replace { get; set; }
+
+    /// <summary>
     ///     是否设置了值
     /// </summary>
     internal bool HasSetValue { get; private set; }

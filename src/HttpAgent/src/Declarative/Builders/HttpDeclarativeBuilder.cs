@@ -20,6 +20,7 @@ public sealed class HttpDeclarativeBuilder
         { typeof(TraceIdentifierDeclarativeExtractor), new TraceIdentifierDeclarativeExtractor() },
         { typeof(ProfilerDeclarativeExtractor), new ProfilerDeclarativeExtractor() },
         { typeof(SimulateBrowserDeclarativeExtractor), new SimulateBrowserDeclarativeExtractor() },
+        { typeof(AcceptLanguageDeclarativeExtractor), new AcceptLanguageDeclarativeExtractor() },
         { typeof(DisableCacheDeclarativeExtractor), new DisableCacheDeclarativeExtractor() },
         { typeof(EnsureSuccessStatusCodeDeclarativeExtractor), new EnsureSuccessStatusCodeDeclarativeExtractor() },
         { typeof(TimeoutDeclarativeExtractor), new TimeoutDeclarativeExtractor() },

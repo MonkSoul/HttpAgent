@@ -145,6 +145,7 @@ public class DeclarativeAttributeTests
         Assert.Null(attribute.Value);
         Assert.Null(attribute.AliasAs);
         Assert.False(attribute.HasSetValue);
+        Assert.False(attribute.Replace);
 
         var attribute2 = new HeaderAttribute("Set-Cookie");
         Assert.Equal("Set-Cookie", attribute2.Name);
@@ -217,6 +218,7 @@ public class DeclarativeAttributeTests
         Assert.Null(attribute.AliasAs);
         Assert.False(attribute.HasSetValue);
         Assert.Null(attribute.Prefix);
+        Assert.False(attribute.Replace);
 
         var attribute2 = new QueryAttribute("name");
         Assert.Equal("name", attribute2.Name);
@@ -263,5 +265,20 @@ public class DeclarativeAttributeTests
 
         var attribute = new TraceIdentifierAttribute("furion");
         Assert.Equal("furion", attribute.Identifier);
+    }
+
+    [Fact]
+    public void AcceptLanguageAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(AcceptLanguageAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface, attributeUsage.ValidOn);
+        Assert.False(attributeUsage.AllowMultiple);
+
+        var attribute = new AcceptLanguageAttribute("fr-FR");
+        Assert.Equal("fr-FR", attribute.Language);
+
+        var attribute2 = new AcceptLanguageAttribute(null);
+        Assert.Null(attribute2.Language);
     }
 }

@@ -189,7 +189,7 @@ public class MessagePackModel0
     public string? Name { get; set; }
 }
 
-[MessagePack.MessagePackObject]
+[MessagePackObject]
 public class MessagePackModel1
 {
     [MessagePack.Key(0)] public int Id { get; set; }

@@ -130,12 +130,12 @@ public interface IValidationAttributeDeclarativeTest : IHttpDeclarativeExtractor
     Task Test2(string str, ValidationModel obj);
 
     [Get("http://localhost:5000")]
-    Task Test3([Required, MinLength(2), MaxLength(5)] string str, [Range(0, 10)] int age);
+    Task Test3([Required] [MinLength(2)] [MaxLength(5)] string str, [Range(0, 10)] int age);
 }
 
 public class ValidationModel
 {
     public int Id { get; set; }
 
-    [Required, MinLength(3)] public string? Name { get; set; }
+    [Required] [MinLength(3)] public string? Name { get; set; }
 }

@@ -32,7 +32,8 @@ internal sealed class HeaderDeclarativeExtractor : IHttpDeclarativeExtractor
                 // 设置请求标头
                 if (headerAttribute.HasSetValue)
                 {
-                    httpRequestBuilder.WithHeader(headerName, headerAttribute.Value, headerAttribute.Escape);
+                    httpRequestBuilder.WithHeader(headerName, headerAttribute.Value, headerAttribute.Escape,
+                        replace: headerAttribute.Replace);
                 }
                 // 移除请求标头
                 else
@@ -80,7 +81,7 @@ internal sealed class HeaderDeclarativeExtractor : IHttpDeclarativeExtractor
                 if (parameter.ParameterType.IsBaseTypeOrEnumOrCollection())
                 {
                     httpRequestBuilder.WithHeader(parameterName, value ?? headerAttribute.Value,
-                        headerAttribute.Escape);
+                        headerAttribute.Escape, replace: headerAttribute.Replace);
 
                     continue;
                 }
@@ -88,7 +89,7 @@ internal sealed class HeaderDeclarativeExtractor : IHttpDeclarativeExtractor
                 // 空检查
                 if (value is not null)
                 {
-                    httpRequestBuilder.WithHeaders(value, headerAttribute.Escape);
+                    httpRequestBuilder.WithHeaders(value, headerAttribute.Escape, replace: headerAttribute.Replace);
                 }
             }
         }

@@ -854,7 +854,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
             var bytes = memoryStream.ToArray();
 
             // 反序列化为 MyClass 对象
-            var obj = MessagePack.MessagePackSerializer.Deserialize<MessagePackModel1>(bytes);
+            var obj = MessagePackSerializer.Deserialize<MessagePackModel1>(bytes);
 
             await context.Response.WriteAsync($"{obj.Id} {obj.Name}");
         });

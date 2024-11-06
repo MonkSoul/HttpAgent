@@ -1216,7 +1216,7 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.WithHeader(System.String,System.Object,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
+        <member name="M:HttpAgent.HttpRequestBuilder.WithHeader(System.String,System.Object,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String},System.Boolean)">
             <summary>
                 设置请求标头
             </summary>
@@ -1230,11 +1230,12 @@
             <param name="comparer">
                 <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
             </param>
+            <param name="replace">是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>。</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.WithHeaders(System.Collections.Generic.IDictionary{System.String,System.Object},System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
+        <member name="M:HttpAgent.HttpRequestBuilder.WithHeaders(System.Collections.Generic.IDictionary{System.String,System.Object},System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String},System.Boolean)">
             <summary>
                 设置请求标头
             </summary>
@@ -1247,11 +1248,12 @@
             <param name="comparer">
                 <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
             </param>
+            <param name="replace">是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>。</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.WithHeaders(System.Object,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
+        <member name="M:HttpAgent.HttpRequestBuilder.WithHeaders(System.Object,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String},System.Boolean)">
             <summary>
                 设置请求标头
             </summary>
@@ -1264,6 +1266,7 @@
             <param name="comparer">
                 <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
             </param>
+            <param name="replace">是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>。</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -1306,7 +1309,7 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.WithQueryParameter(System.String,System.Object,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
+        <member name="M:HttpAgent.HttpRequestBuilder.WithQueryParameter(System.String,System.Object,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String},System.Boolean)">
             <summary>
                 设置查询参数
             </summary>
@@ -1320,11 +1323,12 @@
             <param name="comparer">
                 <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
             </param>
+            <param name="replace">是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>。</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.WithQueryParameters(System.Collections.Generic.IDictionary{System.String,System.Object},System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
+        <member name="M:HttpAgent.HttpRequestBuilder.WithQueryParameters(System.Collections.Generic.IDictionary{System.String,System.Object},System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String},System.Boolean)">
             <summary>
                 设置查询参数
             </summary>
@@ -1337,11 +1341,12 @@
             <param name="comparer">
                 <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
             </param>
+            <param name="replace">是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>。</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.WithQueryParameters(System.Object,System.String,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
+        <member name="M:HttpAgent.HttpRequestBuilder.WithQueryParameters(System.Object,System.String,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String},System.Boolean)">
             <summary>
                 设置查询参数
             </summary>
@@ -1355,6 +1360,7 @@
             <param name="comparer">
                 <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
             </param>
+            <param name="replace">是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>。</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -1712,6 +1718,16 @@
                 设置是否启用请求分析工具
             </summary>
             <param name="enabled">是否启用</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.AcceptLanguage(System.String)">
+            <summary>
+                设置客户端所偏好的自然语言和区域设置
+            </summary>
+            <remarks>设置此配置后，将在单次请求标头中添加 <c>Accept-Language</c> 值。</remarks>
+            <param name="language">自然语言和区域设置</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -2912,7 +2928,7 @@
                 <see cref="T:System.Collections.Generic.IDictionary`2" />
             </param>
             <param name="allowDuplicates">是否允许重复添加。默认值为：<c>true</c>。</param>
-            <param name="addRange">是否采用 <c>AddRange</c> 方式添加存在的值。默认值为 <c>false</c>。</param>
+            <param name="replace">是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>。</param>
         </member>
         <member name="M:HttpAgent.Core.Extensions.IDictionaryExtensions.AddOrUpdate``2(System.Collections.Generic.IDictionary{``0,``1},System.Collections.Generic.IDictionary{``0,``1})">
             <summary>
@@ -3418,6 +3434,22 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
+        <member name="T:HttpAgent.AcceptLanguageAttribute">
+            <summary>
+                HTTP 声明式客户端所偏好的自然语言和区域特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.AcceptLanguageAttribute.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.AcceptLanguageAttribute" />
+            </summary>
+            <param name="language">自然语言和区域设置</param>
+        </member>
+        <member name="P:HttpAgent.AcceptLanguageAttribute.Language">
+            <summary>
+                自然语言和区域设置
+            </summary>
+        </member>
         <member name="T:HttpAgent.BodyAttribute">
             <summary>
                 HTTP 声明式请求内容特性
@@ -3600,6 +3632,11 @@
         <member name="P:HttpAgent.HeaderAttribute.Escape">
             <summary>
                 是否转义
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HeaderAttribute.Replace">
+            <summary>
+                是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>
             </summary>
         </member>
         <member name="P:HttpAgent.HeaderAttribute.HasSetValue">
@@ -3841,6 +3878,11 @@
             </summary>
             <remarks>作用于对象类型时有效。</remarks>
         </member>
+        <member name="P:HttpAgent.QueryAttribute.Replace">
+            <summary>
+                是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>
+            </summary>
+        </member>
         <member name="P:HttpAgent.QueryAttribute.HasSetValue">
             <summary>
                 是否设置了值
@@ -3981,6 +4023,14 @@
                 <see cref="T:System.Tuple`2" />
             </returns>
         </member>
+        <member name="T:HttpAgent.AcceptLanguageDeclarativeExtractor">
+            <summary>
+                HTTP 声明式 <see cref="T:HttpAgent.AcceptLanguageAttribute" /> 特性提取器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.AcceptLanguageDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <inheritdoc />
+        </member>
         <member name="T:HttpAgent.BodyDeclarativeExtractor">
             <summary>
                 HTTP 声明式 <see cref="T:HttpAgent.BodyAttribute" /> 特性提取器
@@ -4044,7 +4094,7 @@
         </member>
         <member name="M:HttpAgent.IHttpDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
             <summary>
-                提取方法信息构建 <see cref="T:HttpAgent.HttpRequestBuilder"/> 实例
+                提取方法信息构建 <see cref="T:HttpAgent.HttpRequestBuilder" /> 实例
             </summary>
             <param name="httpRequestBuilder">
                 <see cref="T:HttpAgent.HttpRequestBuilder" />

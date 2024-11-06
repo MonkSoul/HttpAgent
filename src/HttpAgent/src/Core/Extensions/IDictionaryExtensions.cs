@@ -21,9 +21,9 @@ internal static class IDictionaryExtensions
     ///     <see cref="IDictionary{TKey, TValue}" />
     /// </param>
     /// <param name="allowDuplicates">是否允许重复添加。默认值为：<c>true</c>。</param>
-    /// <param name="addRange">是否采用 <c>AddRange</c> 方式添加存在的值。默认值为 <c>false</c>。</param>
+    /// <param name="replace">是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>。</param>
     internal static void AddOrUpdate<TKey, TValue>(this IDictionary<TKey, List<TValue>> dictionary,
-        IDictionary<TKey, TValue> concatDictionary, bool allowDuplicates = true, bool addRange = false)
+        IDictionary<TKey, TValue> concatDictionary, bool allowDuplicates = true, bool replace = false)
         where TKey : notnull
     {
         // 空检查
@@ -45,7 +45,13 @@ internal static class IDictionaryExtensions
                 continue;
             }
 
-            if (!addRange || newValue is null || !newValue.GetType().IsArrayOrCollection(out _))
+            // 检查是否采用替换的方式
+            if (replace)
+            {
+                values.Clear();
+            }
+
+            if (newValue is null || !newValue.GetType().IsArrayOrCollection(out _))
             {
                 values.Add(newValue);
             }

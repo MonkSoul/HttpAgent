@@ -1392,4 +1392,35 @@ public class HttpRequestBuilderMethodsTests
         httpRequestBuilder.Profiler(false);
         Assert.False(httpRequestBuilder.ProfilerEnabled);
     }
+
+    [Fact]
+    public void AcceptLanguage_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder.AcceptLanguage("en-US");
+
+        Assert.NotNull(httpRequestBuilder.Headers);
+        Assert.Single(httpRequestBuilder.Headers);
+        Assert.Equal("en-US", httpRequestBuilder.Headers["Accept-Language"].First());
+    }
+
+    [Fact]
+    public void AcceptLanguage_Duplicate_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder.AcceptLanguage("en-US");
+        httpRequestBuilder.AcceptLanguage("zh-CN");
+
+        Assert.NotNull(httpRequestBuilder.Headers);
+        Assert.Single(httpRequestBuilder.Headers);
+        Assert.Single(httpRequestBuilder.Headers["Accept-Language"]);
+        Assert.Equal("zh-CN", httpRequestBuilder.Headers["Accept-Language"].First());
+
+        httpRequestBuilder.AcceptLanguage(null);
+
+        Assert.NotNull(httpRequestBuilder.Headers);
+        Assert.Single(httpRequestBuilder.Headers);
+        Assert.Single(httpRequestBuilder.Headers["Accept-Language"]);
+        Assert.Null(httpRequestBuilder.Headers["Accept-Language"].First());
+    }
 }

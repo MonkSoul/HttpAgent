@@ -267,16 +267,17 @@ public sealed partial class HttpRequestBuilder
     /// <param name="comparer">
     ///     <see cref="IEqualityComparer{T}" />
     /// </param>
+    /// <param name="replace">是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>。</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
     public HttpRequestBuilder WithHeader(string key, object? value, bool escape = false, CultureInfo? culture = null,
-        IEqualityComparer<string>? comparer = null)
+        IEqualityComparer<string>? comparer = null, bool replace = false)
     {
         // 空检查
         ArgumentException.ThrowIfNullOrWhiteSpace(key);
 
-        return WithHeaders(new Dictionary<string, object?> { { key, value } }, escape, culture, comparer);
+        return WithHeaders(new Dictionary<string, object?> { { key, value } }, escape, culture, comparer, replace);
     }
 
     /// <summary>
@@ -291,13 +292,12 @@ public sealed partial class HttpRequestBuilder
     /// <param name="comparer">
     ///     <see cref="IEqualityComparer{T}" />
     /// </param>
+    /// <param name="replace">是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>。</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
-    public HttpRequestBuilder WithHeaders(IDictionary<string, object?> headers,
-        bool escape = false,
-        CultureInfo? culture = null,
-        IEqualityComparer<string>? comparer = null)
+    public HttpRequestBuilder WithHeaders(IDictionary<string, object?> headers, bool escape = false,
+        CultureInfo? culture = null, IEqualityComparer<string>? comparer = null, bool replace = false)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(headers);
@@ -307,8 +307,8 @@ public sealed partial class HttpRequestBuilder
         var objectHeaders = new Dictionary<string, List<object?>>(comparer);
 
         // 存在则合并否则添加
-        objectHeaders.AddOrUpdate(Headers.ToDictionary(u => u.Key, object? (u) => u.Value), false, true);
-        objectHeaders.AddOrUpdate(headers, false, true);
+        objectHeaders.AddOrUpdate(Headers.ToDictionary(u => u.Key, object? (u) => u.Value), false);
+        objectHeaders.AddOrUpdate(headers, false, replace);
 
         // 设置请求标头
         Headers = objectHeaders.ToDictionary(kvp => kvp.Key,
@@ -331,11 +331,12 @@ public sealed partial class HttpRequestBuilder
     /// <param name="comparer">
     ///     <see cref="IEqualityComparer{T}" />
     /// </param>
+    /// <param name="replace">是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>。</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
     public HttpRequestBuilder WithHeaders(object headerSource, bool escape = false, CultureInfo? culture = null,
-        IEqualityComparer<string>? comparer = null)
+        IEqualityComparer<string>? comparer = null, bool replace = false)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(headerSource);
@@ -343,7 +344,7 @@ public sealed partial class HttpRequestBuilder
         return WithHeaders(
             headerSource.ObjectToDictionary()!.ToDictionary(
                 u => u.Key.ToCultureString(culture ?? CultureInfo.InvariantCulture)!, u => u.Value), escape, culture,
-            comparer);
+            comparer, replace);
     }
 
     /// <summary>
@@ -444,16 +445,18 @@ public sealed partial class HttpRequestBuilder
     /// <param name="comparer">
     ///     <see cref="IEqualityComparer{T}" />
     /// </param>
+    /// <param name="replace">是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>。</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
     public HttpRequestBuilder WithQueryParameter(string key, object? value, bool escape = false,
-        CultureInfo? culture = null, IEqualityComparer<string>? comparer = null)
+        CultureInfo? culture = null, IEqualityComparer<string>? comparer = null, bool replace = false)
     {
         // 空检查
         ArgumentException.ThrowIfNullOrWhiteSpace(key);
 
-        return WithQueryParameters(new Dictionary<string, object?> { { key, value } }, escape, culture, comparer);
+        return WithQueryParameters(new Dictionary<string, object?> { { key, value } }, escape, culture, comparer,
+            replace);
     }
 
     /// <summary>
@@ -468,13 +471,12 @@ public sealed partial class HttpRequestBuilder
     /// <param name="comparer">
     ///     <see cref="IEqualityComparer{T}" />
     /// </param>
+    /// <param name="replace">是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>。</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
-    public HttpRequestBuilder WithQueryParameters(IDictionary<string, object?> parameters,
-        bool escape = false,
-        CultureInfo? culture = null,
-        IEqualityComparer<string>? comparer = null)
+    public HttpRequestBuilder WithQueryParameters(IDictionary<string, object?> parameters, bool escape = false,
+        CultureInfo? culture = null, IEqualityComparer<string>? comparer = null, bool replace = false)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(parameters);
@@ -484,9 +486,8 @@ public sealed partial class HttpRequestBuilder
         var objectQueryParameters = new Dictionary<string, List<object?>>(comparer);
 
         // 存在则合并否则添加
-        objectQueryParameters.AddOrUpdate(QueryParameters.ToDictionary(u => u.Key, object? (u) => u.Value), false,
-            true);
-        objectQueryParameters.AddOrUpdate(parameters, false, true);
+        objectQueryParameters.AddOrUpdate(QueryParameters.ToDictionary(u => u.Key, object? (u) => u.Value), false);
+        objectQueryParameters.AddOrUpdate(parameters, false, replace);
 
         // 设置查询参数
         QueryParameters = objectQueryParameters.ToDictionary(kvp => kvp.Key,
@@ -510,12 +511,12 @@ public sealed partial class HttpRequestBuilder
     /// <param name="comparer">
     ///     <see cref="IEqualityComparer{T}" />
     /// </param>
+    /// <param name="replace">是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>。</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
     public HttpRequestBuilder WithQueryParameters(object parameterSource, string? prefix = null, bool escape = false,
-        CultureInfo? culture = null,
-        IEqualityComparer<string>? comparer = null)
+        CultureInfo? culture = null, IEqualityComparer<string>? comparer = null, bool replace = false)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(parameterSource);
@@ -524,7 +525,7 @@ public sealed partial class HttpRequestBuilder
             parameterSource.ObjectToDictionary()!.ToDictionary(
                 u =>
                     $"{(string.IsNullOrWhiteSpace(prefix) ? null : $"{prefix}.")}{u.Key.ToCultureString(culture ?? CultureInfo.InvariantCulture)!}",
-                u => u.Value), escape, culture, comparer);
+                u => u.Value), escape, culture, comparer, replace);
     }
 
     /// <summary>
@@ -1131,7 +1132,7 @@ public sealed partial class HttpRequestBuilder
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
     public HttpRequestBuilder SimulateBrowser() =>
-        WithHeader(HeaderNames.UserAgent, Constants.USER_AGENT_OF_BROWSER);
+        WithHeader(HeaderNames.UserAgent, Constants.USER_AGENT_OF_BROWSER, replace: true);
 
     /// <summary>
     ///     释放资源集合
@@ -1222,6 +1223,17 @@ public sealed partial class HttpRequestBuilder
 
         return this;
     }
+
+    /// <summary>
+    ///     设置客户端所偏好的自然语言和区域设置
+    /// </summary>
+    /// <remarks>设置此配置后，将在单次请求标头中添加 <c>Accept-Language</c> 值。</remarks>
+    /// <param name="language">自然语言和区域设置</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder AcceptLanguage(string? language) =>
+        WithHeader(HeaderNames.AcceptLanguage, language, replace: true);
 
     /// <summary>
     ///     添加请求结束时需要释放的对象
