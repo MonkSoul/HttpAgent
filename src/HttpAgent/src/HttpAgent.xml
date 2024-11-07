@@ -3916,7 +3916,7 @@
         </member>
         <member name="P:HttpAgent.SimulateBrowserAttribute.Mobile">
             <summary>
-                是否模拟移动端，默认值为：<c>false</c>（即模拟桌面端）。
+                是否模拟移动端，默认值为：<c>false</c>（即模拟桌面端）
             </summary>
         </member>
         <member name="T:HttpAgent.TimeoutAttribute">

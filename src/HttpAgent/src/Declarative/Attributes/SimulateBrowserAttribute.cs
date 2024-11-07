@@ -11,7 +11,7 @@ namespace HttpAgent;
 public sealed class SimulateBrowserAttribute : Attribute
 {
     /// <summary>
-    ///     是否模拟移动端，默认值为：<c>false</c>（即模拟桌面端）。
+    ///     是否模拟移动端，默认值为：<c>false</c>（即模拟桌面端）
     /// </summary>
     public bool Mobile { get; set; }
 }
