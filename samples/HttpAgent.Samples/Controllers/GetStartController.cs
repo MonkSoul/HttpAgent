@@ -87,4 +87,26 @@ public class GetStartController(IHttpRemoteService httpRemoteService) : Controll
                 await Task.CompletedTask;
             }, FileExistsBehavior.Overwrite)); // FileExistsBehavior 可配置本地已存在该文件时的下载行为，此处是替换操作
     }
+
+    [HttpPost]
+    public async Task UploadFile()
+    {
+        await httpRemoteService.SendAsync(HttpRequestBuilder
+            .Post("https://localhost:7044/HttpRemote/AddFile")
+            .SetMultipartContent(
+                formBuilder => { formBuilder.AddFileStream(@"C:\Workspaces\httptest.jpg", "file"); }));
+    }
+
+    [HttpPost]
+    public async Task UploadFiles()
+    {
+        await httpRemoteService.SendAsync(HttpRequestBuilder
+            .Post("https://localhost:7044/HttpRemote/AddFiles")
+            .SetMultipartContent(
+                formBuilder =>
+                {
+                    formBuilder.AddFileStream(@"C:\Workspaces\httptest.jpg", "files")
+                        .AddFileStream(@"C:\Workspaces\picture.jpg", "files");
+                }).Profiler());
+    }
 }

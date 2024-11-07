@@ -78,11 +78,11 @@ public class HttpRemoteExtensionsTests
         httpResponseMessage.Content.Headers.TryAddWithoutValidation("Content-Type", "application/json");
 
         Assert.Equal(
-            "General: \r\n\tRequest URL:     http://localhost\r\n\tHTTP Method:     GET\r\n\tStatus Code:     200 OK\r\nResponse Headers: \r\n\tAccept:              application/json\r\n\tAccept-Encoding:     gzip, deflate\r\n\tContent-Type:        application/json",
+            "General: \r\n\tRequest URL:      http://localhost\r\n\tHTTP Method:      GET\r\n\tStatus Code:      200 OK\r\n\tHTTP Content:     \r\nResponse Headers: \r\n\tAccept:              application/json\r\n\tAccept-Encoding:     gzip, deflate\r\n\tContent-Type:        application/json",
             httpResponseMessage.ProfilerGeneralAndHeaders());
 
         Assert.Equal(
-            "General: \r\n\tRequest URL:          http://localhost\r\n\tHTTP Method:          GET\r\n\tStatus Code:          200 OK\r\n\tRequest Duration:     200ms\r\nResponse Headers: \r\n\tAccept:              application/json\r\n\tAccept-Encoding:     gzip, deflate\r\n\tContent-Type:        application/json",
+            "General: \r\n\tRequest URL:          http://localhost\r\n\tHTTP Method:          GET\r\n\tStatus Code:          200 OK\r\n\tHTTP Content:         \r\n\tRequest Duration:     200ms\r\nResponse Headers: \r\n\tAccept:              application/json\r\n\tAccept-Encoding:     gzip, deflate\r\n\tContent-Type:        application/json",
             httpResponseMessage.ProfilerGeneralAndHeaders(generalCustomKeyValues:
                 [new KeyValuePair<string, IEnumerable<string>>("Request Duration", ["200ms"])]));
     }

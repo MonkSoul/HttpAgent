@@ -133,10 +133,7 @@ public sealed class HttpContextForwardBuilder
         var httpRequest = HttpContext.Request;
 
         // 添加原始请求地址标头
-        httpRequestBuilder.WithHeaders(new Dictionary<string, string>
-        {
-            { Constants.X_ORIGINAL_URL_HEADER, httpRequest.GetFullRequestUrl() }
-        });
+        httpRequestBuilder.WithHeader(Constants.X_ORIGINAL_URL_HEADER, httpRequest.GetFullRequestUrl());
 
         // 复制原始请求标头
         httpRequestBuilder.WithHeaders(httpRequest.Headers);

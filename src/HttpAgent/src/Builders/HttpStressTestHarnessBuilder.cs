@@ -135,10 +135,7 @@ public sealed class HttpStressTestHarnessBuilder
         // 初始化 HttpRequestBuilder 实例，并确保请求标头中添加了 X-Stress-Test: Harness；
         // 同时启用 HttpClient 池化管理
         var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure)
-            .WithHeaders(new Dictionary<string, object?>
-            {
-                { Constants.X_STRESS_TEST_HEADER, Constants.X_STRESS_TEST_VALUE }
-            }).UseHttpClientPool();
+            .WithHeader(Constants.X_STRESS_TEST_HEADER, Constants.X_STRESS_TEST_VALUE).UseHttpClientPool();
 
         return httpRequestBuilder;
     }

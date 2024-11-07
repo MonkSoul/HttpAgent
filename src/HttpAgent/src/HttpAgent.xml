@@ -2975,6 +2975,21 @@
                 <see cref="T:System.Collections.IEnumerable" />
             </returns>
         </member>
+        <member name="M:HttpAgent.Core.Extensions.IEnumerableExtensions.ConcatIgnoreNull``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+                合并两个集合
+            </summary>
+            <param name="first">
+                <see cref="T:System.Collections.Generic.IEnumerable`1" />
+            </param>
+            <param name="second">
+                <see cref="T:System.Collections.Generic.IEnumerable`1" />
+            </param>
+            <typeparam name="TSource">集合元素的类型</typeparam>
+            <returns>
+                <see cref="T:System.Collections.Generic.IEnumerable`1" />
+            </returns>
+        </member>
         <member name="T:HttpAgent.Core.Extensions.LinqExpressionExtensions">
             <summary>
                 <see cref="T:System.Linq.Expressions.Expression" /> 拓展类

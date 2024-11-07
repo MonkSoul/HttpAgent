@@ -23,4 +23,16 @@ public class HttpRemoteController(IHttpRemoteService httpRemoteService) : Contro
             Name = model.Name
         });
     }
+
+    [HttpPost]
+    public Task<string> AddFile(IFormFile file)
+    {
+        return Task.FromResult(file.FileName);
+    }
+
+    [HttpPost]
+    public Task<string> AddFiles(IFormFileCollection files)
+    {
+        return Task.FromResult(string.Join("; ", files.Select(u => u.FileName)));
+    }
 }

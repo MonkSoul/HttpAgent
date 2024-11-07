@@ -33,4 +33,21 @@ internal static class IEnumerableExtensions
             }
         }
     }
+
+    /// <summary>
+    ///     合并两个集合
+    /// </summary>
+    /// <param name="first">
+    ///     <see cref="IEnumerable{T}" />
+    /// </param>
+    /// <param name="second">
+    ///     <see cref="IEnumerable{T}" />
+    /// </param>
+    /// <typeparam name="TSource">集合元素的类型</typeparam>
+    /// <returns>
+    ///     <see cref="IEnumerable{T}" />
+    /// </returns>
+    public static IEnumerable<TSource> ConcatIgnoreNull<TSource>(this IEnumerable<TSource>? first,
+        IEnumerable<TSource>? second) =>
+        (first ?? []).Concat(second ?? []);
 }
