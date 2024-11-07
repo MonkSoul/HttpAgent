@@ -46,6 +46,22 @@ public class SimulateBrowserDeclarativeExtractorTests
         Assert.NotNull(httpRequestBuilder3.Headers);
         Assert.Single(httpRequestBuilder3.Headers);
         Assert.Equal("User-Agent", httpRequestBuilder3.Headers.Keys.First());
+        Assert.Equal(
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0",
+            httpRequestBuilder3.Headers.Values.First().First());
+
+        var method4 =
+            typeof(ISimulateBrowserDeclarativeExtractorTest2).GetMethod(
+                nameof(ISimulateBrowserDeclarativeExtractorTest2.Test3))!;
+        var context4 = new HttpDeclarativeExtractorContext(method4, []);
+        var httpRequestBuilder4 = HttpRequestBuilder.Get("http://localhost");
+        new SimulateBrowserDeclarativeExtractor().Extract(httpRequestBuilder4, context4);
+        Assert.NotNull(httpRequestBuilder4.Headers);
+        Assert.Single(httpRequestBuilder4.Headers);
+        Assert.Equal("User-Agent", httpRequestBuilder4.Headers.Keys.First());
+        Assert.Equal(
+            "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36 Edg/130.0.0.0",
+            httpRequestBuilder4.Headers.Values.First().First());
     }
 }
 
@@ -63,4 +79,7 @@ public interface ISimulateBrowserDeclarativeExtractorTest2 : IHttpDeclarativeExt
 
     [SimulateBrowser]
     Task Test2();
+
+    [SimulateBrowser(Mobile = true)]
+    Task Test3();
 }

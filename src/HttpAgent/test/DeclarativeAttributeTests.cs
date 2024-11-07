@@ -241,6 +241,12 @@ public class DeclarativeAttributeTests
         Assert.NotNull(attributeUsage);
         Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface, attributeUsage.ValidOn);
         Assert.False(attributeUsage.AllowMultiple);
+
+        var attribute = new SimulateBrowserAttribute();
+        Assert.False(attribute.Mobile);
+
+        var attribute2 = new SimulateBrowserAttribute { Mobile = true };
+        Assert.True(attribute2.Mobile);
     }
 
     [Fact]

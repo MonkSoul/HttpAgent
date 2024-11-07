@@ -1668,11 +1668,12 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.SimulateBrowser">
+        <member name="M:HttpAgent.HttpRequestBuilder.SimulateBrowser(System.Boolean)">
             <summary>
                 设置模拟浏览器环境
             </summary>
             <remarks>设置此配置后，将在单次请求标头中添加主流浏览器的 <c>User-Agent</c> 值。</remarks>
+            <param name="simulateMobile">是否模拟移动端，默认值为：<c>false</c>（即模拟桌面端）。</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -2633,6 +2634,11 @@
         <member name="F:HttpAgent.Constants.USER_AGENT_OF_BROWSER">
             <summary>
                 浏览器的 <c>User-Agent</c> 标头值
+            </summary>
+        </member>
+        <member name="F:HttpAgent.Constants.USER_AGENT_OF_MOBILE_BROWSER">
+            <summary>
+                移动端浏览器的 <c>User-Agent</c> 标头值
             </summary>
         </member>
         <member name="T:HttpAgent.FileExistsBehavior">
@@ -3906,6 +3912,11 @@
         <member name="T:HttpAgent.SimulateBrowserAttribute">
             <summary>
                 HTTP 声明式模拟浏览器环境特性
+            </summary>
+        </member>
+        <member name="P:HttpAgent.SimulateBrowserAttribute.Mobile">
+            <summary>
+                是否模拟移动端，默认值为：<c>false</c>（即模拟桌面端）。
             </summary>
         </member>
         <member name="T:HttpAgent.TimeoutAttribute">
@@ -6029,10 +6040,46 @@
         <member name="M:HttpAgent.HttpRemoteService.SendAs``1(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:HttpAgent.HttpRemoteService.SendAsString(HttpAgent.HttpRequestBuilder,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.SendAsString(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.SendAsByteArray(HttpAgent.HttpRequestBuilder,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.SendAsByteArray(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.SendAsStream(HttpAgent.HttpRequestBuilder,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.SendAsStream(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="M:HttpAgent.HttpRemoteService.SendAsAsync``1(HttpAgent.HttpRequestBuilder,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.SendAsAsync``1(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.SendAsStringAsync(HttpAgent.HttpRequestBuilder,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.SendAsStringAsync(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.SendAsByteArrayAsync(HttpAgent.HttpRequestBuilder,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.SendAsByteArrayAsync(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.SendAsStreamAsync(HttpAgent.HttpRequestBuilder,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.SendAsStreamAsync(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.SendAs(System.Type,HttpAgent.HttpRequestBuilder,System.Threading.CancellationToken)">
@@ -6973,6 +7020,99 @@
                 <typeparamref name="TResult" />
             </returns>
         </member>
+        <member name="M:HttpAgent.IHttpRemoteService.SendAsString(HttpAgent.HttpRequestBuilder,System.Threading.CancellationToken)">
+            <summary>
+                发送 HTTP 远程请求
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.String" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IHttpRemoteService.SendAsString(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+            <summary>
+                发送 HTTP 远程请求
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+            <param name="completionOption">
+                <see cref="T:System.Net.Http.HttpCompletionOption" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.String" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IHttpRemoteService.SendAsByteArray(HttpAgent.HttpRequestBuilder,System.Threading.CancellationToken)">
+            <summary>
+                发送 HTTP 远程请求
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <c>byte[]</c>
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IHttpRemoteService.SendAsByteArray(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+            <summary>
+                发送 HTTP 远程请求
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+            <param name="completionOption">
+                <see cref="T:System.Net.Http.HttpCompletionOption" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <c>byte[]</c>
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IHttpRemoteService.SendAsStream(HttpAgent.HttpRequestBuilder,System.Threading.CancellationToken)">
+            <summary>
+                发送 HTTP 远程请求
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.IO.Stream" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IHttpRemoteService.SendAsStream(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+            <summary>
+                发送 HTTP 远程请求
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+            <param name="completionOption">
+                <see cref="T:System.Net.Http.HttpCompletionOption" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.IO.Stream" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.IHttpRemoteService.SendAsAsync``1(HttpAgent.HttpRequestBuilder,System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP 远程请求
@@ -7004,6 +7144,99 @@
             <typeparam name="TResult">转换的目标类型</typeparam>
             <returns>
                 <typeparamref name="TResult" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IHttpRemoteService.SendAsStringAsync(HttpAgent.HttpRequestBuilder,System.Threading.CancellationToken)">
+            <summary>
+                发送 HTTP 远程请求
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.String" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IHttpRemoteService.SendAsStringAsync(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+            <summary>
+                发送 HTTP 远程请求
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+            <param name="completionOption">
+                <see cref="T:System.Net.Http.HttpCompletionOption" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.String" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IHttpRemoteService.SendAsByteArrayAsync(HttpAgent.HttpRequestBuilder,System.Threading.CancellationToken)">
+            <summary>
+                发送 HTTP 远程请求
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <c>byte[]</c>
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IHttpRemoteService.SendAsByteArrayAsync(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+            <summary>
+                发送 HTTP 远程请求
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+            <param name="completionOption">
+                <see cref="T:System.Net.Http.HttpCompletionOption" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <c>byte[]</c>
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IHttpRemoteService.SendAsStreamAsync(HttpAgent.HttpRequestBuilder,System.Threading.CancellationToken)">
+            <summary>
+                发送 HTTP 远程请求
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.IO.Stream" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IHttpRemoteService.SendAsStreamAsync(HttpAgent.HttpRequestBuilder,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+            <summary>
+                发送 HTTP 远程请求
+            </summary>
+            <param name="httpRequestBuilder">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+            <param name="completionOption">
+                <see cref="T:System.Net.Http.HttpCompletionOption" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.IO.Stream" />
             </returns>
         </member>
         <member name="M:HttpAgent.IHttpRemoteService.SendAs(System.Type,HttpAgent.HttpRequestBuilder,System.Threading.CancellationToken)">

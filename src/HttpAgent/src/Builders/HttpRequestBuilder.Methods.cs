@@ -1128,11 +1128,13 @@ public sealed partial class HttpRequestBuilder
     ///     设置模拟浏览器环境
     /// </summary>
     /// <remarks>设置此配置后，将在单次请求标头中添加主流浏览器的 <c>User-Agent</c> 值。</remarks>
+    /// <param name="simulateMobile">是否模拟移动端，默认值为：<c>false</c>（即模拟桌面端）。</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
-    public HttpRequestBuilder SimulateBrowser() =>
-        WithHeader(HeaderNames.UserAgent, Constants.USER_AGENT_OF_BROWSER, replace: true);
+    public HttpRequestBuilder SimulateBrowser(bool simulateMobile = false) =>
+        WithHeader(HeaderNames.UserAgent,
+            !simulateMobile ? Constants.USER_AGENT_OF_BROWSER : Constants.USER_AGENT_OF_MOBILE_BROWSER, replace: true);
 
     /// <summary>
     ///     释放资源集合

@@ -142,6 +142,34 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
     }
 
     /// <inheritdoc />
+    public string? SendAsString(HttpRequestBuilder httpRequestBuilder, CancellationToken cancellationToken = default) =>
+        SendAs<string>(httpRequestBuilder, cancellationToken);
+
+    /// <inheritdoc />
+    public string? SendAsString(HttpRequestBuilder httpRequestBuilder, HttpCompletionOption completionOption,
+        CancellationToken cancellationToken = default) =>
+        SendAs<string>(httpRequestBuilder, completionOption, cancellationToken);
+
+    /// <inheritdoc />
+    public byte[]?
+        SendAsByteArray(HttpRequestBuilder httpRequestBuilder, CancellationToken cancellationToken = default) =>
+        SendAs<byte[]>(httpRequestBuilder, cancellationToken);
+
+    /// <inheritdoc />
+    public byte[]? SendAsByteArray(HttpRequestBuilder httpRequestBuilder, HttpCompletionOption completionOption,
+        CancellationToken cancellationToken = default) =>
+        SendAs<byte[]>(httpRequestBuilder, completionOption, cancellationToken);
+
+    /// <inheritdoc />
+    public Stream? SendAsStream(HttpRequestBuilder httpRequestBuilder, CancellationToken cancellationToken = default) =>
+        SendAs<Stream>(httpRequestBuilder, cancellationToken);
+
+    /// <inheritdoc />
+    public Stream? SendAsStream(HttpRequestBuilder httpRequestBuilder, HttpCompletionOption completionOption,
+        CancellationToken cancellationToken = default) =>
+        SendAs<Stream>(httpRequestBuilder, completionOption, cancellationToken);
+
+    /// <inheritdoc />
     public Task<TResult?> SendAsAsync<TResult>(HttpRequestBuilder httpRequestBuilder,
         CancellationToken cancellationToken = default) => SendAsAsync<TResult>(httpRequestBuilder,
         HttpCompletionOption.ResponseContentRead, cancellationToken);
@@ -177,6 +205,37 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         // 动态创建 HttpRemoteResult<TResult> 实例并转换为 TResult 实例
         return (TResult)DynamicCreateHttpRemoteResult(resultType, httpResponseMessage, result, requestDuration);
     }
+
+    /// <inheritdoc />
+    public Task<string?> SendAsStringAsync(HttpRequestBuilder httpRequestBuilder,
+        CancellationToken cancellationToken = default) =>
+        SendAsAsync<string>(httpRequestBuilder, cancellationToken);
+
+    /// <inheritdoc />
+    public Task<string?> SendAsStringAsync(HttpRequestBuilder httpRequestBuilder, HttpCompletionOption completionOption,
+        CancellationToken cancellationToken = default) =>
+        SendAsAsync<string>(httpRequestBuilder, completionOption, cancellationToken);
+
+    /// <inheritdoc />
+    public Task<byte[]?> SendAsByteArrayAsync(HttpRequestBuilder httpRequestBuilder,
+        CancellationToken cancellationToken = default) =>
+        SendAsAsync<byte[]>(httpRequestBuilder, cancellationToken);
+
+    /// <inheritdoc />
+    public Task<byte[]?> SendAsByteArrayAsync(HttpRequestBuilder httpRequestBuilder,
+        HttpCompletionOption completionOption,
+        CancellationToken cancellationToken = default) =>
+        SendAsAsync<byte[]>(httpRequestBuilder, completionOption, cancellationToken);
+
+    /// <inheritdoc />
+    public Task<Stream?> SendAsStreamAsync(HttpRequestBuilder httpRequestBuilder,
+        CancellationToken cancellationToken = default) =>
+        SendAsAsync<Stream>(httpRequestBuilder, cancellationToken);
+
+    /// <inheritdoc />
+    public Task<Stream?> SendAsStreamAsync(HttpRequestBuilder httpRequestBuilder, HttpCompletionOption completionOption,
+        CancellationToken cancellationToken = default) =>
+        SendAsAsync<Stream>(httpRequestBuilder, completionOption, cancellationToken);
 
     /// <inheritdoc />
     public object? SendAs(Type resultType, HttpRequestBuilder httpRequestBuilder,
