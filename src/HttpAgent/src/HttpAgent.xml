@@ -3046,7 +3046,7 @@
                 <see cref="T:System.Reflection.MethodInfo" />
             </param>
             <param name="inherit">是否在基类中搜索</param>
-            <param name="methodSearchFirst">是否优先查找 <see cref="T:System.Reflection.MethodInfo" /> 的特性。默认值为：<c>true</c>。</param>
+            <param name="methodScanFirst">是否优先查找 <see cref="T:System.Reflection.MethodInfo" /> 的特性。默认值为：<c>true</c>。</param>
             <typeparam name="TAttribute">
                 <see cref="T:System.Attribute" />
             </typeparam>
@@ -4705,6 +4705,8 @@
             <returns>
                 <see cref="T:System.Tuple`2" />
             </returns>
+            <exception cref="T:System.ArgumentException"></exception>
+            <exception cref="T:System.InvalidOperationException"></exception>
         </member>
         <member name="M:HttpAgent.Helpers.GetFileNameFromUri(System.Uri)">
             <summary>

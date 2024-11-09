@@ -53,7 +53,7 @@ internal static class MethodInfoExtensions
     ///     <see cref="MethodInfo" />
     /// </param>
     /// <param name="inherit">是否在基类中搜索</param>
-    /// <param name="methodSearchFirst">是否优先查找 <see cref="MethodInfo" /> 的特性。默认值为：<c>true</c>。</param>
+    /// <param name="methodScanFirst">是否优先查找 <see cref="MethodInfo" /> 的特性。默认值为：<c>true</c>。</param>
     /// <typeparam name="TAttribute">
     ///     <see cref="Attribute" />
     /// </typeparam>
@@ -61,7 +61,7 @@ internal static class MethodInfoExtensions
     ///     <see cref="bool" />
     /// </returns>
     internal static TAttribute[]? GetDefinedCustomAttributes<TAttribute>(this MethodInfo method, bool inherit = false,
-        bool methodSearchFirst = true)
+        bool methodScanFirst = true)
         where TAttribute : Attribute
     {
         // 初始化指定特性集合
@@ -77,7 +77,7 @@ internal static class MethodInfoExtensions
             var declaringAttributes = method.DeclaringType.GetCustomAttributes<TAttribute>(inherit);
 
             // 是否优先查找方法特性
-            if (methodSearchFirst)
+            if (methodScanFirst)
             {
                 attributes.AddRange(declaringAttributes);
             }

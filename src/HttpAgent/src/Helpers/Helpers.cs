@@ -18,6 +18,8 @@ internal static partial class Helpers
     /// <returns>
     ///     <see cref="Tuple{T1, T2}" />
     /// </returns>
+    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="InvalidOperationException"></exception>
     internal static Tuple<Stream, long?> GetStreamFromRemote(string url)
     {
         // 空检查
