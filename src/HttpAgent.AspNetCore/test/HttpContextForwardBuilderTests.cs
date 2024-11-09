@@ -52,6 +52,10 @@ public class HttpContextForwardBuilderTests
 
             httpContextForwardBuilder.CopyQueryAndRouteValues(httpRequestBuilder);
 
+            Assert.NotNull(httpRequestBuilder.QueryParameters);
+            Assert.Single(httpRequestBuilder.QueryParameters);
+            Assert.Equal("name", httpRequestBuilder.QueryParameters.First().Key);
+
             Assert.NotNull(httpRequestBuilder.PathParameters);
             Assert.Equal(2, httpRequestBuilder.PathParameters.Count);
             Assert.Equal("name", httpRequestBuilder.PathParameters.ElementAt(0).Key);
