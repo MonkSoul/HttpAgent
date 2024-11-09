@@ -139,6 +139,7 @@
             <returns>
                 <see cref="T:System.IO.Stream" />
             </returns>
+            <exception cref="T:System.InvalidOperationException"></exception>
         </member>
         <member name="T:HttpAgent.IActionResultContentConverter">
             <summary>

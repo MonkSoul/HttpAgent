@@ -1057,6 +1057,54 @@ public class HttpContextForwardBuilderTests
 
         await app.StopAsync();
     }
+    
+    [Fact]
+    public async Task ReadBodyAsync_Invalid_Parameters()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+        builder.Services.AddHttpClient();
+        await using var app = builder.Build();
+
+        app.MapPost("/test", async (HttpContext context, HttpRemoteAspNetCoreModel1 model) =>
+        {
+            var httpMethod = Helpers.ParseHttpMethod(context.Request.Method);
+            var requestUri = new Uri($"http://localhost:{port}");
+            var httpContextForwardBuilder = new HttpContextForwardBuilder(httpMethod, requestUri, context);
+            var httpRequestBuilder = HttpRequestBuilder.Create(httpMethod, requestUri);
+
+            try
+            {
+                await httpContextForwardBuilder.ReadBodyAsync(httpRequestBuilder);
+            }
+            catch (Exception e)
+            {
+                if (e.Message != "Please ensure that the `app.UseEnableBuffering()` middleware is registered.")
+                {
+                    throw;
+                }
+            }
+
+            await context.Response.WriteAsync("Hello World!");
+        });
+
+        await app.StartAsync();
+
+        var httpClient = app.Services.GetRequiredService<IHttpClientFactory>().CreateClient();
+
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post,
+            new Uri($"http://localhost:{port}/test"));
+        httpRequestMessage.Content =
+            new StringContent(JsonSerializer.Serialize(new HttpRemoteAspNetCoreModel1 { Id = 1, Name = "Furion" }),
+                Encoding.UTF8, new MediaTypeHeaderValue("application/json"));
+
+        var httpResponseMessage =
+            await httpClient.SendAsync(httpRequestMessage);
+        httpResponseMessage.EnsureSuccessStatusCode();
+
+        await app.StopAsync();
+    }
 
     [Fact]
     public async Task ReadBodyAsync_ReturnOK()
