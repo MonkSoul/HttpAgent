@@ -51,4 +51,7 @@ public class HttpRemoteController : ControllerBase
     public IActionResult Request9() =>
         new FileStreamResult(System.IO.File.OpenRead(Path.Combine(AppContext.BaseDirectory, "test.txt")),
             "application/octet-stream") { FileDownloadName = "test.txt" };
+
+    [HttpGet]
+    public int Request10(int number) => number + 1;
 }

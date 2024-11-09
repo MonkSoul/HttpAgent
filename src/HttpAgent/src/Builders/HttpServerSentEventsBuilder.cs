@@ -8,7 +8,7 @@ namespace HttpAgent;
 ///     HTTP Server-Sent Events 构建器
 /// </summary>
 /// <remarks>
-///     <para>使用 <c>HttpRequestBuilder.EventSource(requestUri, onMessage)</c> 静态方法创建。</para>
+///     <para>使用 <c>HttpRequestBuilder.ServerSentEvents(requestUri, onMessage)</c> 静态方法创建。</para>
 ///     <para>参考文献：https://developer.mozilla.org/zh-CN/docs/Web/API/Server-sent_events/Using_server-sent_events。</para>
 /// </remarks>
 public sealed class HttpServerSentEventsBuilder

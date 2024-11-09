@@ -101,13 +101,16 @@ public sealed class HttpContextForwardBuilder
     internal void CopyQueryAndRouteValues(HttpRequestBuilder httpRequestBuilder)
     {
         // 获取查询参数集合
-        var queryValues = HttpContext.Request.Query;
+        var queryValues = HttpContext.Request.Query.ToArray();
 
         // 空检查
-        if (queryValues.Count > 0)
+        if (queryValues.Length > 0)
         {
+            // 将查询参数添加到查询参数集合中
+            httpRequestBuilder.WithQueryParameters(queryValues);
+
             // 将查询参数添加到路径参数集合中
-            httpRequestBuilder.WithPathParameters(queryValues.ToDictionary(u => u.Key, u => u.Value.ToString()));
+            httpRequestBuilder.WithPathParameters(queryValues);
         }
 
         // 获取路由参数集合

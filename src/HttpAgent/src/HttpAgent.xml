@@ -8,7 +8,7 @@
             <summary>
                 HTTP 文件下载构建器
             </summary>
-            <remarks>使用 <c>HttpRequestBuilder.Download(requestUri, destinationPath)</c> 静态方法创建。</remarks>
+            <remarks>使用 <c>HttpRequestBuilder.DownloadFile(requestUri, destinationPath)</c> 静态方法创建。</remarks>
         </member>
         <member name="M:HttpAgent.HttpFileDownloadBuilder.#ctor(System.Net.Http.HttpMethod,System.Uri)">
             <summary>
@@ -191,7 +191,7 @@
             <summary>
                 HTTP 文件上传构建器
             </summary>
-            <remarks>使用 <c>HttpRequestBuilder.Upload(requestUri, fileFullName, name)</c> 静态方法创建。</remarks>
+            <remarks>使用 <c>HttpRequestBuilder.UploadFile(requestUri, fileFullName, name)</c> 静态方法创建。</remarks>
         </member>
         <member name="M:HttpAgent.HttpFileUploadBuilder.#ctor(System.Net.Http.HttpMethod,System.Uri,System.String,System.String)">
             <summary>
@@ -2361,7 +2361,7 @@
                 HTTP Server-Sent Events 构建器
             </summary>
             <remarks>
-                <para>使用 <c>HttpRequestBuilder.EventSource(requestUri, onMessage)</c> 静态方法创建。</para>
+                <para>使用 <c>HttpRequestBuilder.ServerSentEvents(requestUri, onMessage)</c> 静态方法创建。</para>
                 <para>参考文献：https://developer.mozilla.org/zh-CN/docs/Web/API/Server-sent_events/Using_server-sent_events。</para>
             </remarks>
         </member>

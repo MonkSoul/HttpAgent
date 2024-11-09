@@ -1604,4 +1604,90 @@ public class HttpContextExtensionsTests
     [Fact]
     public void IgnoreResponseHeaders_ReturnOK() =>
         Assert.Equal(["Transfer-Encoding"], HttpContextExtensions._ignoreResponseHeaders);
+
+    [Fact]
+    public async Task ForwardAsAsync_WithQueryParameters_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+
+        builder.Services.AddControllers()
+            .AddApplicationPart(typeof(HttpRemoteController).Assembly);
+        builder.Services.AddHttpRemote();
+
+        await using var app = builder.Build();
+        app.Use(async (ctx, next) =>
+        {
+            ctx.Request.EnableBuffering();
+            ctx.Request.Body.Position = 0;
+
+            await next.Invoke();
+        });
+
+        app.MapControllers();
+
+        app.MapGet("/test", async (HttpContext context, [FromQuery] int number) =>
+        {
+            var str = await context.ForwardAsAsync<int>(HttpMethod.Get,
+                new Uri($"http://localhost:{port}/HttpRemote/Request10"));
+
+            await context.Response.WriteAsync(str.ToString());
+        });
+
+        await app.StartAsync();
+
+        var httpClient = app.Services.GetRequiredService<IHttpClientFactory>().CreateClient();
+        var httpResponseMessage =
+            await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get,
+                new Uri($"http://localhost:{port}/test?number=10")));
+        httpResponseMessage.EnsureSuccessStatusCode();
+        var str = await httpResponseMessage.Content.ReadAsStringAsync();
+        Assert.Equal("11", str);
+
+        await app.StopAsync();
+    }
+    
+    [Fact]
+    public async Task ForwardAs_WithQueryParameters_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+
+        builder.Services.AddControllers()
+            .AddApplicationPart(typeof(HttpRemoteController).Assembly);
+        builder.Services.AddHttpRemote();
+
+        await using var app = builder.Build();
+        app.Use(async (ctx, next) =>
+        {
+            ctx.Request.EnableBuffering();
+            ctx.Request.Body.Position = 0;
+
+            await next.Invoke();
+        });
+
+        app.MapControllers();
+
+        app.MapGet("/test", async (HttpContext context, [FromQuery] int number) =>
+        {
+            var str = context.ForwardAs<int>(HttpMethod.Get,
+                new Uri($"http://localhost:{port}/HttpRemote/Request10"));
+
+            await context.Response.WriteAsync(str.ToString());
+        });
+
+        await app.StartAsync();
+
+        var httpClient = app.Services.GetRequiredService<IHttpClientFactory>().CreateClient();
+        var httpResponseMessage =
+            await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get,
+                new Uri($"http://localhost:{port}/test?number=10")));
+        httpResponseMessage.EnsureSuccessStatusCode();
+        var str = await httpResponseMessage.Content.ReadAsStringAsync();
+        Assert.Equal("11", str);
+
+        await app.StopAsync();
+    }
 }
