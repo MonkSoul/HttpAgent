@@ -280,13 +280,13 @@ public class HttpMultipartFormDataBuilderTests
         Assert.Equal("application/octet-stream", builder._partContents[0].ContentType);
         Assert.Null(builder._partContents[0].ContentEncoding);
         Assert.NotNull(builder._partContents[0].RawContent);
-        Assert.True(builder._partContents[0].RawContent is MemoryStream);
+        Assert.Equal("ContentLengthReadStream", builder._partContents[0].RawContent?.GetType().Name);
         Assert.Equal("Installer_迅捷屏幕录像工具_1.7.9_123.exe",
             builder._partContents[0].FileName);
         Assert.Equal(2785992, builder._partContents[0].FileSize);
         Assert.NotNull(builder._httpRequestBuilder.Disposables);
         Assert.Single(builder._httpRequestBuilder.Disposables);
-        Assert.Equal(typeof(MemoryStream), builder._httpRequestBuilder.Disposables[0].GetType());
+        Assert.Equal("ContentLengthReadStream", builder._httpRequestBuilder.Disposables[0].GetType().Name);
 
         builder.AddFileFromRemote(url, "test", "test.exe");
         Assert.Equal(2, builder._partContents.Count);

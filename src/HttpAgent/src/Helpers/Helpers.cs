@@ -44,7 +44,8 @@ internal static partial class Helpers
         try
         {
             // 发送 HTTP 远程请求
-            var httpResponseMessage = httpClient.Send(new HttpRequestMessage(HttpMethod.Get, url));
+            var httpResponseMessage = httpClient.Send(new HttpRequestMessage(HttpMethod.Get, url),
+                HttpCompletionOption.ResponseHeadersRead);
             httpResponseMessage.EnsureSuccessStatusCode();
 
             // 读取流和长度
