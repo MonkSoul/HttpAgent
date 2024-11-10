@@ -7,6 +7,34 @@ namespace HttpAgent.AspNetCore.Tests;
 public class HttpContextExtensionsTests
 {
     [Fact]
+    public async Task GetFullRequestUrl_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        string[] urls = ["--urls", $"http://localhost:{port}"];
+        var builder = WebApplication.CreateBuilder(urls);
+
+        await using var app = builder.Build();
+
+        app.MapGet("/test", async httpContext =>
+        {
+            var urlAddress = httpContext.Request.GetFullRequestUrl();
+            Assert.Equal($"http://localhost:{port}/test", urlAddress);
+
+            await Task.CompletedTask;
+        });
+
+        await app.StartAsync();
+
+        using HttpClient httpClient = new();
+        httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(nameof(HttpContextExtensionsTests));
+
+        var httpResponseMessage = await httpClient.GetAsync($"http://localhost:{port}/test");
+        httpResponseMessage.EnsureSuccessStatusCode();
+
+        await app.StopAsync();
+    }
+
+    [Fact]
     public async Task CreateRequestBuilderAsync_ReturnOK()
     {
         var port = NetworkUtility.FindAvailableTcpPort();
