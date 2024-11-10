@@ -431,7 +431,7 @@ public class HttpRemoteBuilderTests
         Assert.Equal(
             [
                 typeof(StringContentConverter), typeof(ByteArrayContentConverter),
-                typeof(StreamContentConverter), typeof(DoesNoReceiveContentConverter),
+                typeof(StreamContentConverter), typeof(VoidContentConverter),
                 typeof(CustomStringContentConverter)
             ],
             httpContentConverterFactory._converters.Select(u => u.Key));

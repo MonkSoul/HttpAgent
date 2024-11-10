@@ -5,19 +5,19 @@
 namespace HttpAgent;
 
 /// <summary>
-///     <see cref="DoesNoReceiveContent" /> 内容转换器
+///     <see cref="VoidContent" /> 内容转换器
 /// </summary>
-public class DoesNoReceiveContentConverter : IHttpContentConverter<DoesNoReceiveContent>
+public class VoidContentConverter : IHttpContentConverter<VoidContent>
 {
     /// <inheritdoc />
-    public virtual DoesNoReceiveContent?
+    public virtual VoidContent?
         Read(HttpResponseMessage httpResponseMessage, CancellationToken cancellationToken = default) =>
         default;
 
     /// <inheritdoc />
-    public virtual Task<DoesNoReceiveContent?> ReadAsync(HttpResponseMessage httpResponseMessage,
+    public virtual Task<VoidContent?> ReadAsync(HttpResponseMessage httpResponseMessage,
         CancellationToken cancellationToken = default) =>
-        Task.FromResult<DoesNoReceiveContent?>(default);
+        Task.FromResult<VoidContent?>(default);
 
     /// <inheritdoc />
     public virtual object? Read(Type resultType, HttpResponseMessage httpResponseMessage,

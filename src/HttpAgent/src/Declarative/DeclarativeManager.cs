@@ -55,7 +55,7 @@ internal sealed class DeclarativeManager
 
         // 获取被调用方法返回值类型
         var method = _httpDeclarativeBuilder.Method;
-        var returnType = method.ReturnType == typeof(void) ? typeof(DoesNoReceiveContent) : method.ReturnType;
+        var returnType = method.ReturnType == typeof(void) ? typeof(VoidContent) : method.ReturnType;
 
         // 发送 HTTP 远程请求
         return _httpRemoteService.SendAs(returnType, RequestBuilder, completionOption, cancellationToken);

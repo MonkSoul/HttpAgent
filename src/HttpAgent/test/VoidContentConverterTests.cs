@@ -4,16 +4,16 @@
 
 namespace HttpAgent.Tests;
 
-public class DoesNoReceiveContentConverterTests
+public class VoidContentConverterTests
 {
     [Fact]
     public void New_ReturnOK()
     {
-        var converter = new DoesNoReceiveContentConverter();
+        var converter = new VoidContentConverter();
         Assert.NotNull(converter);
         Assert.True(
-            typeof(IHttpContentConverter<DoesNoReceiveContent>).IsAssignableFrom(
-                typeof(DoesNoReceiveContentConverter)));
+            typeof(IHttpContentConverter<VoidContent>).IsAssignableFrom(
+                typeof(VoidContentConverter)));
     }
 
     [Fact]
@@ -23,7 +23,7 @@ public class DoesNoReceiveContentConverterTests
         var httpResponseMessage = new HttpResponseMessage();
         httpResponseMessage.Content = stringContent;
 
-        var converter = new DoesNoReceiveContentConverter();
+        var converter = new VoidContentConverter();
         var result = converter.Read(httpResponseMessage);
         Assert.Null(result);
     }
@@ -35,7 +35,7 @@ public class DoesNoReceiveContentConverterTests
         var httpResponseMessage = new HttpResponseMessage();
         httpResponseMessage.Content = stringContent;
 
-        var converter = new DoesNoReceiveContentConverter();
+        var converter = new VoidContentConverter();
         var result = await converter.ReadAsync(httpResponseMessage);
         Assert.Null(result);
     }
@@ -49,7 +49,7 @@ public class DoesNoReceiveContentConverterTests
 
         using var cancellationTokenSource = new CancellationTokenSource();
 
-        var converter = new DoesNoReceiveContentConverter();
+        var converter = new VoidContentConverter();
         var result = await converter.ReadAsync(httpResponseMessage, cancellationTokenSource.Token);
         Assert.Null(result);
     }
@@ -61,7 +61,7 @@ public class DoesNoReceiveContentConverterTests
         var httpResponseMessage = new HttpResponseMessage();
         httpResponseMessage.Content = stringContent;
 
-        var converter = new DoesNoReceiveContentConverter();
+        var converter = new VoidContentConverter();
         var result = converter.Read(typeof(string), httpResponseMessage);
         Assert.Null(result);
     }
@@ -73,7 +73,7 @@ public class DoesNoReceiveContentConverterTests
         var httpResponseMessage = new HttpResponseMessage();
         httpResponseMessage.Content = stringContent;
 
-        var converter = new DoesNoReceiveContentConverter();
+        var converter = new VoidContentConverter();
         var result = await converter.ReadAsync(typeof(string), httpResponseMessage);
         Assert.Null(result);
     }
@@ -87,7 +87,7 @@ public class DoesNoReceiveContentConverterTests
 
         using var cancellationTokenSource = new CancellationTokenSource();
 
-        var converter = new DoesNoReceiveContentConverter();
+        var converter = new VoidContentConverter();
         var result = await converter.ReadAsync(typeof(string), httpResponseMessage, cancellationTokenSource.Token);
         Assert.Null(result);
     }

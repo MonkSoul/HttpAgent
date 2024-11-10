@@ -51,9 +51,8 @@ public sealed class HttpContextForwardBuilder
     /// </returns>
     internal HttpRequestBuilder Build(Action<HttpRequestBuilder>? configure = null)
     {
-        // 初始化 HttpRequestBuilder 实例；如果请求失败，则应抛出异常。
-        var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure).EnsureSuccessStatusCode()
-            .DisableCache();
+        // 初始化 HttpRequestBuilder 实例
+        var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure).DisableCache();
 
         // 复制查询参数和路由参数
         CopyQueryAndRouteValues(httpRequestBuilder);
@@ -76,9 +75,8 @@ public sealed class HttpContextForwardBuilder
     /// </returns>
     internal async Task<HttpRequestBuilder> BuildAsync(Action<HttpRequestBuilder>? configure = null)
     {
-        // 初始化 HttpRequestBuilder 实例；如果请求失败，则应抛出异常。
-        var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure).EnsureSuccessStatusCode()
-            .DisableCache();
+        // 初始化 HttpRequestBuilder 实例
+        var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure).DisableCache();
 
         // 复制查询参数和路由参数
         CopyQueryAndRouteValues(httpRequestBuilder);

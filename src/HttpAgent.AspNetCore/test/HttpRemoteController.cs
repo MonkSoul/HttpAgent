@@ -54,4 +54,7 @@ public class HttpRemoteController : ControllerBase
 
     [HttpGet]
     public int Request10(int number) => number + 1;
+
+    [HttpGet]
+    public IActionResult Request11() => throw new InvalidOperationException("出错了");
 }

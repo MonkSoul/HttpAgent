@@ -32,7 +32,7 @@ internal sealed class HttpContentConverterFactory : IHttpContentConverterFactory
             [typeof(StringContentConverter)] = new StringContentConverter(),
             [typeof(ByteArrayContentConverter)] = new ByteArrayContentConverter(),
             [typeof(StreamContentConverter)] = new StreamContentConverter(),
-            [typeof(DoesNoReceiveContentConverter)] = new DoesNoReceiveContentConverter()
+            [typeof(VoidContentConverter)] = new VoidContentConverter()
         };
 
         // 添加自定义 IHttpContentConverter 数组

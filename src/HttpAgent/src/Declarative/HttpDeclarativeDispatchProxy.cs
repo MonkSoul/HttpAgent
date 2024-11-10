@@ -17,7 +17,7 @@ public class HttpDeclarativeDispatchProxy : DispatchProxyAsync
 
     /// <inheritdoc />
     public override async Task InvokeAsync(MethodInfo method, object[] args) =>
-        _ = await InvokeAsyncT<DoesNoReceiveContent>(method, args);
+        _ = await InvokeAsyncT<VoidContent>(method, args);
 
     /// <inheritdoc />
     public override async Task<T> InvokeAsyncT<T>(MethodInfo method, object[] args) =>

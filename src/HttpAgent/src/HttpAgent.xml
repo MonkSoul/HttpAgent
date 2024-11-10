@@ -2680,23 +2680,6 @@
         <member name="M:HttpAgent.ByteArrayContentConverter.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="T:HttpAgent.DoesNoReceiveContentConverter">
-            <summary>
-                <see cref="T:HttpAgent.DoesNoReceiveContent" /> 内容转换器
-            </summary>
-        </member>
-        <member name="M:HttpAgent.DoesNoReceiveContentConverter.Read(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:HttpAgent.DoesNoReceiveContentConverter.ReadAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:HttpAgent.DoesNoReceiveContentConverter.Read(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:HttpAgent.DoesNoReceiveContentConverter.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
         <member name="T:HttpAgent.IHttpContentConverter">
             <summary>
                 <see cref="T:HttpAgent.IHttpContentConverter`1" /> 默认实现接口
@@ -2821,6 +2804,23 @@
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.StringContentConverter.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:HttpAgent.VoidContentConverter">
+            <summary>
+                <see cref="T:HttpAgent.VoidContent" /> 内容转换器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.VoidContentConverter.Read(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.VoidContentConverter.ReadAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.VoidContentConverter.Read(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.VoidContentConverter.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="T:HttpAgent.Core.Extensions.AssemblyExtensions">
@@ -5264,11 +5264,6 @@
                 <see cref="T:System.Threading.Tasks.Task`1" />
             </returns>
         </member>
-        <member name="T:HttpAgent.DoesNoReceiveContent">
-            <summary>
-                用于标识无需接收 HTTP 远程请求返回值
-            </summary>
-        </member>
         <member name="T:HttpAgent.FileTransferProgress">
             <summary>
                 文件传输的进度信息
@@ -5792,6 +5787,11 @@
             <returns>
                 <see cref="T:System.Double" />
             </returns>
+        </member>
+        <member name="T:HttpAgent.VoidContent">
+            <summary>
+                用于标识无需接收 HTTP 远程请求返回值
+            </summary>
         </member>
         <member name="T:HttpAgent.HttpRemoteOptions">
             <summary>
@@ -7672,7 +7672,7 @@
             <summary>
                 发送 HTTP 声明式请求
             </summary>
-            <remarks>仅支持异步方法。若无返回值则泛型传入 <see cref="T:HttpAgent.DoesNoReceiveContent" /> 类型。</remarks>
+            <remarks>仅支持异步方法。若无返回值则泛型传入 <see cref="T:HttpAgent.VoidContent" /> 类型。</remarks>
             <param name="method">被调用方法</param>
             <param name="args">被调用方法的参数值数组</param>
             <typeparam name="T">转换的目标类型</typeparam>
@@ -7696,7 +7696,7 @@
             <summary>
                 发送 HTTP 声明式请求
             </summary>
-            <remarks>仅支持异步方法。若无返回值则泛型传入 <see cref="T:HttpAgent.DoesNoReceiveContent" /> 类型。</remarks>
+            <remarks>仅支持异步方法。若无返回值则泛型传入 <see cref="T:HttpAgent.VoidContent" /> 类型。</remarks>
             <param name="httpDeclarativeBuilder">
                 <see cref="T:HttpAgent.HttpDeclarativeBuilder" />
             </param>

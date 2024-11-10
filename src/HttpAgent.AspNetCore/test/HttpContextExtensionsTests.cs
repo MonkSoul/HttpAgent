@@ -7,34 +7,6 @@ namespace HttpAgent.AspNetCore.Tests;
 public class HttpContextExtensionsTests
 {
     [Fact]
-    public async Task GetFullRequestUrl_ReturnOK()
-    {
-        var port = NetworkUtility.FindAvailableTcpPort();
-        string[] urls = ["--urls", $"http://localhost:{port}"];
-        var builder = WebApplication.CreateBuilder(urls);
-
-        await using var app = builder.Build();
-
-        app.MapGet("/test", async httpContext =>
-        {
-            var urlAddress = httpContext.Request.GetFullRequestUrl();
-            Assert.Equal($"http://localhost:{port}/test", urlAddress);
-
-            await Task.CompletedTask;
-        });
-
-        await app.StartAsync();
-
-        using HttpClient httpClient = new();
-        httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(nameof(HttpContextExtensionsTests));
-
-        var httpResponseMessage = await httpClient.GetAsync($"http://localhost:{port}/test");
-        httpResponseMessage.EnsureSuccessStatusCode();
-
-        await app.StopAsync();
-    }
-
-    [Fact]
     public async Task CreateRequestBuilderAsync_ReturnOK()
     {
         var port = NetworkUtility.FindAvailableTcpPort();
@@ -1647,7 +1619,7 @@ public class HttpContextExtensionsTests
 
         await app.StopAsync();
     }
-    
+
     [Fact]
     public async Task ForwardAs_WithQueryParameters_ReturnOK()
     {
@@ -1687,6 +1659,55 @@ public class HttpContextExtensionsTests
         httpResponseMessage.EnsureSuccessStatusCode();
         var str = await httpResponseMessage.Content.ReadAsStringAsync();
         Assert.Equal("11", str);
+
+        await app.StopAsync();
+    }
+
+    [Fact]
+    public async Task ForwardAsync_WithException_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+
+        builder.Services.AddControllers()
+            .AddApplicationPart(typeof(HttpRemoteController).Assembly);
+        builder.Services.AddHttpRemote();
+
+        await using var app = builder.Build();
+        app.Use(async (ctx, next) =>
+        {
+            ctx.Request.EnableBuffering();
+            ctx.Request.Body.Position = 0;
+
+            await next.Invoke();
+        });
+
+        app.MapControllers();
+
+        app.MapPost("/test", async context =>
+        {
+            var actionResult = await context.ForwardAsync<IActionResult>(HttpMethod.Get,
+                new Uri($"http://localhost:{port}/HttpRemote/Request11"), hbuilder =>
+                {
+                    hbuilder.AddHttpContentConverters(() => [new IActionResultContentConverter()]);
+                });
+
+            var contentResult = actionResult.Result as ContentResult;
+
+            await context.Response.WriteAsync(contentResult?.Content ?? string.Empty);
+        });
+
+        await app.StartAsync();
+
+        var httpClient = app.Services.GetRequiredService<IHttpClientFactory>().CreateClient();
+        var httpResponseMessage =
+            await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post,
+                new Uri($"http://localhost:{port}/test")));
+        // httpResponseMessage.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.InternalServerError, httpResponseMessage.StatusCode);
+        var str = await httpResponseMessage.Content.ReadAsStringAsync();
+        Assert.Contains("出错了", str);
 
         await app.StopAsync();
     }

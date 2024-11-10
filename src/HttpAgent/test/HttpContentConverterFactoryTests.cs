@@ -17,7 +17,7 @@ public class HttpContentConverterFactoryTests
         Assert.Equal(
             [
                 typeof(StringContentConverter), typeof(ByteArrayContentConverter),
-                typeof(StreamContentConverter), typeof(DoesNoReceiveContentConverter)
+                typeof(StreamContentConverter), typeof(VoidContentConverter)
             ],
             httpContentConverterFactory1._converters.Select(u => u.Key));
 
@@ -28,7 +28,7 @@ public class HttpContentConverterFactoryTests
         Assert.Equal(
             [
                 typeof(StringContentConverter), typeof(ByteArrayContentConverter),
-                typeof(StreamContentConverter), typeof(DoesNoReceiveContentConverter),
+                typeof(StreamContentConverter), typeof(VoidContentConverter),
                 typeof(CustomStringContentConverter)
             ],
             httpContentConverterFactory2._converters.Select(u => u.Key));
@@ -41,7 +41,7 @@ public class HttpContentConverterFactoryTests
         Assert.Equal(
             [
                 typeof(StringContentConverter), typeof(ByteArrayContentConverter),
-                typeof(StreamContentConverter), typeof(DoesNoReceiveContentConverter)
+                typeof(StreamContentConverter), typeof(VoidContentConverter)
             ],
             httpContentConverterFactory3._converters.Select(u => u.Key));
     }
@@ -69,8 +69,8 @@ public class HttpContentConverterFactoryTests
         Assert.Equal(typeof(StringContentConverter), httpContentConverterFactory.GetConverter<string>().GetType());
         Assert.Equal(typeof(ByteArrayContentConverter), httpContentConverterFactory.GetConverter<byte[]>().GetType());
         Assert.Equal(typeof(StreamContentConverter), httpContentConverterFactory.GetConverter<Stream>().GetType());
-        Assert.Equal(typeof(DoesNoReceiveContentConverter),
-            httpContentConverterFactory.GetConverter<DoesNoReceiveContent>().GetType());
+        Assert.Equal(typeof(VoidContentConverter),
+            httpContentConverterFactory.GetConverter<VoidContent>().GetType());
         Assert.Equal(typeof(ObjectContentConverter<int>), httpContentConverterFactory.GetConverter<int>().GetType());
         Assert.Equal(typeof(ObjectContentConverter<ObjectModel>),
             httpContentConverterFactory.GetConverter<ObjectModel>().GetType());
