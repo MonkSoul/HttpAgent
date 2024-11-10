@@ -159,7 +159,7 @@ public class HttpRemoteCasesTests
                 HttpRequestBuilder.Post($"http://localhost:{port}/HttpRemote/SendFile")
                     .SetMultipartContent(mBuilder =>
                     {
-                        mBuilder.AddFileStream(fileFullName, "file");
+                        mBuilder.AddFileAsStream(fileFullName, "file");
                     }));
 
         Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
@@ -194,7 +194,7 @@ public class HttpRemoteCasesTests
                 HttpRequestBuilder.Post($"http://localhost:{port}/HttpRemote/SendFile")
                     .SetMultipartContent(mBuilder =>
                     {
-                        mBuilder.AddFileBytes(fileFullName, "file");
+                        mBuilder.AddFileAsByteArray(fileFullName, "file");
                     }));
 
         Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
@@ -302,8 +302,8 @@ public class HttpRemoteCasesTests
                 HttpRequestBuilder.Post($"http://localhost:{port}/HttpRemote/SendFiles")
                     .SetMultipartContent(mBuilder =>
                     {
-                        mBuilder.AddFileStream(fileFullName, "files");
-                        mBuilder.AddFileStream(fileFullName2, "files");
+                        mBuilder.AddFileAsStream(fileFullName, "files");
+                        mBuilder.AddFileAsStream(fileFullName2, "files");
                     }));
 
         Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
@@ -339,8 +339,8 @@ public class HttpRemoteCasesTests
                 HttpRequestBuilder.Post($"http://localhost:{port}/HttpRemote/SendFiles")
                     .SetMultipartContent(mBuilder =>
                     {
-                        mBuilder.AddFileBytes(fileFullName, "files");
-                        mBuilder.AddFileBytes(fileFullName2, "files");
+                        mBuilder.AddFileAsByteArray(fileFullName, "files");
+                        mBuilder.AddFileAsByteArray(fileFullName2, "files");
                     }));
 
         Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
@@ -376,7 +376,7 @@ public class HttpRemoteCasesTests
                     .SetMultipartContent(mBuilder =>
                     {
                         mBuilder.AddJson(new { id = 1, name = "furion" });
-                        mBuilder.AddFileStream(fileFullName, "file");
+                        mBuilder.AddFileAsStream(fileFullName, "file");
                     }));
 
         Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
@@ -413,7 +413,7 @@ public class HttpRemoteCasesTests
                     {
                         mBuilder.AddJsonProperty(1, "id");
                         mBuilder.AddJsonProperty("furion", "name");
-                        mBuilder.AddFileStream(fileFullName, "file");
+                        mBuilder.AddFileAsStream(fileFullName, "file");
                     }));
 
         Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
@@ -449,7 +449,7 @@ public class HttpRemoteCasesTests
                     .SetMultipartContent(mBuilder =>
                     {
                         mBuilder.AddJson("{\"id\":1,\"name\":\"furion\"}");
-                        mBuilder.AddFileStream(fileFullName, "file");
+                        mBuilder.AddFileAsStream(fileFullName, "file");
                     }));
 
         Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);

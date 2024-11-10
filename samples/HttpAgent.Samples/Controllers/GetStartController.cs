@@ -46,7 +46,7 @@ public class GetStartController(IHttpRemoteService httpRemoteService) : Controll
                 {
                     Id = 1,
                     Name = "Furion"
-                }).AddFileStream(@"C:\Workspaces\httptest.jpg", "file")));
+                }).AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file")));
 
         return await httpRemoteService.SendAsAsync<HttpRemoteFormResult>(
             HttpRequestBuilder.Post("https://localhost:7044/HttpRemote/AddForm").SetMultipartContent(formBuilder =>
@@ -55,7 +55,7 @@ public class GetStartController(IHttpRemoteService httpRemoteService) : Controll
                     {
                         Id = 1,
                         Name = "Furion"
-                    }).AddFileStream(@"C:\Workspaces\httptest.jpg", "file")));
+                    }).AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file")));
     }
 
     [HttpGet]
@@ -94,7 +94,7 @@ public class GetStartController(IHttpRemoteService httpRemoteService) : Controll
         await httpRemoteService.SendAsync(HttpRequestBuilder
             .Post("https://localhost:7044/HttpRemote/AddFile")
             .SetMultipartContent(
-                formBuilder => { formBuilder.AddFileStream(@"C:\Workspaces\httptest.jpg", "file"); }));
+                formBuilder => { formBuilder.AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file"); }));
     }
 
     [HttpPost]
@@ -105,8 +105,30 @@ public class GetStartController(IHttpRemoteService httpRemoteService) : Controll
             .SetMultipartContent(
                 formBuilder =>
                 {
-                    formBuilder.AddFileStream(@"C:\Workspaces\httptest.jpg", "files")
-                        .AddFileStream(@"C:\Workspaces\picture.jpg", "files");
+                    formBuilder.AddFileAsStream(@"C:\Workspaces\httptest.jpg", "files")
+                        .AddFileAsStream(@"C:\Workspaces\picture.jpg", "files");
                 }).Profiler());
+    }
+
+    [HttpPost]
+    public async Task UploadFileWithProgress()
+    {
+        await httpRemoteService.UploadFileAsync("https://localhost:7044/HttpRemote/AddFile",
+            @"C:\Workspaces\httptest.jpg",
+            "file", async progress =>
+            {
+                Console.WriteLine(
+                    $"Uploaded {progress.Transferred.ToSizeUnits("MB"):F2} MB of {progress.TotalFileSize.ToSizeUnits("MB"):F2} MB ({progress.PercentageComplete:F2}% complete, Speed: {progress.TransferRate.ToSizeUnits("MB"):F2} MB/s, Time: {progress.TimeElapsed.TotalSeconds:F2}s, ETA: {progress.EstimatedTimeRemaining.TotalSeconds:F2}s), File Name: {progress.FileName}, Destination Path: {progress.FileFullName}");
+                await Task.CompletedTask;
+            });
+
+        await httpRemoteService.SendAsync(
+            HttpRequestBuilder.UploadFile("https://localhost:7044/HttpRemote/AddFile", @"C:\Workspaces\httptest.jpg",
+                "file", async progress =>
+                {
+                    Console.WriteLine(
+                        $"Uploaded {progress.Transferred.ToSizeUnits("MB"):F2} MB of {progress.TotalFileSize.ToSizeUnits("MB"):F2} MB ({progress.PercentageComplete:F2}% complete, Speed: {progress.TransferRate.ToSizeUnits("MB"):F2} MB/s, Time: {progress.TimeElapsed.TotalSeconds:F2}s, ETA: {progress.EstimatedTimeRemaining.TotalSeconds:F2}s), File Name: {progress.FileName}, Destination Path: {progress.FileFullName}");
+                    await Task.CompletedTask;
+                }));
     }
 }

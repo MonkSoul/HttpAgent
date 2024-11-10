@@ -814,7 +814,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
             new HttpRequestBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test")).SetMultipartContent(
                 mBuilder =>
                 {
-                    mBuilder.AddFileStream(fileFullName, "file");
+                    mBuilder.AddFileAsStream(fileFullName, "file");
                 });
 
         _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,

@@ -583,7 +583,7 @@
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddFileStream(System.String,System.String,System.String,System.Text.Encoding)">
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddFileAsStream(System.String,System.String,System.String,System.Text.Encoding)">
             <summary>
                 从本地路径中添加文件
             </summary>
@@ -595,7 +595,7 @@
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddProgressFileStream(System.String,System.String,System.Threading.Channels.Channel{HttpAgent.FileTransferProgress},System.String,System.Text.Encoding)">
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddFileWithProgressAsStream(System.String,System.String,System.Threading.Channels.Channel{HttpAgent.FileTransferProgress},System.String,System.Text.Encoding)">
             <summary>
                 从本地路径中添加文件（带上传进度）
             </summary>
@@ -608,7 +608,7 @@
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddFileBytes(System.String,System.String,System.String,System.Text.Encoding)">
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddFileAsByteArray(System.String,System.String,System.String,System.Text.Encoding)">
             <summary>
                 从本地路径中添加文件
             </summary>

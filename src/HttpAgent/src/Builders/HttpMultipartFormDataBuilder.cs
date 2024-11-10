@@ -255,7 +255,7 @@ public sealed class HttpMultipartFormDataBuilder
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
-    public HttpMultipartFormDataBuilder AddFileStream(string fileFullName, string name,
+    public HttpMultipartFormDataBuilder AddFileAsStream(string fileFullName, string name,
         string contentType = "application/octet-stream", Encoding? contentEncoding = null)
     {
         // 空检查
@@ -298,7 +298,7 @@ public sealed class HttpMultipartFormDataBuilder
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
-    public HttpMultipartFormDataBuilder AddProgressFileStream(string fileFullName, string name,
+    public HttpMultipartFormDataBuilder AddFileWithProgressAsStream(string fileFullName, string name,
         Channel<FileTransferProgress> progressChannel,
         string contentType = "application/octet-stream", Encoding? contentEncoding = null)
     {
@@ -345,7 +345,7 @@ public sealed class HttpMultipartFormDataBuilder
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
-    public HttpMultipartFormDataBuilder AddFileBytes(string fileFullName, string name,
+    public HttpMultipartFormDataBuilder AddFileAsByteArray(string fileFullName, string name,
         string contentType = "application/octet-stream", Encoding? contentEncoding = null)
     {
         // 空检查
