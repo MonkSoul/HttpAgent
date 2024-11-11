@@ -114,8 +114,8 @@ public class GetStartController(IHttpRemoteService httpRemoteService) : Controll
     [HttpGet]
     public async Task DownloadFile()
     {
-        // 下载 ASP.NET Core 运行时并保存到 C:\Workspaces\ 目录中
-        // 如果不配置文件名，将自动解析下载地址中的文件名，如：aspnetcore-runtime-8.0.10-win-x64.exe
+        // 从指定 URL 下载 ASP.NET Core 运行时，并保存到 C:\Workspaces\ 目录中
+        // 如果未指定文件名，系统将自动从下载地址中解析出文件名，例如：aspnetcore-runtime-8.0.10-win-x64.exe
         await httpRemoteService.DownloadFileAsync("https://download.visualstudio.microsoft.com/download/pr/a17b907f-8457-45a8-90db-53f2665ee49e/49bccd33593ebceb2847674fe5fd768e/aspnetcore-runtime-8.0.10-win-x64.exe"
             , @"C:\Workspaces\"
             , fileExistsBehavior: FileExistsBehavior.Overwrite);
@@ -129,5 +129,22 @@ public class GetStartController(IHttpRemoteService httpRemoteService) : Controll
                 await Task.CompletedTask;
             }
             , fileExistsBehavior: FileExistsBehavior.Overwrite);
+
+        // 打印下载进度
+        await httpRemoteService.DownloadFileAsync("https://download.visualstudio.microsoft.com/download/pr/a17b907f-8457-45a8-90db-53f2665ee49e/49bccd33593ebceb2847674fe5fd768e/aspnetcore-runtime-8.0.10-win-x64.exe"
+            , @"C:\Workspaces\"
+            , async progress =>
+            {
+                Console.WriteLine(progress.ToString());  // 输出带缩进进度字符串
+                await Task.CompletedTask;
+            }
+            , fileExistsBehavior: FileExistsBehavior.Overwrite);
+
+        // 使用构建器模式
+        await httpRemoteService.SendAsync(HttpRequestBuilder.DownloadFile("https://download.visualstudio.microsoft.com/download/pr/a17b907f-8457-45a8-90db-53f2665ee49e/49bccd33593ebceb2847674fe5fd768e/aspnetcore-runtime-8.0.10-win-x64.exe"
+            , @"C:\Workspaces\"
+            , fileExistsBehavior: FileExistsBehavior.Overwrite));
+
+        // 更多详细用法可参考第 19.2.1 节
     }
 }
