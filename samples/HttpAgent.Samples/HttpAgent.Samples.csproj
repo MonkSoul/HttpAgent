@@ -14,4 +14,8 @@
         <ProjectReference Include="..\..\src\HttpAgent\src\HttpAgent.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\"/>
+    </ItemGroup>
+
 </Project>

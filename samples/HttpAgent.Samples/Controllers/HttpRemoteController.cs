@@ -4,19 +4,19 @@ namespace HttpAgent.Samples.Controllers;
 
 [ApiController]
 [Route("[controller]/[action]")]
-public class HttpRemoteController(IHttpRemoteService httpRemoteService) : ControllerBase
+public class HttpRemoteController : ControllerBase
 {
     [HttpPost]
-    public Task<HttpRemoteModel> AddModel(HttpRemoteModel model)
+    public Task<YourRemoteModel> AddModel(int query1, string query2, YourRemoteModel model)
     {
         return Task.FromResult(model);
     }
 
     [HttpPost]
-    public Task<HttpRemoteFormResult> AddForm([FromForm] HttpRemoteFormModel model)
+    public Task<YourRemoteFormResult> AddForm(int id, [FromForm] YourRemoteFormModel model)
     {
         var fileInfo = model.File?.FileName;
-        return Task.FromResult(new HttpRemoteFormResult
+        return Task.FromResult(new YourRemoteFormResult
         {
             FileInfo = fileInfo,
             Id = model.Id,

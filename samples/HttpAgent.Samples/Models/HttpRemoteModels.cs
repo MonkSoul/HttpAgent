@@ -1,17 +1,19 @@
 ﻿namespace HttpAgent.Samples.Models;
 
-public class HttpRemoteModel
+public class YourRemoteModel
 {
     public int Id { get; set; }
     public string? Name { get; set; }
 }
 
-public class HttpRemoteFormModel : HttpRemoteModel
+public class YourRemoteFormModel : YourRemoteModel
 {
     public IFormFile? File { get; set; }
+
+    public IFormFileCollection? Files { get; set; }
 }
 
-public class HttpRemoteFormResult : HttpRemoteModel
+public class YourRemoteFormResult : YourRemoteModel
 {
     public string? FileInfo { get; set; }
 }

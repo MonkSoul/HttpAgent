@@ -1,4 +1,5 @@
 ﻿using HttpAgent.Samples.Models;
+using System.Text;
 
 namespace HttpAgent.Samples.Controllers;
 
@@ -7,128 +8,106 @@ namespace HttpAgent.Samples.Controllers;
 public class GetStartController(IHttpRemoteService httpRemoteService) : ControllerBase
 {
     [HttpGet]
-    public async Task<string?> GetHtml()
+    public async Task<string?> GetWebSiteContent()
     {
-        // 方式一
-        var html = await httpRemoteService.GetAsAsync<string>("https://furion.net/");
+        var content = await httpRemoteService.GetAsStringAsync("https://furion.net");
 
-        // 方式二
-        var html2 = await httpRemoteService.GetAsStringAsync("https://furion.net/");
+        // 1. 构建器方式
 
-        return await httpRemoteService.SendAsAsync<string>(HttpRequestBuilder.Get("https://furion.net/"));
+        // 直接获取 String 类型
+        var content1 = await httpRemoteService.SendAsStringAsync(HttpRequestBuilder.Get("https://furion.net"));
+
+        // 通过泛型指定 String 类型
+        var content2 = await httpRemoteService.SendAsAsync<string>(HttpRequestBuilder.Get("https://furion.net"));
+
+        // 获取 HttpRemoteResult 类型
+        var result = await httpRemoteService.SendAsync<string>(HttpRequestBuilder.Get("https://furion.net"));
+        var content3 = result.Result;
+
+        // 获取 HttpResponseMessage 类型
+        var httpResponseMessage = await httpRemoteService.SendAsync(HttpRequestBuilder.Get("https://furion.net"));
+        var content4 = await httpResponseMessage.Content.ReadAsStringAsync();
+
+        // 2. 请求谓词方式
+
+        // 通过泛型指定 String 类型
+        var content5 = await httpRemoteService.GetAsAsync<string>("https://furion.net");
+
+        // 获取 HttpRemoteResult 类型
+        var result2 = await httpRemoteService.GetAsync<string>("https://furion.net");
+        var content6 = result2.Result;
+
+        // 获取 HttpResponseMessage 类型
+        var httpResponseMessage2 = await httpRemoteService.GetAsync("https://furion.net");
+        var content7 = await httpResponseMessage2.Content.ReadAsStringAsync();
+
+        return content;
     }
 
     [HttpPost]
-    public async Task<HttpRemoteModel?> PostJson()
+    public async Task<YourRemoteModel?> PostJson()
     {
-        var model = await httpRemoteService.PostAsAsync<HttpRemoteModel>("https://localhost:7044/HttpRemote/AddModel",
-            builder => builder.SetJsonContent(new HttpRemoteModel
-            {
-                Id = 1,
-                Name = "Furion"
-            }));
+        var content = await httpRemoteService.PostAsAsync<YourRemoteModel>("https://localhost:7044/HttpRemote/AddModel",
+            builder => builder
+                .WithQueryParameters(new { query1 = 1, query2 = "furion" }) // 设置查询参数
+                .SetJsonContent(new { id = 1, name = "furion" }));  // 设置请求内容
 
-        return await httpRemoteService.SendAsAsync<HttpRemoteModel>(
-            HttpRequestBuilder.Post("https://localhost:7044/HttpRemote/AddModel").SetJsonContent(new HttpRemoteModel
-            {
-                Id = 1,
-                Name = "Furion"
-            }));
+        // 构建器方式
+        var content2 = await httpRemoteService.SendAsAsync<YourRemoteModel>(HttpRequestBuilder.Post("https://localhost:7044/HttpRemote/AddModel")
+            .WithQueryParameter("query1", 1) // 设置查询参数（支持单个设置）
+            .WithQueryParameter("query2", "furion") // 设置查询参数（支持单个设置）
+            .SetJsonContent("{\"id\":1,\"name\":\"furion\"}"));  // 设置请求内容（支持直接传入 JSON 字符串）
+
+        // 更多方式可参考 19.2.1 使用
+
+        // 自定义 Content-Type
+        var content3 = await httpRemoteService.PostAsAsync<YourRemoteModel>("https://localhost:7044/HttpRemote/AddModel",
+            builder => builder
+                .WithQueryParameters(new { query1 = 1, query2 = "furion" }) // 设置查询参数
+                .SetRawContent(new { id = 1, name = "furion" }, "application/json"));  // 设置请求内容
+
+        // 自定义 Content-Type 支持配置 Charset
+        var content4 = await httpRemoteService.PostAsAsync<YourRemoteModel>("https://localhost:7044/HttpRemote/AddModel",
+            builder => builder
+                .WithQueryParameters(new { query1 = 1, query2 = "furion" }) // 设置查询参数
+                .SetRawContent(new { id = 1, name = "furion" }, "application/json;charset=utf-8"));  // 设置请求内容
+
+        // 自定义 Content-Type 支持配置请求编码
+        var content5 = await httpRemoteService.PostAsAsync<YourRemoteModel>("https://localhost:7044/HttpRemote/AddModel",
+            builder => builder
+                .WithQueryParameters(new { query1 = 1, query2 = "furion" }) // 设置查询参数
+                .SetRawContent(new { id = 1, name = "furion" }, "application/json;charset=utf-8", Encoding.UTF8));  // 设置请求内容
+
+        return content;
     }
 
     [HttpPost]
-    public async Task<HttpRemoteFormResult?> PostForm()
+    public async Task<YourRemoteFormResult?> PostForm()
     {
-        var result = await httpRemoteService.PostAsAsync<HttpRemoteFormResult>(
-            "https://localhost:7044/HttpRemote/AddForm",
-            builder => builder.SetMultipartContent(formBuilder => formBuilder
-                .AddJson(new HttpRemoteModel
-                {
-                    Id = 1,
-                    Name = "Furion"
-                }).AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file")));
+        var content = await httpRemoteService.PostAsAsync<YourRemoteFormResult>("https://localhost:7044/HttpRemote/AddForm?id=1",
+            builder => builder.SetMultipartContent(formBuilder => formBuilder   // 设置表单内容
+                .AddJson(new { id = 1, name = "furion" })   // 设置常规字段
+                .AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file")));  // 设置文件（支持流方式、字节数组方式、远程 URL 地址和 Base64 字符串
 
-        return await httpRemoteService.SendAsAsync<HttpRemoteFormResult>(
-            HttpRequestBuilder.Post("https://localhost:7044/HttpRemote/AddForm").SetMultipartContent(formBuilder =>
-                formBuilder
-                    .AddJson(new HttpRemoteModel
-                    {
-                        Id = 1,
-                        Name = "Furion"
-                    }).AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file")));
-    }
+        // 使用构建器模式
+        var content2 = await httpRemoteService.SendAsAsync<YourRemoteFormResult>(HttpRequestBuilder.Post("https://localhost:7044/HttpRemote/AddForm?id=1")
+            .SetMultipartContent(formBuilder => formBuilder   // 设置表单内容
+                .AddJson(new { id = 1, name = "furion" })   // 设置常规字段
+                .AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file")));  // 设置文件（支持流方式、字节数组方式、远程 URL 地址和 Base64 字符串
 
-    [HttpGet]
-    public async Task DownloadFile()
-    {
-        await httpRemoteService.SendAsync(HttpRequestBuilder.DownloadFile(
-            "https://download.visualstudio.microsoft.com/download/pr/a17b907f-8457-45a8-90db-53f2665ee49e/49bccd33593ebceb2847674fe5fd768e/aspnetcore-runtime-8.0.10-win-x64.exe",
-            @"C:\Workspaces\"));
-    }
+        // 更多详细用法可参考第 19.2.1 节
 
-    [HttpGet]
-    public async Task DownloadFileWithProgress()
-    {
-        await httpRemoteService.DownloadFileAsync(
-            "https://download.visualstudio.microsoft.com/download/pr/6224f00f-08da-4e7f-85b1-00d42c2bb3d3/b775de636b91e023574a0bbc291f705a/dotnet-sdk-8.0.403-win-x64.exe",
-            @"C:\Workspaces\", async progress =>
-            {
-                Console.WriteLine(
-                    $"Downloaded {progress.Transferred.ToSizeUnits("MB"):F2} MB of {progress.TotalFileSize.ToSizeUnits("MB"):F2} MB ({progress.PercentageComplete:F2}% complete, Speed: {progress.TransferRate.ToSizeUnits("MB"):F2} MB/s, Time: {progress.TimeElapsed.TotalSeconds:F2}s, ETA: {progress.EstimatedTimeRemaining.TotalSeconds:F2}s), File Name: {progress.FileName}, Destination Path: {progress.FileFullName}");
-                await Task.CompletedTask;
-            }, FileExistsBehavior.Overwrite); // FileExistsBehavior 可配置本地已存在该文件时的下载行为，此处是替换操作
+        // 以下是一些 `Form` 表单提交的常见例子
+        var content3 = await httpRemoteService.PostAsAsync<YourRemoteFormResult>("https://localhost:7044/HttpRemote/AddForm?id=1",
+            builder => builder.SetMultipartContent(formBuilder => formBuilder   // 设置表单内容
+                .AddJson(new { id = 1, name = "furion" })   // 设置常规字段
+                .AddJsonProperty("age", "Age")  // 支持设置单个值
+                .AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file") // 设置单个文件（对应表单 File 字段）
+                                                                        // 支持互联网文件地址
+                .AddFileFromRemote("https://furion.net/img/furionlogo.png", "files")    // 设置多个文件（对应表单 Files 字段）
+                                                                                        // 支持读取本地文件作为字节数组
+                .AddFileAsByteArray("C:\\Workspaces\\httptest.jpg", "files")));  // 设置多个文件（对应表单 Files 字段）
 
-        await httpRemoteService.SendAsync(HttpRequestBuilder.DownloadFile(
-            "https://download.visualstudio.microsoft.com/download/pr/6224f00f-08da-4e7f-85b1-00d42c2bb3d3/b775de636b91e023574a0bbc291f705a/dotnet-sdk-8.0.403-win-x64.exe",
-            @"C:\Workspaces\", async progress =>
-            {
-                Console.WriteLine(
-                    $"Downloaded {progress.Transferred.ToSizeUnits("MB"):F2} MB of {progress.TotalFileSize.ToSizeUnits("MB"):F2} MB ({progress.PercentageComplete:F2}% complete, Speed: {progress.TransferRate.ToSizeUnits("MB"):F2} MB/s, Time: {progress.TimeElapsed.TotalSeconds:F2}s, ETA: {progress.EstimatedTimeRemaining.TotalSeconds:F2}s), File Name: {progress.FileName}, Destination Path: {progress.FileFullName}");
-                await Task.CompletedTask;
-            }, FileExistsBehavior.Overwrite)); // FileExistsBehavior 可配置本地已存在该文件时的下载行为，此处是替换操作
-    }
-
-    [HttpPost]
-    public async Task UploadFile()
-    {
-        await httpRemoteService.SendAsync(HttpRequestBuilder
-            .Post("https://localhost:7044/HttpRemote/AddFile")
-            .SetMultipartContent(
-                formBuilder => { formBuilder.AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file"); }));
-    }
-
-    [HttpPost]
-    public async Task UploadFiles()
-    {
-        await httpRemoteService.SendAsync(HttpRequestBuilder
-            .Post("https://localhost:7044/HttpRemote/AddFiles")
-            .SetMultipartContent(
-                formBuilder =>
-                {
-                    formBuilder.AddFileAsStream(@"C:\Workspaces\httptest.jpg", "files")
-                        .AddFileAsStream(@"C:\Workspaces\picture.jpg", "files");
-                }).Profiler());
-    }
-
-    [HttpPost]
-    public async Task UploadFileWithProgress()
-    {
-        await httpRemoteService.UploadFileAsync("https://localhost:7044/HttpRemote/AddFile",
-            @"C:\Workspaces\httptest.jpg",
-            "file", async progress =>
-            {
-                Console.WriteLine(
-                    $"Uploaded {progress.Transferred.ToSizeUnits("MB"):F2} MB of {progress.TotalFileSize.ToSizeUnits("MB"):F2} MB ({progress.PercentageComplete:F2}% complete, Speed: {progress.TransferRate.ToSizeUnits("MB"):F2} MB/s, Time: {progress.TimeElapsed.TotalSeconds:F2}s, ETA: {progress.EstimatedTimeRemaining.TotalSeconds:F2}s), File Name: {progress.FileName}, Destination Path: {progress.FileFullName}");
-                await Task.CompletedTask;
-            });
-
-        await httpRemoteService.SendAsync(
-            HttpRequestBuilder.UploadFile("https://localhost:7044/HttpRemote/AddFile", @"C:\Workspaces\httptest.jpg",
-                "file", async progress =>
-                {
-                    Console.WriteLine(
-                        $"Uploaded {progress.Transferred.ToSizeUnits("MB"):F2} MB of {progress.TotalFileSize.ToSizeUnits("MB"):F2} MB ({progress.PercentageComplete:F2}% complete, Speed: {progress.TransferRate.ToSizeUnits("MB"):F2} MB/s, Time: {progress.TimeElapsed.TotalSeconds:F2}s, ETA: {progress.EstimatedTimeRemaining.TotalSeconds:F2}s), File Name: {progress.FileName}, Destination Path: {progress.FileFullName}");
-                    await Task.CompletedTask;
-                }));
+        return content;
     }
 }
