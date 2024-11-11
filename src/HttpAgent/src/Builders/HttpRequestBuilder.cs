@@ -357,9 +357,11 @@ public sealed partial class HttpRequestBuilder
 
         ContentType = RawContent switch
         {
+            JsonContent => MediaTypeNames.Application.Json,
             FormUrlEncodedContent => MediaTypeNames.Application.FormUrlEncoded,
-            (byte[] or Stream or ByteArrayContent or StreamContent) and not StringContent => MediaTypeNames.Application
-                .Octet,
+            (byte[] or Stream or ByteArrayContent or StreamContent or ReadOnlyMemoryContent or ReadOnlyMemory<byte>)
+                and not StringContent => MediaTypeNames.Application
+                    .Octet,
             MultipartContent => MediaTypeNames.Multipart.FormData,
             _ => defaultContentType ?? Constants.DEFAULT_CONTENT_TYPE
         };

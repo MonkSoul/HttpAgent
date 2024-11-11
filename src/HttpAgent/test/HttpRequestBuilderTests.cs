@@ -360,6 +360,21 @@ public class HttpRequestBuilderTests
         httpRequestBuilder11.SetRawContent(new StringContent(""));
         httpRequestBuilder11.SetDefaultContentType(MediaTypeNames.Application.Json);
         Assert.Equal(MediaTypeNames.Application.Json, httpRequestBuilder11.ContentType);
+
+        var httpRequestBuilder12 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder12.SetRawContent(JsonContent.Create(new { }));
+        httpRequestBuilder12.SetDefaultContentType(MediaTypeNames.Application.Json);
+        Assert.Equal(MediaTypeNames.Application.Json, httpRequestBuilder12.ContentType);
+
+        var httpRequestBuilder13 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder13.SetRawContent(new ReadOnlyMemoryContent(Array.Empty<byte>()));
+        httpRequestBuilder13.SetDefaultContentType(MediaTypeNames.Application.Octet);
+        Assert.Equal(MediaTypeNames.Application.Octet, httpRequestBuilder13.ContentType);
+
+        var httpRequestBuilder14 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder14.SetRawContent(new ReadOnlyMemory<byte>([]));
+        httpRequestBuilder14.SetDefaultContentType(MediaTypeNames.Application.Octet);
+        Assert.Equal(MediaTypeNames.Application.Octet, httpRequestBuilder14.ContentType);
     }
 
     [Fact]
