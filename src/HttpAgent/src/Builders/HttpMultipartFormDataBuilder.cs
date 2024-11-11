@@ -70,14 +70,14 @@ public sealed class HttpMultipartFormDataBuilder
 
         var rawObject = rawJson;
 
-        // 如果是字符串类型则尝试解析并验证 JSON 字符串
-        if (rawJson is not string jsonString)
+        // 检查是否是字符串类型
+        if (rawJson is not string rawString)
         {
             return AddRaw(rawObject, null, MediaTypeNames.Application.Json, contentEncoding);
         }
 
-        // 获取 JsonDocument 实例（需 using）
-        var jsonDocument = JsonUtility.Parse(jsonString);
+        // 尝试验证并获取 JsonDocument 实例（需 using）
+        var jsonDocument = JsonUtility.Parse(rawString);
         rawObject = jsonDocument;
 
         // 添加请求结束时需要释放的对象
