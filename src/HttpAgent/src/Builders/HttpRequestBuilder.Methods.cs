@@ -98,8 +98,14 @@ public sealed partial class HttpRequestBuilder
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
-    public HttpRequestBuilder SetJsonContent(object? rawJson, Encoding? contentEncoding = null) =>
-        SetRawContent(rawJson, MediaTypeNames.Application.Json, contentEncoding);
+    /// <exception cref="JsonException"></exception>
+    public HttpRequestBuilder SetJsonContent(object? rawJson, Encoding? contentEncoding = null)
+    {
+        // 如果是字符串类型则尝试解析并验证 JSON 字符串
+        var rawObject = rawJson is string jsonString ? JsonDocument.Parse(jsonString) : rawJson;
+
+        return SetRawContent(rawObject, MediaTypeNames.Application.Json, contentEncoding);
+    }
 
     /// <summary>
     ///     设置 HTML 内容

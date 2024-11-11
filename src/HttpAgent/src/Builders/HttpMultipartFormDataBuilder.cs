@@ -68,7 +68,7 @@ public sealed class HttpMultipartFormDataBuilder
         // 空检查
         ArgumentNullException.ThrowIfNull(rawJson);
 
-        // 解析 JSON 字符串类型
+        // 如果是字符串类型则尝试解析并验证 JSON 字符串
         var rawObject = rawJson is string jsonString ? JsonDocument.Parse(jsonString) : rawJson;
 
         return AddRaw(rawObject, null, MediaTypeNames.Application.Json, contentEncoding);

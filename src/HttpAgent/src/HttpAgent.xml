@@ -1132,6 +1132,7 @@
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
+            <exception cref="T:System.Text.Json.JsonException"></exception>
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.SetHtmlContent(System.String,System.Text.Encoding)">
             <summary>

@@ -48,6 +48,14 @@ public class HttpMultipartFormDataBuilderTests
         var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
 
         Assert.Throws<ArgumentNullException>(() => builder.AddJson(null!));
+        try
+        {
+            builder.AddJson("{\"id\":1,\"name\":\"furion\"");
+        }
+        catch (Exception e)
+        {
+            Assert.Equal("JsonReaderException", e.GetType().Name);
+        }
     }
 
     [Fact]
