@@ -49,6 +49,18 @@ public class FileTransferProgressTests
     }
 
     [Fact]
+    public void ToSummaryString_ReturnOK()
+    {
+        var fileTransferProgress =
+            new FileTransferProgress(@"C:\Workspaces\furion.index.html", 1000000L);
+        fileTransferProgress.UpdateProgress(500000, TimeSpan.FromMilliseconds(200));
+
+        Assert.Equal(
+            @"Transferred 0.48 MB of 0.95 MB (50.00% complete, Speed: 2.38 MB/s, Time: 0.20s, ETA: 0.20s), File: furion.index.html, Path: C:\Workspaces\furion.index.html.",
+            fileTransferProgress.ToSummaryString());
+    }
+
+    [Fact]
     public void UpdateProgress_ReturnOK()
     {
         var fileTransferProgress =

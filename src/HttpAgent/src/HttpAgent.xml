@@ -5381,6 +5381,14 @@
         <member name="M:HttpAgent.FileTransferProgress.ToString">
             <inheritdoc />
         </member>
+        <member name="M:HttpAgent.FileTransferProgress.ToSummaryString">
+            <summary>
+                输出简要进度字符串
+            </summary>
+            <returns>
+                <see cref="T:System.String" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.FileTransferProgress.UpdateProgress(System.Int64,System.TimeSpan)">
             <summary>
                 更新文件传输进度

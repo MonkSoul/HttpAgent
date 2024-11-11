@@ -90,6 +90,15 @@ public sealed class FileTransferProgress
         ], "Transfer Progress")!;
 
     /// <summary>
+    ///     输出简要进度字符串
+    /// </summary>
+    /// <returns>
+    ///     <see cref="string" />
+    /// </returns>
+    public string ToSummaryString() =>
+        $"Transferred {Transferred.ToSizeUnits("MB"):F2} MB of {TotalFileSize.ToSizeUnits("MB"):F2} MB ({PercentageComplete:F2}% complete, Speed: {TransferRate.ToSizeUnits("MB"):F2} MB/s, Time: {TimeElapsed.TotalSeconds:F2}s, ETA: {EstimatedTimeRemaining.TotalSeconds:F2}s), File: {FileName}, Path: {FileFullName}.";
+
+    /// <summary>
     ///     更新文件传输进度
     /// </summary>
     /// <param name="transferred">已传输的数据量</param>
