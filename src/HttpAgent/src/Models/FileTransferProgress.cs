@@ -58,7 +58,7 @@ public sealed class FileTransferProgress
     public double PercentageComplete { get; private set; }
 
     /// <summary>
-    ///     获取当前的传输速率
+    ///     当前的传输速率
     /// </summary>
     /// <remarks>以字节/秒为单位。</remarks>
     public double TransferRate { get; private set; }

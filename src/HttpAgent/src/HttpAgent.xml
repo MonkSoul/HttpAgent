@@ -5364,7 +5364,7 @@
         </member>
         <member name="P:HttpAgent.FileTransferProgress.TransferRate">
             <summary>
-                获取当前的传输速率
+                当前的传输速率
             </summary>
             <remarks>以字节/秒为单位。</remarks>
         </member>
