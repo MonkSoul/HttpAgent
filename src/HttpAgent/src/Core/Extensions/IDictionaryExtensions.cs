@@ -120,4 +120,57 @@ internal static class IDictionaryExtensions
             dictionary.TryAdd(keySelector(value), value);
         }
     }
+
+    /// <summary>
+    ///     在指定的位置尝试添加
+    /// </summary>
+    /// <remarks>其中键是由值通过给定的选择器函数生成的。</remarks>
+    /// <param name="dictionary">
+    ///     <see cref="IDictionary{TKey, TValue}" />
+    /// </param>
+    /// <param name="values">
+    ///     <see cref="IEnumerable{T}" />
+    /// </param>
+    /// <param name="index">指定位置索引</param>
+    /// <param name="keySelector">键选择器</param>
+    /// <typeparam name="TKey">字典键类型</typeparam>
+    /// <typeparam name="TValue">字典值类型</typeparam>
+    internal static void TryAddAt<TKey, TValue>(this IDictionary<TKey, TValue> dictionary,
+        IEnumerable<TValue>? values, Func<TValue, TKey> keySelector, int index)
+        where TKey : notnull
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(keySelector);
+
+        // 空检查
+        if (values is null)
+        {
+            return;
+        }
+
+        // 复制现有的键值对到列表中
+        var keyValuePairs = new List<KeyValuePair<TKey, TValue>>(dictionary);
+
+        // 收集需要插入的键值对
+        var toInsert = (from value in values
+            let key = keySelector(value)
+            where !dictionary.TryGetValue(key, out _)
+            select new KeyValuePair<TKey, TValue>(key, value)).ToArray();
+
+        // 空检查
+        if (toInsert is { Length: 0 })
+        {
+            return;
+        }
+
+        // 在指定位置插入新的键值对
+        keyValuePairs.InsertRange(index, toInsert);
+
+        // 重新构建字典
+        dictionary.Clear();
+        foreach (var kvp in keyValuePairs)
+        {
+            dictionary.TryAdd(kvp.Key, kvp.Value);
+        }
+    }
 }

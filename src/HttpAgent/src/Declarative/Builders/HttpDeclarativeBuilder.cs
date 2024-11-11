@@ -29,6 +29,7 @@ public sealed class HttpDeclarativeBuilder
         { typeof(CookieDeclarativeExtractor), new CookieDeclarativeExtractor() },
         { typeof(HeaderDeclarativeExtractor), new HeaderDeclarativeExtractor() },
         { typeof(BodyDeclarativeExtractor), new BodyDeclarativeExtractor() },
+        // 确保以下 HTTP 声明式提取器末位注册
         { typeof(MultipartBodyDeclarativeExtractor), new MultipartBodyDeclarativeExtractor() },
         { typeof(HttpRequestBuilderDeclarativeExtractor), new HttpRequestBuilderDeclarativeExtractor() }
     };
@@ -100,8 +101,8 @@ public sealed class HttpDeclarativeBuilder
             _hasLoadedExtractors = true;
 
             // 添加自定义 IHttpDeclarativeExtractor 数组
-            _extractors.TryAdd(httpRemoteOptions.HttpDeclarativeExtractors?.SelectMany(u => u.Invoke()).ToArray(),
-                value => value.GetType());
+            _extractors.TryAddAt(httpRemoteOptions.HttpDeclarativeExtractors?.SelectMany(u => u.Invoke()).ToArray(),
+                value => value.GetType(), _extractors.Count - 2);
         }
 
         // 遍历 HTTP 声明式提取器集合

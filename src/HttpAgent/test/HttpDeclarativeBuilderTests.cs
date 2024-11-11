@@ -108,9 +108,9 @@ public class HttpDeclarativeBuilderTests
             { typeof(CookieDeclarativeExtractor), new CookieDeclarativeExtractor() },
             { typeof(HeaderDeclarativeExtractor), new HeaderDeclarativeExtractor() },
             { typeof(BodyDeclarativeExtractor), new BodyDeclarativeExtractor() },
+            { typeof(CustomHttpDeclarativeExtractor), new CustomHttpDeclarativeExtractor() },
             { typeof(MultipartBodyDeclarativeExtractor), new MultipartBodyDeclarativeExtractor() },
-            { typeof(HttpRequestBuilderDeclarativeExtractor), new HttpRequestBuilderDeclarativeExtractor() },
-            { typeof(CustomHttpDeclarativeExtractor), new CustomHttpDeclarativeExtractor() }
+            { typeof(HttpRequestBuilderDeclarativeExtractor), new HttpRequestBuilderDeclarativeExtractor() }
         };
 
         Assert.Equal(extractors.Keys, HttpDeclarativeBuilder._extractors.Keys);
