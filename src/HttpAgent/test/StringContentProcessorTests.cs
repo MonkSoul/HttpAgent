@@ -78,7 +78,8 @@ public class StringContentProcessorTests
         Assert.Equal("text/plain", httpContent5.Headers.ContentType?.MediaType);
         Assert.Equal("utf-8", httpContent5.Headers.ContentType?.CharSet);
 
-        var httpContent6 = processor.Process(JsonDocument.Parse("\"furion\"").RootElement, "application/json",
+        using var jsonDocument = JsonDocument.Parse("\"furion\"");
+        var httpContent6 = processor.Process(jsonDocument.RootElement, "application/json",
             Encoding.UTF32);
         Assert.NotNull(httpContent6);
         Assert.Equal(typeof(StringContent), httpContent6.GetType());

@@ -68,8 +68,20 @@ public sealed class HttpMultipartFormDataBuilder
         // 空检查
         ArgumentNullException.ThrowIfNull(rawJson);
 
+        var rawObject = rawJson;
+
         // 如果是字符串类型则尝试解析并验证 JSON 字符串
-        var rawObject = rawJson is string jsonString ? JsonDocument.Parse(jsonString) : rawJson;
+        if (rawJson is not string jsonString)
+        {
+            return AddRaw(rawObject, null, MediaTypeNames.Application.Json, contentEncoding);
+        }
+
+        // 获取 JsonDocument 实例（需 using）
+        var jsonDocument = JsonUtility.Parse(jsonString);
+        rawObject = jsonDocument;
+
+        // 添加请求结束时需要释放的对象
+        _httpRequestBuilder.AddDisposable(jsonDocument);
 
         return AddRaw(rawObject, null, MediaTypeNames.Application.Json, contentEncoding);
     }

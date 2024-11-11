@@ -39,6 +39,38 @@ public class HttpRemoteCasesTests
     }
 
     [Fact]
+    public async Task SendJson2_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+
+        builder.Services.AddControllers()
+            .AddApplicationPart(typeof(HttpRemoteController).Assembly);
+        builder.Services.AddHttpRemote();
+
+        await using var app = builder.Build();
+
+        app.MapControllers();
+
+        await app.StartAsync();
+
+        var httpRemoteService = app.Services.GetRequiredService<IHttpRemoteService>();
+
+        var httpRemoteResult =
+            await httpRemoteService.SendAsync<HttpRemoteModel>(
+                HttpRequestBuilder.Post($"http://localhost:{port}/HttpRemote/SendJson")
+                    .SetJsonContent("{\"id\":1,\"name\":\"Furion\"}"));
+
+        Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
+        Assert.NotNull(httpRemoteResult.Result);
+        Assert.Equal(1, httpRemoteResult.Result.Id);
+        Assert.Equal("Furion", httpRemoteResult.Result.Name);
+
+        await app.StopAsync();
+    }
+
+    [Fact]
     public async Task SendFormUrlEncoded_ReturnOK()
     {
         var port = NetworkUtility.FindAvailableTcpPort();

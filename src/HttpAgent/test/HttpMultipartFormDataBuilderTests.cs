@@ -85,6 +85,9 @@ public class HttpMultipartFormDataBuilderTests
         Assert.Equal("text/plain", builder2._partContents[1].ContentType);
         Assert.Null(builder2._partContents[1].ContentEncoding);
         Assert.Equal("furion", builder2._partContents[1].RawContent?.ToString());
+        Assert.NotNull(builder2._httpRequestBuilder.Disposables);
+        Assert.Single(builder2._httpRequestBuilder.Disposables);
+        Assert.True(builder2._httpRequestBuilder.Disposables[0] is JsonDocument);
     }
 
     [Fact]

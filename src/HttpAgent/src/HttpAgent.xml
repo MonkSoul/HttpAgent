@@ -3425,6 +3425,43 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
+        <member name="T:HttpAgent.Core.Utilities.JsonUtility">
+            <summary>
+                提供 JSON 实用方法
+            </summary>
+        </member>
+        <member name="M:HttpAgent.Core.Utilities.JsonUtility.Parse(System.String)">
+            <summary>
+                解析 JSON 字符串
+            </summary>
+            <param name="jsonString">JSON 字符串</param>
+            <returns>
+                <see cref="T:System.Text.Json.JsonDocument" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Core.Utilities.JsonUtility.TryParse(System.String,System.Text.Json.JsonDocument@)">
+            <summary>
+                尝试解析 JSON 字符串
+            </summary>
+            <param name="jsonString">JSON 字符串</param>
+            <param name="jsonDocument">
+                <see cref="T:System.Text.Json.JsonDocument" />
+            </param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Core.Utilities.JsonUtility.IsObjectOrArrayOrNull(System.Text.Json.JsonDocument)">
+            <summary>
+                检查 <see cref="T:System.Text.Json.JsonDocument" /> 的 <c>ValueKind</c> 属性值是否是 <c>Object</c>、<c>Array</c> 或 <c>Null</c>
+            </summary>
+            <param name="jsonDocument">
+                <see cref="T:System.Text.Json.JsonDocument" />
+            </param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
         <member name="T:HttpAgent.Core.Utilities.NetworkUtility">
             <summary>
                 提供网络相关的实用方法

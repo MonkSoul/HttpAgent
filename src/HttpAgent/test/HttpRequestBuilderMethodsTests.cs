@@ -130,7 +130,7 @@ public class HttpRequestBuilderMethodsTests
         httpRequestBuilder.SetContentEncoding("gb2312");
         Assert.Equal("gb2312", httpRequestBuilder.ContentEncoding?.BodyName);
     }
-    
+
     [Fact]
     public void SetJsonContent_Invalid_Parameters()
     {
@@ -160,12 +160,15 @@ public class HttpRequestBuilderMethodsTests
         Assert.NotNull(httpRequestBuilder.RawContent);
         Assert.Equal("application/json", httpRequestBuilder.ContentType);
         Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
-    
+
         httpRequestBuilder.SetJsonContent("{\"id\":1,\"name\":\"furion\"}");
         Assert.NotNull(httpRequestBuilder.RawContent);
         Assert.Equal("application/json", httpRequestBuilder.ContentType);
         Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
         Assert.True(httpRequestBuilder.RawContent is JsonDocument);
+        Assert.NotNull(httpRequestBuilder.Disposables);
+        Assert.Single(httpRequestBuilder.Disposables);
+        Assert.True(httpRequestBuilder.Disposables.Single() is JsonDocument);
     }
 
     [Fact]
