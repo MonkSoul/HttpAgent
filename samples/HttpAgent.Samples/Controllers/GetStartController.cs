@@ -168,5 +168,23 @@ public class GetStartController(IHttpRemoteService httpRemoteService) : Controll
         await httpRemoteService.SendAsync(HttpRequestBuilder.Post("https://localhost:7044/HttpRemote/AddFile")
             .SetMultipartContent(formBuilder => formBuilder
                 .AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file")));
+
+        // 上传文件带进度
+        await httpRemoteService.UploadFileAsync("https://localhost:7044/HttpRemote/AddFile", @"C:\Workspaces\httptest.jpg", "file"
+            , async progress =>
+            {
+                Console.WriteLine(progress.ToSummaryString());  // 输出简要进度字符串
+                await Task.CompletedTask;
+            });
+
+        // 支持限制文件类型和大小
+        await httpRemoteService.SendAsync(HttpRequestBuilder.UploadFile("https://localhost:7044/HttpRemote/AddFile", @"C:\Workspaces\httptest.jpg", "file"
+            , async progress =>
+            {
+                Console.WriteLine(progress.ToSummaryString());  // 输出简要进度字符串
+                await Task.CompletedTask;
+            })
+            .SetAllowedFileExtensions(".jpg;.png")  // 限制只允许 jpg 和 png 类型
+            .SetMaxFileSizeInBytes(5 * 1024 * 1024));   // 限制 5MB
     }
 }
