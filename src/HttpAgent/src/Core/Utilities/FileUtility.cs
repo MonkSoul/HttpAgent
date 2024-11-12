@@ -128,13 +128,12 @@ public static class FileUtility
     /// <exception cref="InvalidOperationException"></exception>
     public static void ValidateSize(string filePath, long maxFileSizeInBytes)
     {
-        // 是否小于 1KB 标识
-        var lessThan1Kb = maxFileSizeInBytes < 1024;
+        var unit = maxFileSizeInBytes < 1024 ? "KB" : "MB";
 
         if (!TryValidateSize(filePath, maxFileSizeInBytes))
         {
             throw new InvalidOperationException(
-                $"The file size exceeds the maximum allowed size of `{maxFileSizeInBytes.ToSizeUnits(lessThan1Kb ? "KB" : "MB"):F2} {(lessThan1Kb ? "KB" : "MB")}`.");
+                $"The file size exceeds the maximum allowed size of `{maxFileSizeInBytes.ToSizeUnits(unit):F2} {unit}`.");
         }
     }
 
