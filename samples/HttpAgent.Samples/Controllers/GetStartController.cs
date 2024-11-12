@@ -147,4 +147,26 @@ public class GetStartController(IHttpRemoteService httpRemoteService) : Controll
 
         // 更多详细用法可参考第 19.2.1 节
     }
+
+    [HttpPost]
+    public async Task UploadFile()
+    {
+        // 1. 使用 Form 表单方式
+
+        // 上传单个文件
+        await httpRemoteService.PostAsync("https://localhost:7044/HttpRemote/AddFile", builder => builder
+            .SetMultipartContent(formBuilder => formBuilder
+                .AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file")));
+
+        // 上传多个文件
+        await httpRemoteService.PostAsync("https://localhost:7044/HttpRemote/AddFiles", builder => builder
+            .SetMultipartContent(formBuilder => formBuilder
+                .AddFileAsStream(@"C:\Workspaces\httptest.jpg", "files")
+                .AddFileFromRemote("https://furion.net/img/furionlogo.png", "files")));
+
+        // 使用构建器模式
+        await httpRemoteService.SendAsync(HttpRequestBuilder.Post("https://localhost:7044/HttpRemote/AddFile")
+            .SetMultipartContent(formBuilder => formBuilder
+                .AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file")));
+    }
 }

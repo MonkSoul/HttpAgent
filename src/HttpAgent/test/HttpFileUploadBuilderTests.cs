@@ -35,7 +35,7 @@ public class HttpFileUploadBuilderTests
         Assert.Equal(HttpMethod.Post, builder2.Method);
         Assert.NotNull(builder2.RequestUri);
         Assert.Equal("http://localhost/", builder2.RequestUri.ToString());
-        Assert.Equal(@"C:\Workspaces\index.html", builder2.FileFullName);
+        Assert.Equal(@"C:\Workspaces\index.html", builder2.FilePath);
         Assert.Null(builder2.ContentType);
         Assert.Equal(TimeSpan.FromSeconds(1), builder2.ProgressInterval);
         Assert.Null(builder2.OnTransferStarted);
@@ -43,6 +43,8 @@ public class HttpFileUploadBuilderTests
         Assert.Null(builder2.OnTransferFailed);
         Assert.Null(builder2.OnProgressChanged);
         Assert.Null(builder2.FileTransferEventHandlerType);
+        Assert.Null(builder2.AllowedFileExtensions);
+        Assert.Null(builder2.MaxFileSizeInBytes);
     }
 
     [Fact]
@@ -85,6 +87,58 @@ public class HttpFileUploadBuilderTests
 
         builder.SetContentType("text/html; charset=unicode");
         Assert.Equal("text/html", builder.ContentType);
+    }
+
+    [Fact]
+    public void SetAllowedFileExtensions_Invalid_Parameters()
+    {
+        var builder = new HttpFileUploadBuilder(HttpMethod.Post, new Uri("http://localhost"),
+            @"C:\Workspaces\index.html", "file");
+
+        Assert.Throws<ArgumentNullException>(() => builder.SetAllowedFileExtensions((string[])null!));
+        Assert.Throws<ArgumentNullException>(() => builder.SetAllowedFileExtensions((string)null!));
+        Assert.Throws<ArgumentException>(() => builder.SetAllowedFileExtensions(string.Empty));
+        Assert.Throws<ArgumentException>(() => builder.SetAllowedFileExtensions(" "));
+    }
+
+    [Fact]
+    public void SetAllowedFileExtensions_ReturnOK()
+    {
+        var builder = new HttpFileUploadBuilder(HttpMethod.Post, new Uri("http://localhost"),
+            @"C:\Workspaces\index.html", "file");
+
+        builder.SetAllowedFileExtensions([".html", ".exe"]);
+
+        Assert.NotNull(builder.AllowedFileExtensions);
+        Assert.Equal([".html", ".exe"], builder.AllowedFileExtensions);
+
+        builder.SetAllowedFileExtensions(".jpg;.png;");
+        Assert.NotNull(builder.AllowedFileExtensions);
+        Assert.Equal([".jpg", ".png"], builder.AllowedFileExtensions);
+    }
+
+    [Fact]
+    public void SetMaxFileSizeInBytes_Invalid_Parameters()
+    {
+        var builder = new HttpFileUploadBuilder(HttpMethod.Post, new Uri("http://localhost"),
+            @"C:\Workspaces\index.html", "file");
+
+        var exception = Assert.Throws<ArgumentOutOfRangeException>(() => builder.SetMaxFileSizeInBytes(0));
+        Assert.Equal("Max file size in bytes must be greater than zero. (Parameter 'maxFileSizeInBytes')",
+            exception.Message);
+
+        Assert.Throws<ArgumentOutOfRangeException>(() => builder.SetMaxFileSizeInBytes(-1));
+    }
+
+    [Fact]
+    public void SetMaxFileSizeInBytes_ReturnOK()
+    {
+        var builder = new HttpFileUploadBuilder(HttpMethod.Post, new Uri("http://localhost"),
+            @"C:\Workspaces\index.html", "file");
+
+        builder.SetMaxFileSizeInBytes(10);
+
+        Assert.Equal(10, builder.MaxFileSizeInBytes);
     }
 
     [Fact]
@@ -219,6 +273,35 @@ public class HttpFileUploadBuilderTests
     }
 
     [Fact]
+    public void EnsureLegalData_Invalid_Parameters()
+    {
+        Assert.Throws<ArgumentNullException>(() => HttpFileUploadBuilder.EnsureLegalData(null!, null, null));
+        Assert.Throws<ArgumentException>(() => HttpFileUploadBuilder.EnsureLegalData(string.Empty, null, null));
+        Assert.Throws<ArgumentException>(() => HttpFileUploadBuilder.EnsureLegalData(" ", null, null));
+
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        Assert.Throws<InvalidOperationException>(() =>
+            HttpFileUploadBuilder.EnsureLegalData(filePath, [".html"], null));
+
+        Assert.Throws<InvalidOperationException>(() =>
+            HttpFileUploadBuilder.EnsureLegalData(filePath, null, 10));
+
+        Assert.Throws<InvalidOperationException>(() =>
+            HttpFileUploadBuilder.EnsureLegalData(filePath, [".txt"], 10));
+    }
+
+    [Fact]
+    public void EnsureLegalData_ReturnOK()
+    {
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        HttpFileUploadBuilder.EnsureLegalData(filePath, null, null);
+        HttpFileUploadBuilder.EnsureLegalData(filePath, [".txt"], null);
+        HttpFileUploadBuilder.EnsureLegalData(filePath, null, 100);
+        HttpFileUploadBuilder.EnsureLegalData(filePath, [".txt"], 100);
+    }
+
+
+    [Fact]
     public void Build_Invalid_Parameters()
     {
         var builder = new HttpFileUploadBuilder(HttpMethod.Post, new Uri("http://localhost"),
@@ -228,14 +311,18 @@ public class HttpFileUploadBuilderTests
 
         Assert.Throws<ArgumentNullException>(() => builder.Build(null!, null!));
         Assert.Throws<ArgumentNullException>(() => builder.Build(httpRemoteOptions, null!));
+
+        var progressChannel = Channel.CreateUnbounded<FileTransferProgress>();
+        builder.SetAllowedFileExtensions(".txt");
+        Assert.Throws<InvalidOperationException>(() => builder.Build(httpRemoteOptions, progressChannel));
     }
 
     [Fact]
     public void Build_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var httpFileUploadBuilder = new HttpFileUploadBuilder(HttpMethod.Post, new Uri("http://localhost"),
-            fileFullName, "file");
+            filePath, "file");
 
         var httpRemoteOptions = new HttpRemoteOptions();
         var progressChannel = Channel.CreateUnbounded<FileTransferProgress>();

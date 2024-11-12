@@ -133,11 +133,11 @@ public class FileDownloadManagerTests(ITestOutputHelper output)
     [Fact]
     public void ShouldContinueWithDownload_Invalid_Parameters()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpFileDownloadBuilder =
-            new HttpFileDownloadBuilder(HttpMethod.Get, new Uri("https://furion.net")).SetDestinationPath(fileFullName);
+            new HttpFileDownloadBuilder(HttpMethod.Get, new Uri("https://furion.net")).SetDestinationPath(filePath);
         var fileDownloadManager = new FileDownloadManager(httpRemoteService, httpFileDownloadBuilder);
 
         var httpResponseMessage =
@@ -146,7 +146,7 @@ public class FileDownloadManagerTests(ITestOutputHelper output)
         var exception = Assert.Throws<InvalidOperationException>(() =>
             fileDownloadManager.ShouldContinueWithDownload(httpResponseMessage, out _));
 
-        Assert.Equal($"The destination path `{fileFullName}` already exists.", exception.Message);
+        Assert.Equal($"The destination path `{filePath}` already exists.", exception.Message);
 
         serviceProvider.Dispose();
     }
@@ -172,11 +172,11 @@ public class FileDownloadManagerTests(ITestOutputHelper output)
         Assert.True(fileDownloadManager2.ShouldContinueWithDownload(httpResponseMessage, out var destinationPath2));
         Assert.Equal(@"C:\Workspaces\index.html", destinationPath2);
 
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var fileDownloadManager3 = new FileDownloadManager(httpRemoteService,
-            httpFileDownloadBuilder.SetFileExistsBehavior(FileExistsBehavior.Skip).SetDestinationPath(fileFullName));
+            httpFileDownloadBuilder.SetFileExistsBehavior(FileExistsBehavior.Skip).SetDestinationPath(filePath));
         Assert.False(fileDownloadManager3.ShouldContinueWithDownload(httpResponseMessage, out var destinationPath3));
-        Assert.Equal(fileFullName, destinationPath3);
+        Assert.Equal(filePath, destinationPath3);
 
         serviceProvider.Dispose();
     }

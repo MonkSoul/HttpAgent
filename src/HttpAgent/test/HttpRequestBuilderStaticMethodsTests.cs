@@ -320,7 +320,7 @@ public class HttpRequestBuilderStaticMethodsTests
         Assert.Equal(HttpMethod.Post, httpFileUploadBuilder.Method);
         Assert.NotNull(httpFileUploadBuilder.RequestUri);
         Assert.Equal("http://localhost/", httpFileUploadBuilder.RequestUri.ToString());
-        Assert.Equal(@"C:\Workspaces\furion.html", httpFileUploadBuilder.FileFullName);
+        Assert.Equal(@"C:\Workspaces\furion.html", httpFileUploadBuilder.FilePath);
         Assert.Equal("file", httpFileUploadBuilder.Name);
 
         var httpFileUploadBuilder2 = HttpRequestBuilder.UploadFile(HttpMethod.Post, null, @"C:\Workspaces\furion.html");
@@ -351,7 +351,7 @@ public class HttpRequestBuilderStaticMethodsTests
         Assert.Equal(HttpMethod.Post, httpFileUploadBuilder7.Method);
         Assert.NotNull(httpFileUploadBuilder7.RequestUri);
         Assert.Equal("http://localhost/", httpFileUploadBuilder7.RequestUri.ToString());
-        Assert.Equal(@"C:\Workspaces\furion.html", httpFileUploadBuilder7.FileFullName);
+        Assert.Equal(@"C:\Workspaces\furion.html", httpFileUploadBuilder7.FilePath);
         Assert.Equal("fileinfo", httpFileUploadBuilder7.Name);
     }
 

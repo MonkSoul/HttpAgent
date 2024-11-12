@@ -183,7 +183,7 @@ public class HttpRemoteCasesTests
 
         await app.StartAsync();
 
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var httpRemoteService = app.Services.GetRequiredService<IHttpRemoteService>();
 
         var httpRemoteResult =
@@ -191,7 +191,7 @@ public class HttpRemoteCasesTests
                 HttpRequestBuilder.Post($"http://localhost:{port}/HttpRemote/SendFile")
                     .SetMultipartContent(mBuilder =>
                     {
-                        mBuilder.AddFileAsStream(fileFullName, "file");
+                        mBuilder.AddFileAsStream(filePath, "file");
                     }));
 
         Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
@@ -218,7 +218,7 @@ public class HttpRemoteCasesTests
 
         await app.StartAsync();
 
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var httpRemoteService = app.Services.GetRequiredService<IHttpRemoteService>();
 
         var httpRemoteResult =
@@ -226,7 +226,7 @@ public class HttpRemoteCasesTests
                 HttpRequestBuilder.Post($"http://localhost:{port}/HttpRemote/SendFile")
                     .SetMultipartContent(mBuilder =>
                     {
-                        mBuilder.AddFileAsByteArray(fileFullName, "file");
+                        mBuilder.AddFileAsByteArray(filePath, "file");
                     }));
 
         Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
@@ -325,8 +325,8 @@ public class HttpRemoteCasesTests
 
         await app.StartAsync();
 
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
-        var fileFullName2 = Path.Combine(AppContext.BaseDirectory, "test2.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath2 = Path.Combine(AppContext.BaseDirectory, "test2.txt");
         var httpRemoteService = app.Services.GetRequiredService<IHttpRemoteService>();
 
         var httpRemoteResult =
@@ -334,8 +334,8 @@ public class HttpRemoteCasesTests
                 HttpRequestBuilder.Post($"http://localhost:{port}/HttpRemote/SendFiles")
                     .SetMultipartContent(mBuilder =>
                     {
-                        mBuilder.AddFileAsStream(fileFullName, "files");
-                        mBuilder.AddFileAsStream(fileFullName2, "files");
+                        mBuilder.AddFileAsStream(filePath, "files");
+                        mBuilder.AddFileAsStream(filePath2, "files");
                     }));
 
         Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
@@ -362,8 +362,8 @@ public class HttpRemoteCasesTests
 
         await app.StartAsync();
 
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
-        var fileFullName2 = Path.Combine(AppContext.BaseDirectory, "test2.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath2 = Path.Combine(AppContext.BaseDirectory, "test2.txt");
         var httpRemoteService = app.Services.GetRequiredService<IHttpRemoteService>();
 
         var httpRemoteResult =
@@ -371,8 +371,8 @@ public class HttpRemoteCasesTests
                 HttpRequestBuilder.Post($"http://localhost:{port}/HttpRemote/SendFiles")
                     .SetMultipartContent(mBuilder =>
                     {
-                        mBuilder.AddFileAsByteArray(fileFullName, "files");
-                        mBuilder.AddFileAsByteArray(fileFullName2, "files");
+                        mBuilder.AddFileAsByteArray(filePath, "files");
+                        mBuilder.AddFileAsByteArray(filePath2, "files");
                     }));
 
         Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
@@ -399,7 +399,7 @@ public class HttpRemoteCasesTests
 
         await app.StartAsync();
 
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var httpRemoteService = app.Services.GetRequiredService<IHttpRemoteService>();
 
         var httpRemoteResult =
@@ -408,7 +408,7 @@ public class HttpRemoteCasesTests
                     .SetMultipartContent(mBuilder =>
                     {
                         mBuilder.AddJson(new { id = 1, name = "furion" });
-                        mBuilder.AddFileAsStream(fileFullName, "file");
+                        mBuilder.AddFileAsStream(filePath, "file");
                     }));
 
         Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
@@ -435,7 +435,7 @@ public class HttpRemoteCasesTests
 
         await app.StartAsync();
 
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var httpRemoteService = app.Services.GetRequiredService<IHttpRemoteService>();
 
         var httpRemoteResult =
@@ -445,7 +445,7 @@ public class HttpRemoteCasesTests
                     {
                         mBuilder.AddJsonProperty(1, "id");
                         mBuilder.AddJsonProperty("furion", "name");
-                        mBuilder.AddFileAsStream(fileFullName, "file");
+                        mBuilder.AddFileAsStream(filePath, "file");
                     }));
 
         Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
@@ -472,7 +472,7 @@ public class HttpRemoteCasesTests
 
         await app.StartAsync();
 
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var httpRemoteService = app.Services.GetRequiredService<IHttpRemoteService>();
 
         var httpRemoteResult =
@@ -481,7 +481,7 @@ public class HttpRemoteCasesTests
                     .SetMultipartContent(mBuilder =>
                     {
                         mBuilder.AddJson("{\"id\":1,\"name\":\"furion\"}");
-                        mBuilder.AddFileAsStream(fileFullName, "file");
+                        mBuilder.AddFileAsStream(filePath, "file");
                     }));
 
         Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);

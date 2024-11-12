@@ -22,9 +22,9 @@ public class FileUploadManagerTests(ITestOutputHelper output)
     {
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var fileUploadManager = new FileUploadManager(httpRemoteService,
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri("http://localhost:5000"), fileFullName, "file"));
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri("http://localhost:5000"), filePath, "file"));
 
         Assert.NotNull(fileUploadManager._httpFileUploadBuilder);
         Assert.NotNull(fileUploadManager._httpRemoteService);
@@ -34,7 +34,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         Assert.Null(fileUploadManager.FileTransferEventHandler);
 
         var fileUploadManager2 = new FileUploadManager(httpRemoteService,
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri("http://localhost:5000"), fileFullName, "file"),
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri("http://localhost:5000"), filePath, "file"),
             builder => builder.SetTimeout(100));
         Assert.NotNull(fileUploadManager2.RequestBuilder);
         Assert.Equal(TimeSpan.FromMilliseconds(100), fileUploadManager2.RequestBuilder.Timeout);
@@ -48,9 +48,9 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var i = 0;
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var httpFileUploadBuilder =
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri("https://furion.net"), fileFullName, "file")
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri("https://furion.net"), filePath, "file")
                 .SetOnProgressChanged(async _ =>
                 {
                     i += 1;
@@ -64,7 +64,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         for (var j = 0; j < 3; j++)
         {
             await fileUploadManager._progressChannel.Writer.WriteAsync(
-                new FileTransferProgress(fileFullName, -1));
+                new FileTransferProgress(filePath, -1));
         }
 
         await Task.Delay(200, progressCancellationTokenSource.Token);
@@ -85,9 +85,9 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var i = 0;
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var httpFileUploadBuilder =
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri("https://furion.net"), fileFullName, "file")
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri("https://furion.net"), filePath, "file")
                 .SetOnProgressChanged(async _ =>
                 {
                     i += 1;
@@ -104,7 +104,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         for (var j = 0; j < 3; j++)
         {
             await fileUploadManager._progressChannel.Writer.WriteAsync(
-                new FileTransferProgress(fileFullName, -1));
+                new FileTransferProgress(filePath, -1));
         }
 
         await Task.Delay(200, progressCancellationTokenSource.Token);
@@ -126,9 +126,9 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var (httpRemoteService, serviceProvider) =
             Helpers.CreateHttpRemoteService(fileTransferEventHandler: customFileTransferEventHandler);
 
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var httpFileUploadBuilder =
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri("https://furion.net"), fileFullName, "file")
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri("https://furion.net"), filePath, "file")
                 .SetOnTransferStarted(() => throw new Exception("出错了"));
         var fileUploadManager = new FileUploadManager(httpRemoteService, httpFileUploadBuilder);
 
@@ -142,9 +142,9 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var (httpRemoteService, serviceProvider) =
             Helpers.CreateHttpRemoteService(fileTransferEventHandler: customFileTransferEventHandler);
 
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var httpFileUploadBuilder =
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri("https://furion.net"), fileFullName, "file")
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri("https://furion.net"), filePath, "file")
                 .SetOnTransferCompleted(_ => throw new Exception("出错了"));
         var fileUploadManager = new FileUploadManager(httpRemoteService, httpFileUploadBuilder);
 
@@ -158,9 +158,9 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var (httpRemoteService, serviceProvider) =
             Helpers.CreateHttpRemoteService(fileTransferEventHandler: customFileTransferEventHandler);
 
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var httpFileUploadBuilder =
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri("https://furion.net"), fileFullName, "file")
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri("https://furion.net"), filePath, "file")
                 .SetOnTransferFailed(_ => throw new Exception("出错了"));
         var fileUploadManager = new FileUploadManager(httpRemoteService, httpFileUploadBuilder);
 
@@ -172,9 +172,9 @@ public class FileUploadManagerTests(ITestOutputHelper output)
     {
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var httpFileUploadBuilder =
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri("https://furion.net"), fileFullName, "file");
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri("https://furion.net"), filePath, "file");
         var fileUploadManager = new FileUploadManager(httpRemoteService, httpFileUploadBuilder);
 
         await Assert.ThrowsAsync<ArgumentNullException>(async () =>
@@ -190,13 +190,13 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var (httpRemoteService, serviceProvider) =
             Helpers.CreateHttpRemoteService(fileTransferEventHandler: customFileTransferEventHandler);
 
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var httpFileUploadBuilder =
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri("https://furion.net"), fileFullName, "file");
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri("https://furion.net"), filePath, "file");
         var fileUploadManager = new FileUploadManager(httpRemoteService, httpFileUploadBuilder);
 
         var fileTransferProgress =
-            new FileTransferProgress(fileFullName, -1);
+            new FileTransferProgress(filePath, -1);
         await fileUploadManager.HandleProgressChangedAsync(fileTransferProgress);
 
         var i = 0;
@@ -224,7 +224,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
     [Fact]
     public async Task Start_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -243,7 +243,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpFileUploadBuilder =
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), fileFullName, "file");
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), filePath, "file");
         var fileUploadManager = new FileUploadManager(httpRemoteService, httpFileUploadBuilder);
 
         // ReSharper disable once MethodHasAsyncOverload
@@ -260,7 +260,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
     [Fact]
     public async Task Start_WithCancellationToken_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -279,7 +279,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpFileUploadBuilder =
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), fileFullName, "file");
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), filePath, "file");
         var fileUploadManager = new FileUploadManager(httpRemoteService, httpFileUploadBuilder);
 
         using var cancellationTokenSource = new CancellationTokenSource();
@@ -297,7 +297,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
     [Fact]
     public async Task Start_WithOnProgressChanged_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -317,7 +317,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
 
         var i = 0;
         var httpFileUploadBuilder =
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), fileFullName, "file")
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), filePath, "file")
                 .SetOnProgressChanged(async _ =>
                 {
                     i += 1;
@@ -341,7 +341,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
     [Fact]
     public async Task Start_Filter_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -361,7 +361,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
 
         var i = 0;
         var httpFileUploadBuilder =
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), fileFullName, "file")
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), filePath, "file")
                 .SetOnTransferStarted(() =>
                 {
                     i += 1;
@@ -389,7 +389,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
     [Fact]
     public async Task Start_EventHandler_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -411,7 +411,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
 
         var i = 0;
         var httpFileUploadBuilder =
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), fileFullName, "file")
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), filePath, "file")
                 .SetOnTransferStarted(() =>
                 {
                     i += 1;
@@ -440,7 +440,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
     [Fact]
     public async Task Start_WithTransferFailed_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -463,7 +463,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
 
         var i = 0;
         var httpFileUploadBuilder =
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), fileFullName, "file")
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), filePath, "file")
                 .SetOnTransferStarted(() =>
                 {
                     i += 1;
@@ -495,7 +495,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
     [Fact]
     public async Task StartAsync_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -514,7 +514,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpFileUploadBuilder =
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), fileFullName, "file");
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), filePath, "file");
         var fileUploadManager = new FileUploadManager(httpRemoteService, httpFileUploadBuilder);
 
         var httpResponseMessage = await fileUploadManager.StartAsync();
@@ -530,7 +530,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
     [Fact]
     public async Task StartAsync_WithCancellationToken_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -549,7 +549,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpFileUploadBuilder =
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), fileFullName, "file");
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), filePath, "file");
         var fileUploadManager = new FileUploadManager(httpRemoteService, httpFileUploadBuilder);
 
         using var cancellationTokenSource = new CancellationTokenSource();
@@ -567,7 +567,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
     [Fact]
     public async Task StartAsync_WithOnProgressChanged_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -587,7 +587,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
 
         var i = 0;
         var httpFileUploadBuilder =
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), fileFullName, "file")
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), filePath, "file")
                 .SetOnProgressChanged(async _ =>
                 {
                     i += 1;
@@ -610,7 +610,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
     [Fact]
     public async Task StartAsync_Filter_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -630,7 +630,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
 
         var i = 0;
         var httpFileUploadBuilder =
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), fileFullName, "file")
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), filePath, "file")
                 .SetOnTransferStarted(() =>
                 {
                     i += 1;
@@ -657,7 +657,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
     [Fact]
     public async Task StartAsync_EventHandler_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -679,7 +679,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
 
         var i = 0;
         var httpFileUploadBuilder =
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), fileFullName, "file")
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), filePath, "file")
                 .SetOnTransferStarted(() =>
                 {
                     i += 1;
@@ -707,7 +707,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
     [Fact]
     public async Task StartAsync_WithTransferFailed_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -730,7 +730,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
 
         var i = 0;
         var httpFileUploadBuilder =
-            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), fileFullName, "file")
+            new HttpFileUploadBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test"), filePath, "file")
                 .SetOnTransferStarted(() =>
                 {
                     i += 1;

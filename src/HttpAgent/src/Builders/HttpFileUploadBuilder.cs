@@ -7,7 +7,7 @@ namespace HttpAgent;
 /// <summary>
 ///     HTTP 文件上传构建器
 /// </summary>
-/// <remarks>使用 <c>HttpRequestBuilder.UploadFile(requestUri, fileFullName, name)</c> 静态方法创建。</remarks>
+/// <remarks>使用 <c>HttpRequestBuilder.UploadFile(requestUri, filePath, name)</c> 静态方法创建。</remarks>
 public sealed class HttpFileUploadBuilder
 {
     /// <summary>
@@ -15,19 +15,19 @@ public sealed class HttpFileUploadBuilder
     /// </summary>
     /// <param name="httpMethod">请求方式</param>
     /// <param name="requestUri">请求地址</param>
-    /// <param name="fileFullName">文件完整路径</param>
+    /// <param name="filePath">文件路径</param>
     /// <param name="name">表单名称</param>
-    internal HttpFileUploadBuilder(HttpMethod httpMethod, Uri? requestUri, string fileFullName, string name)
+    internal HttpFileUploadBuilder(HttpMethod httpMethod, Uri? requestUri, string filePath, string name)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(httpMethod);
-        ArgumentException.ThrowIfNullOrWhiteSpace(fileFullName);
+        ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
         Method = httpMethod;
         RequestUri = requestUri;
 
-        FileFullName = fileFullName;
+        FilePath = filePath;
         Name = name;
     }
 
@@ -42,9 +42,9 @@ public sealed class HttpFileUploadBuilder
     public HttpMethod Method { get; }
 
     /// <summary>
-    ///     文件完整路径
+    ///     文件路径
     /// </summary>
-    public string FileFullName { get; }
+    public string FilePath { get; }
 
     /// <summary>
     ///     表单名称
@@ -55,6 +55,16 @@ public sealed class HttpFileUploadBuilder
     ///     内容类型
     /// </summary>
     public string? ContentType { get; private set; }
+
+    /// <summary>
+    ///     允许的文件拓展名
+    /// </summary>
+    public string[]? AllowedFileExtensions { get; private set; }
+
+    /// <summary>
+    ///     允许的文件大小。以字节为单位
+    /// </summary>
+    public long? MaxFileSizeInBytes { get; private set; }
 
     /// <summary>
     ///     进度更新（通知）的间隔时间
@@ -103,6 +113,62 @@ public sealed class HttpFileUploadBuilder
         var mediaTypeHeaderValue = MediaTypeHeaderValue.Parse(contentType);
 
         ContentType = mediaTypeHeaderValue.MediaType;
+
+        return this;
+    }
+
+    /// <summary>
+    ///     设置允许的文件拓展名
+    /// </summary>
+    /// <param name="allowedFileExtensions">允许的文件拓展名</param>
+    /// <returns>
+    ///     <see cref="HttpFileUploadBuilder" />
+    /// </returns>
+    public HttpFileUploadBuilder SetAllowedFileExtensions(string[] allowedFileExtensions)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(allowedFileExtensions);
+
+        AllowedFileExtensions = allowedFileExtensions;
+
+        return this;
+    }
+
+    /// <summary>
+    ///     设置允许的文件拓展名
+    /// </summary>
+    /// <param name="allowedFileExtensions">允许的文件扩展名字符串，用分号分隔</param>
+    /// <returns>
+    ///     <see cref="HttpFileUploadBuilder" />
+    /// </returns>
+    public HttpFileUploadBuilder SetAllowedFileExtensions(string allowedFileExtensions)
+    {
+        // 空检查
+        ArgumentException.ThrowIfNullOrWhiteSpace(allowedFileExtensions);
+
+        AllowedFileExtensions = allowedFileExtensions.Split(';', StringSplitOptions.RemoveEmptyEntries);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     设置允许的文件大小
+    /// </summary>
+    /// <param name="maxFileSizeInBytes">允许的文件大小。以字节为单位。</param>
+    /// <returns>
+    ///     <see cref="HttpFileUploadBuilder" />
+    /// </returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    public HttpFileUploadBuilder SetMaxFileSizeInBytes(long maxFileSizeInBytes)
+    {
+        // 小于或等于 0 检查
+        if (maxFileSizeInBytes <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(maxFileSizeInBytes),
+                "Max file size in bytes must be greater than zero.");
+        }
+
+        MaxFileSizeInBytes = maxFileSizeInBytes;
 
         return this;
     }
@@ -253,9 +319,12 @@ public sealed class HttpFileUploadBuilder
         ArgumentNullException.ThrowIfNull(httpRemoteOptions);
         ArgumentNullException.ThrowIfNull(progressChannel);
 
+        // 检查文件拓展名和大小合法性
+        EnsureLegalData(FilePath, AllowedFileExtensions, MaxFileSizeInBytes);
+
         // 初始化 HttpRequestBuilder 实例
         var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure).SetMultipartContent(builder =>
-            builder.AddFileWithProgressAsStream(FileFullName, Name, progressChannel,
+            builder.AddFileWithProgressAsStream(FilePath, Name, progressChannel,
                 ContentType ?? MediaTypeNames.Application.Octet));
 
         // 检查是否设置了事件处理程序且该处理程序实现了 IHttpRequestEventHandler 接口，如果有则设置给 httpRequestBuilder
@@ -266,5 +335,29 @@ public sealed class HttpFileUploadBuilder
         }
 
         return httpRequestBuilder;
+    }
+
+    /// <summary>
+    ///     检查文件拓展名和大小合法性
+    /// </summary>
+    /// <param name="filePath">文件路径</param>
+    /// <param name="allowedFileExtensions">允许的文件拓展名</param>
+    /// <param name="maxFileSizeInBytes">允许的文件大小。以字节为单位</param>
+    internal static void EnsureLegalData(string filePath, string[]? allowedFileExtensions, long? maxFileSizeInBytes)
+    {
+        // 空检查
+        ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
+
+        // 空检查
+        if (!allowedFileExtensions.IsNullOrEmpty())
+        {
+            FileUtility.ValidateExtension(filePath, allowedFileExtensions);
+        }
+
+        // 空检查
+        if (maxFileSizeInBytes is not null)
+        {
+            FileUtility.ValidateSize(filePath, maxFileSizeInBytes.Value);
+        }
     }
 }

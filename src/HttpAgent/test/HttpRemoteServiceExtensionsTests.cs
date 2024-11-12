@@ -697,7 +697,7 @@ public class HttpRemoteServiceExtensionsTests
     [Fact]
     public async Task UploadFile_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -717,7 +717,7 @@ public class HttpRemoteServiceExtensionsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         // ReSharper disable once MethodHasAsyncOverload
-        var httpResponseMessage = httpRemoteService.UploadFile($"http://localhost:{port}/test", fileFullName);
+        var httpResponseMessage = httpRemoteService.UploadFile($"http://localhost:{port}/test", filePath);
         var result = await httpResponseMessage.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal("test.txt", result);
@@ -729,7 +729,7 @@ public class HttpRemoteServiceExtensionsTests
     [Fact]
     public async Task UploadFile_WithCancellationToken_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -753,7 +753,7 @@ public class HttpRemoteServiceExtensionsTests
 
         Assert.Throws<TaskCanceledException>(() =>
         {
-            var httpResponseMessage = httpRemoteService.UploadFile($"http://localhost:{port}/test", fileFullName,
+            var httpResponseMessage = httpRemoteService.UploadFile($"http://localhost:{port}/test", filePath,
                 cancellationToken: cancellationTokenSource.Token);
         });
 
@@ -764,7 +764,7 @@ public class HttpRemoteServiceExtensionsTests
     [Fact]
     public async Task UploadFile_WithHttpRequestBuilder_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -785,7 +785,7 @@ public class HttpRemoteServiceExtensionsTests
 
         var i = 0;
         // ReSharper disable once MethodHasAsyncOverload
-        var httpResponseMessage = httpRemoteService.UploadFile($"http://localhost:{port}/test", fileFullName,
+        var httpResponseMessage = httpRemoteService.UploadFile($"http://localhost:{port}/test", filePath,
             configure: requestBuilder =>
             {
                 requestBuilder.SetOnPreSendRequest(_ =>
@@ -806,7 +806,7 @@ public class HttpRemoteServiceExtensionsTests
     [Fact]
     public async Task UploadFileAsync_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -826,7 +826,7 @@ public class HttpRemoteServiceExtensionsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpResponseMessage =
-            await httpRemoteService.UploadFileAsync($"http://localhost:{port}/test", fileFullName);
+            await httpRemoteService.UploadFileAsync($"http://localhost:{port}/test", filePath);
 
         var result = await httpResponseMessage.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
@@ -839,7 +839,7 @@ public class HttpRemoteServiceExtensionsTests
     [Fact]
     public async Task UploadFileAsync_WithCancellationToken_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -864,7 +864,7 @@ public class HttpRemoteServiceExtensionsTests
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
             var httpResponseMessage = await httpRemoteService.UploadFileAsync($"http://localhost:{port}/test",
-                fileFullName, cancellationToken: cancellationTokenSource.Token);
+                filePath, cancellationToken: cancellationTokenSource.Token);
         });
 
         await app.StopAsync();
@@ -874,7 +874,7 @@ public class HttpRemoteServiceExtensionsTests
     [Fact]
     public async Task UploadFileAsync_WithHttpRequestBuilder_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -895,7 +895,7 @@ public class HttpRemoteServiceExtensionsTests
 
         var i = 0;
         var httpResponseMessage = await httpRemoteService.UploadFileAsync($"http://localhost:{port}/test",
-            fileFullName, configure: requestBuilder =>
+            filePath, configure: requestBuilder =>
             {
                 requestBuilder.SetOnPreSendRequest(_ =>
                 {
@@ -915,7 +915,7 @@ public class HttpRemoteServiceExtensionsTests
     [Fact]
     public async Task Send_UploadFile_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -935,7 +935,7 @@ public class HttpRemoteServiceExtensionsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpFileUploadBuilder =
-            HttpRequestBuilder.UploadFile(new Uri($"http://localhost:{port}/test"), fileFullName);
+            HttpRequestBuilder.UploadFile(new Uri($"http://localhost:{port}/test"), filePath);
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpResponseMessage = httpRemoteService.Send(httpFileUploadBuilder);
@@ -950,7 +950,7 @@ public class HttpRemoteServiceExtensionsTests
     [Fact]
     public async Task Send_UploadFile_WithCancellationToken_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -970,7 +970,7 @@ public class HttpRemoteServiceExtensionsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpFileUploadBuilder =
-            HttpRequestBuilder.UploadFile(new Uri($"http://localhost:{port}/test"), fileFullName).SetOnProgressChanged(
+            HttpRequestBuilder.UploadFile(new Uri($"http://localhost:{port}/test"), filePath).SetOnProgressChanged(
                 async _ =>
                 {
                     await Task.CompletedTask;
@@ -991,7 +991,7 @@ public class HttpRemoteServiceExtensionsTests
     [Fact]
     public async Task Send_UploadFile_WithOnProgressChanged_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -1012,7 +1012,7 @@ public class HttpRemoteServiceExtensionsTests
 
         var i = 0;
         var httpFileUploadBuilder =
-            HttpRequestBuilder.UploadFile(new Uri($"http://localhost:{port}/test"), fileFullName).SetOnProgressChanged(
+            HttpRequestBuilder.UploadFile(new Uri($"http://localhost:{port}/test"), filePath).SetOnProgressChanged(
                 async _ =>
                 {
                     i += 1;
@@ -1034,7 +1034,7 @@ public class HttpRemoteServiceExtensionsTests
     [Fact]
     public async Task Send_UploadFile_WithHttpRequestBuilder_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -1054,7 +1054,7 @@ public class HttpRemoteServiceExtensionsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpFileUploadBuilder =
-            HttpRequestBuilder.UploadFile(new Uri($"http://localhost:{port}/test"), fileFullName);
+            HttpRequestBuilder.UploadFile(new Uri($"http://localhost:{port}/test"), filePath);
 
         var i = 0;
         // ReSharper disable once MethodHasAsyncOverload
@@ -1077,7 +1077,7 @@ public class HttpRemoteServiceExtensionsTests
     [Fact]
     public async Task Send_UploadFile_EventHandler_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -1099,7 +1099,7 @@ public class HttpRemoteServiceExtensionsTests
             Helpers.CreateHttpRemoteService(fileTransferEventHandler: customFileTransferEventHandler);
 
         var httpFileUploadBuilder =
-            HttpRequestBuilder.UploadFile(new Uri($"http://localhost:{port}/test"), fileFullName);
+            HttpRequestBuilder.UploadFile(new Uri($"http://localhost:{port}/test"), filePath);
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpResponseMessage =
@@ -1117,7 +1117,7 @@ public class HttpRemoteServiceExtensionsTests
     [Fact]
     public async Task SendAsync_UploadFile_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -1137,7 +1137,7 @@ public class HttpRemoteServiceExtensionsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpFileUploadBuilder =
-            HttpRequestBuilder.UploadFile(new Uri($"http://localhost:{port}/test"), fileFullName);
+            HttpRequestBuilder.UploadFile(new Uri($"http://localhost:{port}/test"), filePath);
 
         var httpResponseMessage = await httpRemoteService.SendAsync(httpFileUploadBuilder);
 
@@ -1152,7 +1152,7 @@ public class HttpRemoteServiceExtensionsTests
     [Fact]
     public async Task SendAsync_UploadFile_WithCancellationToken_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -1172,7 +1172,7 @@ public class HttpRemoteServiceExtensionsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpFileUploadBuilder =
-            HttpRequestBuilder.UploadFile(new Uri($"http://localhost:{port}/test"), fileFullName).SetOnProgressChanged(
+            HttpRequestBuilder.UploadFile(new Uri($"http://localhost:{port}/test"), filePath).SetOnProgressChanged(
                 async _ =>
                 {
                     await Task.CompletedTask;
@@ -1194,7 +1194,7 @@ public class HttpRemoteServiceExtensionsTests
     [Fact]
     public async Task SendAsync_UploadFile_WithOnProgressChanged_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -1216,7 +1216,7 @@ public class HttpRemoteServiceExtensionsTests
 
         var i = 0;
         var httpFileUploadBuilder =
-            HttpRequestBuilder.UploadFile(new Uri($"http://localhost:{port}/test"), fileFullName).SetOnProgressChanged(
+            HttpRequestBuilder.UploadFile(new Uri($"http://localhost:{port}/test"), filePath).SetOnProgressChanged(
                 async _ =>
                 {
                     i += 1;
@@ -1237,7 +1237,7 @@ public class HttpRemoteServiceExtensionsTests
     [Fact]
     public async Task SendAsync_UploadFile_WithHttpRequestBuilder_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -1257,7 +1257,7 @@ public class HttpRemoteServiceExtensionsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpFileUploadBuilder =
-            HttpRequestBuilder.UploadFile(new Uri($"http://localhost:{port}/test"), fileFullName);
+            HttpRequestBuilder.UploadFile(new Uri($"http://localhost:{port}/test"), filePath);
 
         var i = 0;
         var httpResponseMessage = await httpRemoteService.SendAsync(httpFileUploadBuilder, requestBuilder =>
@@ -1280,7 +1280,7 @@ public class HttpRemoteServiceExtensionsTests
     [Fact]
     public async Task SendAsync_UploadFile_EventHandler_ReturnOK()
     {
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -1302,7 +1302,7 @@ public class HttpRemoteServiceExtensionsTests
             Helpers.CreateHttpRemoteService(fileTransferEventHandler: customFileTransferEventHandler);
 
         var httpFileUploadBuilder =
-            HttpRequestBuilder.UploadFile(new Uri($"http://localhost:{port}/test"), fileFullName);
+            HttpRequestBuilder.UploadFile(new Uri($"http://localhost:{port}/test"), filePath);
 
         var httpResponseMessage = await httpRemoteService.SendAsync(httpFileUploadBuilder
             .SetEventHandler<CustomFileTransferEventHandler>());

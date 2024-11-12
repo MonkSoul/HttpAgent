@@ -39,19 +39,17 @@ internal sealed partial class HttpRemoteService
         new FileDownloadManager(this, httpFileDownloadBuilder, configure).StartAsync(cancellationToken);
 
     /// <inheritdoc />
-    public HttpResponseMessage UploadFile(string? requestUri, string fileFullName, string name = "file",
-        Func<FileTransferProgress, Task>? onProgressChanged = null,
-        Action<HttpRequestBuilder>? configure = null,
+    public HttpResponseMessage UploadFile(string? requestUri, string filePath, string name = "file",
+        Func<FileTransferProgress, Task>? onProgressChanged = null, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) =>
-        Send(HttpRequestBuilder.UploadFile(requestUri, fileFullName, name, onProgressChanged), configure,
+        Send(HttpRequestBuilder.UploadFile(requestUri, filePath, name, onProgressChanged), configure,
             cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpResponseMessage> UploadFileAsync(string? requestUri, string fileFullName, string name = "file",
-        Func<FileTransferProgress, Task>? onProgressChanged = null,
-        Action<HttpRequestBuilder>? configure = null,
+    public Task<HttpResponseMessage> UploadFileAsync(string? requestUri, string filePath, string name = "file",
+        Func<FileTransferProgress, Task>? onProgressChanged = null, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) =>
-        SendAsync(HttpRequestBuilder.UploadFile(requestUri, fileFullName, name, onProgressChanged), configure,
+        SendAsync(HttpRequestBuilder.UploadFile(requestUri, filePath, name, onProgressChanged), configure,
             cancellationToken);
 
     /// <inheritdoc />

@@ -359,28 +359,28 @@ public class HttpMultipartFormDataBuilderTests
     public void AddFileAsStream_Invalid_Parameters()
     {
         var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
-        var fileFullNameNotFound = Path.Combine(AppContext.BaseDirectory, "not-found.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePathNotFound = Path.Combine(AppContext.BaseDirectory, "not-found.txt");
 
-        // fileFullName 为空
+        // filePath 为空
         Assert.Throws<ArgumentNullException>(() => builder.AddFileAsStream(null!, null!, null!));
         Assert.Throws<ArgumentException>(() => builder.AddFileAsStream(string.Empty, null!, null!));
         Assert.Throws<ArgumentException>(() => builder.AddFileAsStream(" ", null!, null!));
 
         // name 为空
-        Assert.Throws<ArgumentNullException>(() => builder.AddFileAsStream(fileFullName, null!, null!));
-        Assert.Throws<ArgumentException>(() => builder.AddFileAsStream(fileFullName, string.Empty, null!));
-        Assert.Throws<ArgumentException>(() => builder.AddFileAsStream(fileFullName, " ", null!));
+        Assert.Throws<ArgumentNullException>(() => builder.AddFileAsStream(filePath, null!, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddFileAsStream(filePath, string.Empty, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddFileAsStream(filePath, " ", null!));
 
         // content-type 为空
-        Assert.Throws<ArgumentNullException>(() => builder.AddFileAsStream(fileFullName, "test", null!));
-        Assert.Throws<ArgumentException>(() => builder.AddFileAsStream(fileFullName, "test", string.Empty));
-        Assert.Throws<ArgumentException>(() => builder.AddFileAsStream(fileFullName, "test", " "));
+        Assert.Throws<ArgumentNullException>(() => builder.AddFileAsStream(filePath, "test", null!));
+        Assert.Throws<ArgumentException>(() => builder.AddFileAsStream(filePath, "test", string.Empty));
+        Assert.Throws<ArgumentException>(() => builder.AddFileAsStream(filePath, "test", " "));
 
         // 文件路径不存在
         var exception =
-            Assert.Throws<FileNotFoundException>(() => builder.AddFileAsStream(fileFullNameNotFound, "test"));
-        Assert.Equal($"The specified file `{fileFullNameNotFound}` does not exist.",
+            Assert.Throws<FileNotFoundException>(() => builder.AddFileAsStream(filePathNotFound, "test"));
+        Assert.Equal($"The specified file `{filePathNotFound}` does not exist.",
             exception.Message);
     }
 
@@ -388,9 +388,9 @@ public class HttpMultipartFormDataBuilderTests
     public void AddFileAsStream_ReturnOK()
     {
         var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
-        builder.AddFileAsStream(fileFullName, "test", "image/jpeg");
+        builder.AddFileAsStream(filePath, "test", "image/jpeg");
         Assert.Single(builder._partContents);
         Assert.Equal("test", builder._partContents[0].Name);
         Assert.Equal("image/jpeg", builder._partContents[0].ContentType);
@@ -403,7 +403,7 @@ public class HttpMultipartFormDataBuilderTests
         Assert.Single(builder._httpRequestBuilder.Disposables);
         Assert.Equal(typeof(FileStream), builder._httpRequestBuilder.Disposables[0].GetType());
 
-        builder.AddFileAsStream(fileFullName, "test", "image/jpeg;charset=utf-8");
+        builder.AddFileAsStream(filePath, "test", "image/jpeg;charset=utf-8");
         Assert.Equal(2, builder._partContents.Count);
         Assert.Equal("test", builder._partContents[1].Name);
         Assert.Equal("image/jpeg", builder._partContents[1].ContentType);
@@ -412,7 +412,7 @@ public class HttpMultipartFormDataBuilderTests
         Assert.True(builder._partContents[1].RawContent is FileStream);
         Assert.Equal("test.txt", builder._partContents[1].FileName);
 
-        builder.AddFileAsStream(fileFullName, "test", "image/jpeg;charset=utf-8", Encoding.UTF32);
+        builder.AddFileAsStream(filePath, "test", "image/jpeg;charset=utf-8", Encoding.UTF32);
         Assert.Equal(3, builder._partContents.Count);
         Assert.Equal("test", builder._partContents[2].Name);
         Assert.Equal("image/jpeg", builder._partContents[2].ContentType);
@@ -426,38 +426,38 @@ public class HttpMultipartFormDataBuilderTests
     public void AddFileWithProgressAsStream_Invalid_Parameters()
     {
         var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
-        var fileFullNameNotFound = Path.Combine(AppContext.BaseDirectory, "not-found.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePathNotFound = Path.Combine(AppContext.BaseDirectory, "not-found.txt");
 
-        // fileFullName 为空
+        // filePath 为空
         Assert.Throws<ArgumentNullException>(() => builder.AddFileWithProgressAsStream(null!, null!, null!, null!));
         Assert.Throws<ArgumentException>(() => builder.AddFileWithProgressAsStream(string.Empty, null!, null!, null!));
         Assert.Throws<ArgumentException>(() => builder.AddFileWithProgressAsStream(" ", null!, null!, null!));
 
         // name 为空
         Assert.Throws<ArgumentNullException>(() =>
-            builder.AddFileWithProgressAsStream(fileFullName, null!, null!, null!));
+            builder.AddFileWithProgressAsStream(filePath, null!, null!, null!));
         Assert.Throws<ArgumentException>(() =>
-            builder.AddFileWithProgressAsStream(fileFullName, string.Empty, null!, null!));
-        Assert.Throws<ArgumentException>(() => builder.AddFileWithProgressAsStream(fileFullName, " ", null!, null!));
+            builder.AddFileWithProgressAsStream(filePath, string.Empty, null!, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddFileWithProgressAsStream(filePath, " ", null!, null!));
 
         // progressChannel 为空
         Assert.Throws<ArgumentNullException>(() =>
-            builder.AddFileWithProgressAsStream(fileFullName, "test", null!, null!));
+            builder.AddFileWithProgressAsStream(filePath, "test", null!, null!));
 
         // content-type 为空
         var progressChannel = Channel.CreateUnbounded<FileTransferProgress>();
         Assert.Throws<ArgumentNullException>(() =>
-            builder.AddFileWithProgressAsStream(fileFullName, "test", progressChannel, null!));
+            builder.AddFileWithProgressAsStream(filePath, "test", progressChannel, null!));
         Assert.Throws<ArgumentException>(() =>
-            builder.AddFileWithProgressAsStream(fileFullName, "test", progressChannel, string.Empty));
+            builder.AddFileWithProgressAsStream(filePath, "test", progressChannel, string.Empty));
         Assert.Throws<ArgumentException>(
-            () => builder.AddFileWithProgressAsStream(fileFullName, "test", progressChannel, " "));
+            () => builder.AddFileWithProgressAsStream(filePath, "test", progressChannel, " "));
 
         // 文件路径不存在
         var exception = Assert.Throws<FileNotFoundException>(() =>
-            builder.AddFileWithProgressAsStream(fileFullNameNotFound, "test", progressChannel));
-        Assert.Equal($"The specified file `{fileFullNameNotFound}` does not exist.",
+            builder.AddFileWithProgressAsStream(filePathNotFound, "test", progressChannel));
+        Assert.Equal($"The specified file `{filePathNotFound}` does not exist.",
             exception.Message);
     }
 
@@ -465,10 +465,10 @@ public class HttpMultipartFormDataBuilderTests
     public void AddFileWithProgressAsStream_ReturnOK()
     {
         var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var progressChannel = Channel.CreateUnbounded<FileTransferProgress>();
 
-        builder.AddFileWithProgressAsStream(fileFullName, "test", progressChannel, "image/jpeg");
+        builder.AddFileWithProgressAsStream(filePath, "test", progressChannel, "image/jpeg");
         Assert.Single(builder._partContents);
         Assert.Equal("test", builder._partContents[0].Name);
         Assert.Equal("image/jpeg", builder._partContents[0].ContentType);
@@ -481,7 +481,7 @@ public class HttpMultipartFormDataBuilderTests
         Assert.Single(builder._httpRequestBuilder.Disposables);
         Assert.Equal(typeof(ProgressFileStream), builder._httpRequestBuilder.Disposables[0].GetType());
 
-        builder.AddFileWithProgressAsStream(fileFullName, "test", progressChannel, "image/jpeg;charset=utf-8");
+        builder.AddFileWithProgressAsStream(filePath, "test", progressChannel, "image/jpeg;charset=utf-8");
         Assert.Equal(2, builder._partContents.Count);
         Assert.Equal("test", builder._partContents[1].Name);
         Assert.Equal("image/jpeg", builder._partContents[1].ContentType);
@@ -490,7 +490,7 @@ public class HttpMultipartFormDataBuilderTests
         Assert.True(builder._partContents[1].RawContent is ProgressFileStream);
         Assert.Equal("test.txt", builder._partContents[1].FileName);
 
-        builder.AddFileWithProgressAsStream(fileFullName, "test", progressChannel, "image/jpeg;charset=utf-8",
+        builder.AddFileWithProgressAsStream(filePath, "test", progressChannel, "image/jpeg;charset=utf-8",
             Encoding.UTF32);
         Assert.Equal(3, builder._partContents.Count);
         Assert.Equal("test", builder._partContents[2].Name);
@@ -505,28 +505,28 @@ public class HttpMultipartFormDataBuilderTests
     public void AddFileAsByteArray_Invalid_Parameters()
     {
         var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
-        var fileFullNameNotFound = Path.Combine(AppContext.BaseDirectory, "not-found.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePathNotFound = Path.Combine(AppContext.BaseDirectory, "not-found.txt");
 
-        // fileFullName 为空
+        // filePath 为空
         Assert.Throws<ArgumentNullException>(() => builder.AddFileAsByteArray(null!, null!, null!));
         Assert.Throws<ArgumentException>(() => builder.AddFileAsByteArray(string.Empty, null!, null!));
         Assert.Throws<ArgumentException>(() => builder.AddFileAsByteArray(" ", null!, null!));
 
         // name 为空
-        Assert.Throws<ArgumentNullException>(() => builder.AddFileAsByteArray(fileFullName, null!, null!));
-        Assert.Throws<ArgumentException>(() => builder.AddFileAsByteArray(fileFullName, string.Empty, null!));
-        Assert.Throws<ArgumentException>(() => builder.AddFileAsByteArray(fileFullName, " ", null!));
+        Assert.Throws<ArgumentNullException>(() => builder.AddFileAsByteArray(filePath, null!, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddFileAsByteArray(filePath, string.Empty, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddFileAsByteArray(filePath, " ", null!));
 
         // content-type 为空
-        Assert.Throws<ArgumentNullException>(() => builder.AddFileAsByteArray(fileFullName, "test", null!));
-        Assert.Throws<ArgumentException>(() => builder.AddFileAsByteArray(fileFullName, "test", string.Empty));
-        Assert.Throws<ArgumentException>(() => builder.AddFileAsByteArray(fileFullName, "test", " "));
+        Assert.Throws<ArgumentNullException>(() => builder.AddFileAsByteArray(filePath, "test", null!));
+        Assert.Throws<ArgumentException>(() => builder.AddFileAsByteArray(filePath, "test", string.Empty));
+        Assert.Throws<ArgumentException>(() => builder.AddFileAsByteArray(filePath, "test", " "));
 
         // 文件路径不存在
         var exception =
-            Assert.Throws<FileNotFoundException>(() => builder.AddFileAsByteArray(fileFullNameNotFound, "test"));
-        Assert.Equal($"The specified file `{fileFullNameNotFound}` does not exist.",
+            Assert.Throws<FileNotFoundException>(() => builder.AddFileAsByteArray(filePathNotFound, "test"));
+        Assert.Equal($"The specified file `{filePathNotFound}` does not exist.",
             exception.Message);
     }
 
@@ -534,9 +534,9 @@ public class HttpMultipartFormDataBuilderTests
     public void AddFileAsByteArray_ReturnOK()
     {
         var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
 
-        builder.AddFileAsByteArray(fileFullName, "test", "image/jpeg");
+        builder.AddFileAsByteArray(filePath, "test", "image/jpeg");
         Assert.Single(builder._partContents);
         Assert.Equal("test", builder._partContents[0].Name);
         Assert.Equal("image/jpeg", builder._partContents[0].ContentType);
@@ -546,7 +546,7 @@ public class HttpMultipartFormDataBuilderTests
         Assert.Equal("test.txt", builder._partContents[0].FileName);
         Assert.Equal(21, builder._partContents[0].FileSize);
 
-        builder.AddFileAsByteArray(fileFullName, "test", "image/jpeg;charset=utf-8");
+        builder.AddFileAsByteArray(filePath, "test", "image/jpeg;charset=utf-8");
         Assert.Equal(2, builder._partContents.Count);
         Assert.Equal("test", builder._partContents[1].Name);
         Assert.Equal("image/jpeg", builder._partContents[1].ContentType);
@@ -555,7 +555,7 @@ public class HttpMultipartFormDataBuilderTests
         Assert.True(builder._partContents[1].RawContent is byte[]);
         Assert.Equal("test.txt", builder._partContents[1].FileName);
 
-        builder.AddFileAsByteArray(fileFullName, "test", "image/jpeg;charset=utf-8", Encoding.UTF32);
+        builder.AddFileAsByteArray(filePath, "test", "image/jpeg;charset=utf-8", Encoding.UTF32);
         Assert.Equal(3, builder._partContents.Count);
         Assert.Equal("test", builder._partContents[2].Name);
         Assert.Equal("image/jpeg", builder._partContents[2].ContentType);

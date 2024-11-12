@@ -256,8 +256,8 @@ public class HttpContextForwardBuilderTests
         var multipartFormDataContent = new MultipartFormDataContent(boundary);
         multipartFormDataContent.Add(new StringContent("1"), "Id");
         multipartFormDataContent.Add(new StringContent("Furion"), "Name");
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
-        var bytes = await File.ReadAllBytesAsync(fileFullName);
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var bytes = await File.ReadAllBytesAsync(filePath);
         multipartFormDataContent.Add(new ByteArrayContent(bytes), "File", "test.txt");
 
         httpRequestMessage.Content = multipartFormDataContent;
@@ -361,8 +361,8 @@ public class HttpContextForwardBuilderTests
         var multipartFormDataContent = new MultipartFormDataContent(boundary);
         multipartFormDataContent.Add(new StringContent("1"), "Id");
         multipartFormDataContent.Add(new StringContent("Furion"), "Name");
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
-        var bytes = await File.ReadAllBytesAsync(fileFullName);
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var bytes = await File.ReadAllBytesAsync(filePath);
         multipartFormDataContent.Add(new ByteArrayContent(bytes), "File", "test.txt");
 
         httpRequestMessage.Content = multipartFormDataContent;
@@ -449,8 +449,8 @@ public class HttpContextForwardBuilderTests
         var multipartFormDataContent = new MultipartFormDataContent(boundary);
         multipartFormDataContent.Add(new StringContent("1"), "Id");
         multipartFormDataContent.Add(new StringContent("Furion"), "Name");
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
-        var bytes = await File.ReadAllBytesAsync(fileFullName);
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var bytes = await File.ReadAllBytesAsync(filePath);
         multipartFormDataContent.Add(new ByteArrayContent(bytes), "File", "test.txt");
 
         httpRequestMessage.Content = multipartFormDataContent;
@@ -640,8 +640,8 @@ public class HttpContextForwardBuilderTests
         var multipartFormDataContent = new MultipartFormDataContent(boundary);
         multipartFormDataContent.Add(new StringContent("1"), "Id");
         multipartFormDataContent.Add(new StringContent("Furion"), "Name");
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
-        var bytes = await File.ReadAllBytesAsync(fileFullName);
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var bytes = await File.ReadAllBytesAsync(filePath);
         multipartFormDataContent.Add(new ByteArrayContent(bytes), "File", "test.txt");
 
         httpRequestMessage.Content = multipartFormDataContent;
@@ -837,8 +837,8 @@ public class HttpContextForwardBuilderTests
         var multipartFormDataContent = new MultipartFormDataContent(boundary);
         multipartFormDataContent.Add(new StringContent("1"), "Id");
         multipartFormDataContent.Add(new StringContent("Furion"), "Name");
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
-        var bytes = await File.ReadAllBytesAsync(fileFullName);
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var bytes = await File.ReadAllBytesAsync(filePath);
         multipartFormDataContent.Add(new ByteArrayContent(bytes), "File", "test.txt");
 
         httpRequestMessage.Content = multipartFormDataContent;
@@ -1045,8 +1045,8 @@ public class HttpContextForwardBuilderTests
         var multipartFormDataContent = new MultipartFormDataContent(boundary);
         multipartFormDataContent.Add(new StringContent("1"), "Id");
         multipartFormDataContent.Add(new StringContent("Furion"), "Name");
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
-        var bytes = await File.ReadAllBytesAsync(fileFullName);
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var bytes = await File.ReadAllBytesAsync(filePath);
         multipartFormDataContent.Add(new ByteArrayContent(bytes), "File", "test.txt");
 
         httpRequestMessage.Content = multipartFormDataContent;

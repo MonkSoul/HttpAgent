@@ -21,8 +21,8 @@ public class FileTransferProgressTests
         var fileTransferProgress =
             new FileTransferProgress(@"C:\Workspaces\furion.index.html", 1000L);
 
-        Assert.NotNull(fileTransferProgress.FileFullName);
-        Assert.Equal(@"C:\Workspaces\furion.index.html", fileTransferProgress.FileFullName);
+        Assert.NotNull(fileTransferProgress.FilePath);
+        Assert.Equal(@"C:\Workspaces\furion.index.html", fileTransferProgress.FilePath);
         Assert.Equal(1000L, fileTransferProgress.TotalFileSize);
 
         Assert.NotNull(fileTransferProgress.FileName);
@@ -44,7 +44,7 @@ public class FileTransferProgressTests
         fileTransferProgress.UpdateProgress(500000, TimeSpan.FromMilliseconds(200));
 
         Assert.Equal(
-            "Transfer Progress: \r\n\tFile Name:                        furion.index.html\r\n\tFile Full Name:                   C:\\Workspaces\\furion.index.html\r\n\tTotal File Size:                  0.95 MB\r\n\tTransferred:                      0.48 MB\r\n\tPercentage Complete:              50.00%\r\n\tTransfer Rate:                    2.38 MB/s\r\n\tTime Elapsed (s):                 0.20\r\n\tEstimated Time Remaining (s):     0.20",
+            "Transfer Progress: \r\n\tFile Name:                        furion.index.html\r\n\tFile Path:                        C:\\Workspaces\\furion.index.html\r\n\tTotal File Size:                  0.95 MB\r\n\tTransferred:                      0.48 MB\r\n\tPercentage Complete:              50.00%\r\n\tTransfer Rate:                    2.38 MB/s\r\n\tTime Elapsed (s):                 0.20\r\n\tEstimated Time Remaining (s):     0.20",
             fileTransferProgress.ToString());
     }
 

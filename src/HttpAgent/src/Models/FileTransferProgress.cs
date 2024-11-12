@@ -17,23 +17,23 @@ public sealed class FileTransferProgress
     /// <summary>
     ///     <inheritdoc cref="FileTransferProgress" />
     /// </summary>
-    /// <param name="fileFullName">文件完整路径</param>
+    /// <param name="filePath">文件路径</param>
     /// <param name="totalFileSize">文件的总大小</param>
-    internal FileTransferProgress(string fileFullName, long totalFileSize)
+    internal FileTransferProgress(string filePath, long totalFileSize)
     {
         // 空检查
-        ArgumentException.ThrowIfNullOrWhiteSpace(fileFullName);
+        ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
 
         TotalFileSize = totalFileSize;
 
-        FileFullName = fileFullName;
-        FileName = Path.GetFileName(fileFullName);
+        FilePath = filePath;
+        FileName = Path.GetFileName(filePath);
     }
 
     /// <summary>
-    ///     文件完整路径
+    ///     文件路径
     /// </summary>
-    public string FileFullName { get; }
+    public string FilePath { get; }
 
     /// <summary>
     ///     文件的名称
@@ -77,7 +77,7 @@ public sealed class FileTransferProgress
     public override string ToString() =>
         StringUtility.FormatKeyValuesSummary([
             new KeyValuePair<string, IEnumerable<string>>("File Name", [FileName]),
-            new KeyValuePair<string, IEnumerable<string>>("File Full Name", [FileFullName]),
+            new KeyValuePair<string, IEnumerable<string>>("File Path", [FilePath]),
             new KeyValuePair<string, IEnumerable<string>>("Total File Size",
                 [$"{TotalFileSize.ToSizeUnits("MB"):F2} MB"]),
             new KeyValuePair<string, IEnumerable<string>>("Transferred", [$"{Transferred.ToSizeUnits("MB"):F2} MB"]),
@@ -96,7 +96,7 @@ public sealed class FileTransferProgress
     ///     <see cref="string" />
     /// </returns>
     public string ToSummaryString() =>
-        $"Transferred {Transferred.ToSizeUnits("MB"):F2} MB of {TotalFileSize.ToSizeUnits("MB"):F2} MB ({PercentageComplete:F2}% complete, Speed: {TransferRate.ToSizeUnits("MB"):F2} MB/s, Time: {TimeElapsed.TotalSeconds:F2}s, ETA: {EstimatedTimeRemaining.TotalSeconds:F2}s), File: {FileName}, Path: {FileFullName}.";
+        $"Transferred {Transferred.ToSizeUnits("MB"):F2} MB of {TotalFileSize.ToSizeUnits("MB"):F2} MB ({PercentageComplete:F2}% complete, Speed: {TransferRate.ToSizeUnits("MB"):F2} MB/s, Time: {TimeElapsed.TotalSeconds:F2}s, ETA: {EstimatedTimeRemaining.TotalSeconds:F2}s), File: {FileName}, Path: {FilePath}.";
 
     /// <summary>
     ///     更新文件传输进度

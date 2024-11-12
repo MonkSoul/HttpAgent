@@ -191,7 +191,7 @@
             <summary>
                 HTTP 文件上传构建器
             </summary>
-            <remarks>使用 <c>HttpRequestBuilder.UploadFile(requestUri, fileFullName, name)</c> 静态方法创建。</remarks>
+            <remarks>使用 <c>HttpRequestBuilder.UploadFile(requestUri, filePath, name)</c> 静态方法创建。</remarks>
         </member>
         <member name="M:HttpAgent.HttpFileUploadBuilder.#ctor(System.Net.Http.HttpMethod,System.Uri,System.String,System.String)">
             <summary>
@@ -199,7 +199,7 @@
             </summary>
             <param name="httpMethod">请求方式</param>
             <param name="requestUri">请求地址</param>
-            <param name="fileFullName">文件完整路径</param>
+            <param name="filePath">文件路径</param>
             <param name="name">表单名称</param>
         </member>
         <member name="P:HttpAgent.HttpFileUploadBuilder.RequestUri">
@@ -212,9 +212,9 @@
                 请求方式
             </summary>
         </member>
-        <member name="P:HttpAgent.HttpFileUploadBuilder.FileFullName">
+        <member name="P:HttpAgent.HttpFileUploadBuilder.FilePath">
             <summary>
-                文件完整路径
+                文件路径
             </summary>
         </member>
         <member name="P:HttpAgent.HttpFileUploadBuilder.Name">
@@ -225,6 +225,16 @@
         <member name="P:HttpAgent.HttpFileUploadBuilder.ContentType">
             <summary>
                 内容类型
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HttpFileUploadBuilder.AllowedFileExtensions">
+            <summary>
+                允许的文件拓展名
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HttpFileUploadBuilder.MaxFileSizeInBytes">
+            <summary>
+                允许的文件大小。以字节为单位
             </summary>
         </member>
         <member name="P:HttpAgent.HttpFileUploadBuilder.ProgressInterval">
@@ -266,6 +276,34 @@
             <returns>
                 <see cref="T:HttpAgent.HttpFileUploadBuilder" />
             </returns>
+        </member>
+        <member name="M:HttpAgent.HttpFileUploadBuilder.SetAllowedFileExtensions(System.String[])">
+            <summary>
+                设置允许的文件拓展名
+            </summary>
+            <param name="allowedFileExtensions">允许的文件拓展名</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpFileUploadBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpFileUploadBuilder.SetAllowedFileExtensions(System.String)">
+            <summary>
+                设置允许的文件拓展名
+            </summary>
+            <param name="allowedFileExtensions">允许的文件扩展名字符串，用分号分隔</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpFileUploadBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpFileUploadBuilder.SetMaxFileSizeInBytes(System.Int64)">
+            <summary>
+                设置允许的文件大小
+            </summary>
+            <param name="maxFileSizeInBytes">允许的文件大小。以字节为单位。</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpFileUploadBuilder" />
+            </returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
         </member>
         <member name="M:HttpAgent.HttpFileUploadBuilder.SetOnProgressChanged(System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task})">
             <summary>
@@ -345,6 +383,14 @@
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
+        </member>
+        <member name="M:HttpAgent.HttpFileUploadBuilder.EnsureLegalData(System.String,System.String[],System.Nullable{System.Int64})">
+            <summary>
+                检查文件拓展名和大小合法性
+            </summary>
+            <param name="filePath">文件路径</param>
+            <param name="allowedFileExtensions">允许的文件拓展名</param>
+            <param name="maxFileSizeInBytes">允许的文件大小。以字节为单位</param>
         </member>
         <member name="T:HttpAgent.HttpLongPollingBuilder">
             <summary>
@@ -587,7 +633,7 @@
             <summary>
                 从本地路径中添加文件
             </summary>
-            <param name="fileFullName">文件完整路径</param>
+            <param name="filePath">文件路径</param>
             <param name="name">表单名称</param>
             <param name="contentType">内容类型</param>
             <param name="contentEncoding">内容编码</param>
@@ -599,7 +645,7 @@
             <summary>
                 从本地路径中添加文件（带上传进度）
             </summary>
-            <param name="fileFullName">文件完整路径</param>
+            <param name="filePath">文件路径</param>
             <param name="name">表单名称</param>
             <param name="progressChannel">文件传输进度信息的通道</param>
             <param name="contentType">内容类型</param>
@@ -612,7 +658,7 @@
             <summary>
                 从本地路径中添加文件
             </summary>
-            <param name="fileFullName">文件完整路径</param>
+            <param name="filePath">文件路径</param>
             <param name="name">表单名称</param>
             <param name="contentType">内容类型</param>
             <param name="contentEncoding">内容编码</param>
@@ -2237,7 +2283,7 @@
             </summary>
             <param name="httpMethod">请求方式</param>
             <param name="requestUri">请求地址</param>
-            <param name="fileFullName">文件完整路径</param>
+            <param name="filePath">文件路径</param>
             <param name="name">表单名称；默认值为 <c>file</c>。</param>
             <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
             <returns>
@@ -2249,7 +2295,7 @@
                 创建 <see cref="T:HttpAgent.HttpFileUploadBuilder" /> 构建器
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="fileFullName">文件完整路径</param>
+            <param name="filePath">文件路径</param>
             <param name="name">表单名称；默认值为 <c>file</c>。</param>
             <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
             <returns>
@@ -2261,7 +2307,7 @@
                 创建 <see cref="T:HttpAgent.HttpFileUploadBuilder" /> 构建器
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="fileFullName">文件完整路径</param>
+            <param name="filePath">文件路径</param>
             <param name="name">表单名称；默认值为 <c>file</c>。</param>
             <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
             <returns>
@@ -3423,6 +3469,81 @@
             <param name="isDefined">是否定义特性</param>
             <returns>
                 <see cref="T:System.String" />
+            </returns>
+        </member>
+        <member name="T:HttpAgent.Core.Utilities.FileUtility">
+            <summary>
+                提供文件实用方法
+            </summary>
+        </member>
+        <member name="M:HttpAgent.Core.Utilities.FileUtility.TryValidateExtension(System.String,System.String,System.Collections.Generic.HashSet{System.String}@)">
+            <summary>
+                尝试验证文件拓展名
+            </summary>
+            <remarks>特别说明：不支持拓展名中包含通配符，如 <c>*</c>。</remarks>
+            <param name="fileName">文件名</param>
+            <param name="allowedFileExtensions">允许的文件扩展名字符串，用分号分隔</param>
+            <param name="validFileExtensions">有效的文件拓展名集合</param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Core.Utilities.FileUtility.TryValidateExtension(System.String,System.String[],System.Collections.Generic.HashSet{System.String}@)">
+            <summary>
+                尝试验证文件拓展名
+            </summary>
+            <remarks>特别说明：不支持拓展名中包含通配符，如 <c>*</c>。</remarks>
+            <param name="fileName">文件名</param>
+            <param name="allowedFileExtensions">允许的文件拓展名数组</param>
+            <param name="validFileExtensions">有效的文件拓展名集合</param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Core.Utilities.FileUtility.ValidateExtension(System.String,System.String)">
+            <summary>
+                验证文件拓展名
+            </summary>
+            <remarks>特别说明：不支持拓展名中包含通配符，如 <c>*</c>。</remarks>
+            <param name="fileName">文件名</param>
+            <param name="allowedFileExtensions">允许的文件扩展名字符串，用分号分隔</param>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:HttpAgent.Core.Utilities.FileUtility.ValidateExtension(System.String,System.String[])">
+            <summary>
+                验证文件拓展名
+            </summary>
+            <remarks>特别说明：不支持拓展名中包含通配符，如 <c>*</c>。</remarks>
+            <param name="fileName">文件名</param>
+            <param name="allowedFileExtensions">允许的文件拓展名数组</param>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:HttpAgent.Core.Utilities.FileUtility.TryValidateSize(System.String,System.Int64)">
+            <summary>
+                尝试验证文件大小
+            </summary>
+            <param name="filePath">文件路径</param>
+            <param name="maxFileSizeInBytes">允许的文件大小。以字节为单位。</param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
+        </member>
+        <member name="M:HttpAgent.Core.Utilities.FileUtility.ValidateSize(System.String,System.Int64)">
+            <summary>
+                验证文件大小
+            </summary>
+            <param name="filePath">文件路径</param>
+            <param name="maxFileSizeInBytes">允许的文件大小。以字节为单位。</param>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:HttpAgent.Core.Utilities.FileUtility.GetValidFileExtensions(System.String[])">
+            <summary>
+                获取有效的文件拓展名集合
+            </summary>
+            <param name="allowedFileExtensions">允许的文件拓展名数组</param>
+            <returns>
+                <see cref="T:System.Collections.Generic.HashSet`1" />
             </returns>
         </member>
         <member name="T:HttpAgent.Core.Utilities.JsonUtility">
@@ -5332,12 +5453,12 @@
             <summary>
                 <inheritdoc cref="T:HttpAgent.FileTransferProgress" />
             </summary>
-            <param name="fileFullName">文件完整路径</param>
+            <param name="filePath">文件路径</param>
             <param name="totalFileSize">文件的总大小</param>
         </member>
-        <member name="P:HttpAgent.FileTransferProgress.FileFullName">
+        <member name="P:HttpAgent.FileTransferProgress.FilePath">
             <summary>
-                文件完整路径
+                文件路径
             </summary>
         </member>
         <member name="P:HttpAgent.FileTransferProgress.FileName">
@@ -5621,7 +5742,7 @@
             <param name="fileStream">
                 <see cref="T:System.IO.Stream" />
             </param>
-            <param name="fileFullName">文件完整路径或文件名</param>
+            <param name="filePath">文件路径或文件名</param>
             <param name="fileLength">文件大小</param>
             <param name="progressChannel">文件传输进度信息的通道</param>
         </member>
@@ -7500,7 +7621,7 @@
                 上传文件
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="fileFullName">文件完整路径</param>
+            <param name="filePath">文件路径</param>
             <param name="name">表单名称；默认值为 <c>file</c>。</param>
             <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
             <param name="configure">自定义配置委托</param>
@@ -7516,7 +7637,7 @@
                 上传文件
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="fileFullName">文件完整路径</param>
+            <param name="filePath">文件路径</param>
             <param name="name">表单名称；默认值为 <c>file</c>。</param>
             <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
             <param name="configure">自定义配置委托</param>

@@ -807,14 +807,14 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         await app.StartAsync();
 
         // 测试代码
-        var fileFullName = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpRequestBuilder =
             new HttpRequestBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test")).SetMultipartContent(
                 mBuilder =>
                 {
-                    mBuilder.AddFileAsStream(fileFullName, "file");
+                    mBuilder.AddFileAsStream(filePath, "file");
                 });
 
         _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
