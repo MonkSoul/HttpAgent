@@ -125,7 +125,21 @@ public class GetStartController(IHttpRemoteService httpRemoteService) : Controll
                 // 支持互联网文件地址
                 .AddFileFromRemote("https://furion.net/img/furionlogo.png", "files") // 设置多个文件（对应表单 Files 字段）
                 // 支持读取本地文件作为字节数组
-                .AddFileAsByteArray("C:\\Workspaces\\httptest.jpg", "files"))); // 设置多个文件（对应表单 Files 字段）
+                .AddFileAsByteArray(@"C:\Workspaces\httptest.jpg", "files"))); // 设置多个文件（对应表单 Files 字段）
+
+        return content;
+    }
+
+    [HttpPost]
+    public async Task<YourRemoteModel?> PostURLForm()
+    {
+        var content = await httpRemoteService.PostAsAsync<YourRemoteModel>("https://localhost:7044/HttpRemote/AddURLForm",
+            builder => builder
+                .SetFormUrlEncodedContent(new { id = 1, name = "furion" })); // 设置 application/x-www-form-urlencoded 请求内容
+
+        var content2 = await httpRemoteService.PostAsAsync<YourRemoteModel>("https://localhost:7044/HttpRemote/AddURLForm",
+            builder => builder
+                .SetFormUrlEncodedContent(new { id = 1, name = "furion" }, useStringContent: true)); // 使用 StringContent 构建表单数据
 
         return content;
     }

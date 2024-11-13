@@ -6099,7 +6099,7 @@
             <summary>
                 URL 编码的表单内容处理器
             </summary>
-            <remarks>解决 <see cref="T:System.Net.Http.FormUrlEncodedContent" /> 无法设置编码问题。</remarks>
+            <remarks>解决 <see cref="T:System.Net.Http.FormUrlEncodedContent" /> 无法设置编码问题。<see cref="T:System.Net.Http.FormUrlEncodedContent" /> 的编码格式不是 <c>utf-8</c>，而是 <c>Encoding.Latin1</c>。</remarks>
         </member>
         <member name="M:HttpAgent.StringContentForFormUrlEncodedContentProcessor.Process(System.Object,System.String,System.Text.Encoding)">
             <inheritdoc />

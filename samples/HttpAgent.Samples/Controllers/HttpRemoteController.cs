@@ -25,6 +25,12 @@ public class HttpRemoteController : ControllerBase
     }
 
     [HttpPost]
+    public Task<YourRemoteModel> AddURLForm([FromForm] YourRemoteModel model)
+    {
+        return Task.FromResult(model);
+    }
+
+    [HttpPost]
     public Task<string> AddFile(IFormFile file)
     {
         return Task.FromResult(file.FileName);
