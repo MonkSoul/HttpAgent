@@ -43,12 +43,19 @@ public class HttpDeclarativeBuilderTests
             { typeof(PathDeclarativeExtractor), new PathDeclarativeExtractor() },
             { typeof(CookieDeclarativeExtractor), new CookieDeclarativeExtractor() },
             { typeof(HeaderDeclarativeExtractor), new HeaderDeclarativeExtractor() },
-            { typeof(BodyDeclarativeExtractor), new BodyDeclarativeExtractor() },
+            { typeof(BodyDeclarativeExtractor), new BodyDeclarativeExtractor() }
+        };
+
+        Assert.True(extractors.Keys.ToHashSet().SetEquals(HttpDeclarativeBuilder._extractors.Keys.ToHashSet()));
+
+        Dictionary<Type, IHttpDeclarativeExtractor> freezeExtractors = new()
+        {
             { typeof(MultipartBodyDeclarativeExtractor), new MultipartBodyDeclarativeExtractor() },
             { typeof(HttpRequestBuilderDeclarativeExtractor), new HttpRequestBuilderDeclarativeExtractor() }
         };
 
-        Assert.Equal(extractors.Keys, HttpDeclarativeBuilder._extractors.Keys);
+        Assert.True(freezeExtractors.Keys.ToHashSet()
+            .SetEquals(HttpDeclarativeBuilder._freezeExtractors.Keys.ToHashSet()));
     }
 
     [Fact]
@@ -108,11 +115,18 @@ public class HttpDeclarativeBuilderTests
             { typeof(CookieDeclarativeExtractor), new CookieDeclarativeExtractor() },
             { typeof(HeaderDeclarativeExtractor), new HeaderDeclarativeExtractor() },
             { typeof(BodyDeclarativeExtractor), new BodyDeclarativeExtractor() },
-            { typeof(CustomHttpDeclarativeExtractor), new CustomHttpDeclarativeExtractor() },
+            { typeof(CustomHttpDeclarativeExtractor), new CustomHttpDeclarativeExtractor() }
+        };
+
+        Assert.True(extractors.Keys.ToHashSet().SetEquals(HttpDeclarativeBuilder._extractors.Keys.ToHashSet()));
+
+        Dictionary<Type, IHttpDeclarativeExtractor> freezeExtractors = new()
+        {
             { typeof(MultipartBodyDeclarativeExtractor), new MultipartBodyDeclarativeExtractor() },
             { typeof(HttpRequestBuilderDeclarativeExtractor), new HttpRequestBuilderDeclarativeExtractor() }
         };
 
-        Assert.Equal(extractors.Keys, HttpDeclarativeBuilder._extractors.Keys);
+        Assert.True(freezeExtractors.Keys.ToHashSet()
+            .SetEquals(HttpDeclarativeBuilder._freezeExtractors.Keys.ToHashSet()));
     }
 }
