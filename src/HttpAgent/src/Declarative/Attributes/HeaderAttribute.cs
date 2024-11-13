@@ -13,11 +13,6 @@ namespace HttpAgent;
 public sealed class HeaderAttribute : Attribute
 {
     /// <summary>
-    ///     <see cref="Value" /> 私有字段
-    /// </summary>
-    private object? _value;
-
-    /// <summary>
     ///     <inheritdoc cref="HeaderAttribute" />
     /// </summary>
     /// <remarks>特性作用于参数时有效。</remarks>
@@ -57,10 +52,10 @@ public sealed class HeaderAttribute : Attribute
     /// </summary>
     public object? Value
     {
-        get => _value;
+        get;
         set
         {
-            _value = value;
+            field = value;
             HasSetValue = true;
         }
     }

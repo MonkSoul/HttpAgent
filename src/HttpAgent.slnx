@@ -1,8 +1,8 @@
 ﻿<Solution>
-  <Project Path="..\samples\HttpAgent.AspNetCore.Samples\HttpAgent.AspNetCore.Samples.csproj" Type="Classic C#" />
-  <Project Path="..\samples\HttpAgent.Samples\HttpAgent.Samples.csproj" Type="Classic C#" />
-  <Project Path="HttpAgent.AspNetCore\src\HttpAgent.AspNetCore.csproj" Type="Classic C#" />
-  <Project Path="HttpAgent.AspNetCore\test\HttpAgent.AspNetCore.Tests.csproj" Type="Classic C#" />
-  <Project Path="HttpAgent\src\HttpAgent.csproj" Type="Classic C#" />
-  <Project Path="HttpAgent\test\HttpAgent.Tests.csproj" Type="Classic C#" />
+    <Project Path="..\samples\HttpAgent.AspNetCore.Samples\HttpAgent.AspNetCore.Samples.csproj" Type="Classic C#"/>
+    <Project Path="..\samples\HttpAgent.Samples\HttpAgent.Samples.csproj" Type="Classic C#"/>
+    <Project Path="HttpAgent.AspNetCore\src\HttpAgent.AspNetCore.csproj" Type="Classic C#"/>
+    <Project Path="HttpAgent.AspNetCore\test\HttpAgent.AspNetCore.Tests.csproj" Type="Classic C#"/>
+    <Project Path="HttpAgent\src\HttpAgent.csproj" Type="Classic C#"/>
+    <Project Path="HttpAgent\test\HttpAgent.Tests.csproj" Type="Classic C#"/>
 </Solution>
