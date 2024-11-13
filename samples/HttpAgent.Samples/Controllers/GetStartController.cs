@@ -7,6 +7,10 @@ namespace HttpAgent.Samples.Controllers;
 [Route("[controller]/[action]")]
 public class GetStartController(IHttpRemoteService httpRemoteService) : ControllerBase
 {
+    /// <summary>
+    /// 获取网站内容
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task<string?> GetWebSiteContent()
     {
@@ -44,8 +48,12 @@ public class GetStartController(IHttpRemoteService httpRemoteService) : Controll
         return content;
     }
 
+    /// <summary>
+    /// 携带请求数据
+    /// </summary>
+    /// <returns></returns>
     [HttpPost]
-    public async Task<YourRemoteModel?> PostJson()
+    public async Task<YourRemoteModel?> PostData()
     {
         var content = await httpRemoteService.PostAsAsync<YourRemoteModel>("https://localhost:7044/HttpRemote/AddModel",
             builder => builder
@@ -81,6 +89,10 @@ public class GetStartController(IHttpRemoteService httpRemoteService) : Controll
         return content;
     }
 
+    /// <summary>
+    /// Form 表单提交
+    /// </summary>
+    /// <returns></returns>
     [HttpPost]
     public async Task<YourRemoteFormResult?> PostForm()
     {
@@ -111,6 +123,10 @@ public class GetStartController(IHttpRemoteService httpRemoteService) : Controll
         return content;
     }
 
+    /// <summary>
+    /// 下载网络资源
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task DownloadFile()
     {
@@ -148,6 +164,10 @@ public class GetStartController(IHttpRemoteService httpRemoteService) : Controll
         // 更多详细用法可参考第 19.2.1 节
     }
 
+    /// <summary>
+    /// 上传文件资源
+    /// </summary>
+    /// <returns></returns>
     [HttpPost]
     public async Task UploadFile()
     {
@@ -186,5 +206,26 @@ public class GetStartController(IHttpRemoteService httpRemoteService) : Controll
             })
             .SetAllowedFileExtensions(".jpg;.png")  // 限制只允许 jpg 和 png 类型
             .SetMaxFileSizeInBytes(5 * 1024 * 1024));   // 限制 5MB
+    }
+
+    /// <summary>
+    /// 压力模拟测试
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public async Task StressTestHarness()
+    {
+        var stressTestHarnessResult = await httpRemoteService.StressTestHarnessAsync("https://furion.net/");
+        Console.WriteLine(stressTestHarnessResult.ToString());  // 打印压力测试结果
+
+        var stressTestHarnessResult1 = await httpRemoteService.SendAsync(HttpRequestBuilder.StressTestHarness("https://furion.net/")
+            .SetNumberOfRequests(1000)  // 设置并发请求数量
+            .SetNumberOfRounds(5)   // 设置压测轮次
+            .SetMaxDegreeOfParallelism(500));   // 设置最大并发度
+
+        // 在大多数情况下，只需要设置并发请求数量即可
+        var stressTestHarnessResult2 = await httpRemoteService.StressTestHarnessAsync("https://furion.net/", 500);
+
+        var stressTestHarnessResult3 = await httpRemoteService.SendAsync(HttpRequestBuilder.StressTestHarness("https://furion.net/", 500));
     }
 }

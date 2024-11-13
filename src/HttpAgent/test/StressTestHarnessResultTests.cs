@@ -57,7 +57,7 @@ public class StressTestHarnessResultTests
             responseTimes);
 
         Assert.Equal(
-            "Stress Test Harness Result: \r\n\tTotal Requests:          10\r\n\tTotal Time (s):          0.93\r\n\tSuccessful Requests:     10\r\n\tFailed Requests:         0\r\n\tQPS:                     10.77\r\n\tMin RT (ms):             365.58\r\n\tMax RT (ms):             920.98\r\n\tAvg RT (ms):             629.52\r\n\tP10 RT (ms):             365.58\r\n\tP25 RT (ms):             438.83\r\n\tP50 RT (ms):             618.43\r\n\tP75 RT (ms):             720.78\r\n\tP90 RT (ms):             919.15\r\n\tP99 RT (ms):             920.98\r\n\t99.99 RT (ms):           920.98",
+            "Stress Test Harness Result: \r\n\tTotal Requests:          10\r\n\tTotal Time (s):          0.93\r\n\tSuccessful Requests:     10\r\n\tFailed Requests:         0\r\n\tQPS:                     10.77\r\n\tMin RT (ms):             365.58\r\n\tMax RT (ms):             920.98\r\n\tAvg RT (ms):             629.52\r\n\tP10 RT (ms):             365.58\r\n\tP25 RT (ms):             438.83\r\n\tP50 RT (ms):             618.43\r\n\tP75 RT (ms):             720.78\r\n\tP90 RT (ms):             919.15\r\n\tP99 RT (ms):             920.98\r\n\tP99.99 RT (ms):          920.98",
             result.ToString());
     }
 

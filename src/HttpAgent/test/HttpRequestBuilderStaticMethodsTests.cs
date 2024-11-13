@@ -392,9 +392,10 @@ public class HttpRequestBuilderStaticMethodsTests
         Assert.NotNull(httpStressTestHarnessBuilder.RequestUri);
         Assert.Equal("http://localhost/", httpStressTestHarnessBuilder.RequestUri.ToString());
 
-        var httpStressTestHarnessBuilder2 = HttpRequestBuilder.StressTestHarness(HttpMethod.Post, null);
+        var httpStressTestHarnessBuilder2 = HttpRequestBuilder.StressTestHarness(HttpMethod.Post, null,500);
         Assert.Equal(HttpMethod.Post, httpStressTestHarnessBuilder2.Method);
         Assert.Null(httpStressTestHarnessBuilder2.RequestUri);
+        Assert.Equal(500, httpStressTestHarnessBuilder2.NumberOfRequests);
 
         var httpStressTestHarnessBuilder3 = HttpRequestBuilder.StressTestHarness((string)null!);
         Assert.Equal(HttpMethod.Get, httpStressTestHarnessBuilder3.Method);

@@ -142,7 +142,7 @@ public sealed class StressTestHarnessResult
             new KeyValuePair<string, IEnumerable<string>>("P75 RT (ms)", [$"{Percentile75ResponseTime:N2}"]),
             new KeyValuePair<string, IEnumerable<string>>("P90 RT (ms)", [$"{Percentile90ResponseTime:N2}"]),
             new KeyValuePair<string, IEnumerable<string>>("P99 RT (ms)", [$"{Percentile99ResponseTime:N2}"]),
-            new KeyValuePair<string, IEnumerable<string>>("99.99 RT (ms)", [$"{Percentile9999ResponseTime:N2}"])
+            new KeyValuePair<string, IEnumerable<string>>("P99.99 RT (ms)", [$"{Percentile9999ResponseTime:N2}"])
         ], "Stress Test Harness Result")!;
 
     /// <summary>

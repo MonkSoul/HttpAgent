@@ -92,14 +92,14 @@ internal sealed partial class HttpRemoteService
     public StressTestHarnessResult StressTestHarness(string? requestUri, int numberOfRequests = 100,
         Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) =>
-        Send(HttpRequestBuilder.StressTestHarness(requestUri).SetNumberOfRequests(numberOfRequests), configure,
+        Send(HttpRequestBuilder.StressTestHarness(requestUri, numberOfRequests), configure,
             cancellationToken);
 
     /// <inheritdoc />
     public Task<StressTestHarnessResult> StressTestHarnessAsync(string? requestUri, int numberOfRequests = 100,
         Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) =>
-        SendAsync(HttpRequestBuilder.StressTestHarness(requestUri).SetNumberOfRequests(numberOfRequests), configure,
+        SendAsync(HttpRequestBuilder.StressTestHarness(requestUri, numberOfRequests), configure,
             cancellationToken);
 
     /// <inheritdoc />

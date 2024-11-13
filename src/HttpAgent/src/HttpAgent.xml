@@ -2334,30 +2334,33 @@
                 <see cref="T:HttpAgent.HttpServerSentEventsBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.StressTestHarness(System.Net.Http.HttpMethod,System.Uri)">
+        <member name="M:HttpAgent.HttpRequestBuilder.StressTestHarness(System.Net.Http.HttpMethod,System.Uri,System.Int32)">
             <summary>
                 创建 <see cref="T:HttpAgent.HttpStressTestHarnessBuilder" /> 构建器
             </summary>
             <param name="httpMethod">请求方式</param>
             <param name="requestUri">请求地址</param>
+            <param name="numberOfRequests">并发请求数量，默认值为：100。</param>
             <returns>
                 <see cref="T:HttpAgent.HttpStressTestHarnessBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.StressTestHarness(System.Uri)">
+        <member name="M:HttpAgent.HttpRequestBuilder.StressTestHarness(System.Uri,System.Int32)">
             <summary>
                 创建 <see cref="T:HttpAgent.HttpStressTestHarnessBuilder" /> 构建器
             </summary>
             <param name="requestUri">请求地址</param>
+            <param name="numberOfRequests">并发请求数量，默认值为：100。</param>
             <returns>
                 <see cref="T:HttpAgent.HttpStressTestHarnessBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.StressTestHarness(System.String)">
+        <member name="M:HttpAgent.HttpRequestBuilder.StressTestHarness(System.String,System.Int32)">
             <summary>
                 创建 <see cref="T:HttpAgent.HttpStressTestHarnessBuilder" /> 构建器
             </summary>
             <param name="requestUri">请求地址</param>
+            <param name="numberOfRequests">并发请求数量，默认值为：100。</param>
             <returns>
                 <see cref="T:HttpAgent.HttpStressTestHarnessBuilder" />
             </returns>

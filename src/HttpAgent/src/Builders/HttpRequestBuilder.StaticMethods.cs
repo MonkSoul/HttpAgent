@@ -444,32 +444,37 @@ public sealed partial class HttpRequestBuilder
     /// </summary>
     /// <param name="httpMethod">请求方式</param>
     /// <param name="requestUri">请求地址</param>
+    /// <param name="numberOfRequests">并发请求数量，默认值为：100。</param>
     /// <returns>
     ///     <see cref="HttpStressTestHarnessBuilder" />
     /// </returns>
-    public static HttpStressTestHarnessBuilder StressTestHarness(HttpMethod httpMethod, Uri? requestUri) =>
-        new(httpMethod, requestUri);
+    public static HttpStressTestHarnessBuilder StressTestHarness(HttpMethod httpMethod, Uri? requestUri,
+        int numberOfRequests = 100) =>
+        new HttpStressTestHarnessBuilder(httpMethod, requestUri).SetNumberOfRequests(numberOfRequests);
 
     /// <summary>
     ///     创建 <see cref="HttpStressTestHarnessBuilder" /> 构建器
     /// </summary>
     /// <param name="requestUri">请求地址</param>
+    /// <param name="numberOfRequests">并发请求数量，默认值为：100。</param>
     /// <returns>
     ///     <see cref="HttpStressTestHarnessBuilder" />
     /// </returns>
-    public static HttpStressTestHarnessBuilder StressTestHarness(Uri? requestUri) =>
-        StressTestHarness(HttpMethod.Get, requestUri);
+    public static HttpStressTestHarnessBuilder StressTestHarness(Uri? requestUri, int numberOfRequests = 100) =>
+        StressTestHarness(HttpMethod.Get, requestUri, numberOfRequests);
 
     /// <summary>
     ///     创建 <see cref="HttpStressTestHarnessBuilder" /> 构建器
     /// </summary>
     /// <param name="requestUri">请求地址</param>
+    /// <param name="numberOfRequests">并发请求数量，默认值为：100。</param>
     /// <returns>
     ///     <see cref="HttpStressTestHarnessBuilder" />
     /// </returns>
-    public static HttpStressTestHarnessBuilder StressTestHarness(string? requestUri) =>
+    public static HttpStressTestHarnessBuilder StressTestHarness(string? requestUri, int numberOfRequests = 100) =>
         StressTestHarness(HttpMethod.Get,
-            string.IsNullOrWhiteSpace(requestUri) ? null : new Uri(requestUri, UriKind.RelativeOrAbsolute));
+            string.IsNullOrWhiteSpace(requestUri) ? null : new Uri(requestUri, UriKind.RelativeOrAbsolute),
+            numberOfRequests);
 
     /// <summary>
     ///     创建 <see cref="HttpLongPollingBuilder" /> 构建器
