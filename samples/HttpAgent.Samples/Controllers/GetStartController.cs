@@ -1,4 +1,5 @@
 ﻿using HttpAgent.Samples.Models;
+using System.Net.Http.Headers;
 
 namespace HttpAgent.Samples.Controllers;
 
@@ -122,9 +123,9 @@ public class GetStartController(IHttpRemoteService httpRemoteService, ISampleSer
                 .AddJson(new { id = 1, name = "furion" }) // 设置常规字段
                 .AddJsonProperty("age", "Age") // 支持设置单个值
                 .AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file") // 设置单个文件（对应表单 File 字段）
-                // 支持互联网文件地址
+                                                                        // 支持互联网文件地址
                 .AddFileFromRemote("https://furion.net/img/furionlogo.png", "files") // 设置多个文件（对应表单 Files 字段）
-                // 支持读取本地文件作为字节数组
+                                                                                     // 支持读取本地文件作为字节数组
                 .AddFileAsByteArray(@"C:\Workspaces\httptest.jpg", "files"))); // 设置多个文件（对应表单 Files 字段）
 
         return content;
@@ -259,6 +260,10 @@ public class GetStartController(IHttpRemoteService httpRemoteService, ISampleSer
             .SetMaxFileSizeInBytes(5 * 1024 * 1024)); // 限制 5MB
     }
 
+    /// <summary>
+    /// 请求分析工具
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task Profiler()
     {
@@ -269,6 +274,26 @@ public class GetStartController(IHttpRemoteService httpRemoteService, ISampleSer
         // HTTP 请求谓词方式
         await httpRemoteService.GetAsync("https://furion.net"
             , builder => builder.Profiler());   // 启用请求分析工具
+    }
+
+    /// <summary>
+    /// 添加授权凭证
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public async Task Authentication()
+    {
+        // 添加 JWT (JSON Web Token) 身份验证
+        await httpRemoteService.SendAsync(HttpRequestBuilder.Get("http://furion.net")
+            .AddJwtBearerAuthentication("your token"));
+
+        // 添加 Basic 身份验证
+        await httpRemoteService.SendAsync(HttpRequestBuilder.Get("http://furion.net")
+            .AddBasicAuthentication("username", "password"));
+
+        // 添加自定义 Schema 身份验证
+        await httpRemoteService.SendAsync(HttpRequestBuilder.Get("http://furion.net")
+            .AddAuthentication(new AuthenticationHeaderValue("X-Token", "your token")));
     }
 
     /// <summary>

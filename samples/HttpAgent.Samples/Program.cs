@@ -1,6 +1,7 @@
 using System.Reflection;
 using HttpAgent.Extensions;
 using HttpAgent.Samples;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,8 @@ builder.Services.AddHttpClient(string.Empty)
 // 为特定客户端启用
 //builder.Services.AddHttpClient("weixin")
 //    .AddProfilerDelegatingHandler();
+
+builder.Services.TryAddTransient<AuthorizationDelegatingHandler>();
 
 builder.Services.AddHttpRemote(options =>
 {
