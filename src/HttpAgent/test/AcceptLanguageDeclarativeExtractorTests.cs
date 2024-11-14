@@ -55,14 +55,14 @@ public class AcceptLanguageDeclarativeExtractorTests
 }
 
 [AcceptLanguage(null)]
-public interface IAcceptLanguageDeclarativeExtractorTest1 : IHttpDeclarativeExtractor
+public interface IAcceptLanguageDeclarativeExtractorTest1 : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     Task Test1();
 }
 
 [AcceptLanguage("zh-CN")]
-public interface IAcceptLanguageDeclarativeExtractorTest2 : IHttpDeclarativeExtractor
+public interface IAcceptLanguageDeclarativeExtractorTest2 : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     Task Test1();

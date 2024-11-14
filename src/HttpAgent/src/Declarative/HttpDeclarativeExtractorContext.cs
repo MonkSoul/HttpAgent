@@ -10,9 +10,10 @@ namespace HttpAgent;
 public sealed class HttpDeclarativeExtractorContext
 {
     /// <summary>
-    ///     特殊类型参数集合
+    ///     冻结参数类型集合
     /// </summary>
-    internal static Type[] _specialParameterTypes =
+    /// <remarks>此类参数类型不应作为外部提取对象。</remarks>
+    internal static Type[] _frozenParameterTypes =
     [
         typeof(Action<HttpRequestBuilder>), typeof(Action<HttpMultipartFormDataBuilder>), typeof(HttpCompletionOption),
         typeof(CancellationToken)
@@ -53,19 +54,20 @@ public sealed class HttpDeclarativeExtractorContext
     public IReadOnlyDictionary<ParameterInfo, object?> Parameters { get; }
 
     /// <summary>
-    ///     过滤特殊类型参数
+    ///     判断参数是否为冻结参数
     /// </summary>
+    /// <remarks>此类参数不应作为外部提取对象。</remarks>
     /// <param name="parameter">
     ///     <see cref="ParameterInfo" />
     /// </param>
     /// <returns>
     ///     <see cref="bool" />
     /// </returns>
-    public static bool FilterSpecialParameter(ParameterInfo parameter)
+    public static bool IsFrozenParameter(ParameterInfo parameter)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(parameter);
 
-        return !_specialParameterTypes.Contains(parameter.ParameterType);
+        return _frozenParameterTypes.Contains(parameter.ParameterType);
     }
 }

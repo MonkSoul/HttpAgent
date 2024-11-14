@@ -98,7 +98,7 @@ public class CookieDeclarativeExtractorTests
 [Cookie("header1", "value1")]
 [Cookie("header2", "value2")]
 [Cookie("header3")]
-public interface ICookieDeclarativeTest : IHttpDeclarativeExtractor
+public interface ICookieDeclarativeTest : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     [Cookie("header4")]

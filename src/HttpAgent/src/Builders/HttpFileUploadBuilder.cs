@@ -17,7 +17,9 @@ public sealed class HttpFileUploadBuilder
     /// <param name="requestUri">请求地址</param>
     /// <param name="filePath">文件路径</param>
     /// <param name="name">表单名称</param>
-    internal HttpFileUploadBuilder(HttpMethod httpMethod, Uri? requestUri, string filePath, string name)
+    /// <param name="fileName">文件的名称</param>
+    internal HttpFileUploadBuilder(HttpMethod httpMethod, Uri? requestUri, string filePath, string name,
+        string? fileName = null)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(httpMethod);
@@ -29,6 +31,7 @@ public sealed class HttpFileUploadBuilder
 
         FilePath = filePath;
         Name = name;
+        FileName = fileName;
     }
 
     /// <summary>
@@ -45,6 +48,11 @@ public sealed class HttpFileUploadBuilder
     ///     文件路径
     /// </summary>
     public string FilePath { get; }
+
+    /// <summary>
+    ///     文件的名称
+    /// </summary>
+    public string? FileName { get; }
 
     /// <summary>
     ///     表单名称
@@ -324,7 +332,7 @@ public sealed class HttpFileUploadBuilder
 
         // 初始化 HttpRequestBuilder 实例
         var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure).SetMultipartContent(builder =>
-            builder.AddFileWithProgressAsStream(FilePath, Name, progressChannel,
+            builder.AddFileWithProgressAsStream(FilePath, Name, progressChannel, FileName,
                 ContentType ?? MediaTypeNames.Application.Octet));
 
         // 检查是否设置了事件处理程序且该处理程序实现了 IHttpRequestEventHandler 接口，如果有则设置给 httpRequestBuilder

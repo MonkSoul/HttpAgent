@@ -22,7 +22,7 @@ public class HttpDeclarativeExtractorContextTests
             typeof(Action<HttpRequestBuilder>), typeof(Action<HttpMultipartFormDataBuilder>),
             typeof(HttpCompletionOption),
             typeof(CancellationToken)
-        ], HttpDeclarativeExtractorContext._specialParameterTypes);
+        ], HttpDeclarativeExtractorContext._frozenParameterTypes);
 
         var method1 = typeof(IHttpDeclarativeTest).GetMethod(nameof(IHttpDeclarativeTest.Method1));
         var context1 = new HttpDeclarativeExtractorContext(method1!, []);
@@ -45,20 +45,20 @@ public class HttpDeclarativeExtractorContextTests
     }
 
     [Fact]
-    public void FilterSpecialParameter_Invalid_Parameters() =>
-        Assert.Throws<ArgumentNullException>(() => HttpDeclarativeExtractorContext.FilterSpecialParameter(null!));
+    public void IsFrozenParameter_Invalid_Parameters() =>
+        Assert.Throws<ArgumentNullException>(() => HttpDeclarativeExtractorContext.IsFrozenParameter(null!));
 
     [Fact]
-    public void FilterSpecialParameter_ReturnOK()
+    public void IsFrozenParameter_ReturnOK()
     {
-        var method = typeof(IHttpDeclarativeTest).GetMethod(nameof(IHttpDeclarativeTest.Special))!;
+        var method = typeof(IHttpDeclarativeTest).GetMethod(nameof(IHttpDeclarativeTest.Frozen))!;
         var parameters = method.GetParameters();
 
-        Assert.True(HttpDeclarativeExtractorContext.FilterSpecialParameter(parameters[0]));
-        Assert.True(HttpDeclarativeExtractorContext.FilterSpecialParameter(parameters[1]));
-        Assert.False(HttpDeclarativeExtractorContext.FilterSpecialParameter(parameters[2]));
-        Assert.False(HttpDeclarativeExtractorContext.FilterSpecialParameter(parameters[3]));
-        Assert.False(HttpDeclarativeExtractorContext.FilterSpecialParameter(parameters[4]));
-        Assert.False(HttpDeclarativeExtractorContext.FilterSpecialParameter(parameters[5]));
+        Assert.False(HttpDeclarativeExtractorContext.IsFrozenParameter(parameters[0]));
+        Assert.False(HttpDeclarativeExtractorContext.IsFrozenParameter(parameters[1]));
+        Assert.True(HttpDeclarativeExtractorContext.IsFrozenParameter(parameters[2]));
+        Assert.True(HttpDeclarativeExtractorContext.IsFrozenParameter(parameters[3]));
+        Assert.True(HttpDeclarativeExtractorContext.IsFrozenParameter(parameters[4]));
+        Assert.True(HttpDeclarativeExtractorContext.IsFrozenParameter(parameters[5]));
     }
 }

@@ -36,8 +36,10 @@ public sealed class HttpDeclarativeBuilder
     ///     HTTP 声明式 <see cref="IHttpDeclarativeExtractor" /> 提取器集合（冻结）
     /// </summary>
     /// <remarks>该集合用于确保某些 HTTP 声明式提取器始终位于最后。</remarks>
-    internal static readonly ConcurrentDictionary<Type, IHttpDeclarativeExtractor> _freezeExtractors = new([
-        new(typeof(MultipartBodyDeclarativeExtractor), new MultipartBodyDeclarativeExtractor()),
+    internal static readonly ConcurrentDictionary<Type, IFrozenHttpDeclarativeExtractor> _frozenExtractors = new([
+        new(typeof(MultipartDeclarativeExtractor), new MultipartDeclarativeExtractor()),
+        new(typeof(HttpMultipartFormDataBuilderDeclarativeExtractor),
+            new HttpMultipartFormDataBuilderDeclarativeExtractor()),
         new(typeof(HttpRequestBuilderDeclarativeExtractor), new HttpRequestBuilderDeclarativeExtractor())
     ]);
 
@@ -112,8 +114,11 @@ public sealed class HttpDeclarativeBuilder
                 value => value.GetType());
         }
 
+        // 组合所有 HTTP 声明式提取器
+        var extractors = _extractors.Values.Concat(_frozenExtractors.Values.OrderByDescending(e => e.Order)).ToArray();
+
         // 遍历 HTTP 声明式提取器集合
-        foreach (var extractor in _extractors.Values.Concat(_freezeExtractors.Values))
+        foreach (var extractor in extractors)
         {
             // 提取方法信息构建 HttpRequestBuilder 实例
             extractor.Extract(httpRequestBuilder, httpDeclarativeExtractorContext);

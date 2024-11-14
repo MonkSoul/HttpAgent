@@ -220,7 +220,7 @@ public interface IHttpDeclarativeTest : IHttpDeclarative
     Task<string> Method2([Query] int id, string name);
 
     [Get("https://furion.net/")]
-    Task<string> Special(int id, string name, Action<HttpRequestBuilder> builder,
+    Task<string> Frozen(int id, string name, Action<HttpRequestBuilder> builder,
         Action<HttpMultipartFormDataBuilder> formBuilder, HttpCompletionOption completionOption,
         CancellationToken cancellationToken);
 

@@ -45,6 +45,11 @@ public class HttpFileUploadBuilderTests
         Assert.Null(builder2.FileTransferEventHandlerType);
         Assert.Null(builder2.AllowedFileExtensions);
         Assert.Null(builder2.MaxFileSizeInBytes);
+        Assert.Null(builder2.FileName);
+
+        var builder3 =
+            new HttpFileUploadBuilder(HttpMethod.Post, null, @"C:\Workspaces\index.html", "file", "myindex.html");
+        Assert.Equal("myindex.html", builder3.FileName);
     }
 
     [Fact]

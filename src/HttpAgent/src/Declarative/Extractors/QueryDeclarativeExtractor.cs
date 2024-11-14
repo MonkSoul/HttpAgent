@@ -47,7 +47,7 @@ internal sealed class QueryDeclarativeExtractor : IHttpDeclarativeExtractor
 
         // 查找所有贴有 [Query] 特性的参数集合
         var queryParameters = context.Parameters.Where(u =>
-                HttpDeclarativeExtractorContext.FilterSpecialParameter(u.Key) &&
+                !HttpDeclarativeExtractorContext.IsFrozenParameter(u.Key) &&
                 u.Key.IsDefined(typeof(QueryAttribute), true))
             .ToArray();
 

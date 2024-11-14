@@ -47,7 +47,7 @@ internal sealed class HeaderDeclarativeExtractor : IHttpDeclarativeExtractor
 
         // 查找所有贴有 [Header] 特性的参数集合
         var headerParameters = context.Parameters.Where(u =>
-                HttpDeclarativeExtractorContext.FilterSpecialParameter(u.Key) &&
+                !HttpDeclarativeExtractorContext.IsFrozenParameter(u.Key) &&
                 u.Key.IsDefined(typeof(HeaderAttribute), true))
             .ToArray();
 

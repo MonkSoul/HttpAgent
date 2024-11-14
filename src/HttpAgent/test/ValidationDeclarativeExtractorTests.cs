@@ -121,7 +121,7 @@ public class ValidationDeclarativeExtractorTests
     }
 }
 
-public interface IValidationAttributeDeclarativeTest : IHttpDeclarativeExtractor
+public interface IValidationAttributeDeclarativeTest : IHttpDeclarative
 {
     [Get("http://localhost:5000")]
     Task Test1([Required] string str, [Required] ValidationModel obj);

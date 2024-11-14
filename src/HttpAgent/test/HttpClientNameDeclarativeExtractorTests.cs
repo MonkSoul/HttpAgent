@@ -45,14 +45,14 @@ public class HttpClientNameDeclarativeExtractorTests
     }
 }
 
-public interface IHttpClientNameDeclarativeExtractorTest1 : IHttpDeclarativeExtractor
+public interface IHttpClientNameDeclarativeExtractorTest1 : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     Task Test1();
 }
 
 [HttpClientName(default)]
-public interface IHttpClientNameDeclarativeExtractorTest2 : IHttpDeclarativeExtractor
+public interface IHttpClientNameDeclarativeExtractorTest2 : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     Task Test1();

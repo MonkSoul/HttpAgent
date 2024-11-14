@@ -212,13 +212,13 @@ public sealed class HttpRemoteBuilder
     /// <returns>
     ///     <see cref="HttpRemoteBuilder" />
     /// </returns>
-    public HttpRemoteBuilder AddHttpDeclarativeFromAssemblies(params IEnumerable<Assembly> assemblies)
+    public HttpRemoteBuilder AddHttpDeclarativeFromAssemblies(params IEnumerable<Assembly?> assemblies)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(assemblies);
 
-        AddHttpDeclaratives(assemblies.SelectMany(s =>
-            s.GetExportedTypes().Where(t => t.IsInterface && typeof(IHttpDeclarative).IsAssignableFrom(t))));
+        AddHttpDeclaratives(assemblies.SelectMany(ass =>
+            (ass?.GetExportedTypes() ?? []).Where(t => t.IsInterface && typeof(IHttpDeclarative).IsAssignableFrom(t))));
 
         return this;
     }

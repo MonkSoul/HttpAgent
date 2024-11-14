@@ -46,7 +46,7 @@ internal sealed class CookieDeclarativeExtractor : IHttpDeclarativeExtractor
 
         // 查找所有贴有 [Cookie] 特性的参数集合
         var cookieParameters = context.Parameters.Where(u =>
-                HttpDeclarativeExtractorContext.FilterSpecialParameter(u.Key) &&
+                !HttpDeclarativeExtractorContext.IsFrozenParameter(u.Key) &&
                 u.Key.IsDefined(typeof(CookieAttribute), true))
             .ToArray();
 

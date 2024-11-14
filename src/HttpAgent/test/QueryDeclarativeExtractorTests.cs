@@ -98,7 +98,7 @@ public class QueryDeclarativeExtractorTests
 [Query("query1", "value1")]
 [Query("query2", "value2")]
 [Query("query3")]
-public interface IQueryDeclarativeTest : IHttpDeclarativeExtractor
+public interface IQueryDeclarativeTest : IHttpDeclarative
 {
     [Get("http://localhost:5000")]
     [Query("query4")]

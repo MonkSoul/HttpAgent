@@ -47,14 +47,14 @@ public class TimeoutDeclarativeExtractorTests
     }
 }
 
-public interface ITimeoutDeclarativeExtractorTest1 : IHttpDeclarativeExtractor
+public interface ITimeoutDeclarativeExtractorTest1 : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     Task Test1();
 }
 
 [Timeout(100)]
-public interface ITimeoutDeclarativeExtractorTest2 : IHttpDeclarativeExtractor
+public interface ITimeoutDeclarativeExtractorTest2 : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     Task Test1();

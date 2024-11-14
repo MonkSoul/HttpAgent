@@ -4,7 +4,7 @@ namespace HttpAgent.Samples.Controllers;
 
 [ApiController]
 [Route("[controller]/[action]")]
-public class GetStartController(IHttpRemoteService httpRemoteService) : ControllerBase
+public class GetStartController(IHttpRemoteService httpRemoteService, ISampleService sampleService) : ControllerBase
 {
     /// <summary>
     ///     获取网站内容
@@ -130,18 +130,42 @@ public class GetStartController(IHttpRemoteService httpRemoteService) : Controll
         return content;
     }
 
+    /// <summary>
+    ///     URL 编码表单提交
+    /// </summary>
+    /// <returns></returns>
     [HttpPost]
     public async Task<YourRemoteModel?> PostURLForm()
     {
-        var content = await httpRemoteService.PostAsAsync<YourRemoteModel>("https://localhost:7044/HttpRemote/AddURLForm",
+        var content = await httpRemoteService.PostAsAsync<YourRemoteModel>(
+            "https://localhost:7044/HttpRemote/AddURLForm",
             builder => builder
-                .SetFormUrlEncodedContent(new { id = 1, name = "furion" })); // 设置 application/x-www-form-urlencoded 请求内容
+                .SetFormUrlEncodedContent(new
+                    { id = 1, name = "furion" })); // 设置 application/x-www-form-urlencoded 请求内容
 
-        var content2 = await httpRemoteService.PostAsAsync<YourRemoteModel>("https://localhost:7044/HttpRemote/AddURLForm",
+        var content2 = await httpRemoteService.PostAsAsync<YourRemoteModel>(
+            "https://localhost:7044/HttpRemote/AddURLForm",
             builder => builder
-                .SetFormUrlEncodedContent(new { id = 1, name = "furion" }, useStringContent: true)); // 使用 StringContent 构建表单数据
+                .SetFormUrlEncodedContent(new { id = 1, name = "furion" },
+                    useStringContent: true)); // 使用 StringContent 构建表单数据
 
         return content;
+    }
+
+    [HttpGet]
+    public async Task Declarative()
+    {
+        var content1 = await sampleService.GetWebSiteContent();
+
+        var content2 = await sampleService.PostData("furion", new { id = 1, name = "furion" });
+
+        var content3 = await sampleService.PostForm(formBuilder => formBuilder
+            .AddJson(new { id = 1, name = "furion" }) // 设置常规字段
+            .AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file"));
+
+        var content4 = await sampleService.PostForm2(new { id = 1, name = "furion" }, @"C:\Workspaces\httptest.jpg");
+
+        var content5 = await sampleService.PostURLForm(new { id = 1, name = "furion" });
     }
 
     /// <summary>

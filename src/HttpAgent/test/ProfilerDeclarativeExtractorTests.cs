@@ -45,14 +45,14 @@ public class ProfilerDeclarativeExtractorTests
     }
 }
 
-public interface IProfilerDeclarativeExtractorTest1 : IHttpDeclarativeExtractor
+public interface IProfilerDeclarativeExtractorTest1 : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     Task Test1();
 }
 
 [Profiler]
-public interface IProfilerDeclarativeExtractorTest2 : IHttpDeclarativeExtractor
+public interface IProfilerDeclarativeExtractorTest2 : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     Task Test1();

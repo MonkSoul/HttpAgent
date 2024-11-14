@@ -47,14 +47,14 @@ public class TraceIdentifierDeclarativeExtractorTests
     }
 }
 
-public interface ITraceIdentifierDeclarativeExtractorTest1 : IHttpDeclarativeExtractor
+public interface ITraceIdentifierDeclarativeExtractorTest1 : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     Task Test1();
 }
 
 [TraceIdentifier("furion-remote")]
-public interface ITraceIdentifierDeclarativeExtractorTest2 : IHttpDeclarativeExtractor
+public interface ITraceIdentifierDeclarativeExtractorTest2 : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     Task Test1();

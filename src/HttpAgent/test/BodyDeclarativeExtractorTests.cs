@@ -76,10 +76,18 @@ public class BodyDeclarativeExtractorTests
         Assert.Equal("str", httpRequestBuilder7.RawContent);
         Assert.Equal("text/plain", httpRequestBuilder7.ContentType);
         Assert.Equal("utf-32", httpRequestBuilder7.ContentEncoding?.BodyName);
+
+        var method8 = typeof(IBodyDeclarativeTest).GetMethod(nameof(IBodyDeclarativeTest.Test8))!;
+        var context8 = new HttpDeclarativeExtractorContext(method8, [new { }]);
+        var httpRequestBuilder8 = HttpRequestBuilder.Get("http://localhost");
+        new BodyDeclarativeExtractor().Extract(httpRequestBuilder8, context8);
+        Assert.Equal("application/x-www-form-urlencoded", httpRequestBuilder8.ContentType);
+        Assert.NotNull(httpRequestBuilder8.HttpContentProcessorProviders);
+        Assert.Single(httpRequestBuilder8.HttpContentProcessorProviders);
     }
 }
 
-public interface IBodyDeclarativeTest : IHttpDeclarativeExtractor
+public interface IBodyDeclarativeTest : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     Task Test1();
@@ -101,4 +109,7 @@ public interface IBodyDeclarativeTest : IHttpDeclarativeExtractor
 
     [Post("http://localhost:5000")]
     Task Test7([Body("text/plain; charset=utf-8", "utf-32")] string body);
+
+    [Post("http://localhost:5000")]
+    Task Test8([Body("application/x-www-form-urlencoded; charset=utf-8", UseStringContent = true)] object body);
 }

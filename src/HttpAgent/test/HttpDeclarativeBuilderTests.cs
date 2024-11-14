@@ -50,12 +50,16 @@ public class HttpDeclarativeBuilderTests
 
         Dictionary<Type, IHttpDeclarativeExtractor> freezeExtractors = new()
         {
-            { typeof(MultipartBodyDeclarativeExtractor), new MultipartBodyDeclarativeExtractor() },
+            { typeof(MultipartDeclarativeExtractor), new MultipartDeclarativeExtractor() },
+            {
+                typeof(HttpMultipartFormDataBuilderDeclarativeExtractor),
+                new HttpMultipartFormDataBuilderDeclarativeExtractor()
+            },
             { typeof(HttpRequestBuilderDeclarativeExtractor), new HttpRequestBuilderDeclarativeExtractor() }
         };
 
         Assert.True(freezeExtractors.Keys.ToHashSet()
-            .SetEquals(HttpDeclarativeBuilder._freezeExtractors.Keys.ToHashSet()));
+            .SetEquals(HttpDeclarativeBuilder._frozenExtractors.Keys.ToHashSet()));
     }
 
     [Fact]
@@ -122,11 +126,15 @@ public class HttpDeclarativeBuilderTests
 
         Dictionary<Type, IHttpDeclarativeExtractor> freezeExtractors = new()
         {
-            { typeof(MultipartBodyDeclarativeExtractor), new MultipartBodyDeclarativeExtractor() },
+            { typeof(MultipartDeclarativeExtractor), new MultipartDeclarativeExtractor() },
+            {
+                typeof(HttpMultipartFormDataBuilderDeclarativeExtractor),
+                new HttpMultipartFormDataBuilderDeclarativeExtractor()
+            },
             { typeof(HttpRequestBuilderDeclarativeExtractor), new HttpRequestBuilderDeclarativeExtractor() }
         };
 
         Assert.True(freezeExtractors.Keys.ToHashSet()
-            .SetEquals(HttpDeclarativeBuilder._freezeExtractors.Keys.ToHashSet()));
+            .SetEquals(HttpDeclarativeBuilder._frozenExtractors.Keys.ToHashSet()));
     }
 }

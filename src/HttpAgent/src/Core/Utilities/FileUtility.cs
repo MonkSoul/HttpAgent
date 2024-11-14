@@ -13,7 +13,7 @@ public static class FileUtility
     ///     尝试验证文件拓展名
     /// </summary>
     /// <remarks>特别说明：不支持拓展名中包含通配符，如 <c>*</c>。</remarks>
-    /// <param name="fileName">文件名</param>
+    /// <param name="fileName">文件的名称</param>
     /// <param name="allowedFileExtensions">允许的文件扩展名字符串，用分号分隔</param>
     /// <param name="validFileExtensions">有效的文件拓展名集合</param>
     /// <returns>
@@ -36,7 +36,7 @@ public static class FileUtility
     ///     尝试验证文件拓展名
     /// </summary>
     /// <remarks>特别说明：不支持拓展名中包含通配符，如 <c>*</c>。</remarks>
-    /// <param name="fileName">文件名</param>
+    /// <param name="fileName">文件的名称</param>
     /// <param name="allowedFileExtensions">允许的文件拓展名数组</param>
     /// <param name="validFileExtensions">有效的文件拓展名集合</param>
     /// <returns>
@@ -70,7 +70,7 @@ public static class FileUtility
     ///     验证文件拓展名
     /// </summary>
     /// <remarks>特别说明：不支持拓展名中包含通配符，如 <c>*</c>。</remarks>
-    /// <param name="fileName">文件名</param>
+    /// <param name="fileName">文件的名称</param>
     /// <param name="allowedFileExtensions">允许的文件扩展名字符串，用分号分隔</param>
     /// <exception cref="InvalidOperationException"></exception>
     public static void ValidateExtension(string fileName, string? allowedFileExtensions) =>
@@ -81,7 +81,7 @@ public static class FileUtility
     ///     验证文件拓展名
     /// </summary>
     /// <remarks>特别说明：不支持拓展名中包含通配符，如 <c>*</c>。</remarks>
-    /// <param name="fileName">文件名</param>
+    /// <param name="fileName">文件的名称</param>
     /// <param name="allowedFileExtensions">允许的文件拓展名数组</param>
     /// <exception cref="InvalidOperationException"></exception>
     public static void ValidateExtension(string fileName, string[]? allowedFileExtensions)

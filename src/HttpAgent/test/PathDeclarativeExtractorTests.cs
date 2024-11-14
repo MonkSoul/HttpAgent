@@ -50,7 +50,7 @@ public class PathDeclarativeExtractorTests
 
 [Path("path1", "value1")]
 [Path("path2", "value2")]
-public interface IPathDeclarativeTest : IHttpDeclarativeExtractor
+public interface IPathDeclarativeTest : IHttpDeclarative
 {
     [Path("path3", "value3")]
     [Post("http://localhost:5000")]

@@ -65,14 +65,14 @@ public class SimulateBrowserDeclarativeExtractorTests
     }
 }
 
-public interface ISimulateBrowserDeclarativeExtractorTest1 : IHttpDeclarativeExtractor
+public interface ISimulateBrowserDeclarativeExtractorTest1 : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     Task Test1();
 }
 
 [SimulateBrowser]
-public interface ISimulateBrowserDeclarativeExtractorTest2 : IHttpDeclarativeExtractor
+public interface ISimulateBrowserDeclarativeExtractorTest2 : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     Task Test1();

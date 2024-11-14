@@ -250,10 +250,10 @@ public class HttpRemoteBuilderTests
     {
         var builder = new HttpRemoteBuilder();
         // ReSharper disable once RedundantExplicitParamsArrayCreation
-        builder.AddHttpDeclarativeFromAssemblies([typeof(HttpRemoteBuilderTests).Assembly]);
+        builder.AddHttpDeclarativeFromAssemblies([typeof(HttpRemoteBuilderTests).Assembly, null]);
 
         Assert.NotNull(builder._httpDeclarativeTypes);
-        Assert.Equal(3, builder._httpDeclarativeTypes.Count);
+        Assert.Equal(30, builder._httpDeclarativeTypes.Count);
     }
 
     [Fact]

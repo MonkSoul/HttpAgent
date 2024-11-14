@@ -14,7 +14,7 @@ internal sealed class ValidationDeclarativeExtractor : IHttpDeclarativeExtractor
     {
         // 获取所有参数集合
         var parameters = context.Parameters.Where(u =>
-            HttpDeclarativeExtractorContext.FilterSpecialParameter(u.Key)).ToArray();
+            !HttpDeclarativeExtractorContext.IsFrozenParameter(u.Key)).ToArray();
 
         // 空检查
         if (parameters.Length == 0)

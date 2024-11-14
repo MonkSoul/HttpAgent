@@ -178,12 +178,12 @@ public sealed class HttpContextForwardBuilder
         // 检查请求内容类型是否为 multipart/form-data
         if (!contentType.IsIn([MediaTypeNames.Multipart.FormData], StringComparer.OrdinalIgnoreCase))
         {
-            // 复制非 multipart/form-data 内容
+            // 复制非多部分内容表单内容
             CopyNonMultipartFormData(bodyStream, contentType, httpRequestBuilder);
         }
         else
         {
-            // 复制 multipart/form-data 内容
+            // 复制多部分内容表单内容
             await CopyMultipartFormDataAsync(bodyStream, rawContentType, httpRequestBuilder,
                 HttpContext.RequestAborted);
         }
@@ -193,7 +193,7 @@ public sealed class HttpContextForwardBuilder
     }
 
     /// <summary>
-    ///     复制非 <c>multipart/form-data</c> 内容
+    ///     复制非多部分内容表单内容
     /// </summary>
     /// <param name="bodyStream">
     ///     <see cref="Stream" />
@@ -213,7 +213,7 @@ public sealed class HttpContextForwardBuilder
     }
 
     /// <summary>
-    ///     复制 <c>multipart/form-data</c> 内容
+    ///     复制多部分内容表单内容
     /// </summary>
     /// <param name="bodyStream">
     ///     <see cref="Stream" />
@@ -228,7 +228,7 @@ public sealed class HttpContextForwardBuilder
     internal static async Task CopyMultipartFormDataAsync(Stream bodyStream, string rawContentType,
         HttpRequestBuilder httpRequestBuilder, CancellationToken cancellationToken)
     {
-        // 获取多部分内容的边界；注意：这里可能出现前后双引号问题
+        // 获取多部分内容表单的边界；注意：这里可能出现前后双引号问题
         var boundary = rawContentType.Split('=')[1].TrimStart('"').TrimEnd('"');
 
         // 初始化 HttpMultipartFormDataBuilder 实例
@@ -246,12 +246,12 @@ public sealed class HttpContextForwardBuilder
             // 检查当前节是否为文件节
             if (multipartSection.AsFileSection() is { } fileMultipartSection)
             {
-                // 复制 multipart/form-data 文件节内容
+                // 复制多部分内容表单文件节内容
                 CopyFileMultipartSection(fileMultipartSection, httpMultipartFormDataBuilder, httpRequestBuilder);
             }
             else
             {
-                // 复制 multipart/form-data 文本节内容
+                // 复制多部分内容表单文本节内容
                 await CopyTextMultipartSectionAsync(multipartSection, httpMultipartFormDataBuilder, cancellationToken);
             }
 
@@ -259,11 +259,12 @@ public sealed class HttpContextForwardBuilder
             multipartSection = await multipartReader.ReadNextSectionAsync(cancellationToken);
         }
 
+        // 设置多部分内容表单
         httpRequestBuilder.SetMultipartContent(httpMultipartFormDataBuilder);
     }
 
     /// <summary>
-    ///     复制 <c>multipart/form-data</c> 文本节内容
+    ///     复制多部分内容表单文本节内容
     /// </summary>
     /// <param name="multipartSection">
     ///     <see cref="MultipartSection" />
@@ -294,7 +295,7 @@ public sealed class HttpContextForwardBuilder
     }
 
     /// <summary>
-    ///     复制 <c>multipart/form-data</c> 文件节内容
+    ///     复制多部分内容表单文件节内容
     /// </summary>
     /// <param name="fileMultipartSection">
     ///     <see cref="FileMultipartSection" />

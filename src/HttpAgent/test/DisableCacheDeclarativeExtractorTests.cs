@@ -44,14 +44,14 @@ public class DisableCacheDeclarativeExtractorTests
     }
 }
 
-public interface IDisableCacheDeclarativeExtractorTest1 : IHttpDeclarativeExtractor
+public interface IDisableCacheDeclarativeExtractorTest1 : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     Task Test1();
 }
 
 [DisableCache]
-public interface IDisableCacheDeclarativeExtractorTest2 : IHttpDeclarativeExtractor
+public interface IDisableCacheDeclarativeExtractorTest2 : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     Task Test1();

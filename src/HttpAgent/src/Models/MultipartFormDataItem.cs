@@ -44,9 +44,8 @@ internal sealed class MultipartFormDataItem
     internal object? RawContent { get; init; }
 
     /// <summary>
-    ///     文件名
+    ///     文件的名称
     /// </summary>
-    /// <remarks>用于 <see cref="RawContent" /> 类型为 <see cref="Stream" /> 或 <c>byte[]</c> 时有效。</remarks>
     internal string? FileName { get; init; }
 
     /// <summary>

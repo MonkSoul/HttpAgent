@@ -60,7 +60,7 @@ public class IActionResultContentConverter : IHttpContentConverter<IActionResult
                     FileDownloadName =
                         string.IsNullOrWhiteSpace(fileDownloadName)
                             ? fileDownloadName
-                            // 使用 UTF-8 解码文件名
+                            // 使用 UTF-8 解码文件的名称
                             : Uri.UnescapeDataString(fileDownloadName),
                     LastModified = contentHeaders.LastModified?.UtcDateTime
                 };
@@ -117,7 +117,7 @@ public class IActionResultContentConverter : IHttpContentConverter<IActionResult
                     FileDownloadName =
                         string.IsNullOrWhiteSpace(fileDownloadName)
                             ? fileDownloadName
-                            // 使用 UTF-8 解码文件名
+                            // 使用 UTF-8 解码文件的名称
                             : Uri.UnescapeDataString(fileDownloadName),
                     LastModified = contentHeaders.LastModified?.UtcDateTime
                 };

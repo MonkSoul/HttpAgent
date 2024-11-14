@@ -98,7 +98,7 @@ public class HeaderDeclarativeExtractorTests
 [Header("header1", "value1")]
 [Header("header2", "value2")]
 [Header("header3")]
-public interface IHeaderDeclarativeTest : IHttpDeclarativeExtractor
+public interface IHeaderDeclarativeTest : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     [Header("header4")]

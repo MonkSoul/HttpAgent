@@ -366,13 +366,14 @@ public sealed partial class HttpRequestBuilder
     /// <param name="filePath">文件路径</param>
     /// <param name="name">表单名称；默认值为 <c>file</c>。</param>
     /// <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
+    /// <param name="fileName">文件的名称</param>
     /// <returns>
     ///     <see cref="HttpFileUploadBuilder" />
     /// </returns>
     public static HttpFileUploadBuilder UploadFile(HttpMethod httpMethod, Uri? requestUri, string filePath,
-        string name = "file", Func<FileTransferProgress, Task>? onProgressChanged = null)
+        string name = "file", Func<FileTransferProgress, Task>? onProgressChanged = null, string? fileName = null)
     {
-        var httpFileUploadBuilder = new HttpFileUploadBuilder(httpMethod, requestUri, filePath, name);
+        var httpFileUploadBuilder = new HttpFileUploadBuilder(httpMethod, requestUri, filePath, name, fileName);
 
         // 空检查
         if (onProgressChanged is not null)
@@ -390,12 +391,13 @@ public sealed partial class HttpRequestBuilder
     /// <param name="filePath">文件路径</param>
     /// <param name="name">表单名称；默认值为 <c>file</c>。</param>
     /// <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
+    /// <param name="fileName">文件的名称</param>
     /// <returns>
     ///     <see cref="HttpFileUploadBuilder" />
     /// </returns>
     public static HttpFileUploadBuilder UploadFile(Uri? requestUri, string filePath, string name = "file",
-        Func<FileTransferProgress, Task>? onProgressChanged = null) =>
-        UploadFile(HttpMethod.Post, requestUri, filePath, name, onProgressChanged);
+        Func<FileTransferProgress, Task>? onProgressChanged = null, string? fileName = null) =>
+        UploadFile(HttpMethod.Post, requestUri, filePath, name, onProgressChanged, fileName);
 
     /// <summary>
     ///     创建 <see cref="HttpFileUploadBuilder" /> 构建器
@@ -404,14 +406,15 @@ public sealed partial class HttpRequestBuilder
     /// <param name="filePath">文件路径</param>
     /// <param name="name">表单名称；默认值为 <c>file</c>。</param>
     /// <param name="onProgressChanged">用于传输进度发生变化时执行的委托</param>
+    /// <param name="fileName">文件的名称</param>
     /// <returns>
     ///     <see cref="HttpFileUploadBuilder" />
     /// </returns>
     public static HttpFileUploadBuilder UploadFile(string? requestUri, string filePath, string name = "file",
-        Func<FileTransferProgress, Task>? onProgressChanged = null) =>
+        Func<FileTransferProgress, Task>? onProgressChanged = null, string? fileName = null) =>
         UploadFile(HttpMethod.Post,
             string.IsNullOrWhiteSpace(requestUri) ? null : new Uri(requestUri, UriKind.RelativeOrAbsolute),
-            filePath, name, onProgressChanged);
+            filePath, name, onProgressChanged, fileName);
 
     /// <summary>
     ///     创建 <see cref="HttpServerSentEventsBuilder" /> 构建器

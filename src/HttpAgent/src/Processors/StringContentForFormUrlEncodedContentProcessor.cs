@@ -7,7 +7,10 @@ namespace HttpAgent;
 /// <summary>
 ///     URL 编码的表单内容处理器
 /// </summary>
-/// <remarks>解决 <see cref="FormUrlEncodedContent" /> 无法设置编码问题。<see cref="FormUrlEncodedContent" /> 的编码格式不是 <c>utf-8</c>，而是 <c>Encoding.Latin1</c>。</remarks>
+/// <remarks>
+///     解决 <see cref="FormUrlEncodedContent" /> 无法设置编码问题。<see cref="FormUrlEncodedContent" /> 的编码格式不是 <c>utf-8</c>，而是
+///     <c>Encoding.Latin1</c>。
+/// </remarks>
 public class StringContentForFormUrlEncodedContentProcessor : FormUrlEncodedContentProcessor
 {
     /// <inheritdoc />

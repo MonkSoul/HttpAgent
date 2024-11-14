@@ -33,14 +33,14 @@ public sealed class HttpMultipartFormDataBuilder
     }
 
     /// <summary>
-    ///     多部分内容的边界
+    ///     多部分内容表单的边界
     /// </summary>
     public string? Boundary { get; set; }
 
     /// <summary>
-    ///     设置多部分内容的边界
+    ///     设置多部分内容表单的边界
     /// </summary>
-    /// <param name="boundary">多部分内容的边界</param>
+    /// <param name="boundary">多部分内容表单的边界</param>
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
@@ -58,12 +58,13 @@ public sealed class HttpMultipartFormDataBuilder
     ///     添加 JSON 内容
     /// </summary>
     /// <param name="rawJson">JSON 字符串/原始对象</param>
+    /// <param name="name">表单名称。该值不为空时作为表单的一项。否则将遍历对象类型的每一个公开属性作为表单的项。</param>
     /// <param name="contentEncoding">内容编码</param>
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
     /// <exception cref="JsonException"></exception>
-    public HttpMultipartFormDataBuilder AddJson(object rawJson, Encoding? contentEncoding = null)
+    public HttpMultipartFormDataBuilder AddJson(object rawJson, string? name = null, Encoding? contentEncoding = null)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(rawJson);
@@ -73,7 +74,7 @@ public sealed class HttpMultipartFormDataBuilder
         // 检查是否是字符串类型
         if (rawJson is not string rawString)
         {
-            return AddRaw(rawObject, null, MediaTypeNames.Application.Json, contentEncoding);
+            return AddRaw(rawObject, name, MediaTypeNames.Application.Json, contentEncoding);
         }
 
         // 尝试验证并获取 JsonDocument 实例（需 using）
@@ -83,7 +84,7 @@ public sealed class HttpMultipartFormDataBuilder
         // 添加请求结束时需要释放的对象
         _httpRequestBuilder.AddDisposable(jsonDocument);
 
-        return AddRaw(rawObject, null, MediaTypeNames.Application.Json, contentEncoding);
+        return AddRaw(rawObject, name, MediaTypeNames.Application.Json, contentEncoding);
     }
 
     /// <summary>
@@ -158,7 +159,7 @@ public sealed class HttpMultipartFormDataBuilder
     ///     添加原始内容（字符串/对象）
     /// </summary>
     /// <param name="rawObject">字符串/原始对象</param>
-    /// <param name="name">表单名称</param>
+    /// <param name="name">表单名称。该值不为空时作为表单的一项。否则将遍历对象类型的每一个公开属性作为表单的项。</param>
     /// <param name="contentType">内容类型</param>
     /// <param name="contentEncoding">内容编码</param>
     /// <returns>
@@ -200,7 +201,7 @@ public sealed class HttpMultipartFormDataBuilder
     /// <remarks>文件大小限制在 <c>50MB</c> 以内。</remarks>
     /// <param name="url">互联网 URL 地址</param>
     /// <param name="name">表单名称</param>
-    /// <param name="fileName">文件名</param>
+    /// <param name="fileName">文件的名称</param>
     /// <param name="contentType">内容类型</param>
     /// <param name="contentEncoding">内容编码</param>
     /// <returns>
@@ -213,11 +214,8 @@ public sealed class HttpMultipartFormDataBuilder
         ArgumentException.ThrowIfNullOrWhiteSpace(url);
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
-        // 尝试获取文件名
+        // 尝试获取文件的名称
         var newFileName = fileName ?? Helpers.GetFileNameFromUri(new Uri(url, UriKind.Absolute));
-
-        // 空检查
-        ArgumentException.ThrowIfNullOrWhiteSpace(newFileName);
 
         // 从互联网 URL 地址中加载流
         var (fileStream, fileLength) = Helpers.GetStreamFromRemote(url);
@@ -234,19 +232,18 @@ public sealed class HttpMultipartFormDataBuilder
     /// <remarks>文件大小限制在 <c>50MB</c> 以内。</remarks>
     /// <param name="base64String">Base64 字符串</param>
     /// <param name="name">表单名称</param>
-    /// <param name="fileName">文件名</param>
+    /// <param name="fileName">文件的名称</param>
     /// <param name="contentType">内容类型</param>
     /// <param name="contentEncoding">内容编码</param>
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
-    public HttpMultipartFormDataBuilder AddFileFromBase64String(string base64String, string name, string fileName,
-        string contentType = "application/octet-stream", Encoding? contentEncoding = null)
+    public HttpMultipartFormDataBuilder AddFileFromBase64String(string base64String, string name,
+        string? fileName = null, string contentType = "application/octet-stream", Encoding? contentEncoding = null)
     {
         // 空检查
         ArgumentException.ThrowIfNullOrWhiteSpace(base64String);
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
 
         // 将 Base64 字符串转换成字节数组
         var bytes = Convert.FromBase64String(base64String);
@@ -262,12 +259,13 @@ public sealed class HttpMultipartFormDataBuilder
     /// </summary>
     /// <param name="filePath">文件路径</param>
     /// <param name="name">表单名称</param>
+    /// <param name="fileName">文件的名称</param>
     /// <param name="contentType">内容类型</param>
     /// <param name="contentEncoding">内容编码</param>
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
-    public HttpMultipartFormDataBuilder AddFileAsStream(string filePath, string name,
+    public HttpMultipartFormDataBuilder AddFileAsStream(string filePath, string name, string? fileName = null,
         string contentType = "application/octet-stream", Encoding? contentEncoding = null)
     {
         // 空检查
@@ -280,11 +278,8 @@ public sealed class HttpMultipartFormDataBuilder
             throw new FileNotFoundException($"The specified file `{filePath}` does not exist.");
         }
 
-        // 获取文件名
-        var fileName = Path.GetFileName(filePath);
-
-        // 空检查
-        ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
+        // 获取文件的名称
+        var newFileName = fileName ?? Path.GetFileName(filePath);
 
         // 读取文件流（没有 using）
         var fileStream = File.OpenRead(filePath);
@@ -296,7 +291,7 @@ public sealed class HttpMultipartFormDataBuilder
         // 添加文件流到请求结束时需要释放的集合中
         _httpRequestBuilder.AddDisposable(fileStream);
 
-        return AddStream(fileStream, name, fileName, fileLength, contentType, contentEncoding);
+        return AddStream(fileStream, name, newFileName, fileLength, contentType, contentEncoding);
     }
 
     /// <summary>
@@ -305,14 +300,15 @@ public sealed class HttpMultipartFormDataBuilder
     /// <param name="filePath">文件路径</param>
     /// <param name="name">表单名称</param>
     /// <param name="progressChannel">文件传输进度信息的通道</param>
+    /// <param name="fileName">文件的名称</param>
     /// <param name="contentType">内容类型</param>
     /// <param name="contentEncoding">内容编码</param>
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
     public HttpMultipartFormDataBuilder AddFileWithProgressAsStream(string filePath, string name,
-        Channel<FileTransferProgress> progressChannel, string contentType = "application/octet-stream",
-        Encoding? contentEncoding = null)
+        Channel<FileTransferProgress> progressChannel, string? fileName = null,
+        string contentType = "application/octet-stream", Encoding? contentEncoding = null)
     {
         // 空检查
         ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
@@ -325,11 +321,8 @@ public sealed class HttpMultipartFormDataBuilder
             throw new FileNotFoundException($"The specified file `{filePath}` does not exist.");
         }
 
-        // 获取文件名
-        var fileName = Path.GetFileName(filePath);
-
-        // 空检查
-        ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
+        // 获取文件的名称
+        var newFileName = fileName ?? Path.GetFileName(filePath);
 
         // 读取文件流（没有 using）
         var fileStream = File.OpenRead(filePath);
@@ -339,12 +332,12 @@ public sealed class HttpMultipartFormDataBuilder
         var fileLength = fileInfo.Length;
 
         // 初始化带读写进度的文件流
-        var progressFileStream = new ProgressFileStream(fileStream, filePath, fileLength, progressChannel);
+        var progressFileStream = new ProgressFileStream(fileStream, filePath, fileLength, progressChannel, newFileName);
 
         // 添加文件流到请求结束时需要释放的集合中
         _httpRequestBuilder.AddDisposable(progressFileStream);
 
-        return AddStream(progressFileStream, name, fileName, fileLength, contentType, contentEncoding);
+        return AddStream(progressFileStream, name, newFileName, fileLength, contentType, contentEncoding);
     }
 
     /// <summary>
@@ -352,12 +345,13 @@ public sealed class HttpMultipartFormDataBuilder
     /// </summary>
     /// <param name="filePath">文件路径</param>
     /// <param name="name">表单名称</param>
+    /// <param name="fileName">文件的名称</param>
     /// <param name="contentType">内容类型</param>
     /// <param name="contentEncoding">内容编码</param>
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
-    public HttpMultipartFormDataBuilder AddFileAsByteArray(string filePath, string name,
+    public HttpMultipartFormDataBuilder AddFileAsByteArray(string filePath, string name, string? fileName = null,
         string contentType = "application/octet-stream", Encoding? contentEncoding = null)
     {
         // 空检查
@@ -370,11 +364,8 @@ public sealed class HttpMultipartFormDataBuilder
             throw new FileNotFoundException($"The specified file `{filePath}` does not exist.");
         }
 
-        // 获取文件名
-        var fileName = Path.GetFileName(filePath);
-
-        // 空检查
-        ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
+        // 获取文件的名称
+        var newFileName = fileName ?? Path.GetFileName(filePath);
 
         // 读取文件字节数组
         var bytes = File.ReadAllBytes(filePath);
@@ -383,7 +374,7 @@ public sealed class HttpMultipartFormDataBuilder
         var fileInfo = new FileInfo(filePath);
         var fileLength = fileInfo.Length;
 
-        return AddByteArray(bytes, name, fileName, fileLength, contentType, contentEncoding);
+        return AddByteArray(bytes, name, newFileName, fileLength, contentType, contentEncoding);
     }
 
     /// <summary>
@@ -393,7 +384,7 @@ public sealed class HttpMultipartFormDataBuilder
     ///     <see cref="Stream" />
     /// </param>
     /// <param name="name">表单名称</param>
-    /// <param name="fileName">文件名</param>
+    /// <param name="fileName">文件的名称</param>
     /// <param name="fileSize">文件大小</param>
     /// <param name="contentType">内容类型</param>
     /// <param name="contentEncoding">内容编码</param>
@@ -427,7 +418,7 @@ public sealed class HttpMultipartFormDataBuilder
     /// </summary>
     /// <param name="byteArray">字节数组</param>
     /// <param name="name">表单名称</param>
-    /// <param name="fileName">文件名</param>
+    /// <param name="fileName">文件的名称</param>
     /// <param name="fileSize">文件大小</param>
     /// <param name="contentType">内容类型</param>
     /// <param name="contentEncoding">内容编码</param>
@@ -457,16 +448,20 @@ public sealed class HttpMultipartFormDataBuilder
     }
 
     /// <summary>
-    ///     添加 URL 表单
+    ///     添加 URL 编码的键值对表单
     /// </summary>
     /// <param name="rawObject">原始对象</param>
     /// <param name="name">表单名称</param>
     /// <param name="contentEncoding">内容编码</param>
+    /// <param name="useStringContent">
+    ///     是否使用 <see cref="StringContent" /> 构建
+    ///     <see cref="FormUrlEncodedContent" />。默认 <c>false</c>。
+    /// </param>
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
     public HttpMultipartFormDataBuilder AddFormUrlEncoded(object? rawObject, string name,
-        Encoding? contentEncoding = null)
+        Encoding? contentEncoding = null, bool useStringContent = false)
     {
         // 空检查
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
@@ -478,11 +473,17 @@ public sealed class HttpMultipartFormDataBuilder
             ContentEncoding = contentEncoding
         });
 
+        // 检查是否启用 StringContent 方式构建 application/x-www-form-urlencoded 请求内容
+        if (useStringContent)
+        {
+            _httpRequestBuilder.AddHttpContentProcessors(() => [new StringContentForFormUrlEncodedContentProcessor()]);
+        }
+
         return this;
     }
 
     /// <summary>
-    ///     添加多行表单
+    ///     添加多部分内容表单
     /// </summary>
     /// <param name="rawObject">原始对象</param>
     /// <param name="name">表单名称</param>
@@ -589,7 +590,7 @@ public sealed class HttpMultipartFormDataBuilder
             return null;
         }
 
-        // 获取多部分内容的边界；注意：这里可能出现前后双引号问题
+        // 获取多部分内容表单的边界；注意：这里可能出现前后双引号问题
         var boundary = Boundary?.TrimStart('"').TrimEnd('"');
 
         // 初始化 multipartFormDataContent 实例
@@ -641,9 +642,9 @@ public sealed class HttpMultipartFormDataBuilder
         var httpContent = httpContentProcessorFactory.BuildHttpContent(multipartFormDataItem.RawContent, contentType,
             multipartFormDataItem.ContentEncoding, processors);
 
-        // 处理 ByteArrayContent 和 StreamContent 类型文件名
-        if (httpContent is ByteArrayContent and not (FormUrlEncodedContent or StringContent) or StreamContent &&
-            httpContent.Headers.ContentDisposition is null &&
+        // 处理 ByteArrayContent、StreamContent 和 ReadOnlyMemoryContent 类型文件的名称
+        if (httpContent is ByteArrayContent and not (FormUrlEncodedContent or StringContent) or StreamContent
+                or ReadOnlyMemoryContent && httpContent.Headers.ContentDisposition is null &&
             !string.IsNullOrWhiteSpace(multipartFormDataItem.FileName))
         {
             httpContent.Headers.ContentDisposition =

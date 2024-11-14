@@ -15,6 +15,7 @@ public class HttpRequestBuilderDeclarativeExtractorTests
 
         var extractor = new HttpRequestBuilderDeclarativeExtractor();
         Assert.NotNull(extractor);
+        Assert.Equal(1, extractor.Order);
     }
 
     [Fact]
@@ -60,13 +61,13 @@ public class HttpRequestBuilderDeclarativeExtractorTests
     }
 }
 
-public interface IHttpRequestBuilderConfigureDeclarativeExtractorTest1 : IHttpDeclarativeExtractor
+public interface IHttpRequestBuilderConfigureDeclarativeExtractorTest1 : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     Task Test1(Action<HttpRequestBuilder> configure, Action<HttpRequestBuilder> configure2);
 }
 
-public interface IHttpRequestBuilderConfigureDeclarativeExtractorTest2 : IHttpDeclarativeExtractor
+public interface IHttpRequestBuilderConfigureDeclarativeExtractorTest2 : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     Task Test1();

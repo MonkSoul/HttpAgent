@@ -19,7 +19,8 @@ public sealed class FileTransferProgress
     /// </summary>
     /// <param name="filePath">文件路径</param>
     /// <param name="totalFileSize">文件的总大小</param>
-    internal FileTransferProgress(string filePath, long totalFileSize)
+    /// <param name="fileName">文件的名称</param>
+    internal FileTransferProgress(string filePath, long totalFileSize, string? fileName = null)
     {
         // 空检查
         ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
@@ -27,7 +28,7 @@ public sealed class FileTransferProgress
         TotalFileSize = totalFileSize;
 
         FilePath = filePath;
-        FileName = Path.GetFileName(filePath);
+        FileName = fileName ?? Path.GetFileName(filePath);
     }
 
     /// <summary>

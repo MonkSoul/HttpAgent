@@ -462,7 +462,7 @@ internal sealed class FileDownloadManager
     /// </returns>
     internal string GetFileName(HttpResponseMessage httpResponseMessage)
     {
-        // 获取文件下载保存的文件名
+        // 获取文件下载保存的文件的名称
         var fileName = Path.GetFileName(_httpFileDownloadBuilder.DestinationPath);
 
         // 空检查
@@ -475,12 +475,12 @@ internal sealed class FileDownloadManager
         var contentDisposition = httpResponseMessage.Content.Headers.ContentDisposition;
         if (!string.IsNullOrWhiteSpace(contentDisposition?.FileNameStar))
         {
-            // 使用 UTF-8 解码文件名
+            // 使用 UTF-8 解码文件的名称
             fileName = Uri.UnescapeDataString(contentDisposition.FileNameStar);
         }
         else if (!string.IsNullOrWhiteSpace(contentDisposition?.FileName))
         {
-            // 使用 UTF-8 解码文件名
+            // 使用 UTF-8 解码文件的名称
             fileName = Uri.UnescapeDataString(contentDisposition.FileName);
         }
 

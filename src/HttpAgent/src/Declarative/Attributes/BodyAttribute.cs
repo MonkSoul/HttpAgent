@@ -41,4 +41,10 @@ public sealed class BodyAttribute : Attribute
     ///     内容编码
     /// </summary>
     public string? ContentEncoding { get; set; }
+
+    /// <summary>
+    ///     是否使用 <see cref="StringContent" /> 构建 <see cref="FormUrlEncodedContent" />。默认 <c>false</c>
+    /// </summary>
+    /// <remarks>当 <see cref="ContentType" /> 值为 <c>application/x-www-form-urlencoded</c> 时有效。</remarks>
+    public bool UseStringContent { get; set; }
 }

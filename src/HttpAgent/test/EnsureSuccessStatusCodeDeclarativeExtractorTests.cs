@@ -45,14 +45,14 @@ public class EnsureSuccessStatusCodeDeclarativeExtractorTests
     }
 }
 
-public interface IEnsureSuccessStatusCodeDeclarativeExtractorTest1 : IHttpDeclarativeExtractor
+public interface IEnsureSuccessStatusCodeDeclarativeExtractorTest1 : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     Task Test1();
 }
 
 [EnsureSuccessStatusCode]
-public interface IEnsureSuccessStatusCodeDeclarativeExtractorTest2 : IHttpDeclarativeExtractor
+public interface IEnsureSuccessStatusCodeDeclarativeExtractorTest2 : IHttpDeclarative
 {
     [Post("http://localhost:5000")]
     Task Test1();

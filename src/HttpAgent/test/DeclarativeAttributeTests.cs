@@ -17,6 +17,7 @@ public class DeclarativeAttributeTests
         var attribute = new BodyAttribute();
         Assert.Null(attribute.ContentType);
         Assert.Null(attribute.ContentEncoding);
+        Assert.False(attribute.UseStringContent);
 
         var attribute2 = new BodyAttribute("application/json");
         Assert.Equal("application/json", attribute2.ContentType);
@@ -25,6 +26,26 @@ public class DeclarativeAttributeTests
         var attribute3 = new BodyAttribute("application/json", "utf-32");
         Assert.Equal("application/json", attribute3.ContentType);
         Assert.Equal("utf-32", attribute3.ContentEncoding);
+    }
+
+    [Fact]
+    public void MultipartAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(MultipartAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Parameter, attributeUsage.ValidOn);
+        Assert.False(attributeUsage.AllowMultiple);
+
+        var attribute = new MultipartAttribute();
+        Assert.Null(attribute.Name);
+        Assert.Null(attribute.FileName);
+        Assert.Null(attribute.ContentType);
+        Assert.Null(attribute.ContentEncoding);
+        Assert.Equal(FileSourceType.None, attribute.AsFileFrom);
+        Assert.True(attribute.AsFormItem);
+
+        var attribute2 = new MultipartAttribute("file");
+        Assert.Equal("file", attribute2.Name);
     }
 
     [Fact]

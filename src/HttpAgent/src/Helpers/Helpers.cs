@@ -61,7 +61,7 @@ internal static partial class Helpers
     }
 
     /// <summary>
-    ///     从 <see cref="Uri" /> 中解析文件名
+    ///     从 <see cref="Uri" /> 中解析文件的名称
     /// </summary>
     /// <param name="uri">
     ///     <see cref="Uri" />
@@ -80,31 +80,31 @@ internal static partial class Helpers
         // 获取 URL 的绝对路径
         var path = uri.AbsolutePath;
 
-        // 使用 / 分割路径，并获取最后一个部分作为潜在的文件名
+        // 使用 / 分割路径，并获取最后一个部分作为潜在的文件的名称
         var parts = path.Split('/');
         var fileName = parts.Length > 0 ? parts[^1] : string.Empty;
 
-        // 检查文件名是否为空或仅由点组成
+        // 检查文件的名称是否为空或仅由点组成
         if (string.IsNullOrEmpty(fileName) || fileName.Trim('.').Length == 0)
         {
             return string.Empty;
         }
 
-        // 查找文件名中的查询字符串开始位置。如果存在查询字符串，则去除它
+        // 查找文件的名称中的查询字符串开始位置。如果存在查询字符串，则去除它
         var queryStartIndex = fileName.IndexOf('?');
         if (queryStartIndex != -1)
         {
             fileName = fileName[..queryStartIndex];
         }
 
-        // 检查文件名是否包含有效的扩展名
+        // 检查文件的名称是否包含有效的扩展名
         var lastDotIndex = fileName.LastIndexOf('.');
         if (lastDotIndex == -1 || lastDotIndex == fileName.Length - 1)
         {
             return string.Empty;
         }
 
-        // 使用 UTF-8 解码文件名
+        // 使用 UTF-8 解码文件的名称
         return Uri.UnescapeDataString(fileName);
     }
 

@@ -4,17 +4,18 @@
 
 namespace HttpAgent.Tests;
 
-public class FileExistsBehaviorTests
+public class FileSourceTypeTests
 {
     [Fact]
     public void Definition_ReturnOK()
     {
-        var names = Enum.GetNames<FileExistsBehavior>();
-        Assert.Equal(3, names.Length);
+        var names = Enum.GetNames<FileSourceType>();
+        Assert.Equal(4, names.Length);
 
         string[] strings =
         [
-            nameof(FileExistsBehavior.CreateNew), nameof(FileExistsBehavior.Overwrite), nameof(FileExistsBehavior.Skip)
+            nameof(FileSourceType.None), nameof(FileSourceType.Path),
+            nameof(FileSourceType.Base64String), nameof(FileSourceType.Remote)
         ];
         Assert.True(strings.SequenceEqual(names));
     }

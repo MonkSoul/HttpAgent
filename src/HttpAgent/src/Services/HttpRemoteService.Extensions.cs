@@ -41,15 +41,15 @@ internal sealed partial class HttpRemoteService
     /// <inheritdoc />
     public HttpResponseMessage UploadFile(string? requestUri, string filePath, string name = "file",
         Func<FileTransferProgress, Task>? onProgressChanged = null, Action<HttpRequestBuilder>? configure = null,
-        CancellationToken cancellationToken = default) =>
-        Send(HttpRequestBuilder.UploadFile(requestUri, filePath, name, onProgressChanged), configure,
+        string? fileName = null, CancellationToken cancellationToken = default) =>
+        Send(HttpRequestBuilder.UploadFile(requestUri, filePath, name, onProgressChanged, fileName), configure,
             cancellationToken);
 
     /// <inheritdoc />
     public Task<HttpResponseMessage> UploadFileAsync(string? requestUri, string filePath, string name = "file",
         Func<FileTransferProgress, Task>? onProgressChanged = null, Action<HttpRequestBuilder>? configure = null,
-        CancellationToken cancellationToken = default) =>
-        SendAsync(HttpRequestBuilder.UploadFile(requestUri, filePath, name, onProgressChanged), configure,
+        string? fileName = null, CancellationToken cancellationToken = default) =>
+        SendAsync(HttpRequestBuilder.UploadFile(requestUri, filePath, name, onProgressChanged, fileName), configure,
             cancellationToken);
 
     /// <inheritdoc />

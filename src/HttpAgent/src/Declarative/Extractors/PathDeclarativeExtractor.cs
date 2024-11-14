@@ -32,7 +32,7 @@ internal sealed class PathDeclarativeExtractor : IHttpDeclarativeExtractor
 
         // 查找所有路径参数集合
         var pathParameters = context.Parameters
-            .Where(u => HttpDeclarativeExtractorContext.FilterSpecialParameter(u.Key)).ToArray();
+            .Where(u => !HttpDeclarativeExtractorContext.IsFrozenParameter(u.Key)).ToArray();
 
         // 空检查
         if (pathParameters.Length == 0)
