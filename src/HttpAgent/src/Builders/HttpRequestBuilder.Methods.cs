@@ -1259,7 +1259,7 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
-    ///     设置 HTTP 请求的属性集
+    ///     设置 HTTP 请求的属性集合
     /// </summary>
     /// <remarks>支持多次调用。</remarks>
     /// <param name="properties">HTTP 请求的属性集合</param>
@@ -1277,7 +1277,7 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
-    ///     设置 HTTP 请求的属性集
+    ///     设置 HTTP 请求的属性集合
     /// </summary>
     /// <remarks>支持多次调用。</remarks>
     /// <param name="propertySource">请求的属性源对象</param>
