@@ -7,6 +7,7 @@ global using HttpAgent.Extensions;
 global using HttpAgent.Core.Utilities;
 global using MessagePack;
 global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.Extensions.DependencyInjection.Extensions;
 global using Microsoft.Extensions.Http;
 global using Microsoft.Extensions.Options;
 global using System.Collections.ObjectModel;

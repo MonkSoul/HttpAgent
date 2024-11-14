@@ -1,6 +1,4 @@
-﻿using HttpAgent.Samples.Models;
-
-namespace HttpAgent.Samples.Controllers;
+﻿namespace HttpAgent.Samples.Controllers;
 
 [ApiController]
 [Route("[controller]/[action]")]

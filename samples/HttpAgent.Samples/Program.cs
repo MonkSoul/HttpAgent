@@ -1,3 +1,4 @@
+using System.Net;
 using System.Reflection;
 using HttpAgent.Extensions;
 using HttpAgent.Samples;
@@ -12,8 +13,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var cookieContainer = new CookieContainer();
+cookieContainer.Add(new Uri("https://furion.net"), new Cookie("cookieName", "cookieValue"));
+
 // 为默认客户端启用
 builder.Services.AddHttpClient(string.Empty)
+    .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
+    {
+        CookieContainer = cookieContainer,
+        UseCookies = false
+    })
     .AddProfilerDelegatingHandler();
 
 // 为特定客户端启用

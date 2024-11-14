@@ -1,7 +1,4 @@
-﻿using System.Net.Mime;
-using HttpAgent.Samples.Models;
-
-namespace HttpAgent.Samples;
+﻿namespace HttpAgent.Samples;
 
 [Profiler]
 public interface ISampleService : IHttpDeclarative

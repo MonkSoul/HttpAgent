@@ -4666,7 +4666,7 @@
         </member>
         <member name="T:HttpAgent.ProfilerDelegatingHandler">
             <summary>
-                HTTP 远程请求分析工具中间件
+                HTTP 远程请求分析工具处理委托
             </summary>
             <remarks>参考文献：https://learn.microsoft.com/zh-cn/aspnet/core/fundamentals/http-requests?view=aspnetcore-8.0#outgoing-request-middleware</remarks>
             <param name="logger">
@@ -4675,12 +4675,23 @@
         </member>
         <member name="M:HttpAgent.ProfilerDelegatingHandler.#ctor(Microsoft.Extensions.Logging.ILogger{HttpAgent.Logging})">
             <summary>
-                HTTP 远程请求分析工具中间件
+                HTTP 远程请求分析工具处理委托
             </summary>
             <remarks>参考文献：https://learn.microsoft.com/zh-cn/aspnet/core/fundamentals/http-requests?view=aspnetcore-8.0#outgoing-request-middleware</remarks>
             <param name="logger">
                 <see cref="T:Microsoft.Extensions.Logging.Logger`1" />
             </param>
+        </member>
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.IsEnabled(System.Net.Http.HttpRequestMessage)">
+            <summary>
+                是否启用请求分析工具
+            </summary>
+            <param name="httpRequestMessage">
+                <see cref="T:System.Net.Http.HttpRequestMessage" />
+            </param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
         </member>
         <member name="M:HttpAgent.ProfilerDelegatingHandler.Send(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
             <inheritdoc />
@@ -4711,6 +4722,20 @@
             </param>
             <param name="requestDuration">请求耗时（毫秒）</param>
         </member>
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogCookieContainer(Microsoft.Extensions.Logging.ILogger,System.Net.Http.HttpRequestMessage,System.Net.Http.SocketsHttpHandler)">
+            <summary>
+                打印 <see cref="T:System.Net.CookieContainer" /> 内容
+            </summary>
+            <param name="logger">
+                <see cref="T:Microsoft.Extensions.Logging.ILogger" />
+            </param>
+            <param name="request">
+                <see cref="T:System.Net.Http.HttpRequestMessage" />
+            </param>
+            <param name="socketsHttpHandler">
+                <see cref="T:System.Net.Http.SocketsHttpHandler" />
+            </param>
+        </member>
         <member name="M:HttpAgent.ProfilerDelegatingHandler.Log(Microsoft.Extensions.Logging.ILogger,System.String)">
             <summary>
                 打印日志
@@ -4720,15 +4745,12 @@
             </param>
             <param name="message">日志消息</param>
         </member>
-        <member name="M:HttpAgent.ProfilerDelegatingHandler.IsEnabled(System.Net.Http.HttpRequestMessage)">
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.ExtractSocketsHttpHandler">
             <summary>
-                是否启用请求分析工具
+                提取 <see cref="T:System.Net.Http.SocketsHttpHandler" /> 实例
             </summary>
-            <param name="httpRequestMessage">
-                <see cref="T:System.Net.Http.HttpRequestMessage" />
-            </param>
             <returns>
-                <see cref="T:System.Boolean" />
+                <see cref="T:System.Net.Http.SocketsHttpHandler" />
             </returns>
         </member>
         <member name="T:HttpAgent.Extensions.HttpRemoteExtensions">
@@ -4738,7 +4760,7 @@
         </member>
         <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.AddProfilerDelegatingHandler(Microsoft.Extensions.DependencyInjection.IHttpClientBuilder)">
             <summary>
-                添加 HTTP 远程请求分析工具中间件
+                添加 HTTP 远程请求分析工具处理委托
             </summary>
             <param name="builder">
                 <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />

@@ -25,7 +25,6 @@ public class ProfilerDelegatingHandlerTests
         services.AddLogging();
         using var provider = services.BuildServiceProvider();
         var logger = provider.GetRequiredService<ILogger<Logging>>();
-        var handler = new ProfilerDelegatingHandler(logger);
 
         var httpRequestMessage = new HttpRequestMessage();
         httpRequestMessage.Headers.TryAddWithoutValidation("Accept", "application/json");
@@ -41,7 +40,6 @@ public class ProfilerDelegatingHandlerTests
         services.AddLogging();
         using var provider = services.BuildServiceProvider();
         var logger = provider.GetRequiredService<ILogger<Logging>>();
-        var handler = new ProfilerDelegatingHandler(logger);
 
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost"));
         httpRequestMessage.Headers.TryAddWithoutValidation("Accept", "application/json");
@@ -67,12 +65,11 @@ public class ProfilerDelegatingHandlerTests
         services.AddLogging();
         using var provider = services.BuildServiceProvider();
         var logger = provider.GetRequiredService<ILogger<Logging>>();
-        var handler = new ProfilerDelegatingHandler(logger);
 
         ProfilerDelegatingHandler.Log(logger, null);
         ProfilerDelegatingHandler.Log(logger, string.Empty);
         ProfilerDelegatingHandler.Log(logger, " ");
-        ProfilerDelegatingHandler.Log(logger, "HttpAgent.Tests");
+        ProfilerDelegatingHandler.Log(logger, "Furion.HttpRemote.Tests");
     }
 
     [Fact]
@@ -86,5 +83,35 @@ public class ProfilerDelegatingHandlerTests
 
         httpRequestMessage.Options.Set(new HttpRequestOptionsKey<string>(Constants.DISABLED_PROFILER_KEY), "TRUE");
         Assert.False(ProfilerDelegatingHandler.IsEnabled(httpRequestMessage));
+    }
+
+    [Fact]
+    public void ExtractSocketsHttpHandler_ReturnOK()
+    {
+        var services = new ServiceCollection();
+        services.AddLogging();
+        services.TryAddTransient<ProfilerDelegatingHandler>();
+        services.AddHttpClient(string.Empty).AddProfilerDelegatingHandler();
+        using var provider = services.BuildServiceProvider();
+        var handler = provider.GetRequiredService<ProfilerDelegatingHandler>();
+        Assert.Null(handler.ExtractSocketsHttpHandler());
+    }
+
+    [Fact]
+    public void LogCookieContainer_ReturnOK()
+    {
+        var services = new ServiceCollection();
+        services.AddLogging();
+        using var provider = services.BuildServiceProvider();
+        var logger = provider.GetRequiredService<ILogger<Logging>>();
+
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost"));
+
+        ProfilerDelegatingHandler.LogCookieContainer(logger, httpRequestMessage, null);
+
+        var cookieContainer = new CookieContainer();
+        cookieContainer.Add(new Uri("http://localhost"), new Cookie("cookieName", "cookieValue"));
+        ProfilerDelegatingHandler.LogCookieContainer(logger, httpRequestMessage,
+            new SocketsHttpHandler { CookieContainer = cookieContainer, UseCookies = true });
     }
 }

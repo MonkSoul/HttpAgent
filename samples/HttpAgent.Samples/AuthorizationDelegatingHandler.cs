@@ -1,6 +1,4 @@
 ﻿
-using System.Net.Http.Headers;
-
 namespace HttpAgent.Samples;
 
 public class AuthorizationDelegatingHandler : DelegatingHandler
