@@ -65,6 +65,11 @@ internal static class Constants
     internal const string X_STRESS_TEST_VALUE = "Harness";
 
     /// <summary>
+    ///     禁用请求分析工具键
+    /// </summary>
+    internal const string DISABLED_PROFILER_KEY = "__Disabled_Profiler__";
+
+    /// <summary>
     ///     浏览器的 <c>User-Agent</c> 标头值
     /// </summary>
     internal const string USER_AGENT_OF_BROWSER =

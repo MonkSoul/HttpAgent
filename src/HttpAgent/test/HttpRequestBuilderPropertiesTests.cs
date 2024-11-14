@@ -57,5 +57,8 @@ public class HttpRequestBuilderPropertiesTests
         Assert.False(httpRequestBuilder2.HttpClientPoolingEnabled);
         Assert.Null(httpRequestBuilder2.StatusCodeHandlers);
         Assert.False(httpRequestBuilder2.ProfilerEnabled);
+        Assert.False(httpRequestBuilder2.__Disabled_Profiler__);
+        Assert.NotNull(httpRequestBuilder2.Properties);
+        Assert.Empty(httpRequestBuilder2.Properties);
     }
 }

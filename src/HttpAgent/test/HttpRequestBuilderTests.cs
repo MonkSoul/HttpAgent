@@ -304,6 +304,27 @@ public class HttpRequestBuilderTests
     }
 
     [Fact]
+    public void AppendProperties_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.Method!, new Uri("http://localhost"));
+
+        httpRequestBuilder.AppendProperties(httpRequestMessage);
+        Assert.Empty(httpRequestMessage.Options);
+
+        httpRequestBuilder.WithProperties(new { id = 10, name = "furion" });
+        httpRequestBuilder.AppendProperties(httpRequestMessage);
+        Assert.Equal(2, httpRequestMessage.Options.Count());
+
+        httpRequestBuilder.Profiler(false);
+        httpRequestBuilder.AppendProperties(httpRequestMessage);
+        Assert.Equal(3, httpRequestMessage.Options.Count());
+        Assert.True(httpRequestMessage.Options.TryGetValue(
+            new HttpRequestOptionsKey<string>(Constants.DISABLED_PROFILER_KEY), out var value));
+        Assert.Equal("TRUE", value);
+    }
+
+    [Fact]
     public void SetDefaultContentType_ReturnOK()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
@@ -405,6 +426,7 @@ public class HttpRequestBuilderTests
             .WithCookies(new { id = 10, name = "furion" })
             .WithHeaders(new { id = 10, name = "furion" })
             .RemoveHeaders("name")
+            .Profiler(false)
             .Build(httpRemoteOptions, new HttpContentProcessorFactory([]), null);
 
         Assert.NotNull(httpRequestMessage);
@@ -416,6 +438,10 @@ public class HttpRequestBuilderTests
         Assert.Equal(typeof(StringContent), httpRequestMessage.Content.GetType());
         Assert.Equal("text/plain", httpRequestMessage.Content.Headers.ContentType!.MediaType);
         Assert.Equal("utf-8", httpRequestMessage.Content.Headers.ContentType!.CharSet);
+        Assert.Single(httpRequestMessage.Options);
+        Assert.True(httpRequestMessage.Options.TryGetValue(
+            new HttpRequestOptionsKey<string>(Constants.DISABLED_PROFILER_KEY), out var value));
+        Assert.Equal("TRUE", value);
     }
 
     [Fact]

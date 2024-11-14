@@ -168,6 +168,12 @@ public sealed partial class HttpRequestBuilder
     public AuthenticationHeaderValue? AuthenticationHeader { get; private set; }
 
     /// <summary>
+    ///     HTTP 请求的属性集合
+    /// </summary>
+    /// <remarks>用于添加 HTTP 请求自定义拓展属性。该值将合并到 <c>HttpRequestMessage.Options</c> 属性中。</remarks>
+    public IDictionary<string, object?> Properties { get; } = new Dictionary<string, object?>();
+
+    /// <summary>
     ///     <inheritdoc cref="HttpMultipartFormDataBuilder" />
     /// </summary>
     internal HttpMultipartFormDataBuilder? MultipartFormDataBuilder { get; private set; }
@@ -208,6 +214,12 @@ public sealed partial class HttpRequestBuilder
     ///     是否启用请求分析工具
     /// </summary>
     internal bool ProfilerEnabled { get; private set; }
+
+    /// <summary>
+    ///     表示禁用请求分析工具标识
+    /// </summary>
+    /// <remarks>用于禁用全局请求分析工具。</remarks>
+    internal bool __Disabled_Profiler__ { get; private set; }
 
     /// <summary>
     ///     状态码处理程序

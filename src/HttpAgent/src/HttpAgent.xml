@@ -1140,6 +1140,14 @@
                 <see cref="T:HttpAgent.HttpRemoteOptions" />
             </param>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.AppendProperties(System.Net.Http.HttpRequestMessage)">
+            <summary>
+                追加 HTTP 请求的属性集
+            </summary>
+            <param name="httpRequestMessage">
+                <see cref="T:System.Net.Http.HttpRequestMessage" />
+            </param>
+        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.SetDefaultContentType(System.String)">
             <summary>
                 设置默认的内容类型
@@ -1319,7 +1327,7 @@
                 设置请求标头
             </summary>
             <remarks>支持多次调用。</remarks>
-            <param name="headerSource">请求头源对象</param>
+            <param name="headerSource">请求标头源对象</param>
             <param name="escape">是否转义字符串，默认 <c>false</c></param>
             <param name="culture">
                 <see cref="T:System.Globalization.CultureInfo" />
@@ -1794,6 +1802,37 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.WithProperty(System.String,System.Object)">
+            <summary>
+                设置 HTTP 请求的属性
+            </summary>
+            <remarks>支持多次调用。</remarks>
+            <param name="key">键</param>
+            <param name="value">值</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.WithProperties(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+                设置 HTTP 请求的属性集
+            </summary>
+            <remarks>支持多次调用。</remarks>
+            <param name="properties">HTTP 请求的属性集合</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.WithProperties(System.Object)">
+            <summary>
+                设置 HTTP 请求的属性集
+            </summary>
+            <remarks>支持多次调用。</remarks>
+            <param name="propertySource">请求的属性源对象</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.AddDisposable(System.IDisposable)">
             <summary>
                 添加请求结束时需要释放的对象
@@ -1968,6 +2007,12 @@
             </summary>
             <remarks>可为单次请求设置身份验证凭据请求授权标头。</remarks>
         </member>
+        <member name="P:HttpAgent.HttpRequestBuilder.Properties">
+            <summary>
+                HTTP 请求的属性集合
+            </summary>
+            <remarks>用于添加 HTTP 请求自定义拓展属性。该值将合并到 <c>HttpRequestMessage.Options</c> 属性中。</remarks>
+        </member>
         <member name="P:HttpAgent.HttpRequestBuilder.MultipartFormDataBuilder">
             <summary>
                 <inheritdoc cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
@@ -2009,6 +2054,12 @@
             <summary>
                 是否启用请求分析工具
             </summary>
+        </member>
+        <member name="P:HttpAgent.HttpRequestBuilder.__Disabled_Profiler__">
+            <summary>
+                表示禁用请求分析工具标识
+            </summary>
+            <remarks>用于禁用全局请求分析工具。</remarks>
         </member>
         <member name="P:HttpAgent.HttpRequestBuilder.StatusCodeHandlers">
             <summary>
@@ -2698,6 +2749,11 @@
                 压力测试标头值
             </summary>
         </member>
+        <member name="F:HttpAgent.Constants.DISABLED_PROFILER_KEY">
+            <summary>
+                禁用请求分析工具键
+            </summary>
+        </member>
         <member name="F:HttpAgent.Constants.USER_AGENT_OF_BROWSER">
             <summary>
                 浏览器的 <c>User-Agent</c> 标头值
@@ -3014,6 +3070,22 @@
                 <see cref="T:System.Collections.Generic.IDictionary`2" /> 拓展类
             </summary>
         </member>
+        <member name="M:HttpAgent.Core.Extensions.IDictionaryExtensions.AddOrUpdate``2(System.Collections.Generic.IDictionary{``0,``1},``0,``1)">
+            <summary>
+                添加或更新
+            </summary>
+            <typeparam name="TKey">字典键类型</typeparam>
+            <typeparam name="TValue">字典值类型</typeparam>
+            <param name="dictionary">
+                <see cref="T:System.Collections.Generic.IDictionary`2" />
+            </param>
+            <param name="key">
+                <typeparamref name="TKey" />
+            </param>
+            <param name="value">
+                <typeparamref name="TValue" />
+            </param>
+        </member>
         <member name="M:HttpAgent.Core.Extensions.IDictionaryExtensions.AddOrUpdate``2(System.Collections.Generic.IDictionary{``0,System.Collections.Generic.List{``1}},System.Collections.Generic.IDictionary{``0,``1},System.Boolean,System.Boolean)">
             <summary>
                 添加或更新
@@ -3032,6 +3104,19 @@
         <member name="M:HttpAgent.Core.Extensions.IDictionaryExtensions.AddOrUpdate``2(System.Collections.Generic.IDictionary{``0,``1},System.Collections.Generic.IDictionary{``0,``1})">
             <summary>
                 添加或更新
+            </summary>
+            <typeparam name="TKey">字典键类型</typeparam>
+            <typeparam name="TValue">字典值类型</typeparam>
+            <param name="dictionary">
+                <see cref="T:System.Collections.Generic.IDictionary`2" />
+            </param>
+            <param name="concatDictionary">
+                <see cref="T:System.Collections.Generic.IDictionary`2" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.Core.Extensions.IDictionaryExtensions.TryAdd``2(System.Collections.Generic.IDictionary{``0,``1},System.Collections.Generic.IDictionary{``0,``1})">
+            <summary>
+                尝试添加
             </summary>
             <typeparam name="TKey">字典键类型</typeparam>
             <typeparam name="TValue">字典值类型</typeparam>
@@ -4634,6 +4719,17 @@
                 <see cref="T:Microsoft.Extensions.Logging.ILogger" />
             </param>
             <param name="message">日志消息</param>
+        </member>
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.IsEnabled(System.Net.Http.HttpRequestMessage)">
+            <summary>
+                是否启用请求分析工具
+            </summary>
+            <param name="httpRequestMessage">
+                <see cref="T:System.Net.Http.HttpRequestMessage" />
+            </param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
         </member>
         <member name="T:HttpAgent.Extensions.HttpRemoteExtensions">
             <summary>

@@ -68,6 +68,9 @@ public sealed partial class HttpRequestBuilder
         // 构建并设置指定的 HttpRequestMessage 请求消息的内容
         BuildAndSetContent(httpRequestMessage, httpContentProcessorFactory, httpRemoteOptions);
 
+        // 追加 HTTP 请求的属性集
+        AppendProperties(httpRequestMessage);
+
         return httpRequestMessage;
     }
 
@@ -341,6 +344,28 @@ public sealed partial class HttpRequestBuilder
 
         // 设置 HttpRequestMessage 请求消息的内容
         httpRequestMessage.Content = httpContent;
+    }
+
+    /// <summary>
+    ///     追加 HTTP 请求的属性集
+    /// </summary>
+    /// <param name="httpRequestMessage">
+    ///     <see cref="HttpRequestMessage" />
+    /// </param>
+    internal void AppendProperties(HttpRequestMessage httpRequestMessage)
+    {
+        // 空检查
+        if (Properties.Count > 0)
+        {
+            // 注意：httpRequestMessage.Properties 已过时，使用 Options 替代
+            httpRequestMessage.Options.TryAdd(Properties);
+        }
+
+        // 检查是否禁用全局请求分析工具
+        if (__Disabled_Profiler__)
+        {
+            httpRequestMessage.Options.AddOrUpdate(Constants.DISABLED_PROFILER_KEY, "TRUE");
+        }
     }
 
     /// <summary>

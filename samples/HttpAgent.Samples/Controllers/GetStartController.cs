@@ -141,7 +141,7 @@ public class GetStartController(IHttpRemoteService httpRemoteService, ISampleSer
             "https://localhost:7044/HttpRemote/AddURLForm",
             builder => builder
                 .SetFormUrlEncodedContent(new
-                    { id = 1, name = "furion" })); // 设置 application/x-www-form-urlencoded 请求内容
+                { id = 1, name = "furion" })); // 设置 application/x-www-form-urlencoded 请求内容
 
         var content2 = await httpRemoteService.PostAsAsync<YourRemoteModel>(
             "https://localhost:7044/HttpRemote/AddURLForm",
@@ -257,6 +257,18 @@ public class GetStartController(IHttpRemoteService httpRemoteService, ISampleSer
                 })
             .SetAllowedFileExtensions(".jpg;.png") // 限制只允许 jpg 和 png 类型
             .SetMaxFileSizeInBytes(5 * 1024 * 1024)); // 限制 5MB
+    }
+
+    [HttpGet]
+    public async Task Profiler()
+    {
+        // 构建器方式
+        await httpRemoteService.SendAsync(HttpRequestBuilder.Get("https://furion.net").WithHeader("X-Header", "custom")
+            .Profiler());   // 启用请求分析工具
+
+        // HTTP 请求谓词方式
+        await httpRemoteService.GetAsync("https://furion.net"
+            , builder => builder.Profiler());   // 启用请求分析工具
     }
 
     /// <summary>

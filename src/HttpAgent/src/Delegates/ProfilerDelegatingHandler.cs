@@ -17,6 +17,12 @@ public sealed class ProfilerDelegatingHandler(ILogger<Logging> logger) : Delegat
     protected override HttpResponseMessage Send(HttpRequestMessage httpRequestMessage,
         CancellationToken cancellationToken)
     {
+        // 检查是否启用请求分析工具
+        if (!IsEnabled(httpRequestMessage))
+        {
+            return base.Send(httpRequestMessage, cancellationToken);
+        }
+
         // 记录请求标头
         LogRequestHeaders(logger, httpRequestMessage);
 
@@ -42,6 +48,12 @@ public sealed class ProfilerDelegatingHandler(ILogger<Logging> logger) : Delegat
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage httpRequestMessage,
         CancellationToken cancellationToken)
     {
+        // 检查是否启用请求分析工具
+        if (!IsEnabled(httpRequestMessage))
+        {
+            return await base.SendAsync(httpRequestMessage, cancellationToken);
+        }
+
         // 记录请求标头
         LogRequestHeaders(logger, httpRequestMessage);
 
@@ -111,4 +123,17 @@ public sealed class ProfilerDelegatingHandler(ILogger<Logging> logger) : Delegat
         // 打印日志
         logger.LogInformation("{message}", message);
     }
+
+    /// <summary>
+    ///     是否启用请求分析工具
+    /// </summary>
+    /// <param name="httpRequestMessage">
+    ///     <see cref="HttpRequestMessage" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="bool" />
+    /// </returns>
+    internal static bool IsEnabled(HttpRequestMessage httpRequestMessage) =>
+        !(httpRequestMessage.Options.TryGetValue(new HttpRequestOptionsKey<string>(Constants.DISABLED_PROFILER_KEY),
+            out var value) && value == "TRUE");
 }

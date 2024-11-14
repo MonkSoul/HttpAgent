@@ -74,4 +74,17 @@ public class ProfilerDelegatingHandlerTests
         ProfilerDelegatingHandler.Log(logger, " ");
         ProfilerDelegatingHandler.Log(logger, "HttpAgent.Tests");
     }
+
+    [Fact]
+    public void IsEnabled_ReturnOK()
+    {
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost"));
+        Assert.True(ProfilerDelegatingHandler.IsEnabled(httpRequestMessage));
+
+        httpRequestMessage.Options.Set(new HttpRequestOptionsKey<string>(Constants.DISABLED_PROFILER_KEY), "value");
+        Assert.True(ProfilerDelegatingHandler.IsEnabled(httpRequestMessage));
+
+        httpRequestMessage.Options.Set(new HttpRequestOptionsKey<string>(Constants.DISABLED_PROFILER_KEY), "TRUE");
+        Assert.False(ProfilerDelegatingHandler.IsEnabled(httpRequestMessage));
+    }
 }

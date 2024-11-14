@@ -1,4 +1,5 @@
 using System.Reflection;
+using HttpAgent.Extensions;
 using HttpAgent.Samples;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// 为默认客户端启用
+builder.Services.AddHttpClient(string.Empty)
+    .AddProfilerDelegatingHandler();
+
+// 为特定客户端启用
+//builder.Services.AddHttpClient("weixin")
+//    .AddProfilerDelegatingHandler();
 
 builder.Services.AddHttpRemote(options =>
 {

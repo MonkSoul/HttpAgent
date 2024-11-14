@@ -1420,9 +1420,11 @@ public class HttpRequestBuilderMethodsTests
         httpRequestBuilder.Profiler();
 
         Assert.True(httpRequestBuilder.ProfilerEnabled);
+        Assert.False(httpRequestBuilder.__Disabled_Profiler__);
 
         httpRequestBuilder.Profiler(false);
         Assert.False(httpRequestBuilder.ProfilerEnabled);
+        Assert.True(httpRequestBuilder.__Disabled_Profiler__);
     }
 
     [Fact]
@@ -1454,5 +1456,51 @@ public class HttpRequestBuilderMethodsTests
         Assert.Single(httpRequestBuilder.Headers);
         Assert.Single(httpRequestBuilder.Headers["Accept-Language"]);
         Assert.Null(httpRequestBuilder.Headers["Accept-Language"].First());
+    }
+
+    [Fact]
+    public void WithProperty_Invalid_Parameters()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+
+        Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.WithProperty(null!, null));
+    }
+
+    [Fact]
+    public void WithProperty_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+
+        httpRequestBuilder.WithProperty("foo", "bar").WithProperty("foo", "bar1").WithProperty("foo2", "bar2");
+        Assert.Equal(2, httpRequestBuilder.Properties.Count);
+        Assert.Equal("bar", httpRequestBuilder.Properties["foo"]);
+        Assert.Equal("bar2", httpRequestBuilder.Properties["foo2"]);
+    }
+
+    [Fact]
+    public void WithProperties_Invalid_Parameters()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+
+        Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.WithProperties(null!));
+        Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.WithProperties((object)null!));
+    }
+
+    [Fact]
+    public void WithProperties_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+
+        httpRequestBuilder.WithProperties(new Dictionary<string, object?> { { "foo", "bar" }, { "foo2", "bar2" } });
+        Assert.Equal(2, httpRequestBuilder.Properties.Count);
+        Assert.Equal("bar", httpRequestBuilder.Properties["foo"]);
+        Assert.Equal("bar2", httpRequestBuilder.Properties["foo2"]);
+
+        var httpRequestBuilder2 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+
+        httpRequestBuilder2.WithProperties(new { foo = "bar", foo2 = "bar2" });
+        Assert.Equal(2, httpRequestBuilder2.Properties.Count);
+        Assert.Equal("bar", httpRequestBuilder2.Properties["foo"]);
+        Assert.Equal("bar2", httpRequestBuilder2.Properties["foo2"]);
     }
 }
