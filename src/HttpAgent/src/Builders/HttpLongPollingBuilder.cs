@@ -70,7 +70,7 @@ public sealed class HttpLongPollingBuilder
     /// <summary>
     ///     设置轮询重试间隔
     /// </summary>
-    /// <param name="retryInterval">轮询间隔</param>
+    /// <param name="retryInterval">轮询重试间隔</param>
     /// <returns>
     ///     <see cref="HttpLongPollingBuilder" />
     /// </returns>
