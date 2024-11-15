@@ -39,9 +39,6 @@ public sealed class ProfilerDelegatingHandler(ILogger<Logging> logger) : Delegat
         // 记录请求标头
         LogRequestHeaders(logger, httpRequestMessage);
 
-        // 打印 CookieContainer 内容
-        LogCookieContainer(logger, httpRequestMessage, ExtractSocketsHttpHandler());
-
         // 初始化 Stopwatch 实例并开启计时操作
         var stopwatch = Stopwatch.StartNew();
 
@@ -56,6 +53,9 @@ public sealed class ProfilerDelegatingHandler(ILogger<Logging> logger) : Delegat
 
         // 记录常规和响应标头
         LogResponseHeadersAndSummary(logger, httpResponseMessage, requestDuration);
+
+        // 打印 CookieContainer 内容
+        LogCookieContainer(logger, httpRequestMessage, ExtractSocketsHttpHandler());
 
         return httpResponseMessage;
     }
@@ -73,9 +73,6 @@ public sealed class ProfilerDelegatingHandler(ILogger<Logging> logger) : Delegat
         // 记录请求标头
         LogRequestHeaders(logger, httpRequestMessage);
 
-        // 打印 CookieContainer 内容
-        LogCookieContainer(logger, httpRequestMessage, ExtractSocketsHttpHandler());
-
         // 初始化 Stopwatch 实例并开启计时操作
         var stopwatch = Stopwatch.StartNew();
 
@@ -90,6 +87,9 @@ public sealed class ProfilerDelegatingHandler(ILogger<Logging> logger) : Delegat
 
         // 记录常规和响应标头
         LogResponseHeadersAndSummary(logger, httpResponseMessage, requestDuration);
+
+        // 打印 CookieContainer 内容
+        LogCookieContainer(logger, httpRequestMessage, ExtractSocketsHttpHandler());
 
         return httpResponseMessage;
     }

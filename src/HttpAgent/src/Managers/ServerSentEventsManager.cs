@@ -82,6 +82,7 @@ internal sealed class ServerSentEventsManager
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
+    /// <exception cref="InvalidOperationException"></exception>
     internal void Start(CancellationToken cancellationToken = default)
     {
         // 创建关联的取消标识
@@ -137,6 +138,7 @@ internal sealed class ServerSentEventsManager
                 serverSentEventsData = null;
             }
         }
+        // 任务被取消
         catch (Exception e) when (cancellationToken.IsCancellationRequested || e is OperationCanceledException)
         {
             // 标识客户端中止事件消息接收
@@ -157,8 +159,8 @@ internal sealed class ServerSentEventsManager
             }
             else
             {
-                throw new AggregateException(
-                    $"Failed to establish Server-Sent Events connection after {_httpServerSentEventsBuilder.MaxRetries} attempts.",
+                throw new InvalidOperationException(
+                    $"Failed to establish Server-Sent Events connection after `{_httpServerSentEventsBuilder.MaxRetries}` attempts.",
                     e);
             }
         }
@@ -182,6 +184,7 @@ internal sealed class ServerSentEventsManager
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
+    /// <exception cref="InvalidOperationException"></exception>
     internal async Task StartAsync(CancellationToken cancellationToken = default)
     {
         // 创建关联的取消标识
@@ -238,6 +241,7 @@ internal sealed class ServerSentEventsManager
                 serverSentEventsData = null;
             }
         }
+        // 任务被取消
         catch (Exception e) when (cancellationToken.IsCancellationRequested || e is OperationCanceledException)
         {
             // 标识客户端中止事件消息接收
@@ -258,8 +262,8 @@ internal sealed class ServerSentEventsManager
             }
             else
             {
-                throw new AggregateException(
-                    $"Failed to establish Server-Sent Events connection after {_httpServerSentEventsBuilder.MaxRetries} attempts.",
+                throw new InvalidOperationException(
+                    $"Failed to establish Server-Sent Events connection after `{_httpServerSentEventsBuilder.MaxRetries}` attempts.",
                     e);
             }
         }

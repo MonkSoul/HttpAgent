@@ -2624,7 +2624,7 @@ public class HttpRemoteServiceExtensionsTests
         using var cancellationTokenSource = new CancellationTokenSource();
         cancellationTokenSource.CancelAfter(100);
 
-        Assert.Throws<TaskCanceledException>(() =>
+        Assert.Throws<OperationCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
             httpRemoteService.Send(httpLongPollingBuilder, null, cancellationTokenSource.Token);

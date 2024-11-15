@@ -421,9 +421,15 @@
                 请求方式
             </summary>
         </member>
-        <member name="P:HttpAgent.HttpLongPollingBuilder.PollingInterval">
+        <member name="P:HttpAgent.HttpLongPollingBuilder.Timeout">
             <summary>
-                轮询间隔
+                超时时间
+            </summary>
+            <remarks>可为单次请求设置超时时间。</remarks>
+        </member>
+        <member name="P:HttpAgent.HttpLongPollingBuilder.RetryInterval">
+            <summary>
+                轮询重试间隔
             </summary>
             <remarks>默认值为 5 秒。</remarks>
         </member>
@@ -435,7 +441,12 @@
         </member>
         <member name="P:HttpAgent.HttpLongPollingBuilder.OnDataReceived">
             <summary>
-                用于在长轮询时接收到数据时的操作
+                用于接收服务器返回 <c>200~299</c> 状态码的数据的操作
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HttpLongPollingBuilder.OnError">
+            <summary>
+                用于接收服务器返回非 <c>200~299</c> 状态码的数据的操作
             </summary>
         </member>
         <member name="P:HttpAgent.HttpLongPollingBuilder.LongPollingEventHandlerType">
@@ -443,11 +454,11 @@
                 实现 <see cref="T:HttpAgent.IHttpLongPollingEventHandler" /> 的类型
             </summary>
         </member>
-        <member name="M:HttpAgent.HttpLongPollingBuilder.SetPollingInterval(System.TimeSpan)">
+        <member name="M:HttpAgent.HttpLongPollingBuilder.SetRetryInterval(System.TimeSpan)">
             <summary>
-                设置轮询间隔
+                设置轮询重试间隔
             </summary>
-            <param name="pollingInterval">轮询间隔</param>
+            <param name="retryInterval">轮询间隔</param>
             <returns>
                 <see cref="T:HttpAgent.HttpLongPollingBuilder" />
             </returns>
@@ -463,9 +474,36 @@
             </returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
+        <member name="M:HttpAgent.HttpLongPollingBuilder.SetTimeout(System.TimeSpan)">
+            <summary>
+                设置超时时间
+            </summary>
+            <param name="timeout">超时时间</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpLongPollingBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpLongPollingBuilder.SetTimeout(System.Double)">
+            <summary>
+                设置超时时间
+            </summary>
+            <param name="timeoutMilliseconds">超时时间（毫秒）</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpLongPollingBuilder" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.HttpLongPollingBuilder.SetOnDataReceived(System.Func{System.Net.Http.HttpResponseMessage,System.Threading.Tasks.Task})">
             <summary>
-                设置在长轮询时接收到数据时的操作
+                设置在接收服务器返回 <c>200~299</c> 状态码的数据的操作
+            </summary>
+            <param name="configure">自定义配置委托</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpLongPollingBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpLongPollingBuilder.SetOnError(System.Func{System.Net.Http.HttpResponseMessage,System.Threading.Tasks.Task})">
+            <summary>
+                设置在接收服务器返回非 <c>200~299</c> 状态码的数据的操作
             </summary>
             <param name="configure">自定义配置委托</param>
             <returns>
@@ -2439,7 +2477,7 @@
             </summary>
             <param name="httpMethod">请求方式</param>
             <param name="requestUri">请求地址</param>
-            <param name="onDataReceived">用于在长轮询时接收到数据时的操作</param>
+            <param name="onDataReceived">用于接收服务器返回 <c>200~299</c> 状态码的数据的操作</param>
             <returns>
                 <see cref="T:HttpAgent.HttpLongPollingBuilder" />
             </returns>
@@ -2449,7 +2487,7 @@
                 创建 <see cref="T:HttpAgent.HttpLongPollingBuilder" /> 构建器
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="onDataReceived">用于在长轮询时接收到数据时的操作</param>
+            <param name="onDataReceived">用于接收服务器返回 <c>200~299</c> 状态码的数据的操作</param>
             <returns>
                 <see cref="T:HttpAgent.HttpLongPollingBuilder" />
             </returns>
@@ -2459,7 +2497,7 @@
                 创建 <see cref="T:HttpAgent.HttpLongPollingBuilder" /> 构建器
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="onDataReceived">用于在长轮询时接收到数据时的操作</param>
+            <param name="onDataReceived">用于接收服务器返回 <c>200~299</c> 状态码的数据的操作</param>
             <returns>
                 <see cref="T:HttpAgent.HttpLongPollingBuilder" />
             </returns>
@@ -5051,7 +5089,18 @@
         </member>
         <member name="M:HttpAgent.IHttpLongPollingEventHandler.OnDataReceivedAsync(System.Net.Http.HttpResponseMessage)">
             <summary>
-                用于在长轮询时接收到数据时的操作
+                用于接收服务器返回 <c>200~299</c> 状态码的数据的操作
+            </summary>
+            <param name="httpResponseMessage">
+                <see cref="T:System.Net.Http.HttpResponseMessage" />
+            </param>
+            <returns>
+                <see cref="T:System.Threading.Tasks.Task" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IHttpLongPollingEventHandler.OnErrorAsync(System.Net.Http.HttpResponseMessage)">
+            <summary>
+                用于接收服务器返回非 <c>200~299</c> 状态码的数据的操作
             </summary>
             <param name="httpResponseMessage">
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
@@ -5474,10 +5523,28 @@
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
+            <exception cref="T:System.InvalidOperationException"></exception>
         </member>
         <member name="M:HttpAgent.LongPollingManager.StartAsync(System.Threading.CancellationToken)">
             <summary>
                 开始请求
+            </summary>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:HttpAgent.LongPollingManager.Retry(System.Threading.CancellationToken)">
+            <summary>
+                重新开始请求
+            </summary>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.LongPollingManager.RetryAsync(System.Threading.CancellationToken)">
+            <summary>
+                重新开始请求
             </summary>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
@@ -5494,17 +5561,33 @@
                 <see cref="T:System.Boolean" />
             </returns>
         </member>
-        <member name="M:HttpAgent.LongPollingManager.ReceiveDataAsync(System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.LongPollingManager.FetchResponseAsync(System.Threading.CancellationToken)">
             <summary>
-                接收数据任务
+                接收服务器响应数据任务
             </summary>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
+        <member name="M:HttpAgent.LongPollingManager.HandleResponseAsync(System.Net.Http.HttpResponseMessage)">
+            <summary>
+                处理服务器响应数据
+            </summary>
+            <param name="httpResponseMessage">
+                <see cref="T:System.Net.Http.HttpResponseMessage" />
+            </param>
+        </member>
         <member name="M:HttpAgent.LongPollingManager.HandleDataReceivedAsync(System.Net.Http.HttpResponseMessage)">
             <summary>
-                处理服务器发送的数据
+                处理服务器返回 <c>200~299</c> 状态码的数据
+            </summary>
+            <param name="httpResponseMessage">
+                <see cref="T:System.Net.Http.HttpResponseMessage" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.LongPollingManager.HandleErrorAsync(System.Net.Http.HttpResponseMessage)">
+            <summary>
+                处理服务器返回非 <c>200~299</c> 状态码的数据
             </summary>
             <param name="httpResponseMessage">
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
@@ -5566,6 +5649,7 @@
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
+            <exception cref="T:System.InvalidOperationException"></exception>
         </member>
         <member name="M:HttpAgent.ServerSentEventsManager.StartAsync(System.Threading.CancellationToken)">
             <summary>
@@ -5574,6 +5658,7 @@
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
+            <exception cref="T:System.InvalidOperationException"></exception>
         </member>
         <member name="M:HttpAgent.ServerSentEventsManager.Retry(System.Threading.CancellationToken)">
             <summary>
@@ -5690,7 +5775,7 @@
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
             <returns>
-                <see cref="T:System.Threading.Tasks.Task`1" />
+                <see cref="T:HttpAgent.StressTestHarnessResult" />
             </returns>
         </member>
         <member name="T:HttpAgent.FileTransferProgress">
@@ -8053,7 +8138,7 @@
                 发送长轮询请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="onDataReceived">用于在长轮询时接收到数据时的操作</param>
+            <param name="onDataReceived">用于接收服务器返回 <c>200~299</c> 状态码的数据的操作</param>
             <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
@@ -8064,7 +8149,7 @@
                 发送长轮询请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="onDataReceived">用于在长轮询时接收到数据时的操作</param>
+            <param name="onDataReceived">用于接收服务器返回 <c>200~299</c> 状态码的数据的操作</param>
             <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />

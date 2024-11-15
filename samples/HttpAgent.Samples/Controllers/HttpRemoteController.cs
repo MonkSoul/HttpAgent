@@ -39,4 +39,19 @@ public class HttpRemoteController : ControllerBase
     {
         return Task.FromResult(string.Join("; ", files.Select(u => u.FileName)));
     }
+
+    [HttpGet]
+    public async Task<IActionResult> LongPolling([FromServices] IHttpContextAccessor httpContextAccessor)
+    {
+        var httpContext = httpContextAccessor.HttpContext;
+
+        // 空检查
+        ArgumentNullException.ThrowIfNull(httpContext);
+
+        var message = $"Message at {DateTime.UtcNow}\n\n";
+
+        await Task.Delay(2000, httpContext.RequestAborted);
+
+        return new ContentResult { Content = message, ContentType = "text/plain" };
+    }
 }

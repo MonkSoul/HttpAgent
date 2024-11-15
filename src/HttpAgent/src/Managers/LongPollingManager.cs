@@ -73,17 +73,22 @@ internal sealed class LongPollingManager
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
+    /// <exception cref="InvalidOperationException"></exception>
     internal void Start(CancellationToken cancellationToken = default)
     {
         // 创建关联的取消标识
-        using var dataCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        using var fetchCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
-        // 初始化接收数据任务
-        var receiveDataTask = ReceiveDataAsync(dataCancellationTokenSource.Token);
+        // 初始化接收服务器响应数据任务
+        var fetchResponseTask = FetchResponseAsync(fetchCancellationTokenSource.Token);
 
-        while (true)
+        // 声明取消接收标识
+        var isCancelled = false;
+
+        try
         {
-            try
+            // 循环读取数据直到取消请求或读取完毕
+            while (!cancellationToken.IsCancellationRequested)
             {
                 // 发送 HTTP 远程请求
                 var httpResponseMessage = _httpRemoteService.Send(RequestBuilder, cancellationToken);
@@ -94,49 +99,52 @@ internal sealed class LongPollingManager
                     break;
                 }
 
+                // 发送响应数据对象到通道
+                _dataChannel.Writer.TryWrite(httpResponseMessage);
+
                 // 检查是否请求成功
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
                     // 重置当前重试次数
                     CurrentRetries = 0;
-
-                    // 发送响应消息对象到通道
-                    _dataChannel.Writer.TryWrite(httpResponseMessage);
-
-                    // 进入下一次循环
-                    continue;
                 }
             }
-            catch (Exception e) when (cancellationToken.IsCancellationRequested ||
-                                      e is ChannelClosedException or OperationCanceledException)
-            {
-                throw;
-            }
-            catch (Exception e)
-            {
-                // 输出调试事件
-                Debugging.Error(e.Message);
-
-                // 递增当前重试次数
-                CurrentRetries++;
-
-                // 检查是否超过了最大连续失败次数
-                if (CurrentRetries >= _httpLongPollingBuilder.MaxRetries)
-                {
-                    throw;
-                }
-            }
-
-            // 没有新数据时等待指定的时间间隔再重试
-            Task.Delay(_httpLongPollingBuilder.PollingInterval, cancellationToken).Wait(cancellationToken);
         }
+        // 任务被取消
+        catch (Exception e) when (cancellationToken.IsCancellationRequested || e is OperationCanceledException)
+        {
+            // 标识客户端中止事件消息接收
+            isCancelled = true;
 
-        // 关闭通道
-        _dataChannel.Writer.Complete();
+            throw;
+        }
+        catch (Exception e)
+        {
+            // 检查是否达到了最大当前重试次数
+            if (CurrentRetries < _httpLongPollingBuilder.MaxRetries)
+            {
+                // 重新开始接收
+                Retry(cancellationToken);
+            }
+            else
+            {
+                throw new InvalidOperationException(
+                    $"Failed to establish server connection after `{_httpLongPollingBuilder.MaxRetries}` attempts.",
+                    e);
+            }
+        }
+        finally
+        {
+            if (isCancelled)
+            {
+                // 关闭通道
+                _dataChannel.Writer.Complete();
+            }
 
-        // 等待接收数据任务完成
-        dataCancellationTokenSource.Cancel();
-        receiveDataTask.Wait(cancellationToken);
+            // 等待接收服务器响应数据任务完成
+            fetchCancellationTokenSource.Cancel();
+            fetchResponseTask.Wait(cancellationToken);
+        }
     }
 
     /// <summary>
@@ -145,17 +153,22 @@ internal sealed class LongPollingManager
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
+    /// <exception cref="InvalidOperationException"></exception>
     internal async Task StartAsync(CancellationToken cancellationToken = default)
     {
         // 创建关联的取消标识
-        using var dataCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        using var fetchCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
-        // 初始化接收数据任务
-        var receiveDataTask = ReceiveDataAsync(dataCancellationTokenSource.Token);
+        // 初始化接收服务器响应数据任务
+        var fetchResponseTask = FetchResponseAsync(fetchCancellationTokenSource.Token);
 
-        while (true)
+        // 声明取消接收标识
+        var isCancelled = false;
+
+        try
         {
-            try
+            // 循环读取数据直到取消请求或读取完毕
+            while (!cancellationToken.IsCancellationRequested)
             {
                 // 发送 HTTP 远程请求
                 var httpResponseMessage = await _httpRemoteService.SendAsync(RequestBuilder, cancellationToken);
@@ -166,49 +179,88 @@ internal sealed class LongPollingManager
                     break;
                 }
 
+                // 发送响应数据对象到通道
+                await _dataChannel.Writer.WriteAsync(httpResponseMessage, cancellationToken);
+
                 // 检查是否请求成功
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
                     // 重置当前重试次数
                     CurrentRetries = 0;
-
-                    // 发送响应消息对象到通道
-                    await _dataChannel.Writer.WriteAsync(httpResponseMessage, cancellationToken);
-
-                    // 进入下一次循环
-                    continue;
                 }
             }
-            catch (Exception e) when (cancellationToken.IsCancellationRequested ||
-                                      e is ChannelClosedException or OperationCanceledException)
-            {
-                throw;
-            }
-            catch (Exception e)
-            {
-                // 输出调试事件
-                Debugging.Error(e.Message);
-
-                // 递增当前重试次数
-                CurrentRetries++;
-
-                // 检查是否超过了最大连续失败次数
-                if (CurrentRetries >= _httpLongPollingBuilder.MaxRetries)
-                {
-                    throw;
-                }
-            }
-
-            // 没有新数据时等待指定的时间间隔再重试
-            await Task.Delay(_httpLongPollingBuilder.PollingInterval, cancellationToken);
         }
+        // 任务被取消
+        catch (Exception e) when (cancellationToken.IsCancellationRequested || e is OperationCanceledException)
+        {
+            // 标识客户端中止事件消息接收
+            isCancelled = true;
 
-        // 关闭通道
-        _dataChannel.Writer.Complete();
+            throw;
+        }
+        catch (Exception e)
+        {
+            // 检查是否达到了最大当前重试次数
+            if (CurrentRetries < _httpLongPollingBuilder.MaxRetries)
+            {
+                // 重新开始接收
+                await RetryAsync(cancellationToken);
+            }
+            else
+            {
+                throw new InvalidOperationException(
+                    $"Failed to establish server connection after `{_httpLongPollingBuilder.MaxRetries}` attempts.",
+                    e);
+            }
+        }
+        finally
+        {
+            if (isCancelled)
+            {
+                // 关闭通道
+                _dataChannel.Writer.Complete();
+            }
 
-        // 等待接收数据任务完成
-        await dataCancellationTokenSource.CancelAsync();
-        await receiveDataTask;
+            // 等待接收服务器响应数据任务完成
+            await fetchCancellationTokenSource.CancelAsync();
+            await fetchResponseTask;
+        }
+    }
+
+    /// <summary>
+    ///     重新开始请求
+    /// </summary>
+    /// <param name="cancellationToken">
+    ///     <see cref="CancellationToken" />
+    /// </param>
+    internal void Retry(CancellationToken cancellationToken = default)
+    {
+        // 递增当前重试次数
+        CurrentRetries++;
+
+        // 根据配置的重新连接的间隔时间延迟重新开始请求
+        Task.Delay(_httpLongPollingBuilder.RetryInterval, cancellationToken).Wait(cancellationToken);
+
+        // 重新开始接收
+        Start(cancellationToken);
+    }
+
+    /// <summary>
+    ///     重新开始请求
+    /// </summary>
+    /// <param name="cancellationToken">
+    ///     <see cref="CancellationToken" />
+    /// </param>
+    internal async Task RetryAsync(CancellationToken cancellationToken = default)
+    {
+        // 递增当前重试次数
+        CurrentRetries++;
+
+        // 根据配置的重新连接的间隔时间延迟重新开始请求
+        await Task.Delay(_httpLongPollingBuilder.RetryInterval, cancellationToken);
+
+        // 重新开始接收
+        await StartAsync(cancellationToken);
     }
 
     /// <summary>
@@ -241,15 +293,16 @@ internal sealed class LongPollingManager
     }
 
     /// <summary>
-    ///     接收数据任务
+    ///     接收服务器响应数据任务
     /// </summary>
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
-    internal async Task ReceiveDataAsync(CancellationToken cancellationToken)
+    internal async Task FetchResponseAsync(CancellationToken cancellationToken)
     {
         // 空检查
-        if (_httpLongPollingBuilder.OnDataReceived is null && LongPollingEventHandler is null)
+        if (_httpLongPollingBuilder.OnDataReceived is null && _httpLongPollingBuilder.OnError is null &&
+            LongPollingEventHandler is null)
         {
             return;
         }
@@ -261,15 +314,15 @@ internal sealed class LongPollingManager
             {
                 try
                 {
-                    // 处理服务器发送的数据
-                    await HandleDataReceivedAsync(httpResponseMessage);
+                    // 处理服务器响应数据
+                    await HandleResponseAsync(httpResponseMessage);
                 }
                 // 捕获当通道关闭或操作被取消时的异常
                 catch (Exception e) when (cancellationToken.IsCancellationRequested ||
                                           e is ChannelClosedException or OperationCanceledException)
                 {
-                    // 处理服务器发送的数据
-                    await HandleDataReceivedAsync(httpResponseMessage);
+                    // 处理服务器响应数据
+                    await HandleResponseAsync(httpResponseMessage);
 
                     break;
                 }
@@ -292,7 +345,30 @@ internal sealed class LongPollingManager
     }
 
     /// <summary>
-    ///     处理服务器发送的数据
+    ///     处理服务器响应数据
+    /// </summary>
+    /// <param name="httpResponseMessage">
+    ///     <see cref="HttpResponseMessage" />
+    /// </param>
+    internal async Task HandleResponseAsync(HttpResponseMessage httpResponseMessage)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(httpResponseMessage);
+
+        // 处理服务器返回 <c>200~299</c> 状态码的数据
+        if (httpResponseMessage.IsSuccessStatusCode)
+        {
+            await HandleDataReceivedAsync(httpResponseMessage);
+        }
+        // 处理服务器返回非 <c>200~299</c> 状态码的数据
+        else
+        {
+            await HandleErrorAsync(httpResponseMessage);
+        }
+    }
+
+    /// <summary>
+    ///     处理服务器返回 <c>200~299</c> 状态码的数据
     /// </summary>
     /// <param name="httpResponseMessage">
     ///     <see cref="HttpResponseMessage" />
@@ -309,5 +385,25 @@ internal sealed class LongPollingManager
         }
 
         await _httpLongPollingBuilder.OnDataReceived.TryInvokeAsync(httpResponseMessage);
+    }
+
+    /// <summary>
+    ///     处理服务器返回非 <c>200~299</c> 状态码的数据
+    /// </summary>
+    /// <param name="httpResponseMessage">
+    ///     <see cref="HttpResponseMessage" />
+    /// </param>
+    internal async Task HandleErrorAsync(HttpResponseMessage httpResponseMessage)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(httpResponseMessage);
+
+        // 空检查
+        if (LongPollingEventHandler is not null)
+        {
+            await DelegateExtensions.TryInvokeAsync(LongPollingEventHandler.OnErrorAsync, httpResponseMessage);
+        }
+
+        await _httpLongPollingBuilder.OnError.TryInvokeAsync(httpResponseMessage);
     }
 }

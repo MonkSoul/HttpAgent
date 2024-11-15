@@ -484,7 +484,7 @@ public sealed partial class HttpRequestBuilder
     /// </summary>
     /// <param name="httpMethod">请求方式</param>
     /// <param name="requestUri">请求地址</param>
-    /// <param name="onDataReceived">用于在长轮询时接收到数据时的操作</param>
+    /// <param name="onDataReceived">用于接收服务器返回 <c>200~299</c> 状态码的数据的操作</param>
     /// <returns>
     ///     <see cref="HttpLongPollingBuilder" />
     /// </returns>
@@ -496,7 +496,7 @@ public sealed partial class HttpRequestBuilder
     ///     创建 <see cref="HttpLongPollingBuilder" /> 构建器
     /// </summary>
     /// <param name="requestUri">请求地址</param>
-    /// <param name="onDataReceived">用于在长轮询时接收到数据时的操作</param>
+    /// <param name="onDataReceived">用于接收服务器返回 <c>200~299</c> 状态码的数据的操作</param>
     /// <returns>
     ///     <see cref="HttpLongPollingBuilder" />
     /// </returns>
@@ -507,7 +507,7 @@ public sealed partial class HttpRequestBuilder
     ///     创建 <see cref="HttpLongPollingBuilder" /> 构建器
     /// </summary>
     /// <param name="requestUri">请求地址</param>
-    /// <param name="onDataReceived">用于在长轮询时接收到数据时的操作</param>
+    /// <param name="onDataReceived">用于接收服务器返回 <c>200~299</c> 状态码的数据的操作</param>
     /// <returns>
     ///     <see cref="HttpLongPollingBuilder" />
     /// </returns>

@@ -22,30 +22,32 @@ public class HttpLongPollingBuilderTests
         Assert.NotNull(builder2.RequestUri);
         Assert.Equal("http://localhost/", builder2.RequestUri.ToString());
         Assert.Equal(HttpMethod.Get, builder2.Method);
-        Assert.Equal(TimeSpan.FromSeconds(5), builder2.PollingInterval);
+        Assert.Equal(TimeSpan.FromSeconds(5), builder2.RetryInterval);
+        Assert.Null(builder2.Timeout);
         Assert.Equal(100, builder2.MaxRetries);
         Assert.Null(builder2.OnDataReceived);
+        Assert.Null(builder2.OnError);
         Assert.Null(builder2.LongPollingEventHandlerType);
     }
 
     [Fact]
-    public void SetPollingInterval_Invalid_Parameters()
+    public void SetRetryInterval_Invalid_Parameters()
     {
         var builder = new HttpLongPollingBuilder(HttpMethod.Get, new Uri("http://localhost"));
 
-        var exception = Assert.Throws<ArgumentException>(() => builder.SetPollingInterval(TimeSpan.Zero));
-        Assert.Equal("Polling interval must be greater than 0. (Parameter 'pollingInterval')", exception.Message);
+        var exception = Assert.Throws<ArgumentException>(() => builder.SetRetryInterval(TimeSpan.Zero));
+        Assert.Equal("Retry interval must be greater than 0. (Parameter 'retryInterval')", exception.Message);
 
-        var exception2 = Assert.Throws<ArgumentException>(() => builder.SetPollingInterval(TimeSpan.FromSeconds(-1)));
-        Assert.Equal("Polling interval must be greater than 0. (Parameter 'pollingInterval')", exception2.Message);
+        var exception2 = Assert.Throws<ArgumentException>(() => builder.SetRetryInterval(TimeSpan.FromSeconds(-1)));
+        Assert.Equal("Retry interval must be greater than 0. (Parameter 'retryInterval')", exception2.Message);
     }
 
     [Fact]
-    public void SetPollingInterval_ReturnOK()
+    public void SetRetryInterval_ReturnOK()
     {
         var builder = new HttpLongPollingBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        builder.SetPollingInterval(TimeSpan.FromMilliseconds(6000));
-        Assert.Equal(TimeSpan.FromMilliseconds(6000), builder.PollingInterval);
+        builder.SetRetryInterval(TimeSpan.FromMilliseconds(6000));
+        Assert.Equal(TimeSpan.FromMilliseconds(6000), builder.RetryInterval);
     }
 
     [Fact]
@@ -69,6 +71,33 @@ public class HttpLongPollingBuilderTests
     }
 
     [Fact]
+    public void SetTimeout_Invalid_Parameters()
+    {
+        var builder = new HttpLongPollingBuilder(HttpMethod.Get, new Uri("http://localhost"));
+
+        var exception = Assert.Throws<ArgumentOutOfRangeException>(() =>
+        {
+            builder.SetTimeout(-1);
+        });
+
+        Assert.Equal("Timeout value must be non-negative. (Parameter 'timeoutMilliseconds')", exception.Message);
+    }
+
+    [Fact]
+    public void SetTimeout_ReturnOK()
+    {
+        var builder = new HttpLongPollingBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        builder.SetTimeout(TimeSpan.MaxValue);
+        Assert.Equal(TimeSpan.MaxValue, builder.Timeout);
+
+        builder.SetTimeout(1000);
+        Assert.Equal(TimeSpan.FromMilliseconds(1000), builder.Timeout);
+
+        builder.SetTimeout(0);
+        Assert.Equal(TimeSpan.Zero, builder.Timeout);
+    }
+
+    [Fact]
     public void SetOnDataReceived_Invalid_Parameters()
     {
         var builder = new HttpLongPollingBuilder(HttpMethod.Get, new Uri("http://localhost"));
@@ -81,6 +110,21 @@ public class HttpLongPollingBuilderTests
         var builder = new HttpLongPollingBuilder(HttpMethod.Get, new Uri("http://localhost"));
         builder.SetOnDataReceived(async _ => await Task.CompletedTask);
         Assert.NotNull(builder.OnDataReceived);
+    }
+
+    [Fact]
+    public void SetOnError_Invalid_Parameters()
+    {
+        var builder = new HttpLongPollingBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        Assert.Throws<ArgumentNullException>(() => builder.SetOnError(null!));
+    }
+
+    [Fact]
+    public void SetOnError_ReturnOK()
+    {
+        var builder = new HttpLongPollingBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        builder.SetOnError(async _ => await Task.CompletedTask);
+        Assert.NotNull(builder.OnError);
     }
 
     [Fact]
@@ -119,7 +163,9 @@ public class HttpLongPollingBuilderTests
     public void Build_ReturnOK()
     {
         var httpRemoteOptions = new HttpRemoteOptions();
-        var httpLongPollingBuilder = new HttpLongPollingBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        var httpLongPollingBuilder =
+            new HttpLongPollingBuilder(HttpMethod.Get, new Uri("http://localhost")).SetTimeout(
+                TimeSpan.FromMilliseconds(100));
 
         var httpRequestBuilder = httpLongPollingBuilder.Build(httpRemoteOptions);
         Assert.NotNull(httpRequestBuilder);
@@ -129,6 +175,7 @@ public class HttpLongPollingBuilderTests
         Assert.False(httpRequestBuilder.EnsureSuccessStatusCodeEnabled);
         Assert.Null(httpRequestBuilder.RequestEventHandlerType);
         Assert.True(httpRequestBuilder.DisableCacheEnabled);
+        Assert.Equal(TimeSpan.FromMilliseconds(100), httpRequestBuilder.Timeout);
 
         var httpRequestBuilder2 = httpLongPollingBuilder.SetEventHandler<CustomLongPollingEventHandler2>()
             .Build(httpRemoteOptions,

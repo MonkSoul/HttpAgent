@@ -327,4 +327,29 @@ public class GetStartController(IHttpRemoteService httpRemoteService, ISampleSer
         var stressTestHarnessResult3 =
             await httpRemoteService.SendAsync(HttpRequestBuilder.StressTestHarness("https://furion.net/", 500));
     }
+
+    /// <summary>
+    ///     长轮询
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet]
+    public async Task LongPolling(CancellationToken cancellationToken)
+    {
+        await httpRemoteService.LongPollingAsync("https://localhost:7044/HttpRemote/LongPolling"
+            , async responseMessage =>
+            {
+                Console.WriteLine(await responseMessage.Content.ReadAsStringAsync(cancellationToken));
+                await Task.CompletedTask;
+            }, cancellationToken: cancellationToken);
+
+        // 使用构建器模式
+        //await httpRemoteService.SendAsync(HttpRequestBuilder
+        //    .LongPolling("https://localhost:7044/HttpRemote/LongPolling"
+        //    , async responseMessage =>
+        //    {
+        //        Console.WriteLine(await responseMessage.Content.ReadAsStringAsync(cancellationToken));
+        //        await Task.CompletedTask;
+        //    }), cancellationToken: cancellationToken);
+    }
 }

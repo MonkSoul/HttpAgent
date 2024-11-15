@@ -10,7 +10,7 @@ namespace HttpAgent;
 public interface IHttpLongPollingEventHandler
 {
     /// <summary>
-    ///     用于在长轮询时接收到数据时的操作
+    ///     用于接收服务器返回 <c>200~299</c> 状态码的数据的操作
     /// </summary>
     /// <param name="httpResponseMessage">
     ///     <see cref="HttpResponseMessage" />
@@ -19,4 +19,15 @@ public interface IHttpLongPollingEventHandler
     ///     <see cref="Task" />
     /// </returns>
     Task OnDataReceivedAsync(HttpResponseMessage httpResponseMessage);
+
+    /// <summary>
+    ///     用于接收服务器返回非 <c>200~299</c> 状态码的数据的操作
+    /// </summary>
+    /// <param name="httpResponseMessage">
+    ///     <see cref="HttpResponseMessage" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="Task" />
+    /// </returns>
+    Task OnErrorAsync(HttpResponseMessage httpResponseMessage);
 }
