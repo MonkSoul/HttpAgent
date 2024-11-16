@@ -54,4 +54,34 @@ public class HttpRemoteController : ControllerBase
 
         return new ContentResult { Content = message, ContentType = "text/plain" };
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Events([FromServices] IHttpContextAccessor httpContextAccessor)
+    {
+        var httpContext = httpContextAccessor.HttpContext;
+
+        // 空检查
+        ArgumentNullException.ThrowIfNull(httpContext);
+
+        httpContext.Response.ContentType = "text/event-stream";
+        httpContext.Response.Headers.CacheControl = "no-cache";
+        httpContext.Response.Headers.Connection = "keep-alive";
+        httpContext.Response.Headers["X-Accel-Buffering"] = "no";
+
+        // 模拟事件流
+        var eventId = 0;
+        while (!httpContext.RequestAborted.IsCancellationRequested)
+        {
+            eventId++;
+            var message = $"id: {eventId}\nevent: update\ndata: Message {eventId} at {DateTime.UtcNow}\n\n";
+
+            // 发送 SSE 消息
+            await httpContext.Response.WriteAsync(message);
+
+            // 每隔两秒发送一条消息
+            await Task.Delay(2000, httpContext.RequestAborted);
+        }
+
+        return new EmptyResult();
+    }
 }

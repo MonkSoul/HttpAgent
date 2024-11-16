@@ -110,13 +110,14 @@ public class HttpRemoteServiceExtensionsTests
 
         var i = 0;
         // ReSharper disable once MethodHasAsyncOverload
-        httpRemoteService.DownloadFile($"http://localhost:{port}/test", destinationPath, configure: requestBuilder =>
-        {
-            requestBuilder.SetOnPreSendRequest(_ =>
+        httpRemoteService.DownloadFile($"http://localhost:{port}/test", destinationPath,
+            requestConfigure: requestBuilder =>
             {
-                i += 1;
+                requestBuilder.SetOnPreSendRequest(_ =>
+                {
+                    i += 1;
+                });
             });
-        });
 
         Assert.True(File.Exists(destinationPath));
         Assert.Equal(12, (await File.ReadAllBytesAsync(destinationPath)).Length);
@@ -231,7 +232,7 @@ public class HttpRemoteServiceExtensionsTests
 
         var i = 0;
         await httpRemoteService.DownloadFileAsync($"http://localhost:{port}/test", destinationPath,
-            configure: requestBuilder =>
+            requestConfigure: requestBuilder =>
             {
                 requestBuilder.SetOnPreSendRequest(_ =>
                 {
@@ -786,7 +787,7 @@ public class HttpRemoteServiceExtensionsTests
         var i = 0;
         // ReSharper disable once MethodHasAsyncOverload
         var httpResponseMessage = httpRemoteService.UploadFile($"http://localhost:{port}/test", filePath,
-            configure: requestBuilder =>
+            requestConfigure: requestBuilder =>
             {
                 requestBuilder.SetOnPreSendRequest(_ =>
                 {
@@ -895,7 +896,7 @@ public class HttpRemoteServiceExtensionsTests
 
         var i = 0;
         var httpResponseMessage = await httpRemoteService.UploadFileAsync($"http://localhost:{port}/test",
-            filePath, configure: requestBuilder =>
+            filePath, requestConfigure: requestBuilder =>
             {
                 requestBuilder.SetOnPreSendRequest(_ =>
                 {
@@ -1907,7 +1908,7 @@ public class HttpRemoteServiceExtensionsTests
         {
             i++;
             await Task.CompletedTask;
-        }, null, cancellationTokenSource.Token);
+        }, cancellationToken: cancellationTokenSource.Token);
 
         Assert.Equal(1, i);
 
@@ -1952,7 +1953,7 @@ public class HttpRemoteServiceExtensionsTests
         {
             i++;
             await Task.CompletedTask;
-        }, b =>
+        }, requestConfigure: b =>
         {
             b.SetOnPreSendRequest(_ =>
             {
@@ -2051,7 +2052,7 @@ public class HttpRemoteServiceExtensionsTests
             {
                 i++;
                 await Task.CompletedTask;
-            }, null, cancellationTokenSource.Token);
+            }, cancellationToken: cancellationTokenSource.Token);
         });
 
         Assert.Equal(1, i);
@@ -2096,7 +2097,7 @@ public class HttpRemoteServiceExtensionsTests
         {
             i++;
             await Task.CompletedTask;
-        }, b =>
+        }, requestConfigure: b =>
         {
             b.SetOnPreSendRequest(_ =>
             {
@@ -2386,8 +2387,8 @@ public class HttpRemoteServiceExtensionsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            httpRemoteService.StressTestHarness($"http://localhost:{port}/test", 10, null,
-                cancellationTokenSource.Token);
+            httpRemoteService.StressTestHarness($"http://localhost:{port}/test", 10,
+                cancellationToken: cancellationTokenSource.Token);
         });
 
         await app.StopAsync();
@@ -2414,7 +2415,7 @@ public class HttpRemoteServiceExtensionsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         // ReSharper disable once MethodHasAsyncOverload
-        var result = httpRemoteService.StressTestHarness($"http://localhost:{port}/test", 10, b =>
+        var result = httpRemoteService.StressTestHarness($"http://localhost:{port}/test", 10, requestConfigure: b =>
         {
             b.SetOnPreSendRequest(_ =>
             {
@@ -2487,8 +2488,8 @@ public class HttpRemoteServiceExtensionsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            await httpRemoteService.StressTestHarnessAsync($"http://localhost:{port}/test", 10, null,
-                cancellationTokenSource.Token);
+            await httpRemoteService.StressTestHarnessAsync($"http://localhost:{port}/test", 10,
+                cancellationToken: cancellationTokenSource.Token);
         });
 
         await app.StopAsync();
@@ -2514,13 +2515,14 @@ public class HttpRemoteServiceExtensionsTests
         var i = 0;
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
-        var result = await httpRemoteService.StressTestHarnessAsync($"http://localhost:{port}/test", 10, b =>
-        {
-            b.SetOnPreSendRequest(_ =>
+        var result = await httpRemoteService.StressTestHarnessAsync($"http://localhost:{port}/test", 10,
+            requestConfigure: b =>
             {
-                i++;
+                b.SetOnPreSendRequest(_ =>
+                {
+                    i++;
+                });
             });
-        });
         Assert.NotNull(result);
 
         Assert.Equal(10, result.TotalRequests);
@@ -3035,7 +3037,7 @@ public class HttpRemoteServiceExtensionsTests
             {
                 i++;
                 await Task.CompletedTask;
-            }, null, cancellationTokenSource.Token);
+            }, cancellationToken: cancellationTokenSource.Token);
         });
 
         Assert.Equal(0, i);
@@ -3081,7 +3083,7 @@ public class HttpRemoteServiceExtensionsTests
         {
             i++;
             await Task.CompletedTask;
-        }, b =>
+        }, requestConfigure: b =>
         {
             b.SetOnPreSendRequest(_ =>
             {
@@ -3180,7 +3182,7 @@ public class HttpRemoteServiceExtensionsTests
             {
                 i++;
                 await Task.CompletedTask;
-            }, null, cancellationTokenSource.Token);
+            }, cancellationToken: cancellationTokenSource.Token);
         });
 
         Assert.Equal(0, i);
@@ -3225,7 +3227,7 @@ public class HttpRemoteServiceExtensionsTests
         {
             i++;
             await Task.CompletedTask;
-        }, b =>
+        }, requestConfigure: b =>
         {
             b.SetOnPreSendRequest(_ =>
             {

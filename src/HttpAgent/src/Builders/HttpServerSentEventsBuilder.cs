@@ -206,10 +206,9 @@ public sealed class HttpServerSentEventsBuilder
         // 初始化 HttpRequestBuilder 实例，并确保请求标头中添加了 Accept: text/event-stream；
         // 如果请求失败，则应抛出异常。
         // 请注意，Server-Sent Events（SSE）标准仅支持使用 GET 方法进行请求。
-        var httpRequestBuilder =
-            HttpRequestBuilder.Create(HttpMethod.Get, RequestUri, configure)
-                .WithHeader(nameof(HttpRequestHeaders.Accept), "text/event-stream").DisableCache()
-                .EnsureSuccessStatusCode();
+        var httpRequestBuilder = HttpRequestBuilder.Create(HttpMethod.Get, RequestUri, configure)
+            .WithHeader(nameof(HttpRequestHeaders.Accept), "text/event-stream").DisableCache()
+            .EnsureSuccessStatusCode();
 
         // 检查是否设置了事件处理程序且该处理程序实现了 IHttpRequestEventHandler 接口，如果有则设置给 httpRequestBuilder
         if (ServerSentEventsEventHandlerType is not null &&

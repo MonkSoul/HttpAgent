@@ -352,4 +352,45 @@ public class GetStartController(IHttpRemoteService httpRemoteService, ISampleSer
         //        await Task.CompletedTask;
         //    }), cancellationToken: cancellationToken);
     }
+
+    /// <summary>
+    ///     Server Sent Events
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet]
+    public async Task ServerSentEvents(CancellationToken cancellationToken)
+    {
+        await httpRemoteService.ServerSentEventsAsync("https://localhost:7044/HttpRemote/Events"
+            // 接收到数据时的操作
+            , async data =>
+            {
+                Console.WriteLine(data.Data.ToString());
+                await Task.CompletedTask;
+            }, builder => builder
+                // 连接打开时操作
+                .SetOnOpen(() => { Console.WriteLine("连接成功。"); })
+                // 连接未打开时操作
+                .SetOnError(ex => { Console.WriteLine("连接错误。" + ex.Message); }), cancellationToken: cancellationToken);
+
+        // 使用构建器模式
+        //await httpRemoteService.SendAsync(HttpRequestBuilder
+        //   .ServerSentEvents("https://localhost:7044/HttpRemote/Events"
+        //   // 接收到数据时的操作
+        //   , async data =>
+        //   {
+        //       Console.WriteLine(data.Data.ToString());
+        //       await Task.CompletedTask;
+        //   })
+        //   // 连接打开时操作
+        //   .SetOnOpen(() =>
+        //   {
+        //       Console.WriteLine("连接成功。");
+        //   })
+        //   // 连接未打开时操作
+        //   .SetOnError((ex) =>
+        //   {
+        //       Console.WriteLine("连接错误。" + ex.Message);
+        //   }), cancellationToken: cancellationToken);
+    }
 }
