@@ -431,7 +431,7 @@
             <summary>
                 轮询重试间隔
             </summary>
-            <remarks>默认值为 5 秒。</remarks>
+            <remarks>默认值为 2 秒。</remarks>
         </member>
         <member name="P:HttpAgent.HttpLongPollingBuilder.MaxRetries">
             <summary>

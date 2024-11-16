@@ -43,8 +43,8 @@ public sealed class HttpLongPollingBuilder
     /// <summary>
     ///     轮询重试间隔
     /// </summary>
-    /// <remarks>默认值为 5 秒。</remarks>
-    public TimeSpan RetryInterval { get; private set; } = TimeSpan.FromSeconds(5);
+    /// <remarks>默认值为 2 秒。</remarks>
+    public TimeSpan RetryInterval { get; private set; } = TimeSpan.FromSeconds(2);
 
     /// <summary>
     ///     最大重试次数

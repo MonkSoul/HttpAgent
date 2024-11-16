@@ -22,7 +22,7 @@ public class HttpLongPollingBuilderTests
         Assert.NotNull(builder2.RequestUri);
         Assert.Equal("http://localhost/", builder2.RequestUri.ToString());
         Assert.Equal(HttpMethod.Get, builder2.Method);
-        Assert.Equal(TimeSpan.FromSeconds(5), builder2.RetryInterval);
+        Assert.Equal(TimeSpan.FromSeconds(2), builder2.RetryInterval);
         Assert.Null(builder2.Timeout);
         Assert.Equal(100, builder2.MaxRetries);
         Assert.Null(builder2.OnDataReceived);
