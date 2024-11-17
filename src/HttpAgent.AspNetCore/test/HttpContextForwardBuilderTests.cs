@@ -9,29 +9,34 @@ public class HttpContextForwardBuilderTests
     [Fact]
     public void New_Invalid_Parameters()
     {
-        Assert.Throws<ArgumentNullException>(() => new HttpContextForwardBuilder(null!, null, null));
-        Assert.Throws<ArgumentNullException>(() => new HttpContextForwardBuilder(HttpMethod.Get, null, null));
+        Assert.Throws<ArgumentNullException>(() => new HttpContextForwardBuilder(null!, null!));
+        Assert.Throws<ArgumentNullException>(() =>
+            new HttpContextForwardBuilder(new DefaultHttpContext(), null!));
     }
 
     [Fact]
     public void New_ReturnOK()
     {
-        var services = new ServiceCollection();
-        var serviceProvider = services.BuildServiceProvider();
-
         var httpContext = new DefaultHttpContext();
 
-        var builder = new HttpContextForwardBuilder(HttpMethod.Get, null, httpContext);
+        var builder = new HttpContextForwardBuilder(httpContext, HttpMethod.Get);
         Assert.Equal(HttpMethod.Get, builder.Method);
         Assert.Null(builder.RequestUri);
 
-        var builder2 = new HttpContextForwardBuilder(HttpMethod.Get, new Uri("http://localhost"), httpContext);
+        var builder2 = new HttpContextForwardBuilder(httpContext, HttpMethod.Get, new Uri("http://localhost"));
         Assert.Equal(HttpMethod.Get, builder2.Method);
         Assert.NotNull(builder2.RequestUri);
         Assert.Equal("http://localhost/", builder2.RequestUri.ToString());
         Assert.NotNull(builder2.HttpContext);
 
-        serviceProvider.Dispose();
+        var httpContext2 = new DefaultHttpContext
+        {
+            Request = { Headers = { ["X-Forward-To"] = "https://furion.net" } }
+        };
+        var builder3 = new HttpContextForwardBuilder(httpContext2, HttpMethod.Get);
+        Assert.Equal(HttpMethod.Get, builder3.Method);
+        Assert.NotNull(builder3.RequestUri);
+        Assert.Equal("https://furion.net/", builder3.RequestUri.ToString());
     }
 
     [Fact]
@@ -47,7 +52,7 @@ public class HttpContextForwardBuilderTests
         {
             var httpMethod = Helpers.ParseHttpMethod(context.Request.Method);
             var requestUri = new Uri($"http://localhost:{port}");
-            var httpContextForwardBuilder = new HttpContextForwardBuilder(httpMethod, requestUri, context);
+            var httpContextForwardBuilder = new HttpContextForwardBuilder(context, httpMethod, requestUri);
             var httpRequestBuilder = HttpRequestBuilder.Create(httpMethod, requestUri);
 
             httpContextForwardBuilder.CopyQueryAndRouteValues(httpRequestBuilder);
@@ -90,7 +95,7 @@ public class HttpContextForwardBuilderTests
         {
             var httpMethod = Helpers.ParseHttpMethod(context.Request.Method);
             var requestUri = new Uri($"http://localhost:{port}");
-            var httpContextForwardBuilder = new HttpContextForwardBuilder(httpMethod, requestUri, context);
+            var httpContextForwardBuilder = new HttpContextForwardBuilder(context, httpMethod, requestUri);
             var httpRequestBuilder = HttpRequestBuilder.Create(httpMethod, requestUri);
 
             httpContextForwardBuilder.CopyHeaders(httpRequestBuilder);
@@ -136,7 +141,7 @@ public class HttpContextForwardBuilderTests
         {
             var httpMethod = Helpers.ParseHttpMethod(context.Request.Method);
             var requestUri = new Uri($"http://localhost:{port}");
-            var httpContextForwardBuilder = new HttpContextForwardBuilder(httpMethod, requestUri, context);
+            var httpContextForwardBuilder = new HttpContextForwardBuilder(context, httpMethod, requestUri);
             var httpRequestBuilder = HttpRequestBuilder.Create(httpMethod, requestUri);
 
             httpContextForwardBuilder.CopyHeaders(httpRequestBuilder);
@@ -200,7 +205,7 @@ public class HttpContextForwardBuilderTests
         {
             var httpMethod = Helpers.ParseHttpMethod(context.Request.Method);
             var requestUri = new Uri($"http://localhost:{port}");
-            var httpContextForwardBuilder = new HttpContextForwardBuilder(httpMethod, requestUri, context);
+            var httpContextForwardBuilder = new HttpContextForwardBuilder(context, httpMethod, requestUri);
             var httpRequestBuilder = HttpRequestBuilder.Create(httpMethod, requestUri);
 
             httpContextForwardBuilder.CopyHeaders(httpRequestBuilder);
@@ -290,7 +295,7 @@ public class HttpContextForwardBuilderTests
         {
             var httpMethod = Helpers.ParseHttpMethod(context.Request.Method);
             var requestUri = new Uri($"http://localhost:{port}");
-            var httpContextForwardBuilder = new HttpContextForwardBuilder(httpMethod, requestUri, context);
+            var httpContextForwardBuilder = new HttpContextForwardBuilder(context, httpMethod, requestUri);
             var httpRequestBuilder = HttpRequestBuilder.Create(httpMethod, requestUri);
 
             httpContextForwardBuilder.CopyHeaders(httpRequestBuilder);
@@ -395,7 +400,7 @@ public class HttpContextForwardBuilderTests
         {
             var httpMethod = Helpers.ParseHttpMethod(context.Request.Method);
             var requestUri = new Uri($"http://localhost:{port}");
-            var httpContextForwardBuilder = new HttpContextForwardBuilder(httpMethod, requestUri, context);
+            var httpContextForwardBuilder = new HttpContextForwardBuilder(context, httpMethod, requestUri);
             var httpRequestBuilder = HttpRequestBuilder.Create(httpMethod, requestUri);
 
             httpContextForwardBuilder.CopyHeaders(httpRequestBuilder);
@@ -475,7 +480,7 @@ public class HttpContextForwardBuilderTests
         {
             var httpMethod = Helpers.ParseHttpMethod(context.Request.Method);
             var requestUri = new Uri($"http://localhost:{port}");
-            var httpContextForwardBuilder = new HttpContextForwardBuilder(httpMethod, requestUri, context);
+            var httpContextForwardBuilder = new HttpContextForwardBuilder(context, httpMethod, requestUri);
             var httpRequestBuilder = HttpRequestBuilder.Create(httpMethod, requestUri);
 
             httpContextForwardBuilder.CopyHeaders(httpRequestBuilder);
@@ -524,7 +529,7 @@ public class HttpContextForwardBuilderTests
         {
             var httpMethod = Helpers.ParseHttpMethod(context.Request.Method);
             var requestUri = new Uri($"http://localhost:{port}");
-            var httpContextForwardBuilder = new HttpContextForwardBuilder(httpMethod, requestUri, context);
+            var httpContextForwardBuilder = new HttpContextForwardBuilder(context, httpMethod, requestUri);
             var httpRequestBuilder = HttpRequestBuilder.Create(httpMethod, requestUri);
 
             httpContextForwardBuilder.CopyHeaders(httpRequestBuilder);
@@ -587,7 +592,7 @@ public class HttpContextForwardBuilderTests
         {
             var httpMethod = Helpers.ParseHttpMethod(context.Request.Method);
             var requestUri = new Uri($"http://localhost:{port}");
-            var httpContextForwardBuilder = new HttpContextForwardBuilder(httpMethod, requestUri, context);
+            var httpContextForwardBuilder = new HttpContextForwardBuilder(context, httpMethod, requestUri);
             var httpRequestBuilder = HttpRequestBuilder.Create(httpMethod, requestUri);
 
             httpContextForwardBuilder.CopyHeaders(httpRequestBuilder);
@@ -666,7 +671,7 @@ public class HttpContextForwardBuilderTests
         {
             var httpMethod = Helpers.ParseHttpMethod(context.Request.Method);
             var requestUri = new Uri($"http://localhost:{port}");
-            var httpContextForwardBuilder = new HttpContextForwardBuilder(httpMethod, requestUri, context);
+            var httpContextForwardBuilder = new HttpContextForwardBuilder(context, httpMethod, requestUri);
             var httpRequestBuilder0 = await httpContextForwardBuilder.BuildAsync();
             Assert.True(httpRequestBuilder0.DisableCacheEnabled);
             Assert.False(httpRequestBuilder0.EnsureSuccessStatusCodeEnabled);
@@ -719,7 +724,7 @@ public class HttpContextForwardBuilderTests
         {
             var httpMethod = Helpers.ParseHttpMethod(context.Request.Method);
             var requestUri = new Uri($"http://localhost:{port}");
-            var httpContextForwardBuilder = new HttpContextForwardBuilder(httpMethod, requestUri, context);
+            var httpContextForwardBuilder = new HttpContextForwardBuilder(context, httpMethod, requestUri);
             var httpRequestBuilder0 = await httpContextForwardBuilder.BuildAsync();
             Assert.True(httpRequestBuilder0.DisableCacheEnabled);
             var httpRequestBuilder =
@@ -783,7 +788,7 @@ public class HttpContextForwardBuilderTests
         {
             var httpMethod = Helpers.ParseHttpMethod(context.Request.Method);
             var requestUri = new Uri($"http://localhost:{port}");
-            var httpContextForwardBuilder = new HttpContextForwardBuilder(httpMethod, requestUri, context);
+            var httpContextForwardBuilder = new HttpContextForwardBuilder(context, httpMethod, requestUri);
             var httpRequestBuilder0 = await httpContextForwardBuilder.BuildAsync();
             Assert.True(httpRequestBuilder0.DisableCacheEnabled);
             var httpRequestBuilder =
@@ -863,7 +868,7 @@ public class HttpContextForwardBuilderTests
         {
             var httpMethod = Helpers.ParseHttpMethod(context.Request.Method);
             var requestUri = new Uri($"http://localhost:{port}");
-            var httpContextForwardBuilder = new HttpContextForwardBuilder(httpMethod, requestUri, context);
+            var httpContextForwardBuilder = new HttpContextForwardBuilder(context, httpMethod, requestUri);
 
             // ReSharper disable once MethodHasAsyncOverload
             var httpRequestBuilder0 = httpContextForwardBuilder.Build();
@@ -919,7 +924,7 @@ public class HttpContextForwardBuilderTests
         {
             var httpMethod = Helpers.ParseHttpMethod(context.Request.Method);
             var requestUri = new Uri($"http://localhost:{port}");
-            var httpContextForwardBuilder = new HttpContextForwardBuilder(httpMethod, requestUri, context);
+            var httpContextForwardBuilder = new HttpContextForwardBuilder(context, httpMethod, requestUri);
 
             // ReSharper disable once MethodHasAsyncOverload
             var httpRequestBuilder0 = httpContextForwardBuilder.Build();
@@ -987,7 +992,7 @@ public class HttpContextForwardBuilderTests
         {
             var httpMethod = Helpers.ParseHttpMethod(context.Request.Method);
             var requestUri = new Uri($"http://localhost:{port}");
-            var httpContextForwardBuilder = new HttpContextForwardBuilder(httpMethod, requestUri, context);
+            var httpContextForwardBuilder = new HttpContextForwardBuilder(context, httpMethod, requestUri);
 
             // ReSharper disable once MethodHasAsyncOverload
             var httpRequestBuilder0 = httpContextForwardBuilder.Build();
@@ -1071,7 +1076,7 @@ public class HttpContextForwardBuilderTests
         {
             var httpMethod = Helpers.ParseHttpMethod(context.Request.Method);
             var requestUri = new Uri($"http://localhost:{port}");
-            var httpContextForwardBuilder = new HttpContextForwardBuilder(httpMethod, requestUri, context);
+            var httpContextForwardBuilder = new HttpContextForwardBuilder(context, httpMethod, requestUri);
             var httpRequestBuilder = HttpRequestBuilder.Create(httpMethod, requestUri);
 
             try
@@ -1126,7 +1131,7 @@ public class HttpContextForwardBuilderTests
         {
             var httpMethod = Helpers.ParseHttpMethod(context.Request.Method);
             var requestUri = new Uri($"http://localhost:{port}");
-            var httpContextForwardBuilder = new HttpContextForwardBuilder(httpMethod, requestUri, context);
+            var httpContextForwardBuilder = new HttpContextForwardBuilder(context, httpMethod, requestUri);
             var httpRequestBuilder = HttpRequestBuilder.Create(httpMethod, requestUri);
 
             await httpContextForwardBuilder.ReadBodyAsync(httpRequestBuilder);

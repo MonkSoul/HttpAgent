@@ -9,15 +9,15 @@
                 <see cref="P:HttpAgent.HttpContextForwardBuilder.HttpContext" /> 转发构建器
             </summary>
         </member>
-        <member name="M:HttpAgent.HttpContextForwardBuilder.#ctor(System.Net.Http.HttpMethod,System.Uri,Microsoft.AspNetCore.Http.HttpContext)">
+        <member name="M:HttpAgent.HttpContextForwardBuilder.#ctor(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpMethod,System.Uri)">
             <summary>
                 <inheritdoc cref="T:HttpAgent.HttpContextForwardBuilder" />
             </summary>
-            <param name="httpMethod">请求方式</param>
-            <param name="requestUri">请求地址</param>
             <param name="httpContext">
                 <see cref="P:HttpAgent.HttpContextForwardBuilder.HttpContext" />
             </param>
+            <param name="httpMethod">请求方式</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
         </member>
         <member name="P:HttpAgent.HttpContextForwardBuilder.RequestUri">
             <summary>
@@ -224,7 +224,7 @@
             <param name="httpContext">
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -242,7 +242,7 @@
             </summary>
             <param name="httpContext"></param>
             <param name="httpMethod">请求方式</param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -261,7 +261,7 @@
             <param name="httpContext">
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -281,7 +281,7 @@
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
             <param name="httpMethod">请求方式</param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -300,7 +300,7 @@
             <param name="httpContext">
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -318,7 +318,7 @@
             </summary>
             <param name="httpContext"></param>
             <param name="httpMethod">请求方式</param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -337,7 +337,7 @@
             <param name="httpContext">
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -357,7 +357,7 @@
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
             <param name="httpMethod">请求方式</param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -376,7 +376,7 @@
             <param name="httpContext">
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -395,7 +395,7 @@
             </summary>
             <param name="httpContext"></param>
             <param name="httpMethod">请求方式</param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -415,7 +415,7 @@
             <param name="httpContext">
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -436,7 +436,7 @@
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
             <param name="httpMethod">请求方式</param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -456,7 +456,7 @@
             <param name="httpContext">
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -475,7 +475,7 @@
             </summary>
             <param name="httpContext"></param>
             <param name="httpMethod">请求方式</param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -495,7 +495,7 @@
             <param name="httpContext">
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -516,7 +516,7 @@
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
             <param name="httpMethod">请求方式</param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -536,7 +536,7 @@
             <param name="httpContext">
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -555,7 +555,7 @@
             </summary>
             <param name="httpContext"></param>
             <param name="httpMethod">请求方式</param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -575,7 +575,7 @@
             <param name="httpContext">
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -596,7 +596,7 @@
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
             <param name="httpMethod">请求方式</param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -616,7 +616,7 @@
             <param name="httpContext">
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -635,7 +635,7 @@
             </summary>
             <param name="httpContext"></param>
             <param name="httpMethod">请求方式</param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -655,7 +655,7 @@
             <param name="httpContext">
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -676,7 +676,7 @@
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
             <param name="httpMethod">请求方式</param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
@@ -696,7 +696,7 @@
             <param name="httpContext">
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
@@ -710,7 +710,7 @@
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
             <param name="httpMethod">请求方式</param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
@@ -723,7 +723,7 @@
             <param name="httpContext">
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
@@ -737,7 +737,7 @@
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
             <param name="httpMethod">请求方式</param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
@@ -750,7 +750,7 @@
             <param name="httpContext">
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
@@ -764,7 +764,7 @@
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
             <param name="httpMethod">请求方式</param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
@@ -777,7 +777,7 @@
             <param name="httpContext">
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
@@ -791,7 +791,7 @@
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
             <param name="httpMethod">请求方式</param>
-            <param name="requestUri">请求地址</param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
             <param name="configure">自定义配置委托</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />

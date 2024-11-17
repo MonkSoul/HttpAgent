@@ -43,6 +43,10 @@ public class ConstantsTests
         Assert.Equal("X-Original-URL", Constants.X_ORIGINAL_URL_HEADER);
 
     [Fact]
+    public void X_FORWARD_TO_HEADER() =>
+        Assert.Equal("X-Forward-To", Constants.X_FORWARD_TO_HEADER);
+
+    [Fact]
     public void X_STRESS_TEST_HEADER() =>
         Assert.Equal("X-Stress-Test", Constants.X_STRESS_TEST_HEADER);
 

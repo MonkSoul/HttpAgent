@@ -55,6 +55,11 @@ internal static class Constants
     internal const string X_ORIGINAL_URL_HEADER = "X-Original-URL";
 
     /// <summary>
+    ///     请求转发目标地址标头
+    /// </summary>
+    internal const string X_FORWARD_TO_HEADER = "X-Forward-To";
+
+    /// <summary>
     ///     压力测试标头
     /// </summary>
     internal const string X_STRESS_TEST_HEADER = "X-Stress-Test";

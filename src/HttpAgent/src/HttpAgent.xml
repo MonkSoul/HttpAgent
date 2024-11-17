@@ -2791,6 +2791,11 @@
                 请求原始地址标头
             </summary>
         </member>
+        <member name="F:HttpAgent.Constants.X_FORWARD_TO_HEADER">
+            <summary>
+                请求转发目标地址标头
+            </summary>
+        </member>
         <member name="F:HttpAgent.Constants.X_STRESS_TEST_HEADER">
             <summary>
                 压力测试标头

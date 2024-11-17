@@ -12,21 +12,24 @@ public sealed class HttpContextForwardBuilder
     /// <summary>
     ///     <inheritdoc cref="HttpContextForwardBuilder" />
     /// </summary>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址</param>
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    internal HttpContextForwardBuilder(HttpMethod httpMethod, Uri? requestUri, HttpContext? httpContext)
+    /// <param name="httpMethod">请求方式</param>
+    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    internal HttpContextForwardBuilder(HttpContext? httpContext, HttpMethod httpMethod, Uri? requestUri = null)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(httpMethod);
         ArgumentNullException.ThrowIfNull(httpContext);
 
-        Method = httpMethod;
-        RequestUri = requestUri;
-
         HttpContext = httpContext;
+        Method = httpMethod;
+
+        // 尝试从请求标头 X-Forward-To 中获取目标地址
+        var targetUrl = httpContext.Request.Headers[Constants.X_FORWARD_TO_HEADER].ToString();
+        RequestUri = requestUri ??
+                     (string.IsNullOrWhiteSpace(targetUrl) ? null : new Uri(targetUrl, UriKind.RelativeOrAbsolute));
     }
 
     /// <summary>
