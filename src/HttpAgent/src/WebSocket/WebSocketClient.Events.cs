@@ -30,34 +30,34 @@ public sealed partial class WebSocketClient
     public event EventHandler<EventArgs>? Reconnected;
 
     /// <summary>
-    ///     开始断开连接时触发事件
+    ///     开始关闭连接时触发事件
     /// </summary>
-    public event EventHandler<EventArgs>? Disconnecting;
+    public event EventHandler<EventArgs>? Closing;
 
     /// <summary>
-    ///     断开连接成功时触发事件
+    ///     关闭连接成功时触发事件
     /// </summary>
-    public event EventHandler<EventArgs>? Disconnected;
+    public event EventHandler<EventArgs>? Closed;
 
     /// <summary>
     ///     开始接收消息时触发事件
     /// </summary>
-    public event EventHandler<EventArgs>? StartedReceiving;
+    public event EventHandler<EventArgs>? ReceivingStarted;
 
     /// <summary>
     ///     停止接收消息时触发事件
     /// </summary>
-    public event EventHandler<EventArgs>? StoppedReceiving;
+    public event EventHandler<EventArgs>? ReceivingStopped;
 
     /// <summary>
     ///     接收文本消息事件
     /// </summary>
-    public event EventHandler<WebSocketReceiveResult<string>>? Received;
+    public event EventHandler<WebSocketTextReceiveResult>? TextReceived;
 
     /// <summary>
     ///     接收二进制消息事件
     /// </summary>
-    public event EventHandler<WebSocketReceiveResult<byte[]>>? BinaryReceived;
+    public event EventHandler<WebSocketBinaryReceiveResult>? BinaryReceived;
 
     /// <summary>
     ///     触发开始连接事件
@@ -80,39 +80,39 @@ public sealed partial class WebSocketClient
     internal void OnReconnected() => Reconnected?.Invoke(this, EventArgs.Empty);
 
     /// <summary>
-    ///     触发开始断开连接事件
+    ///     触发开始关闭连接事件
     /// </summary>
-    internal void OnDisconnecting() => Disconnecting?.Invoke(this, EventArgs.Empty);
+    internal void OnClosing() => Closing?.Invoke(this, EventArgs.Empty);
 
     /// <summary>
-    ///     触发断开连接成功事件
+    ///     触发关闭连接成功事件
     /// </summary>
-    internal void OnDisconnected() => Disconnected?.Invoke(this, EventArgs.Empty);
+    internal void OnClosed() => Closed?.Invoke(this, EventArgs.Empty);
 
     /// <summary>
     ///     触发开始接收消息事件
     /// </summary>
-    internal void OnStartedReceiving() => StartedReceiving?.Invoke(this, EventArgs.Empty);
+    internal void OnReceivingStarted() => ReceivingStarted?.Invoke(this, EventArgs.Empty);
 
     /// <summary>
     ///     触发停止接收消息事件
     /// </summary>
-    internal void OnStoppedReceiving() => StoppedReceiving?.Invoke(this, EventArgs.Empty);
+    internal void OnReceivingStopped() => ReceivingStopped?.Invoke(this, EventArgs.Empty);
 
     /// <summary>
     ///     触发接收文本消息事件
     /// </summary>
     /// <param name="receiveResult">
-    ///     <see cref="WebSocketReceiveResult{TResult}" />
+    ///     <see cref="WebSocketTextReceiveResult" />
     /// </param>
-    internal void OnReceived(WebSocketReceiveResult<string> receiveResult) => Received?.Invoke(this, receiveResult);
+    internal void OnTextReceived(WebSocketTextReceiveResult receiveResult) => TextReceived?.Invoke(this, receiveResult);
 
     /// <summary>
     ///     触发接收二进制消息事件
     /// </summary>
     /// <param name="receiveResult">
-    ///     <see cref="WebSocketReceiveResult{TResult}" />
+    ///     <see cref="WebSocketBinaryReceiveResult" />
     /// </param>
-    internal void OnBinaryReceived(WebSocketReceiveResult<byte[]> receiveResult) =>
+    internal void OnBinaryReceived(WebSocketBinaryReceiveResult receiveResult) =>
         BinaryReceived?.Invoke(this, receiveResult);
 }

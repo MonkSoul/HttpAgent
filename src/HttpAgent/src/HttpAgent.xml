@@ -11105,6 +11105,22 @@
                 <c>byte[]</c>
             </returns>
         </member>
+        <member name="T:HttpAgent.WebSocketBinaryReceiveResult">
+            <summary>
+                WebSocket 接收的二进制消息的结果类
+            </summary>
+        </member>
+        <member name="M:HttpAgent.WebSocketBinaryReceiveResult.#ctor(System.Int32,System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.WebSocketBinaryReceiveResult.#ctor(System.Int32,System.Boolean,System.Nullable{System.Net.WebSockets.WebSocketCloseStatus},System.String)">
+            <inheritdoc />
+        </member>
+        <member name="P:HttpAgent.WebSocketBinaryReceiveResult.Message">
+            <summary>
+                二进制消息
+            </summary>
+        </member>
         <member name="T:HttpAgent.WebSocketClient">
             <summary>
                 WebSocket 客户端
@@ -11178,9 +11194,9 @@
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
-        <member name="M:HttpAgent.WebSocketClient.ListeningAsync(System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.WebSocketClient.ListenAsync(System.Threading.CancellationToken)">
             <summary>
-                开始监听服务器消息
+                开始监听服务器消息（非阻塞）
             </summary>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
@@ -11189,9 +11205,9 @@
                 <see cref="T:System.Threading.Tasks.Task" />
             </returns>
         </member>
-        <member name="M:HttpAgent.WebSocketClient.WaitToReceiveAsync(System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.WebSocketClient.WaitAsync(System.Threading.CancellationToken)">
             <summary>
-                等待接收服务器消息
+                等待接收服务器消息（阻塞）
             </summary>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
@@ -11238,10 +11254,22 @@
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
-        <member name="M:HttpAgent.WebSocketClient.DisconnectAsync(System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.WebSocketClient.CloseAsync(System.Threading.CancellationToken)">
             <summary>
-                断开连接
+                关闭连接
             </summary>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.WebSocketClient.CloseAsync(System.Net.WebSockets.WebSocketCloseStatus,System.String,System.Threading.CancellationToken)">
+            <summary>
+                关闭连接
+            </summary>
+            <param name="closeStatus">
+                <see cref="T:System.Net.WebSockets.WebSocketCloseStatus" />
+            </param>
+            <param name="closeDescription">关闭描述。默认值为：<c>Closing</c>。</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11266,27 +11294,27 @@
                 重新连接成功时触发事件
             </summary>
         </member>
-        <member name="E:HttpAgent.WebSocketClient.Disconnecting">
+        <member name="E:HttpAgent.WebSocketClient.Closing">
             <summary>
-                开始断开连接时触发事件
+                开始关闭连接时触发事件
             </summary>
         </member>
-        <member name="E:HttpAgent.WebSocketClient.Disconnected">
+        <member name="E:HttpAgent.WebSocketClient.Closed">
             <summary>
-                断开连接成功时触发事件
+                关闭连接成功时触发事件
             </summary>
         </member>
-        <member name="E:HttpAgent.WebSocketClient.StartedReceiving">
+        <member name="E:HttpAgent.WebSocketClient.ReceivingStarted">
             <summary>
                 开始接收消息时触发事件
             </summary>
         </member>
-        <member name="E:HttpAgent.WebSocketClient.StoppedReceiving">
+        <member name="E:HttpAgent.WebSocketClient.ReceivingStopped">
             <summary>
                 停止接收消息时触发事件
             </summary>
         </member>
-        <member name="E:HttpAgent.WebSocketClient.Received">
+        <member name="E:HttpAgent.WebSocketClient.TextReceived">
             <summary>
                 接收文本消息事件
             </summary>
@@ -11316,40 +11344,40 @@
                 触发重新连接成功事件
             </summary>
         </member>
-        <member name="M:HttpAgent.WebSocketClient.OnDisconnecting">
+        <member name="M:HttpAgent.WebSocketClient.OnClosing">
             <summary>
-                触发开始断开连接事件
+                触发开始关闭连接事件
             </summary>
         </member>
-        <member name="M:HttpAgent.WebSocketClient.OnDisconnected">
+        <member name="M:HttpAgent.WebSocketClient.OnClosed">
             <summary>
-                触发断开连接成功事件
+                触发关闭连接成功事件
             </summary>
         </member>
-        <member name="M:HttpAgent.WebSocketClient.OnStartedReceiving">
+        <member name="M:HttpAgent.WebSocketClient.OnReceivingStarted">
             <summary>
                 触发开始接收消息事件
             </summary>
         </member>
-        <member name="M:HttpAgent.WebSocketClient.OnStoppedReceiving">
+        <member name="M:HttpAgent.WebSocketClient.OnReceivingStopped">
             <summary>
                 触发停止接收消息事件
             </summary>
         </member>
-        <member name="M:HttpAgent.WebSocketClient.OnReceived(HttpAgent.WebSocketReceiveResult{System.String})">
+        <member name="M:HttpAgent.WebSocketClient.OnTextReceived(HttpAgent.WebSocketTextReceiveResult)">
             <summary>
                 触发接收文本消息事件
             </summary>
             <param name="receiveResult">
-                <see cref="T:HttpAgent.WebSocketReceiveResult`1" />
+                <see cref="T:HttpAgent.WebSocketTextReceiveResult" />
             </param>
         </member>
-        <member name="M:HttpAgent.WebSocketClient.OnBinaryReceived(HttpAgent.WebSocketReceiveResult{System.Byte[]})">
+        <member name="M:HttpAgent.WebSocketClient.OnBinaryReceived(HttpAgent.WebSocketBinaryReceiveResult)">
             <summary>
                 触发接收二进制消息事件
             </summary>
             <param name="receiveResult">
-                <see cref="T:HttpAgent.WebSocketReceiveResult`1" />
+                <see cref="T:HttpAgent.WebSocketBinaryReceiveResult" />
             </param>
         </member>
         <member name="T:HttpAgent.WebSocketClientOptions">
@@ -11402,21 +11430,20 @@
                 用于配置 <see cref="P:HttpAgent.WebSocketClientOptions.ConfigureClientWebSocketOptions" /> 的操作
             </summary>
         </member>
-        <member name="T:HttpAgent.WebSocketReceiveResult`1">
+        <member name="T:HttpAgent.WebSocketTextReceiveResult">
             <summary>
-                WebSocket 接收到的数据结果
+                WebSocket 接收的文本消息的结果类
             </summary>
-            <typeparam name="TResult">结果的目标类型</typeparam>
         </member>
-        <member name="M:HttpAgent.WebSocketReceiveResult`1.#ctor(System.Int32,System.Net.WebSockets.WebSocketMessageType,System.Boolean)">
+        <member name="M:HttpAgent.WebSocketTextReceiveResult.#ctor(System.Int32,System.Boolean)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.WebSocketReceiveResult`1.#ctor(System.Int32,System.Net.WebSockets.WebSocketMessageType,System.Boolean,System.Nullable{System.Net.WebSockets.WebSocketCloseStatus},System.String)">
+        <member name="M:HttpAgent.WebSocketTextReceiveResult.#ctor(System.Int32,System.Boolean,System.Nullable{System.Net.WebSockets.WebSocketCloseStatus},System.String)">
             <inheritdoc />
         </member>
-        <member name="P:HttpAgent.WebSocketReceiveResult`1.Result">
+        <member name="P:HttpAgent.WebSocketTextReceiveResult.Message">
             <summary>
-                <typeparamref name="TResult" />
+                文本消息
             </summary>
         </member>
         <member name="T:System.AliasAsAttribute">

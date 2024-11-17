@@ -28,25 +28,25 @@ public class WebSocketClientEventsTests
         {
             events[3] = nameof(webSocketClient.Reconnected);
         };
-        webSocketClient.Disconnecting += (s, e) =>
+        webSocketClient.Closing += (s, e) =>
         {
-            events[4] = nameof(webSocketClient.Disconnecting);
+            events[4] = nameof(webSocketClient.Closing);
         };
-        webSocketClient.Disconnected += (s, e) =>
+        webSocketClient.Closed += (s, e) =>
         {
-            events[5] = nameof(webSocketClient.Disconnected);
+            events[5] = nameof(webSocketClient.Closed);
         };
-        webSocketClient.StartedReceiving += (s, e) =>
+        webSocketClient.ReceivingStarted += (s, e) =>
         {
-            events[6] = nameof(webSocketClient.StartedReceiving);
+            events[6] = nameof(webSocketClient.ReceivingStarted);
         };
-        webSocketClient.StoppedReceiving += (s, e) =>
+        webSocketClient.ReceivingStopped += (s, e) =>
         {
-            events[7] = nameof(webSocketClient.StoppedReceiving);
+            events[7] = nameof(webSocketClient.ReceivingStopped);
         };
-        webSocketClient.Received += (s, e) =>
+        webSocketClient.TextReceived += (s, e) =>
         {
-            events[8] = nameof(webSocketClient.Received);
+            events[8] = nameof(webSocketClient.TextReceived);
         };
         webSocketClient.BinaryReceived += (s, e) =>
         {
@@ -57,19 +57,17 @@ public class WebSocketClientEventsTests
         webSocketClient.OnConnected();
         webSocketClient.OnReconnecting();
         webSocketClient.OnReconnected();
-        webSocketClient.OnDisconnecting();
-        webSocketClient.OnDisconnected();
-        webSocketClient.OnStartedReceiving();
-        webSocketClient.OnStoppedReceiving();
-        webSocketClient.OnReceived(new WebSocketReceiveResult<string>(0, WebSocketMessageType.Text, true,
-            WebSocketCloseStatus.Empty, null));
-        webSocketClient.OnBinaryReceived(new WebSocketReceiveResult<byte[]>(0, WebSocketMessageType.Text, true,
-            WebSocketCloseStatus.Empty, null));
+        webSocketClient.OnClosing();
+        webSocketClient.OnClosed();
+        webSocketClient.OnReceivingStarted();
+        webSocketClient.OnReceivingStopped();
+        webSocketClient.OnTextReceived(new WebSocketTextReceiveResult(0, true, WebSocketCloseStatus.Empty, null));
+        webSocketClient.OnBinaryReceived(new WebSocketBinaryReceiveResult(0, true, WebSocketCloseStatus.Empty, null));
 
         Assert.Equal(
         [
-            "Connecting", "Connected", "Reconnecting", "Reconnected", "Disconnecting", "Disconnected",
-            "StartedReceiving", "StoppedReceiving", "Received", "BinaryReceived"
+            "Connecting", "Connected", "Reconnecting", "Reconnected", "Closing", "Closed", "ReceivingStarted",
+            "ReceivingStopped", "TextReceived", "BinaryReceived"
         ], events);
     }
 }

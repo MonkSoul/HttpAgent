@@ -109,13 +109,14 @@ public sealed partial class WebSocketClient : IDisposable
             return;
         }
 
-        // 创建关联的超时 Token 标识
-        using var timeoutCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        // 创建关联的连接超时 Token 标识
+        using var connectTimeoutCancellationTokenSource =
+            CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
         // 设置连接超时时间控制
         if (Options.Timeout is not null && Options.Timeout.Value != TimeSpan.Zero)
         {
-            timeoutCancellationTokenSource.CancelAfter(Options.Timeout.Value);
+            connectTimeoutCancellationTokenSource.CancelAfter(Options.Timeout.Value);
         }
 
         // 触发开始连接事件
@@ -125,7 +126,7 @@ public sealed partial class WebSocketClient : IDisposable
         try
         {
             // 连接到服务器
-            await _clientWebSocket.ConnectAsync(Options.ServerUri, timeoutCancellationTokenSource.Token);
+            await _clientWebSocket.ConnectAsync(Options.ServerUri, connectTimeoutCancellationTokenSource.Token);
 
             // 重置当前重连次数
             CurrentReconnectRetries = 0;
@@ -133,7 +134,11 @@ public sealed partial class WebSocketClient : IDisposable
             // 触发连接成功事件
             var onConnected = OnConnected;
             onConnected.TryInvoke();
+
+            // 开始监听服务器消息（非阻塞）
+            await ListenAsync(cancellationToken);
         }
+        // 任务被取消
         catch (Exception e) when (cancellationToken.IsCancellationRequested || e is OperationCanceledException)
         {
             throw;
@@ -186,7 +191,7 @@ public sealed partial class WebSocketClient : IDisposable
     }
 
     /// <summary>
-    ///     开始监听服务器消息
+    ///     开始监听服务器消息（非阻塞）
     /// </summary>
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
@@ -194,7 +199,7 @@ public sealed partial class WebSocketClient : IDisposable
     /// <returns>
     ///     <see cref="Task" />
     /// </returns>
-    public Task ListeningAsync(CancellationToken cancellationToken = default)
+    internal Task ListenAsync(CancellationToken cancellationToken = default)
     {
         // 检查连接是否处于打开状态
         if (State == WebSocketState.Open)
@@ -207,12 +212,12 @@ public sealed partial class WebSocketClient : IDisposable
     }
 
     /// <summary>
-    ///     等待接收服务器消息
+    ///     等待接收服务器消息（阻塞）
     /// </summary>
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
-    public async Task WaitToReceiveAsync(CancellationToken cancellationToken = default)
+    internal async Task WaitAsync(CancellationToken cancellationToken = default)
     {
         // 检查连接是否处于打开状态
         if (State != WebSocketState.Open)
@@ -246,8 +251,8 @@ public sealed partial class WebSocketClient : IDisposable
         _messageCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
         // 触发开始接收消息事件
-        var onStartedReceiving = OnStartedReceiving;
-        onStartedReceiving.TryInvoke();
+        var onReceivingStarted = OnReceivingStarted;
+        onReceivingStarted.TryInvoke();
 
         // 初始化缓冲区大小
         var buffer = new byte[Options.ReceiveBufferSize];
@@ -276,26 +281,24 @@ public sealed partial class WebSocketClient : IDisposable
                             // 解码接收到的文本消息
                             var message = Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
 
-                            // 初始化 WebSocketReceiveResult<TResult> 实例
-                            var textReceiveResult = new WebSocketReceiveResult<string>(receiveResult.Count,
-                                receiveResult.MessageType,
+                            // 初始化 WebSocketTextReceiveResult 实例
+                            var textReceiveResult = new WebSocketTextReceiveResult(receiveResult.Count,
                                 receiveResult.EndOfMessage, receiveResult.CloseStatus,
-                                receiveResult.CloseStatusDescription) { Result = message };
+                                receiveResult.CloseStatusDescription) { Message = message };
 
                             // 触发接收文本消息事件
-                            var onReceived = OnReceived;
-                            onReceived.TryInvoke(textReceiveResult);
+                            var onTextReceived = OnTextReceived;
+                            onTextReceived.TryInvoke(textReceiveResult);
                             break;
                         case WebSocketMessageType.Binary:
                             // 将接收到的数据从原始缓冲区复制到新创建的字节数组中
                             var bytes = new byte[receiveResult.Count];
                             Buffer.BlockCopy(buffer, 0, bytes, 0, receiveResult.Count);
 
-                            // 初始化 WebSocketReceiveResult<TResult> 实例
-                            var binaryReceiveResult = new WebSocketReceiveResult<byte[]>(receiveResult.Count,
-                                receiveResult.MessageType,
+                            // 初始化 WebSocketBinaryReceiveResult 实例
+                            var binaryReceiveResult = new WebSocketBinaryReceiveResult(receiveResult.Count,
                                 receiveResult.EndOfMessage, receiveResult.CloseStatus,
-                                receiveResult.CloseStatusDescription) { Result = bytes };
+                                receiveResult.CloseStatusDescription) { Message = bytes };
 
                             // 触发接收二进制消息事件
                             var onBinaryReceived = OnBinaryReceived;
@@ -309,25 +312,18 @@ public sealed partial class WebSocketClient : IDisposable
                         Array.Clear(buffer, 0, buffer.Length);
                     }
                 }
+                // 任务被取消
                 catch (Exception e) when (cancellationToken.IsCancellationRequested || e is OperationCanceledException)
                 {
                     break;
-                }
-                catch (Exception e)
-                {
-                    // 输出调试事件
-                    Debugging.Error(e.Message);
                 }
             }
         }
         finally
         {
             // 触发停止接收消息事件
-            var onStoppedReceiving = OnStoppedReceiving;
-            onStoppedReceiving.TryInvoke();
-
-            // 断开连接
-            await DisconnectAsync(cancellationToken);
+            var onReceivingStopped = OnReceivingStopped;
+            onReceivingStopped.TryInvoke();
         }
     }
 
@@ -408,12 +404,26 @@ public sealed partial class WebSocketClient : IDisposable
     }
 
     /// <summary>
-    ///     断开连接
+    ///     关闭连接
     /// </summary>
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
-    public async Task DisconnectAsync(CancellationToken cancellationToken = default)
+    public Task CloseAsync(CancellationToken cancellationToken = default) =>
+        CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", cancellationToken);
+
+    /// <summary>
+    ///     关闭连接
+    /// </summary>
+    /// <param name="closeStatus">
+    ///     <see cref="WebSocketCloseStatus" />
+    /// </param>
+    /// <param name="closeDescription">关闭描述。默认值为：<c>Closing</c>。</param>
+    /// <param name="cancellationToken">
+    ///     <see cref="CancellationToken" />
+    /// </param>
+    public async Task CloseAsync(WebSocketCloseStatus closeStatus, string closeDescription,
+        CancellationToken cancellationToken = default)
     {
         // 检查连接是否处于关闭状态
         if (State is null or WebSocketState.CloseSent or WebSocketState.Closed)
@@ -424,19 +434,14 @@ public sealed partial class WebSocketClient : IDisposable
         // 空检查
         ArgumentNullException.ThrowIfNull(_clientWebSocket);
 
-        // 触发开始断开连接事件
-        var onDisconnecting = OnDisconnecting;
-        onDisconnecting.TryInvoke();
+        // 触发开始关闭连接事件
+        var onClosing = OnClosing;
+        onClosing.TryInvoke();
 
         try
         {
-            // 发送关闭帧并断开连接
-            await _clientWebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", cancellationToken);
-        }
-        catch (Exception e)
-        {
-            // 输出调试事件
-            Debugging.Error(e.Message);
+            // 发送关闭帧并关闭连接
+            await _clientWebSocket.CloseAsync(closeStatus, closeDescription, cancellationToken);
         }
         finally
         {
@@ -446,9 +451,9 @@ public sealed partial class WebSocketClient : IDisposable
             // 重置当前重连次数
             CurrentReconnectRetries = 0;
 
-            // 触发断开连接成功事件
-            var onDisconnected = OnDisconnected;
-            onDisconnected.TryInvoke();
+            // 触发关闭连接成功事件
+            var onClosed = OnClosed;
+            onClosed.TryInvoke();
         }
     }
 }

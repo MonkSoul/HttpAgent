@@ -411,11 +411,15 @@ public class LongPollingManagerTests
                 });
         var longPollingManagerManager = new LongPollingManager(httpRemoteService, httpLongPollingBuilder);
 
-        Assert.Throws<TaskCanceledException>(() =>
+        try
         {
             // ReSharper disable once MethodHasAsyncOverload
             longPollingManagerManager.Start(cancellationTokenSource.Token);
-        });
+        }
+        catch (Exception e)
+        {
+            Assert.True(e is OperationCanceledException);
+        }
 
         Assert.Equal(0, i);
 

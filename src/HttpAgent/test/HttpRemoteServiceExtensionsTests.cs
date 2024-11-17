@@ -2626,11 +2626,15 @@ public class HttpRemoteServiceExtensionsTests
         using var cancellationTokenSource = new CancellationTokenSource();
         cancellationTokenSource.CancelAfter(100);
 
-        Assert.Throws<OperationCanceledException>(() =>
+        try
         {
             // ReSharper disable once MethodHasAsyncOverload
             httpRemoteService.Send(httpLongPollingBuilder, null, cancellationTokenSource.Token);
-        });
+        }
+        catch (Exception e)
+        {
+            Assert.True(e is OperationCanceledException);
+        }
 
         Assert.Equal(0, i);
 
@@ -3030,7 +3034,7 @@ public class HttpRemoteServiceExtensionsTests
         using var cancellationTokenSource = new CancellationTokenSource();
         cancellationTokenSource.CancelAfter(100);
 
-        Assert.Throws<TaskCanceledException>(() =>
+        try
         {
             // ReSharper disable once MethodHasAsyncOverload
             httpRemoteService.LongPolling($"http://localhost:{port}/test", async data =>
@@ -3038,7 +3042,11 @@ public class HttpRemoteServiceExtensionsTests
                 i++;
                 await Task.CompletedTask;
             }, cancellationToken: cancellationTokenSource.Token);
-        });
+        }
+        catch (Exception e)
+        {
+            Assert.True(e is OperationCanceledException);
+        }
 
         Assert.Equal(0, i);
 

@@ -393,4 +393,37 @@ public class GetStartController(IHttpRemoteService httpRemoteService, ISampleSer
         //       Console.WriteLine("连接错误。" + ex.Message);
         //   }), cancellationToken: cancellationToken);
     }
+
+    /// <summary>
+    ///     WebSocket
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    [HttpGet]
+    public async Task WebSocket(CancellationToken cancellationToken)
+    {
+        using var webSocketClient = new WebSocketClient("wss://localhost:7044/ws");
+
+        // 连接成功事件
+        webSocketClient.Connected += (sender, s) => Console.WriteLine("连接成功");
+        // 连接关闭事件
+        webSocketClient.Closed += (sender, args) => Console.WriteLine("连接关闭");
+        // 接收文本消息
+        webSocketClient.TextReceived += (sender, s) => Console.WriteLine(s.Message);
+        // 接收二进制消息
+        webSocketClient.BinaryReceived += (sender, s) => Console.WriteLine(s.Message);
+
+        // 连接服务器
+        await webSocketClient.ConnectAsync(cancellationToken);
+
+        for (var i = 10 - 1; i >= 0; i--)
+        {
+            // 向服务器发送消息
+            await webSocketClient.SendAsync($"Message at {DateTime.UtcNow}\n\n", cancellationToken: cancellationToken);
+
+            await Task.Delay(1000, cancellationToken);
+        }
+
+        // 关闭连接
+        await webSocketClient.CloseAsync(cancellationToken);
+    }
 }

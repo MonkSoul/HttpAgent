@@ -9,16 +9,18 @@ public class WebSocketReceiveResultTests
     [Fact]
     public void New_ReturnOK()
     {
-        Assert.True(typeof(WebSocketReceiveResult<string>).BaseType == typeof(WebSocketReceiveResult));
+        Assert.True(typeof(WebSocketTextReceiveResult).BaseType == typeof(WebSocketReceiveResult));
 
-        var webSocketReceiveResult1 =
-            new WebSocketReceiveResult<string>(10, WebSocketMessageType.Text, true) { Result = "Furion" };
-        Assert.NotNull(webSocketReceiveResult1);
-        Assert.Equal("Furion", webSocketReceiveResult1.Result);
+        var webSocketTextReceiveResult =
+            new WebSocketTextReceiveResult(10, true) { Message = "Furion" };
+        Assert.NotNull(webSocketTextReceiveResult);
+        Assert.Equal("Furion", webSocketTextReceiveResult.Message);
 
-        var webSocketReceiveResult2 =
-            new WebSocketReceiveResult<byte[]>(10, WebSocketMessageType.Text, true) { Result = "Furion"u8.ToArray() };
-        Assert.NotNull(webSocketReceiveResult2);
-        Assert.Equal("Furion", Encoding.UTF8.GetString(webSocketReceiveResult2.Result));
+        Assert.True(typeof(WebSocketBinaryReceiveResult).BaseType == typeof(WebSocketReceiveResult));
+
+        var webSocketBinaryReceiveResult =
+            new WebSocketBinaryReceiveResult(10, true) { Message = "Furion"u8.ToArray() };
+        Assert.NotNull(webSocketBinaryReceiveResult);
+        Assert.Equal("Furion", Encoding.UTF8.GetString(webSocketBinaryReceiveResult.Message));
     }
 }
