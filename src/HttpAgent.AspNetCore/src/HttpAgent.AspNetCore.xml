@@ -180,9 +180,31 @@
         </member>
         <member name="F:HttpAgent.Extensions.HttpContextExtensions._ignoreResponseHeaders">
             <summary>
-                转发时徐忽略的响应标头数组
+                忽略在转发时需要跳过的响应标头列表。
             </summary>
-            <remarks>解决响应标头包含 <c>Transfer-Encoding: chunked</c> 导致进入响应一直处理等待中问题。</remarks>
+            <remarks>
+                <list type="bullet">
+                    <item>
+                        <term>Transfer-Encoding: </term>
+                        <description>当响应标头包含 <c>Transfer-Encoding: chunked</c> 时，可能导致响应处理过程无限期挂起。忽略此标头可避免该问题。</description>
+                    </item>
+                    <item>
+                        <term>Content-Type: </term>
+                        <description>
+                            非标准的 <c>Content-Type</c> 值（例如 <c>text/plain; charset=utf-8</c>
+                            ）可能会导致“No output formatter was found for content types 'text/plain; charset=utf-8, text/plain;
+                            charset=utf-8' to write the response.”错误。忽略此标头以防止此类错误。
+                        </description>
+                    </item>
+                    <item>
+                        <term>Content-Length: </term>
+                        <description>
+                            若响应标头中包含 <c>Content-Length</c>，且其值与实际响应体大小不符，则可能引发“Error while copying content to a
+                            stream.”。忽略此标头有助于解决因长度不匹配引起的错误。
+                        </description>
+                    </item>
+                </list>
+            </remarks>
         </member>
         <member name="M:HttpAgent.Extensions.HttpContextExtensions.GetFullRequestUrl(Microsoft.AspNetCore.Http.HttpRequest)">
             <summary>
@@ -775,7 +797,7 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardResponseMessageToContext(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpResponseMessage,HttpAgent.HttpContextForwardOptions)">
+        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardResponseMessage(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpResponseMessage,HttpAgent.HttpContextForwardOptions)">
             <summary>
                 根据配置选项将 <see cref="T:System.Net.Http.HttpResponseMessage" /> 信息转发到 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" /> 中
             </summary>
@@ -787,6 +809,31 @@
             </param>
             <param name="forwardOptions">
                 <see cref="T:HttpAgent.HttpContextForwardOptions" />
+            </param>
+        </member>
+        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ResolveForwardOptions(Microsoft.AspNetCore.Http.HttpContext,HttpAgent.HttpContextForwardOptions)">
+            <summary>
+                获取 <see cref="T:HttpAgent.HttpContextForwardOptions" /> 实例
+            </summary>
+            <param name="httpContext">
+                <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
+            </param>
+            <param name="forwardOptions">
+                <see cref="T:HttpAgent.HttpContextForwardOptions" />
+            </param>
+            <returns>
+                <see cref="T:HttpAgent.HttpContextForwardOptions" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardHttpHeaders(Microsoft.AspNetCore.Http.HttpResponse,System.Net.Http.Headers.HttpHeaders)">
+            <summary>
+                转发 HTTP 标头
+            </summary>
+            <param name="httpResponse">
+                <see cref="T:Microsoft.AspNetCore.Http.HttpResponse" />
+            </param>
+            <param name="httpHeaders">
+                <see cref="T:System.Net.Http.Headers.HttpHeaders" />
             </param>
         </member>
         <member name="T:HttpAgent.AspNetCore.Extensions.IApplicationBuilderExtensions">
@@ -814,24 +861,25 @@
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" /> 转发配置选项
             </summary>
         </member>
-        <member name="P:HttpAgent.HttpContextForwardOptions.ForwardStatusCode">
+        <member name="P:HttpAgent.HttpContextForwardOptions.WithStatusCode">
             <summary>
                 是否转发响应状态码
             </summary>
             <remarks>默认值为：<c>true</c>。</remarks>
         </member>
-        <member name="P:HttpAgent.HttpContextForwardOptions.ForwardResponseHeaders">
+        <member name="P:HttpAgent.HttpContextForwardOptions.WithResponseHeaders">
             <summary>
                 是否转发响应标头
             </summary>
             <remarks>默认值为：<c>true</c>。</remarks>
         </member>
-        <member name="P:HttpAgent.HttpContextForwardOptions.ForwardContentDispositionHeader">
+        <member name="P:HttpAgent.HttpContextForwardOptions.WithResponseContentHeaders">
             <summary>
-                是否转发响应内容 <c>Content-Disposition</c> 标头
+                是否转发响应内容标头
             </summary>
+            <remarks>默认值为：<c>true</c>。</remarks>
         </member>
-        <member name="P:HttpAgent.HttpContextForwardOptions.OnForwarding">
+        <member name="P:HttpAgent.HttpContextForwardOptions.OnForward">
             <summary>
                 用于在转发响应之前执行自定义操作
             </summary>

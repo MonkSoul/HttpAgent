@@ -10,15 +10,13 @@ public class HttpContextForwardOptionsTests
     public void New_ReturnOK()
     {
         var options = new HttpContextForwardOptions();
-        Assert.True(options.ForwardStatusCode);
-        Assert.True(options.ForwardResponseHeaders);
-        Assert.True(options.ForwardContentDispositionHeader);
-        Assert.Null(options.OnForwarding);
+        Assert.True(options.WithStatusCode);
+        Assert.True(options.WithResponseHeaders);
+        Assert.True(options.WithResponseContentHeaders);
+        Assert.Null(options.OnForward);
 
-        options.ForwardStatusCode = false;
-        options.ForwardResponseHeaders = false;
-        options.OnForwarding = (_, _) =>
-        {
-        };
+        options.WithStatusCode = false;
+        options.WithResponseHeaders = false;
+        options.OnForward = (_, _) => { };
     }
 }

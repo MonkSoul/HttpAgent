@@ -1563,7 +1563,7 @@ public class HttpContextExtensionsTests
     }
 
     [Fact]
-    public void ForwardResponseMessageToContext_ReturnOK()
+    public void ForwardResponseMessage_ReturnOK()
     {
         var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.InternalServerError);
         httpResponseMessage.Headers.TryAddWithoutValidation("Framework", "furion");
@@ -1571,26 +1571,30 @@ public class HttpContextExtensionsTests
         httpResponseMessage.Content.Headers.ContentDisposition =
             new ContentDispositionHeaderValue("attachment") { FileName = "test.txt" };
 
-        var defaultHttpContext = new DefaultHttpContext();
-        HttpContextExtensions.ForwardResponseMessageToContext(defaultHttpContext, httpResponseMessage, null);
+        var services = new ServiceCollection();
+        services.AddHttpContextAccessor();
+        using var provider = services.BuildServiceProvider();
+        var defaultHttpContext = new DefaultHttpContext { RequestServices = provider };
+
+        HttpContextExtensions.ForwardResponseMessage(defaultHttpContext, httpResponseMessage, null);
         Assert.Equal(500, defaultHttpContext.Response.StatusCode);
         Assert.Equal("furion", defaultHttpContext.Response.Headers["Framework"]);
         Assert.DoesNotContain(defaultHttpContext.Response.Headers, h => h.Key == "Transfer-Encoding");
         Assert.Equal("attachment; filename=test.txt", defaultHttpContext.Response.Headers.ContentDisposition);
 
         var defaultHttpContext2 = new DefaultHttpContext();
-        HttpContextExtensions.ForwardResponseMessageToContext(defaultHttpContext2, httpResponseMessage,
-            new HttpContextForwardOptions { ForwardStatusCode = false, ForwardResponseHeaders = false });
+        HttpContextExtensions.ForwardResponseMessage(defaultHttpContext2, httpResponseMessage,
+            new HttpContextForwardOptions { WithStatusCode = false, WithResponseHeaders = false });
         Assert.Equal(200, defaultHttpContext2.Response.StatusCode);
         Assert.DoesNotContain(defaultHttpContext2.Response.Headers, u => u.Key == "Framework");
 
         var defaultHttpContext3 = new DefaultHttpContext();
-        HttpContextExtensions.ForwardResponseMessageToContext(defaultHttpContext3, httpResponseMessage,
+        HttpContextExtensions.ForwardResponseMessage(defaultHttpContext3, httpResponseMessage,
             new HttpContextForwardOptions
             {
-                ForwardStatusCode = false,
-                ForwardResponseHeaders = false,
-                OnForwarding =
+                WithStatusCode = false,
+                WithResponseHeaders = false,
+                OnForward =
                     (ctx, res) =>
                     {
                         ctx.Response.ContentLength = 10;
@@ -1602,8 +1606,26 @@ public class HttpContextExtensionsTests
     }
 
     [Fact]
+    public void ForwardHttpHeaders_ReturnOK()
+    {
+        var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+        httpResponseMessage.Headers.TryAddWithoutValidation("Framework", "furion");
+        httpResponseMessage.Headers.TryAddWithoutValidation("Transfer-Encoding", "chunked");
+        httpResponseMessage.Content.Headers.ContentDisposition =
+            new ContentDispositionHeaderValue("attachment") { FileName = "test.txt" };
+
+        var defaultHttpContext = new DefaultHttpContext();
+        HttpContextExtensions.ForwardHttpHeaders(defaultHttpContext.Response, httpResponseMessage.Headers);
+        HttpContextExtensions.ForwardHttpHeaders(defaultHttpContext.Response, httpResponseMessage.Content.Headers);
+        Assert.Equal("furion", defaultHttpContext.Response.Headers["Framework"]);
+        Assert.DoesNotContain(defaultHttpContext.Response.Headers, h => h.Key == "Transfer-Encoding");
+        Assert.Equal("attachment; filename=test.txt", defaultHttpContext.Response.Headers.ContentDisposition);
+    }
+
+    [Fact]
     public void IgnoreResponseHeaders_ReturnOK() =>
-        Assert.Equal(["Transfer-Encoding"], HttpContextExtensions._ignoreResponseHeaders);
+        Assert.Equal(["Transfer-Encoding", "Content-Type", "Content-Length"],
+            HttpContextExtensions._ignoreResponseHeaders);
 
     [Fact]
     public async Task ForwardAsAsync_WithQueryParameters_ReturnOK()
@@ -1738,5 +1760,32 @@ public class HttpContextExtensionsTests
         Assert.Contains("出错了", str);
 
         await app.StopAsync();
+    }
+
+    [Fact]
+    public void ResolveForwardOptions_ReturnOK()
+    {
+        var services = new ServiceCollection();
+        services.AddHttpContextAccessor();
+        using var provider = services.BuildServiceProvider();
+        var httpContext = new DefaultHttpContext { RequestServices = provider };
+
+        Assert.NotNull(HttpContextExtensions.ResolveForwardOptions(httpContext, null));
+
+        var forwardOptions = new HttpContextForwardOptions();
+        var forwardOptions1 = HttpContextExtensions.ResolveForwardOptions(httpContext, forwardOptions);
+        Assert.Equal(forwardOptions1.GetHashCode(), forwardOptions1.GetHashCode());
+
+        var services2 = new ServiceCollection();
+        services2.AddHttpContextAccessor();
+        services2.AddOptions<HttpContextForwardOptions>().Configure(o =>
+        {
+            o.OnForward = (_, _) => { };
+        });
+        using var provider2 = services2.BuildServiceProvider();
+        var httpContext2 = new DefaultHttpContext { RequestServices = provider2 };
+        var forwardOptions2 = HttpContextExtensions.ResolveForwardOptions(httpContext2, null);
+        Assert.NotNull(forwardOptions2);
+        Assert.NotNull(forwardOptions2.OnForward);
     }
 }

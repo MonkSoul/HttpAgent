@@ -10,10 +10,32 @@ namespace HttpAgent.Extensions;
 public static class HttpContextExtensions
 {
     /// <summary>
-    ///     转发时徐忽略的响应标头数组
+    ///     忽略在转发时需要跳过的响应标头列表。
     /// </summary>
-    /// <remarks>解决响应标头包含 <c>Transfer-Encoding: chunked</c> 导致进入响应一直处理等待中问题。</remarks>
-    internal static string[] _ignoreResponseHeaders = ["Transfer-Encoding"];
+    /// <remarks>
+    ///     <list type="bullet">
+    ///         <item>
+    ///             <term>Transfer-Encoding: </term>
+    ///             <description>当响应标头包含 <c>Transfer-Encoding: chunked</c> 时，可能导致响应处理过程无限期挂起。忽略此标头可避免该问题。</description>
+    ///         </item>
+    ///         <item>
+    ///             <term>Content-Type: </term>
+    ///             <description>
+    ///                 非标准的 <c>Content-Type</c> 值（例如 <c>text/plain; charset=utf-8</c>
+    ///                 ）可能会导致“No output formatter was found for content types 'text/plain; charset=utf-8, text/plain;
+    ///                 charset=utf-8' to write the response.”错误。忽略此标头以防止此类错误。
+    ///             </description>
+    ///         </item>
+    ///         <item>
+    ///             <term>Content-Length: </term>
+    ///             <description>
+    ///                 若响应标头中包含 <c>Content-Length</c>，且其值与实际响应体大小不符，则可能引发“Error while copying content to a
+    ///                 stream.”。忽略此标头有助于解决因长度不匹配引起的错误。
+    ///             </description>
+    ///         </item>
+    ///     </list>
+    /// </remarks>
+    internal static string[] _ignoreResponseHeaders = ["Transfer-Encoding", "Content-Type", "Content-Length"];
 
     /// <summary>
     ///     获取完整的请求 URL 地址
@@ -75,8 +97,8 @@ public static class HttpContextExtensions
     /// <returns>
     ///     <see cref="HttpResponseMessage" />
     /// </returns>
-    public static HttpResponseMessage Forward(this HttpContext? httpContext, HttpMethod httpMethod,
-        string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public static HttpResponseMessage Forward(this HttpContext? httpContext, HttpMethod httpMethod, string? requestUri,
+        Action<HttpRequestBuilder>? configure = null,
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
         HttpContextForwardOptions? forwardOptions = null) =>
         Forward(httpContext, httpMethod,
@@ -125,8 +147,8 @@ public static class HttpContextExtensions
     /// <returns>
     ///     <see cref="HttpResponseMessage" />
     /// </returns>
-    public static HttpResponseMessage Forward(this HttpContext? httpContext, HttpMethod httpMethod,
-        Uri? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public static HttpResponseMessage Forward(this HttpContext? httpContext, HttpMethod httpMethod, Uri? requestUri,
+        Action<HttpRequestBuilder>? configure = null,
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
         HttpContextForwardOptions? forwardOptions = null)
     {
@@ -145,7 +167,7 @@ public static class HttpContextExtensions
             httpRemoteService.Send(httpRequestBuilder, completionOption, httpContext.RequestAborted);
 
         // 根据配置选项将 HttpResponseMessage 信息转发到 HttpContext 中
-        ForwardResponseMessageToContext(httpContext, httpResponseMessage, forwardOptions);
+        ForwardResponseMessage(httpContext, httpResponseMessage, forwardOptions);
 
         return httpResponseMessage;
     }
@@ -167,8 +189,7 @@ public static class HttpContextExtensions
     /// <returns>
     ///     <see cref="HttpResponseMessage" />
     /// </returns>
-    public static Task<HttpResponseMessage> ForwardAsync(this HttpContext? httpContext,
-        string? requestUri,
+    public static Task<HttpResponseMessage> ForwardAsync(this HttpContext? httpContext, string? requestUri,
         Action<HttpRequestBuilder>? configure = null,
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
         HttpContextForwardOptions? forwardOptions = null) =>
@@ -192,8 +213,7 @@ public static class HttpContextExtensions
     /// <returns>
     ///     <see cref="HttpResponseMessage" />
     /// </returns>
-    public static Task<HttpResponseMessage> ForwardAsync(this HttpContext? httpContext,
-        HttpMethod httpMethod,
+    public static Task<HttpResponseMessage> ForwardAsync(this HttpContext? httpContext, HttpMethod httpMethod,
         string? requestUri, Action<HttpRequestBuilder>? configure = null,
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
         HttpContextForwardOptions? forwardOptions = null) =>
@@ -243,8 +263,7 @@ public static class HttpContextExtensions
     /// <returns>
     ///     <see cref="HttpResponseMessage" />
     /// </returns>
-    public static async Task<HttpResponseMessage> ForwardAsync(this HttpContext? httpContext,
-        HttpMethod httpMethod,
+    public static async Task<HttpResponseMessage> ForwardAsync(this HttpContext? httpContext, HttpMethod httpMethod,
         Uri? requestUri, Action<HttpRequestBuilder>? configure = null,
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
         HttpContextForwardOptions? forwardOptions = null)
@@ -260,12 +279,11 @@ public static class HttpContextExtensions
         var httpRemoteService = httpContext.RequestServices.GetRequiredService<IHttpRemoteService>();
 
         // 发送 HTTP 远程请求
-        var httpResponseMessage =
-            await httpRemoteService.SendAsync(httpRequestBuilder, completionOption,
-                httpContext.RequestAborted);
+        var httpResponseMessage = await httpRemoteService.SendAsync(httpRequestBuilder, completionOption,
+            httpContext.RequestAborted);
 
         // 根据配置选项将 HttpResponseMessage 信息转发到 HttpContext 中
-        ForwardResponseMessageToContext(httpContext, httpResponseMessage, forwardOptions);
+        ForwardResponseMessage(httpContext, httpResponseMessage, forwardOptions);
 
         return httpResponseMessage;
     }
@@ -291,10 +309,10 @@ public static class HttpContextExtensions
     public static TResult? ForwardAs<TResult>(this HttpContext? httpContext, string? requestUri,
         Action<HttpRequestBuilder>? configure = null,
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
-        HttpContextForwardOptions? forwardOptions = null) =>
-        ForwardAs<TResult>(httpContext, Helpers.ParseHttpMethod(httpContext?.Request.Method),
-            string.IsNullOrWhiteSpace(requestUri) ? null : new Uri(requestUri, UriKind.RelativeOrAbsolute), configure,
-            completionOption, forwardOptions);
+        HttpContextForwardOptions? forwardOptions = null) => ForwardAs<TResult>(httpContext,
+        Helpers.ParseHttpMethod(httpContext?.Request.Method),
+        string.IsNullOrWhiteSpace(requestUri) ? null : new Uri(requestUri, UriKind.RelativeOrAbsolute), configure,
+        completionOption, forwardOptions);
 
     /// <summary>
     ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
@@ -313,13 +331,12 @@ public static class HttpContextExtensions
     /// <returns>
     ///     <typeparamref name="TResult" />
     /// </returns>
-    public static TResult? ForwardAs<TResult>(this HttpContext? httpContext, HttpMethod httpMethod,
-        string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public static TResult? ForwardAs<TResult>(this HttpContext? httpContext, HttpMethod httpMethod, string? requestUri,
+        Action<HttpRequestBuilder>? configure = null,
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
-        HttpContextForwardOptions? forwardOptions = null) =>
-        ForwardAs<TResult>(httpContext, httpMethod,
-            string.IsNullOrWhiteSpace(requestUri) ? null : new Uri(requestUri, UriKind.RelativeOrAbsolute), configure,
-            completionOption, forwardOptions);
+        HttpContextForwardOptions? forwardOptions = null) => ForwardAs<TResult>(httpContext, httpMethod,
+        string.IsNullOrWhiteSpace(requestUri) ? null : new Uri(requestUri, UriKind.RelativeOrAbsolute), configure,
+        completionOption, forwardOptions);
 
     /// <summary>
     ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
@@ -342,9 +359,9 @@ public static class HttpContextExtensions
     public static TResult? ForwardAs<TResult>(this HttpContext? httpContext, Uri? requestUri,
         Action<HttpRequestBuilder>? configure = null,
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
-        HttpContextForwardOptions? forwardOptions = null) =>
-        ForwardAs<TResult>(httpContext, Helpers.ParseHttpMethod(httpContext?.Request.Method), requestUri,
-            configure, completionOption, forwardOptions);
+        HttpContextForwardOptions? forwardOptions = null) => ForwardAs<TResult>(httpContext,
+        Helpers.ParseHttpMethod(httpContext?.Request.Method), requestUri,
+        configure, completionOption, forwardOptions);
 
     /// <summary>
     ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
@@ -365,8 +382,8 @@ public static class HttpContextExtensions
     /// <returns>
     ///     <typeparamref name="TResult" />
     /// </returns>
-    public static TResult? ForwardAs<TResult>(this HttpContext? httpContext, HttpMethod httpMethod,
-        Uri? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public static TResult? ForwardAs<TResult>(this HttpContext? httpContext, HttpMethod httpMethod, Uri? requestUri,
+        Action<HttpRequestBuilder>? configure = null,
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
         HttpContextForwardOptions? forwardOptions = null)
     {
@@ -389,7 +406,7 @@ public static class HttpContextExtensions
             httpRemoteService.Send(httpRequestBuilder, completionOption, httpContext.RequestAborted);
 
         // 根据配置选项将 HttpResponseMessage 信息转发到 HttpContext 中
-        ForwardResponseMessageToContext(httpContext, httpResponseMessage, forwardOptions);
+        ForwardResponseMessage(httpContext, httpResponseMessage, forwardOptions);
 
         // 将 HttpResponseMessage 转换为 TResult 实例
         return httpContentConverterFactory.Read<TResult>(httpResponseMessage,
@@ -516,7 +533,7 @@ public static class HttpContextExtensions
             await httpRemoteService.SendAsync(httpRequestBuilder, completionOption, httpContext.RequestAborted);
 
         // 根据配置选项将 HttpResponseMessage 信息转发到 HttpContext 中
-        ForwardResponseMessageToContext(httpContext, httpResponseMessage, forwardOptions);
+        ForwardResponseMessage(httpContext, httpResponseMessage, forwardOptions);
 
         // 将 HttpResponseMessage 转换为 TResult 实例
         return await httpContentConverterFactory.ReadAsync<TResult>(httpResponseMessage,
@@ -638,7 +655,7 @@ public static class HttpContextExtensions
         var result = httpRemoteService.Send<TResult>(httpRequestBuilder, completionOption, httpContext.RequestAborted);
 
         // 根据配置选项将 HttpResponseMessage 信息转发到 HttpContext 中
-        ForwardResponseMessageToContext(httpContext, result.ResponseMessage, forwardOptions);
+        ForwardResponseMessage(httpContext, result.ResponseMessage, forwardOptions);
 
         return result;
     }
@@ -662,8 +679,7 @@ public static class HttpContextExtensions
     ///     <see cref="HttpRemoteResult{TResult}" />
     /// </returns>
     public static Task<HttpRemoteResult<TResult>> ForwardAsync<TResult>(this HttpContext? httpContext,
-        string? requestUri,
-        Action<HttpRequestBuilder>? configure = null,
+        string? requestUri, Action<HttpRequestBuilder>? configure = null,
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
         HttpContextForwardOptions? forwardOptions = null) =>
         ForwardAsync<TResult>(httpContext, Helpers.ParseHttpMethod(httpContext?.Request.Method),
@@ -688,8 +704,7 @@ public static class HttpContextExtensions
     ///     <see cref="HttpRemoteResult{TResult}" />
     /// </returns>
     public static Task<HttpRemoteResult<TResult>> ForwardAsync<TResult>(this HttpContext? httpContext,
-        HttpMethod httpMethod,
-        string? requestUri, Action<HttpRequestBuilder>? configure = null,
+        HttpMethod httpMethod, string? requestUri, Action<HttpRequestBuilder>? configure = null,
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
         HttpContextForwardOptions? forwardOptions = null) =>
         ForwardAsync<TResult>(httpContext, httpMethod,
@@ -741,8 +756,7 @@ public static class HttpContextExtensions
     ///     <see cref="HttpRemoteResult{TResult}" />
     /// </returns>
     public static async Task<HttpRemoteResult<TResult>> ForwardAsync<TResult>(this HttpContext? httpContext,
-        HttpMethod httpMethod,
-        Uri? requestUri, Action<HttpRequestBuilder>? configure = null,
+        HttpMethod httpMethod, Uri? requestUri, Action<HttpRequestBuilder>? configure = null,
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
         HttpContextForwardOptions? forwardOptions = null)
     {
@@ -757,12 +771,11 @@ public static class HttpContextExtensions
         var httpRemoteService = httpContext.RequestServices.GetRequiredService<IHttpRemoteService>();
 
         // 发送 HTTP 远程请求
-        var result =
-            await httpRemoteService.SendAsync<TResult>(httpRequestBuilder, completionOption,
-                httpContext.RequestAborted);
+        var result = await httpRemoteService.SendAsync<TResult>(httpRequestBuilder, completionOption,
+            httpContext.RequestAborted);
 
         // 根据配置选项将 HttpResponseMessage 信息转发到 HttpContext 中
-        ForwardResponseMessageToContext(httpContext, result.ResponseMessage, forwardOptions);
+        ForwardResponseMessage(httpContext, result.ResponseMessage, forwardOptions);
 
         return result;
     }
@@ -796,8 +809,8 @@ public static class HttpContextExtensions
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
-    public static HttpRequestBuilder CreateRequestBuilder(this HttpContext? httpContext,
-        HttpMethod httpMethod, string? requestUri, Action<HttpRequestBuilder>? configure = null) =>
+    public static HttpRequestBuilder CreateRequestBuilder(this HttpContext? httpContext, HttpMethod httpMethod,
+        string? requestUri, Action<HttpRequestBuilder>? configure = null) =>
         CreateRequestBuilder(httpContext, httpMethod,
             string.IsNullOrWhiteSpace(requestUri) ? null : new Uri(requestUri, UriKind.RelativeOrAbsolute), configure);
 
@@ -828,8 +841,8 @@ public static class HttpContextExtensions
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
-    public static HttpRequestBuilder CreateRequestBuilder(this HttpContext? httpContext,
-        HttpMethod httpMethod, Uri? requestUri, Action<HttpRequestBuilder>? configure = null) =>
+    public static HttpRequestBuilder CreateRequestBuilder(this HttpContext? httpContext, HttpMethod httpMethod,
+        Uri? requestUri, Action<HttpRequestBuilder>? configure = null) =>
         new HttpContextForwardBuilder(httpMethod, requestUri, httpContext).Build(configure);
 
     /// <summary>
@@ -910,44 +923,76 @@ public static class HttpContextExtensions
     /// <param name="forwardOptions">
     ///     <see cref="HttpContextForwardOptions" />
     /// </param>
-    internal static void ForwardResponseMessageToContext(HttpContext httpContext,
-        HttpResponseMessage httpResponseMessage,
+    internal static void ForwardResponseMessage(HttpContext httpContext, HttpResponseMessage httpResponseMessage,
         HttpContextForwardOptions? forwardOptions)
     {
+        // 获取 HttpContextForwardOptions 实例
+        var httpContextForwardOptions = ResolveForwardOptions(httpContext, forwardOptions);
+
         // 获取 HttpResponse 实例
         var httpResponse = httpContext.Response;
 
         // 检查是否配置了响应状态码转发
-        if (forwardOptions?.ForwardStatusCode ?? true)
+        if (httpContextForwardOptions.WithStatusCode)
         {
             httpResponse.StatusCode = (int)httpResponseMessage.StatusCode;
         }
 
         // 检查是否配置了响应标头转发
-        if (forwardOptions?.ForwardResponseHeaders ?? true)
+        if (httpContextForwardOptions.WithResponseHeaders)
         {
-            // 逐条更新响应标头
-            foreach (var (key, values) in httpResponseMessage.Headers)
-            {
-                // 忽略特定响应标头
-                if (key.IsIn(_ignoreResponseHeaders, StringComparer.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-
-                httpResponse.Headers[key] = values.ToArray();
-            }
+            ForwardHttpHeaders(httpResponse, httpResponseMessage.Headers);
         }
 
-        // 检查是否配置了响应内容 Content-Disposition 标头转发
-        if (forwardOptions?.ForwardContentDispositionHeader ?? true)
+        // 检查是否配置了响应内容标头转发
+        if (httpContextForwardOptions.WithResponseContentHeaders)
         {
-            // 获取 ContentDisposition 实例
-            var contentDisposition = httpResponseMessage.Content.Headers.ContentDisposition;
-            httpResponse.Headers.ContentDisposition = contentDisposition?.ToString();
+            ForwardHttpHeaders(httpResponse, httpResponseMessage.Content.Headers);
         }
 
         // 调用用于在转发响应之前执行自定义操作
-        forwardOptions?.OnForwarding?.Invoke(httpContext, httpResponseMessage);
+        httpContextForwardOptions.OnForward?.Invoke(httpContext, httpResponseMessage);
+    }
+
+    /// <summary>
+    ///     获取 <see cref="HttpContextForwardOptions" /> 实例
+    /// </summary>
+    /// <param name="httpContext">
+    ///     <see cref="HttpContext" />
+    /// </param>
+    /// <param name="forwardOptions">
+    ///     <see cref="HttpContextForwardOptions" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="HttpContextForwardOptions" />
+    /// </returns>
+    internal static HttpContextForwardOptions ResolveForwardOptions(HttpContext httpContext,
+        HttpContextForwardOptions? forwardOptions) =>
+        forwardOptions ??
+        httpContext.RequestServices.GetService<IOptions<HttpContextForwardOptions>>()
+            ?.Value ?? new HttpContextForwardOptions();
+
+    /// <summary>
+    ///     转发 HTTP 标头
+    /// </summary>
+    /// <param name="httpResponse">
+    ///     <see cref="HttpResponse" />
+    /// </param>
+    /// <param name="httpHeaders">
+    ///     <see cref="HttpHeaders" />
+    /// </param>
+    internal static void ForwardHttpHeaders(HttpResponse httpResponse, HttpHeaders httpHeaders)
+    {
+        // 逐条更新响应标头
+        foreach (var (key, values) in httpHeaders)
+        {
+            // 忽略特定响应标头
+            if (key.IsIn(_ignoreResponseHeaders, StringComparer.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            httpResponse.Headers[key] = values.ToArray();
+        }
     }
 }

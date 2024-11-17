@@ -13,21 +13,22 @@ public sealed class HttpContextForwardOptions
     ///     是否转发响应状态码
     /// </summary>
     /// <remarks>默认值为：<c>true</c>。</remarks>
-    public bool ForwardStatusCode { get; set; } = true;
+    public bool WithStatusCode { get; set; } = true;
 
     /// <summary>
     ///     是否转发响应标头
     /// </summary>
     /// <remarks>默认值为：<c>true</c>。</remarks>
-    public bool ForwardResponseHeaders { get; set; } = true;
+    public bool WithResponseHeaders { get; set; } = true;
 
     /// <summary>
-    ///     是否转发响应内容 <c>Content-Disposition</c> 标头
+    ///     是否转发响应内容标头
     /// </summary>
-    public bool ForwardContentDispositionHeader { get; set; } = true;
+    /// <remarks>默认值为：<c>true</c>。</remarks>
+    public bool WithResponseContentHeaders { get; set; } = true;
 
     /// <summary>
     ///     用于在转发响应之前执行自定义操作
     /// </summary>
-    public Action<HttpContext, HttpResponseMessage>? OnForwarding { get; set; }
+    public Action<HttpContext, HttpResponseMessage>? OnForward { get; set; }
 }
