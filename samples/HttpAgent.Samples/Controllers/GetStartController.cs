@@ -435,9 +435,46 @@ public class GetStartController(
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)] // 禁用浏览器缓存
     public Task<IActionResult?> ForwardToWebSite()
     {
-        return httpContextAccessor.HttpContext.ForwardAsAsync<IActionResult>("https://github.com");
+        return httpContextAccessor.HttpContext.ForwardAsActionResultAsync("https://github.com");
+    }
+
+    /// <summary>
+    ///     转发代理到图片
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)] // 禁用浏览器缓存
+    public Task<IActionResult?> ForwardToImage()
+    {
+        return httpContextAccessor.HttpContext.ForwardAsActionResultAsync(
+            "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA1u7RJI.img?w=584&h=326&m=6");
+    }
+
+    /// <summary>
+    ///     转发代理到图片
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)] // 禁用浏览器缓存
+    public Task<IActionResult?> ForwardToDownload()
+    {
+        return httpContextAccessor.HttpContext.ForwardAsActionResultAsync(
+            "https://download.visualstudio.microsoft.com/download/pr/a17b907f-8457-45a8-90db-53f2665ee49e/49bccd33593ebceb2847674fe5fd768e/aspnetcore-runtime-8.0.10-win-x64.exe");
+    }
+
+    /// <summary>
+    ///     转发代理表单
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    [HttpPost]
+    public Task<YourRemoteFormResult?> AddForm(int id, [FromForm] YourRemoteFormModel model)
+    {
+        return httpContextAccessor.HttpContext.ForwardAsAsync<YourRemoteFormResult>(
+            "https://localhost:7044/HttpRemote/AddForm");
     }
 }

@@ -47,6 +47,7 @@ builder.Services.AddHttpRemote(options =>
 
 var app = builder.Build();
 
+// 启用请求正文缓存（支持 Body 重复读）
 app.UseEnableBuffering();
 
 app.UseWebSockets();
