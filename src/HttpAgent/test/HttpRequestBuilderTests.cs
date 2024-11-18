@@ -156,6 +156,22 @@ public class HttpRequestBuilderTests
         var uriBuilder3 = new UriBuilder(httpRequestBuilder3.RequestUri!);
         var newUri4 = httpRequestBuilder3.ReplacePathPlaceholders(uriBuilder3.Uri.ToString());
         Assert.Equal("http://localhost/", newUri4);
+
+        var httpRequestBuilder4 =
+            new HttpRequestBuilder(HttpMethod.Get,
+                new Uri("http://localhost/?test={test}"));
+        var uriBuilder4 = new UriBuilder(httpRequestBuilder4.RequestUri!);
+        httpRequestBuilder4.WithPathParameter("test", new[] { "furion", "monksoul" });
+        var newUri5 = httpRequestBuilder4.ReplacePathPlaceholders(uriBuilder4.Uri.ToString());
+        Assert.Equal("http://localhost/?test=furion,monksoul", newUri5);
+
+        var httpRequestBuilder5 =
+            new HttpRequestBuilder(HttpMethod.Get,
+                new Uri("http://localhost/?id={user.id}&name={user.name}"));
+        var uriBuilder5 = new UriBuilder(httpRequestBuilder5.RequestUri!);
+        httpRequestBuilder5.WithPathParameters(new { id = 1, name = "Furion" }, "user");
+        var newUri6 = httpRequestBuilder5.ReplacePathPlaceholders(uriBuilder5.Uri.ToString());
+        Assert.Equal("http://localhost/?id=1&name=Furion", newUri6);
     }
 
     [Fact]

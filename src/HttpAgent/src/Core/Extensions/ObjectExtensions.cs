@@ -37,6 +37,8 @@ internal static class ObjectExtensions
             TimeOnly ot => ot.ToString("HH':'mm':'ss", culture),
             Enum e when enumAsString => e.ToString(),
             Enum e => Convert.ChangeType(e, Enum.GetUnderlyingType(e.GetType())).ToString(),
+            IEnumerable e and not string when typeof(IEnumerable<>).IsDefinitionEquals(e.GetType()) => string.Join(",",
+                e.Cast<object>()),
             _ => obj.ToString()
         };
     }
@@ -230,8 +232,7 @@ internal static class ObjectExtensions
     ///     <see cref="object" />
     /// </returns>
     internal static object? GetPropertyValueFromPath(this object? obj, string path, out bool isMatch,
-        string prefix = "model",
-        BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)
+        string prefix = "model", BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)
     {
         // 空检查
         ArgumentException.ThrowIfNullOrWhiteSpace(path);
