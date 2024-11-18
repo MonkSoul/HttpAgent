@@ -23,12 +23,13 @@ public class IActionResultContentConverter : IHttpContentConverter<IActionResult
         var contentHeaders = httpResponseMessage.Content.Headers;
 
         // 获取内容类型
-        var contentType = contentHeaders.ContentType?.MediaType;
+        var contentType = contentHeaders.ContentType;
+        var mediaType = contentType?.MediaType;
 
         // 空检查
-        ArgumentNullException.ThrowIfNull(contentType);
+        ArgumentNullException.ThrowIfNull(mediaType);
 
-        switch (contentType)
+        switch (mediaType)
         {
             case MediaTypeNames.Application.Json:
             case MediaTypeNames.Application.JsonPatch:
@@ -43,7 +44,7 @@ public class IActionResultContentConverter : IHttpContentConverter<IActionResult
 
                 return new ContentResult
                 {
-                    Content = stringContent, StatusCode = (int)statusCode, ContentType = contentType
+                    Content = stringContent, StatusCode = (int)statusCode, ContentType = contentType?.ToString()
                 };
             default:
                 // 获取 ContentDisposition 实例
@@ -55,7 +56,7 @@ public class IActionResultContentConverter : IHttpContentConverter<IActionResult
                 // 读取流内容
                 var streamContent = httpResponseMessage.Content.ReadAsStream(cancellationToken);
 
-                return new FileStreamResult(streamContent, contentType)
+                return new FileStreamResult(streamContent, contentType!.ToString())
                 {
                     FileDownloadName =
                         string.IsNullOrWhiteSpace(fileDownloadName)
@@ -81,12 +82,13 @@ public class IActionResultContentConverter : IHttpContentConverter<IActionResult
         var contentHeaders = httpResponseMessage.Content.Headers;
 
         // 获取内容类型
-        var contentType = contentHeaders.ContentType?.MediaType;
+        var contentType = contentHeaders.ContentType;
+        var mediaType = contentType?.MediaType;
 
         // 空检查
-        ArgumentNullException.ThrowIfNull(contentType);
+        ArgumentNullException.ThrowIfNull(mediaType);
 
-        switch (contentType)
+        switch (mediaType)
         {
             case MediaTypeNames.Application.Json:
             case MediaTypeNames.Application.JsonPatch:
@@ -100,7 +102,7 @@ public class IActionResultContentConverter : IHttpContentConverter<IActionResult
 
                 return new ContentResult
                 {
-                    Content = stringContent, StatusCode = (int)statusCode, ContentType = contentType
+                    Content = stringContent, StatusCode = (int)statusCode, ContentType = contentType?.ToString()
                 };
             default:
                 // 获取 ContentDisposition 实例
@@ -112,7 +114,7 @@ public class IActionResultContentConverter : IHttpContentConverter<IActionResult
                 // 读取流内容
                 var streamContent = await httpResponseMessage.Content.ReadAsStreamAsync(cancellationToken);
 
-                return new FileStreamResult(streamContent, contentType)
+                return new FileStreamResult(streamContent, contentType!.ToString())
                 {
                     FileDownloadName =
                         string.IsNullOrWhiteSpace(fileDownloadName)
