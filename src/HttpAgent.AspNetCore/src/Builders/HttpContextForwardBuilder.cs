@@ -23,8 +23,8 @@ public sealed class HttpContextForwardBuilder
     /// </summary>
     internal static HashSet<string> _ignoreRequestHeaders =
     [
-        "Host", "Accept", "Accept-CH", "Accept-Charset", "Accept-Encoding", "Accept-Language", "Accept-Patch",
-        "Accept-Post", "Accept-Ranges"
+        Constants.X_FORWARD_TO_HEADER, "Host", "Accept", "Accept-CH", "Accept-Charset", "Accept-Encoding",
+        "Accept-Language", "Accept-Patch", "Accept-Post", "Accept-Ranges"
     ];
 
     /// <summary>
