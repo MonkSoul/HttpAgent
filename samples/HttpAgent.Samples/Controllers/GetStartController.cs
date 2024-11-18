@@ -466,15 +466,32 @@ public class GetStartController(
     }
 
     /// <summary>
-    ///     转发代理表单
+    ///     转发代理到表单
     /// </summary>
     /// <param name="id"></param>
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public Task<YourRemoteFormResult?> AddForm(int id, [FromForm] YourRemoteFormModel model)
+    public Task<YourRemoteFormResult?> ForwardToForm(int id, [FromForm] YourRemoteFormModel model)
     {
         return httpContextAccessor.HttpContext.ForwardAsAsync<YourRemoteFormResult>(
             "https://localhost:7044/HttpRemote/AddForm");
+    }
+
+    /// <summary>
+    ///     HttpRemoteResult
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public async Task<string?> GetResult()
+    {
+        var result1 = await httpRemoteService.GetAsync<string>("https://furion.net/");
+
+        // 构建器方式
+        var result2 = await httpRemoteService.SendAsync<string>(HttpRequestBuilder.Get("https://furion.net/"));
+
+        Console.WriteLine(result1.ToString());
+
+        return result1.Result;
     }
 }
