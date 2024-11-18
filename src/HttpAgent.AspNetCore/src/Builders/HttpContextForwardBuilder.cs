@@ -211,10 +211,13 @@ public sealed class HttpContextForwardBuilder
             httpRequest.Headers.Where(u => !u.Key.IsIn(_ignoreRequestHeaders, StringComparer.OrdinalIgnoreCase)),
             replace: true);
 
-        // 重新设置 Host 请求标头
-        httpRequestBuilder.WithHeader(HeaderNames.Host,
-            $"{RequestUri?.Host}{(string.IsNullOrWhiteSpace(RequestUri?.Port.ToString()) ? string.Empty : $":{RequestUri.Port}")}",
-            replace: true);
+        // 检查是否需要重新设置 Host 请求标头
+        if (ForwardOptions.ResetHostRequestHeader)
+        {
+            httpRequestBuilder.WithHeader(HeaderNames.Host,
+                $"{RequestUri?.Host}{(string.IsNullOrWhiteSpace(RequestUri?.Port.ToString()) ? string.Empty : $":{RequestUri.Port}")}",
+                replace: true);
+        }
     }
 
     /// <summary>

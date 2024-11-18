@@ -34,6 +34,12 @@ public sealed class HttpContextForwardOptions
     public bool WithResponseContentHeaders { get; set; } = true;
 
     /// <summary>
+    ///     表示是否重新设置 Host 请求标头
+    /// </summary>
+    /// <remarks>在一些目标服务器中，可能需要校验该请求标头。默认值为：<c>false</c>。</remarks>
+    public bool ResetHostRequestHeader { get; set; }
+
+    /// <summary>
     ///     用于在转发响应之前执行自定义操作
     /// </summary>
     public Action<HttpContext, HttpResponseMessage>? OnForward { get; set; }
