@@ -186,12 +186,12 @@ public sealed class HttpContextForwardBuilder
         var httpRequest = HttpContext.Request;
 
         // 添加原始请求地址标头
-        httpRequestBuilder.WithHeader(Constants.X_ORIGINAL_URL_HEADER, httpRequest.GetFullRequestUrl());
+        httpRequestBuilder.WithHeader(Constants.X_ORIGINAL_URL_HEADER, httpRequest.GetFullRequestUrl(), replace: true);
 
         // 检查是否转发请求标头
         if (ForwardOptions.WithRequestHeaders)
         {
-            httpRequestBuilder.WithHeaders(httpRequest.Headers);
+            httpRequestBuilder.WithHeaders(httpRequest.Headers, replace: true);
         }
     }
 
