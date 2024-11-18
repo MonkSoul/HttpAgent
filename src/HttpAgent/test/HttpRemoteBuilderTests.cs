@@ -2,8 +2,6 @@
 // 
 // 此源代码遵循位于源代码树根目录中的 LICENSE 文件的许可证。
 
-using System.Net.Sockets;
-
 namespace HttpAgent.Tests;
 
 public class HttpRemoteBuilderTests
@@ -444,57 +442,5 @@ public class HttpRemoteBuilderTests
 
         Assert.NotNull(httpRemoteService.RemoteOptions.HttpDeclarativeExtractors);
         Assert.Single(httpRemoteService.RemoteOptions.HttpDeclarativeExtractors);
-    }
-
-    [Fact]
-    public async Task IPAddressConnectCallback_ReturnOK()
-    {
-        using var httpClient = new HttpClient(new SocketsHttpHandler
-        {
-            ConnectCallback = (context, token) =>
-                HttpRemoteBuilder.IPAddressConnectCallback(AddressFamily.Unspecified, context, token)
-        });
-
-        var response = await httpClient.GetAsync("https://www.baidu.com");
-        response.EnsureSuccessStatusCode();
-    }
-
-    [Fact]
-    public async Task IPv4ConnectCallback_ReturnOK()
-    {
-        using var httpClient = new HttpClient(new SocketsHttpHandler
-        {
-            ConnectCallback = HttpRemoteBuilder.IPv4ConnectCallback
-        });
-
-        var response = await httpClient.GetAsync("https://www.baidu.com");
-        response.EnsureSuccessStatusCode();
-    }
-
-    [Fact]
-    public async Task IPv6ConnectCallback_ReturnOK()
-    {
-        using var httpClient = new HttpClient(new SocketsHttpHandler
-        {
-            ConnectCallback = HttpRemoteBuilder.IPv6ConnectCallback
-        });
-
-        await Assert.ThrowsAsync<HttpRequestException>(async () =>
-        {
-            var response = await httpClient.GetAsync("https://www.baidu.com");
-            response.EnsureSuccessStatusCode();
-        });
-    }
-
-    [Fact]
-    public async Task UnspecifiedConnectCallback_ReturnOK()
-    {
-        using var httpClient = new HttpClient(new SocketsHttpHandler
-        {
-            ConnectCallback = HttpRemoteBuilder.UnspecifiedConnectCallback
-        });
-
-        var response = await httpClient.GetAsync("https://www.baidu.com");
-        response.EnsureSuccessStatusCode();
     }
 }

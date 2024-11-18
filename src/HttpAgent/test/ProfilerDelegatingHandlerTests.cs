@@ -86,15 +86,16 @@ public class ProfilerDelegatingHandlerTests
     }
 
     [Fact]
-    public void ExtractSocketsHttpHandler_ReturnOK()
+    public void ExtractCookieContainer_ReturnOK()
     {
         var services = new ServiceCollection();
         services.AddLogging();
         services.TryAddTransient<ProfilerDelegatingHandler>();
         services.AddHttpClient(string.Empty).AddProfilerDelegatingHandler();
         using var provider = services.BuildServiceProvider();
+
         var handler = provider.GetRequiredService<ProfilerDelegatingHandler>();
-        Assert.Null(handler.ExtractSocketsHttpHandler());
+        Assert.Null(handler.ExtractCookieContainer());
     }
 
     [Fact]
@@ -111,7 +112,6 @@ public class ProfilerDelegatingHandlerTests
 
         var cookieContainer = new CookieContainer();
         cookieContainer.Add(new Uri("http://localhost"), new Cookie("cookieName", "cookieValue"));
-        ProfilerDelegatingHandler.LogCookieContainer(logger, httpRequestMessage,
-            new SocketsHttpHandler { CookieContainer = cookieContainer, UseCookies = true });
+        ProfilerDelegatingHandler.LogCookieContainer(logger, httpRequestMessage, cookieContainer);
     }
 }

@@ -980,65 +980,6 @@
                 <see cref="T:HttpAgent.HttpRemoteBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRemoteBuilder.IPv4ConnectCallback(System.Net.Http.SocketsHttpConnectionContext,System.Threading.CancellationToken)">
-            <summary>
-                获取使用 IPv4 连接到服务器的回调
-            </summary>
-            <param name="context">
-                <see cref="T:System.Net.Http.SocketsHttpConnectionContext" />
-            </param>
-            <param name="cancellationToken">
-                <see cref="T:System.Threading.CancellationToken" />
-            </param>
-            <returns>
-                <see cref="T:System.IO.Stream" />
-            </returns>
-        </member>
-        <member name="M:HttpAgent.HttpRemoteBuilder.IPv6ConnectCallback(System.Net.Http.SocketsHttpConnectionContext,System.Threading.CancellationToken)">
-            <summary>
-                获取使用 IPv6 连接到服务器的回调
-            </summary>
-            <param name="context">
-                <see cref="T:System.Net.Http.SocketsHttpConnectionContext" />
-            </param>
-            <param name="cancellationToken">
-                <see cref="T:System.Threading.CancellationToken" />
-            </param>
-            <returns>
-                <see cref="T:System.IO.Stream" />
-            </returns>
-        </member>
-        <member name="M:HttpAgent.HttpRemoteBuilder.UnspecifiedConnectCallback(System.Net.Http.SocketsHttpConnectionContext,System.Threading.CancellationToken)">
-            <summary>
-                获取使用 IPv4 或 IPv6 连接到服务器的回调
-            </summary>
-            <param name="context">
-                <see cref="T:System.Net.Http.SocketsHttpConnectionContext" />
-            </param>
-            <param name="cancellationToken">
-                <see cref="T:System.Threading.CancellationToken" />
-            </param>
-            <returns>
-                <see cref="T:System.IO.Stream" />
-            </returns>
-        </member>
-        <member name="M:HttpAgent.HttpRemoteBuilder.IPAddressConnectCallback(System.Net.Sockets.AddressFamily,System.Net.Http.SocketsHttpConnectionContext,System.Threading.CancellationToken)">
-            <summary>
-                获取使用指定 IP 地址类型连接到服务器的回调
-            </summary>
-            <param name="addressFamily">
-                <see cref="T:System.Net.Sockets.AddressFamily" />
-            </param>
-            <param name="context">
-                <see cref="T:System.Net.Http.SocketsHttpConnectionContext" />
-            </param>
-            <param name="cancellationToken">
-                <see cref="T:System.Threading.CancellationToken" />
-            </param>
-            <returns>
-                <see cref="T:System.IO.Stream" />
-            </returns>
-        </member>
         <member name="M:HttpAgent.HttpRemoteBuilder.Build(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
                 构建模块服务
@@ -4779,7 +4720,7 @@
             </param>
             <param name="requestDuration">请求耗时（毫秒）</param>
         </member>
-        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogCookieContainer(Microsoft.Extensions.Logging.ILogger,System.Net.Http.HttpRequestMessage,System.Net.Http.SocketsHttpHandler)">
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogCookieContainer(Microsoft.Extensions.Logging.ILogger,System.Net.Http.HttpRequestMessage,System.Net.CookieContainer)">
             <summary>
                 打印 <see cref="T:System.Net.CookieContainer" /> 内容
             </summary>
@@ -4789,8 +4730,8 @@
             <param name="request">
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
             </param>
-            <param name="socketsHttpHandler">
-                <see cref="T:System.Net.Http.SocketsHttpHandler" />
+            <param name="cookieContainer">
+                <see cref="T:System.Net.CookieContainer" />
             </param>
         </member>
         <member name="M:HttpAgent.ProfilerDelegatingHandler.Log(Microsoft.Extensions.Logging.ILogger,System.String)">
@@ -4802,12 +4743,12 @@
             </param>
             <param name="message">日志消息</param>
         </member>
-        <member name="M:HttpAgent.ProfilerDelegatingHandler.ExtractSocketsHttpHandler">
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.ExtractCookieContainer">
             <summary>
-                提取 <see cref="T:System.Net.Http.SocketsHttpHandler" /> 实例
+                提取 <see cref="T:System.Net.CookieContainer" /> 实例
             </summary>
             <returns>
-                <see cref="T:System.Net.Http.SocketsHttpHandler" />
+                <see cref="T:System.Net.CookieContainer" />
             </returns>
         </member>
         <member name="T:HttpAgent.Extensions.HttpRemoteExtensions">
@@ -11108,6 +11049,80 @@
             </param>
             <returns>
                 <c>byte[]</c>
+            </returns>
+        </member>
+        <member name="T:HttpAgent.HttpRemoteUtility">
+            <summary>
+                提供 HTTP 远程请求实用方法
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HttpRemoteUtility.AllSslProtocols">
+            <summary>
+                获取所有支持的 SslProtocols
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HttpRemoteUtility.IgnoreSslErrors">
+            <summary>
+                忽略 SSL 证书验证
+            </summary>
+        </member>
+        <member name="M:HttpAgent.HttpRemoteUtility.IPv4ConnectCallback(System.Net.Http.SocketsHttpConnectionContext,System.Threading.CancellationToken)">
+            <summary>
+                获取使用 IPv4 连接到服务器的回调
+            </summary>
+            <param name="context">
+                <see cref="T:System.Net.Http.SocketsHttpConnectionContext" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.IO.Stream" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRemoteUtility.IPv6ConnectCallback(System.Net.Http.SocketsHttpConnectionContext,System.Threading.CancellationToken)">
+            <summary>
+                获取使用 IPv6 连接到服务器的回调
+            </summary>
+            <param name="context">
+                <see cref="T:System.Net.Http.SocketsHttpConnectionContext" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.IO.Stream" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRemoteUtility.UnspecifiedConnectCallback(System.Net.Http.SocketsHttpConnectionContext,System.Threading.CancellationToken)">
+            <summary>
+                获取使用 IPv4 或 IPv6 连接到服务器的回调
+            </summary>
+            <param name="context">
+                <see cref="T:System.Net.Http.SocketsHttpConnectionContext" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.IO.Stream" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRemoteUtility.IPAddressConnectCallback(System.Net.Sockets.AddressFamily,System.Net.Http.SocketsHttpConnectionContext,System.Threading.CancellationToken)">
+            <summary>
+                获取使用指定 IP 地址类型连接到服务器的回调
+            </summary>
+            <param name="addressFamily">
+                <see cref="T:System.Net.Sockets.AddressFamily" />
+            </param>
+            <param name="context">
+                <see cref="T:System.Net.Http.SocketsHttpConnectionContext" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.IO.Stream" />
             </returns>
         </member>
         <member name="T:HttpAgent.WebSocketBinaryReceiveResult">

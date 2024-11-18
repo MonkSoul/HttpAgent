@@ -5,5 +5,6 @@
 global using System.Net.Http.Headers;
 global using System.Net.Mime;
 global using System.Text;
+global using HttpAgent.Extensions;
 global using HttpAgent.Samples.Models;
 global using Microsoft.AspNetCore.Mvc;

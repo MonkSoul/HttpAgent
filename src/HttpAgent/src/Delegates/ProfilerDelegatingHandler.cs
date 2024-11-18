@@ -55,7 +55,7 @@ public sealed class ProfilerDelegatingHandler(ILogger<Logging> logger) : Delegat
         LogResponseHeadersAndSummary(logger, httpResponseMessage, requestDuration);
 
         // 打印 CookieContainer 内容
-        LogCookieContainer(logger, httpRequestMessage, ExtractSocketsHttpHandler());
+        LogCookieContainer(logger, httpRequestMessage, ExtractCookieContainer());
 
         return httpResponseMessage;
     }
@@ -89,7 +89,7 @@ public sealed class ProfilerDelegatingHandler(ILogger<Logging> logger) : Delegat
         LogResponseHeadersAndSummary(logger, httpResponseMessage, requestDuration);
 
         // 打印 CookieContainer 内容
-        LogCookieContainer(logger, httpRequestMessage, ExtractSocketsHttpHandler());
+        LogCookieContainer(logger, httpRequestMessage, ExtractCookieContainer());
 
         return httpResponseMessage;
     }
@@ -130,20 +130,20 @@ public sealed class ProfilerDelegatingHandler(ILogger<Logging> logger) : Delegat
     /// <param name="request">
     ///     <see cref="HttpRequestMessage" />
     /// </param>
-    /// <param name="socketsHttpHandler">
-    ///     <see cref="SocketsHttpHandler" />
+    /// <param name="cookieContainer">
+    ///     <see cref="CookieContainer" />
     /// </param>
     internal static void LogCookieContainer(ILogger logger, HttpRequestMessage request,
-        SocketsHttpHandler? socketsHttpHandler)
+        CookieContainer? cookieContainer)
     {
         // 空检查
-        if (socketsHttpHandler is null || request.RequestUri is null)
+        if (request.RequestUri is null || cookieContainer is null)
         {
             return;
         }
 
         // 获取 Cookie 集合
-        var cookies = socketsHttpHandler.CookieContainer.GetCookies(request.RequestUri);
+        var cookies = cookieContainer.GetCookies(request.RequestUri);
 
         // 空检查
         if (cookies is { Count: 0 })
@@ -180,19 +180,29 @@ public sealed class ProfilerDelegatingHandler(ILogger<Logging> logger) : Delegat
     }
 
     /// <summary>
-    ///     提取 <see cref="SocketsHttpHandler" /> 实例
+    ///     提取 <see cref="CookieContainer" /> 实例
     /// </summary>
     /// <returns>
-    ///     <see cref="SocketsHttpHandler" />
+    ///     <see cref="CookieContainer" />
     /// </returns>
-    internal SocketsHttpHandler? ExtractSocketsHttpHandler() =>
+    internal CookieContainer? ExtractCookieContainer() =>
         InnerHandler switch
         {
-            LoggingHttpMessageHandler loggingHttpMessageHandler =>
-                loggingHttpMessageHandler.InnerHandler as SocketsHttpHandler,
-            LoggingScopeHttpMessageHandler loggingScopeHttpMessageHandler =>
-                loggingScopeHttpMessageHandler.InnerHandler as SocketsHttpHandler,
-            SocketsHttpHandler innerSocketsHttpHandler => innerSocketsHttpHandler,
+            LoggingHttpMessageHandler loggingHttpMessageHandler => loggingHttpMessageHandler.InnerHandler switch
+            {
+                SocketsHttpHandler socketsHttpHandler => socketsHttpHandler.CookieContainer,
+                HttpClientHandler httpClientHandler => httpClientHandler.CookieContainer,
+                _ => null
+            },
+            LoggingScopeHttpMessageHandler loggingScopeHttpMessageHandler => loggingScopeHttpMessageHandler.InnerHandler
+                switch
+                {
+                    SocketsHttpHandler socketsHttpHandler => socketsHttpHandler.CookieContainer,
+                    HttpClientHandler httpClientHandler => httpClientHandler.CookieContainer,
+                    _ => null
+                },
+            SocketsHttpHandler socketsHttpHandler => socketsHttpHandler.CookieContainer,
+            HttpClientHandler httpClientHandler => httpClientHandler.CookieContainer,
             _ => null
         };
 }

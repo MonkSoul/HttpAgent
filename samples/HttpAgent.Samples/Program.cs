@@ -1,6 +1,7 @@
 using System.Net;
 using System.Reflection;
-using HttpAgent.Extensions;
+using HttpAgent;
+using HttpAgent.AspNetCore.Extensions;
 using HttpAgent.Samples;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -19,10 +20,13 @@ cookieContainer.Add(new Uri("https://furion.net"), new Cookie("cookieName", "coo
 
 // 为默认客户端启用
 builder.Services.AddHttpClient(string.Empty)
-    .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
     {
         CookieContainer = cookieContainer,
-        UseCookies = false
+        UseCookies = false,
+        // 忽略 SSL 证书验证
+        ServerCertificateCustomValidationCallback = HttpRemoteUtility.IgnoreSslErrors,
+        SslProtocols = HttpRemoteUtility.AllSslProtocols
     })
     .AddProfilerDelegatingHandler();
 
@@ -42,6 +46,8 @@ builder.Services.AddHttpRemote(options =>
 });
 
 var app = builder.Build();
+
+app.UseEnableBuffering();
 
 app.UseWebSockets();
 

@@ -55,7 +55,8 @@ public sealed class HttpContextForwardBuilder
     internal HttpRequestBuilder Build(Action<HttpRequestBuilder>? configure = null)
     {
         // 初始化 HttpRequestBuilder 实例
-        var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure).DisableCache();
+        var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure)
+            .AddHttpContentConverters(() => [new IActionResultContentConverter()]).DisableCache();
 
         // 复制查询参数和路由参数
         CopyQueryAndRouteValues(httpRequestBuilder);
@@ -79,7 +80,8 @@ public sealed class HttpContextForwardBuilder
     internal async Task<HttpRequestBuilder> BuildAsync(Action<HttpRequestBuilder>? configure = null)
     {
         // 初始化 HttpRequestBuilder 实例
-        var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure).DisableCache();
+        var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure)
+            .AddHttpContentConverters(() => [new IActionResultContentConverter()]).DisableCache();
 
         // 复制查询参数和路由参数
         CopyQueryAndRouteValues(httpRequestBuilder);

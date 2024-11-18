@@ -2,7 +2,10 @@
 
 [ApiController]
 [Route("[controller]/[action]")]
-public class GetStartController(IHttpRemoteService httpRemoteService, ISampleService sampleService) : ControllerBase
+public class GetStartController(
+    IHttpRemoteService httpRemoteService,
+    ISampleService sampleService,
+    IHttpContextAccessor httpContextAccessor) : ControllerBase
 {
     /// <summary>
     ///     获取网站内容
@@ -425,5 +428,12 @@ public class GetStartController(IHttpRemoteService httpRemoteService, ISampleSer
 
         // 关闭连接
         await webSocketClient.CloseAsync(cancellationToken);
+    }
+
+    [HttpGet]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+    public Task<IActionResult?> Forward()
+    {
+        return httpContextAccessor.HttpContext.ForwardAsAsync<IActionResult>("https://localhost:7044/GetStart/Forward");
     }
 }

@@ -675,6 +675,8 @@ public class HttpContextForwardBuilderTests
             var httpRequestBuilder0 = await httpContextForwardBuilder.BuildAsync();
             Assert.True(httpRequestBuilder0.DisableCacheEnabled);
             Assert.False(httpRequestBuilder0.EnsureSuccessStatusCodeEnabled);
+            Assert.NotNull(httpRequestBuilder0.HttpContentConverterProviders);
+            Assert.Single(httpRequestBuilder0.HttpContentConverterProviders);
 
             var httpRequestBuilder =
                 await httpContextForwardBuilder.BuildAsync(u => u.SetTimeout(TimeSpan.FromSeconds(150)));
@@ -874,6 +876,8 @@ public class HttpContextForwardBuilderTests
             var httpRequestBuilder0 = httpContextForwardBuilder.Build();
             Assert.True(httpRequestBuilder0.DisableCacheEnabled);
             Assert.False(httpRequestBuilder0.EnsureSuccessStatusCodeEnabled);
+            Assert.NotNull(httpRequestBuilder0.HttpContentConverterProviders);
+            Assert.Single(httpRequestBuilder0.HttpContentConverterProviders);
 
             // ReSharper disable once MethodHasAsyncOverload
             var httpRequestBuilder =
