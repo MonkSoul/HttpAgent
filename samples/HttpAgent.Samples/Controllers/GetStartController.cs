@@ -430,10 +430,14 @@ public class GetStartController(
         await webSocketClient.CloseAsync(cancellationToken);
     }
 
+    /// <summary>
+    ///     转发代理网站
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
-    public Task<IActionResult?> ForwardNoCors2()
+    public Task<IActionResult?> ForwardToWebSite()
     {
-        return httpContextAccessor.HttpContext.ForwardAsAsync<IActionResult>("https://localhost:7044/GetStart/GetWebSiteContent");
+        return httpContextAccessor.HttpContext.ForwardAsAsync<IActionResult>("https://github.com");
     }
 }
