@@ -432,7 +432,7 @@ public class GetStartController(
 
     [HttpGet]
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
-    public Task<IActionResult?> ForwardNoCors()
+    public Task<IActionResult?> ForwardNoCors2()
     {
         return httpContextAccessor.HttpContext.ForwardAsAsync<IActionResult>("https://localhost:7044/GetStart/GetWebSiteContent");
     }

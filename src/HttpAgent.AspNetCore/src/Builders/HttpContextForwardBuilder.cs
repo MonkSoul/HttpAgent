@@ -2,6 +2,9 @@
 // 
 // 此源代码遵循位于源代码树根目录中的 LICENSE 文件的许可证。
 
+using Microsoft.Net.Http.Headers;
+using MediaTypeHeaderValue = System.Net.Http.Headers.MediaTypeHeaderValue;
+
 namespace HttpAgent;
 
 /// <summary>
@@ -9,6 +12,15 @@ namespace HttpAgent;
 /// </summary>
 public sealed class HttpContextForwardBuilder
 {
+    /// <summary>
+    ///     忽略在转发时需要跳过的请求标头列表
+    /// </summary>
+    internal static HashSet<string> _ignoreRequestHeaders =
+    [
+        "Host", "Accept", "Accept-CH", "Accept-Charset", "Accept-Encoding", "Accept-Language", "Accept-Patch",
+        "Accept-Post", "Accept-Ranges"
+    ];
+
     /// <summary>
     ///     <inheritdoc cref="HttpContextForwardBuilder" />
     /// </summary>
@@ -189,10 +201,20 @@ public sealed class HttpContextForwardBuilder
         httpRequestBuilder.WithHeader(Constants.X_ORIGINAL_URL_HEADER, httpRequest.GetFullRequestUrl(), replace: true);
 
         // 检查是否转发请求标头
-        if (ForwardOptions.WithRequestHeaders)
+        if (!ForwardOptions.WithRequestHeaders)
         {
-            httpRequestBuilder.WithHeaders(httpRequest.Headers, replace: true);
+            return;
         }
+
+        // 忽略特定请求标头列表
+        httpRequestBuilder.WithHeaders(
+            httpRequest.Headers.Where(u => !u.Key.IsIn(_ignoreRequestHeaders, StringComparer.OrdinalIgnoreCase)),
+            replace: true);
+
+        // 重新设置 Host 请求标头
+        httpRequestBuilder.WithHeader(HeaderNames.Host,
+            $"{RequestUri?.Host}{(string.IsNullOrWhiteSpace(RequestUri?.Port.ToString()) ? string.Empty : $":{RequestUri.Port}")}",
+            replace: true);
     }
 
     /// <summary>

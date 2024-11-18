@@ -35,7 +35,7 @@ public static class HttpContextExtensions
     ///         </item>
     ///     </list>
     /// </remarks>
-    internal static string[] _ignoreResponseHeaders = ["Transfer-Encoding", "Content-Type", "Content-Length"];
+    internal static HashSet<string> _ignoreResponseHeaders = ["Transfer-Encoding", "Content-Type", "Content-Length"];
 
     /// <summary>
     ///     获取完整的请求 URL 地址

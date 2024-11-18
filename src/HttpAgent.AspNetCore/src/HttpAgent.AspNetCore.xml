@@ -9,6 +9,11 @@
                 <see cref="P:HttpAgent.HttpContextForwardBuilder.HttpContext" /> 转发构建器
             </summary>
         </member>
+        <member name="F:HttpAgent.HttpContextForwardBuilder._ignoreRequestHeaders">
+            <summary>
+                忽略在转发时需要跳过的请求标头列表
+            </summary>
+        </member>
         <member name="M:HttpAgent.HttpContextForwardBuilder.#ctor(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpMethod,System.Uri,HttpAgent.HttpContextForwardOptions)">
             <summary>
                 <inheritdoc cref="T:HttpAgent.HttpContextForwardBuilder" />

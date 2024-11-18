@@ -7,6 +7,14 @@ namespace HttpAgent.AspNetCore.Tests;
 public class HttpContextForwardBuilderTests
 {
     [Fact]
+    public void IgnoreRequestHeaders_ReturnOK() =>
+        Assert.Equal([
+                "Host", "Accept", "Accept-CH", "Accept-Charset", "Accept-Encoding", "Accept-Language", "Accept-Patch",
+                "Accept-Post", "Accept-Ranges"
+            ],
+            HttpContextForwardBuilder._ignoreRequestHeaders);
+
+    [Fact]
     public void GetTargetUri_ReturnOK()
     {
         var httpContext1 = new DefaultHttpContext();
@@ -189,12 +197,12 @@ public class HttpContextForwardBuilderTests
             Assert.Equal(4, httpRequestBuilder.Headers.Count);
             Assert.Equal("X-Original-URL", httpRequestBuilder.Headers.ElementAt(0).Key);
             Assert.Equal($"http://localhost:{port}/test", httpRequestBuilder.Headers.ElementAt(0).Value.First());
-            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(1).Key);
-            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(1).Value.First());
-            Assert.Equal("Content-Type", httpRequestBuilder.Headers.ElementAt(2).Key);
-            Assert.Equal("application/json", httpRequestBuilder.Headers.ElementAt(2).Value.First());
-            Assert.Equal("Content-Length", httpRequestBuilder.Headers.ElementAt(3).Key);
-            Assert.Equal("24", httpRequestBuilder.Headers.ElementAt(3).Value.First());
+            Assert.Equal("Content-Type", httpRequestBuilder.Headers.ElementAt(1).Key);
+            Assert.Equal("application/json", httpRequestBuilder.Headers.ElementAt(1).Value.First());
+            Assert.Equal("Content-Length", httpRequestBuilder.Headers.ElementAt(2).Key);
+            Assert.Equal("24", httpRequestBuilder.Headers.ElementAt(2).Value.First());
+            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(3).Key);
+            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(3).Value.First());
 
             HttpContextForwardBuilder.CopyNonMultipartFormData(context.Request.Body,
                 new MediaTypeHeaderValue(context.Request.ContentType!).MediaType!,
@@ -253,13 +261,13 @@ public class HttpContextForwardBuilderTests
             Assert.Equal(4, httpRequestBuilder.Headers.Count);
             Assert.Equal("X-Original-URL", httpRequestBuilder.Headers.ElementAt(0).Key);
             Assert.Equal($"http://localhost:{port}/test", httpRequestBuilder.Headers.ElementAt(0).Value.First());
-            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(1).Key);
-            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(1).Value.First());
-            Assert.Equal("Content-Type", httpRequestBuilder.Headers.ElementAt(2).Key);
+            Assert.Equal("Content-Type", httpRequestBuilder.Headers.ElementAt(1).Key);
             Assert.Equal($"multipart/form-data; boundary=\"{boundary}\"",
-                httpRequestBuilder.Headers.ElementAt(2).Value.First());
-            Assert.Equal("Content-Length", httpRequestBuilder.Headers.ElementAt(3).Key);
-            Assert.Equal("433", httpRequestBuilder.Headers.ElementAt(3).Value.First());
+                httpRequestBuilder.Headers.ElementAt(1).Value.First());
+            Assert.Equal("Content-Length", httpRequestBuilder.Headers.ElementAt(2).Key);
+            Assert.Equal("433", httpRequestBuilder.Headers.ElementAt(2).Value.First());
+            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(3).Key);
+            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(3).Value.First());
 
             var boundary1 = context.Request.ContentType!.Split('=')[1];
             var httpMultipartFormDataBuilder =
@@ -343,13 +351,13 @@ public class HttpContextForwardBuilderTests
             Assert.Equal(4, httpRequestBuilder.Headers.Count);
             Assert.Equal("X-Original-URL", httpRequestBuilder.Headers.ElementAt(0).Key);
             Assert.Equal($"http://localhost:{port}/test", httpRequestBuilder.Headers.ElementAt(0).Value.First());
-            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(1).Key);
-            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(1).Value.First());
-            Assert.Equal("Content-Type", httpRequestBuilder.Headers.ElementAt(2).Key);
+            Assert.Equal("Content-Type", httpRequestBuilder.Headers.ElementAt(1).Key);
             Assert.Equal($"multipart/form-data; boundary=\"{boundary}\"",
-                httpRequestBuilder.Headers.ElementAt(2).Value.First());
-            Assert.Equal("Content-Length", httpRequestBuilder.Headers.ElementAt(3).Key);
-            Assert.Equal("433", httpRequestBuilder.Headers.ElementAt(3).Value.First());
+                httpRequestBuilder.Headers.ElementAt(1).Value.First());
+            Assert.Equal("Content-Length", httpRequestBuilder.Headers.ElementAt(2).Key);
+            Assert.Equal("433", httpRequestBuilder.Headers.ElementAt(2).Value.First());
+            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(3).Key);
+            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(3).Value.First());
 
             var boundary1 = context.Request.ContentType!.Split('=')[1];
             var httpMultipartFormDataBuilder =
@@ -448,13 +456,13 @@ public class HttpContextForwardBuilderTests
             Assert.Equal(4, httpRequestBuilder.Headers.Count);
             Assert.Equal("X-Original-URL", httpRequestBuilder.Headers.ElementAt(0).Key);
             Assert.Equal($"http://localhost:{port}/test", httpRequestBuilder.Headers.ElementAt(0).Value.First());
-            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(1).Key);
-            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(1).Value.First());
-            Assert.Equal("Content-Type", httpRequestBuilder.Headers.ElementAt(2).Key);
+            Assert.Equal("Content-Type", httpRequestBuilder.Headers.ElementAt(1).Key);
             Assert.Equal($"multipart/form-data; boundary=\"{boundary}\"",
-                httpRequestBuilder.Headers.ElementAt(2).Value.First());
-            Assert.Equal("Content-Length", httpRequestBuilder.Headers.ElementAt(3).Key);
-            Assert.Equal("433", httpRequestBuilder.Headers.ElementAt(3).Value.First());
+                httpRequestBuilder.Headers.ElementAt(1).Value.First());
+            Assert.Equal("Content-Length", httpRequestBuilder.Headers.ElementAt(2).Key);
+            Assert.Equal("433", httpRequestBuilder.Headers.ElementAt(2).Value.First());
+            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(3).Key);
+            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(3).Value.First());
 
             await HttpContextForwardBuilder.CopyMultipartFormDataAsync(context.Request.Body,
                 context.Request.ContentType!, httpRequestBuilder, context.RequestAborted);
@@ -577,12 +585,12 @@ public class HttpContextForwardBuilderTests
             Assert.Equal(4, httpRequestBuilder.Headers.Count);
             Assert.Equal("X-Original-URL", httpRequestBuilder.Headers.ElementAt(0).Key);
             Assert.Equal($"http://localhost:{port}/test", httpRequestBuilder.Headers.ElementAt(0).Value.First());
-            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(1).Key);
-            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(1).Value.First());
-            Assert.Equal("Content-Type", httpRequestBuilder.Headers.ElementAt(2).Key);
-            Assert.Equal("application/json", httpRequestBuilder.Headers.ElementAt(2).Value.First());
-            Assert.Equal("Content-Length", httpRequestBuilder.Headers.ElementAt(3).Key);
-            Assert.Equal("24", httpRequestBuilder.Headers.ElementAt(3).Value.First());
+            Assert.Equal("Content-Type", httpRequestBuilder.Headers.ElementAt(1).Key);
+            Assert.Equal("application/json", httpRequestBuilder.Headers.ElementAt(1).Value.First());
+            Assert.Equal("Content-Length", httpRequestBuilder.Headers.ElementAt(2).Key);
+            Assert.Equal("24", httpRequestBuilder.Headers.ElementAt(2).Value.First());
+            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(3).Key);
+            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(3).Value.First());
 
             await httpContextForwardBuilder.CopyBodyAsync(httpRequestBuilder);
 
@@ -640,13 +648,13 @@ public class HttpContextForwardBuilderTests
             Assert.Equal(4, httpRequestBuilder.Headers.Count);
             Assert.Equal("X-Original-URL", httpRequestBuilder.Headers.ElementAt(0).Key);
             Assert.Equal($"http://localhost:{port}/test", httpRequestBuilder.Headers.ElementAt(0).Value.First());
-            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(1).Key);
-            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(1).Value.First());
-            Assert.Equal("Content-Type", httpRequestBuilder.Headers.ElementAt(2).Key);
+            Assert.Equal("Content-Type", httpRequestBuilder.Headers.ElementAt(1).Key);
             Assert.Equal($"multipart/form-data; boundary=\"{boundary}\"",
-                httpRequestBuilder.Headers.ElementAt(2).Value.First());
-            Assert.Equal("Content-Length", httpRequestBuilder.Headers.ElementAt(3).Key);
-            Assert.Equal("433", httpRequestBuilder.Headers.ElementAt(3).Value.First());
+                httpRequestBuilder.Headers.ElementAt(1).Value.First());
+            Assert.Equal("Content-Length", httpRequestBuilder.Headers.ElementAt(2).Key);
+            Assert.Equal("433", httpRequestBuilder.Headers.ElementAt(2).Value.First());
+            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(3).Key);
+            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(3).Value.First());
 
             await httpContextForwardBuilder.CopyBodyAsync(httpRequestBuilder);
 
@@ -777,12 +785,12 @@ public class HttpContextForwardBuilderTests
             Assert.Equal(4, httpRequestBuilder.Headers.Count);
             Assert.Equal("X-Original-URL", httpRequestBuilder.Headers.ElementAt(0).Key);
             Assert.Equal($"http://localhost:{port}/test", httpRequestBuilder.Headers.ElementAt(0).Value.First());
-            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(1).Key);
-            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(1).Value.First());
-            Assert.Equal("Content-Type", httpRequestBuilder.Headers.ElementAt(2).Key);
-            Assert.Equal("application/json", httpRequestBuilder.Headers.ElementAt(2).Value.First());
-            Assert.Equal("Content-Length", httpRequestBuilder.Headers.ElementAt(3).Key);
-            Assert.Equal("24", httpRequestBuilder.Headers.ElementAt(3).Value.First());
+            Assert.Equal("Content-Type", httpRequestBuilder.Headers.ElementAt(1).Key);
+            Assert.Equal("application/json", httpRequestBuilder.Headers.ElementAt(1).Value.First());
+            Assert.Equal("Content-Length", httpRequestBuilder.Headers.ElementAt(2).Key);
+            Assert.Equal("24", httpRequestBuilder.Headers.ElementAt(2).Value.First());
+            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(3).Key);
+            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(3).Value.First());
 
             Assert.NotNull(httpRequestBuilder.RawContent);
             Assert.True(httpRequestBuilder.RawContent is StreamContent);
@@ -841,13 +849,13 @@ public class HttpContextForwardBuilderTests
             Assert.Equal(4, httpRequestBuilder.Headers.Count);
             Assert.Equal("X-Original-URL", httpRequestBuilder.Headers.ElementAt(0).Key);
             Assert.Equal($"http://localhost:{port}/test", httpRequestBuilder.Headers.ElementAt(0).Value.First());
-            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(1).Key);
-            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(1).Value.First());
-            Assert.Equal("Content-Type", httpRequestBuilder.Headers.ElementAt(2).Key);
+            Assert.Equal("Content-Type", httpRequestBuilder.Headers.ElementAt(1).Key);
             Assert.Equal($"multipart/form-data; boundary=\"{boundary}\"",
-                httpRequestBuilder.Headers.ElementAt(2).Value.First());
-            Assert.Equal("Content-Length", httpRequestBuilder.Headers.ElementAt(3).Key);
-            Assert.Equal("433", httpRequestBuilder.Headers.ElementAt(3).Value.First());
+                httpRequestBuilder.Headers.ElementAt(1).Value.First());
+            Assert.Equal("Content-Length", httpRequestBuilder.Headers.ElementAt(2).Key);
+            Assert.Equal("433", httpRequestBuilder.Headers.ElementAt(2).Value.First());
+            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(3).Key);
+            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(3).Value.First());
 
             Assert.NotNull(httpRequestBuilder.MultipartFormDataBuilder);
             var httpMultipartFormDataBuilder = httpRequestBuilder.MultipartFormDataBuilder;
@@ -983,12 +991,12 @@ public class HttpContextForwardBuilderTests
             Assert.Equal(4, httpRequestBuilder.Headers.Count);
             Assert.Equal("X-Original-URL", httpRequestBuilder.Headers.ElementAt(0).Key);
             Assert.Equal($"http://localhost:{port}/test", httpRequestBuilder.Headers.ElementAt(0).Value.First());
-            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(1).Key);
-            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(1).Value.First());
-            Assert.Equal("Content-Type", httpRequestBuilder.Headers.ElementAt(2).Key);
-            Assert.Equal("application/json", httpRequestBuilder.Headers.ElementAt(2).Value.First());
-            Assert.Equal("Content-Length", httpRequestBuilder.Headers.ElementAt(3).Key);
-            Assert.Equal("24", httpRequestBuilder.Headers.ElementAt(3).Value.First());
+            Assert.Equal("Content-Type", httpRequestBuilder.Headers.ElementAt(1).Key);
+            Assert.Equal("application/json", httpRequestBuilder.Headers.ElementAt(1).Value.First());
+            Assert.Equal("Content-Length", httpRequestBuilder.Headers.ElementAt(2).Key);
+            Assert.Equal("24", httpRequestBuilder.Headers.ElementAt(2).Value.First());
+            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(3).Key);
+            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(3).Value.First());
 
             Assert.NotNull(httpRequestBuilder.RawContent);
             Assert.True(httpRequestBuilder.RawContent is StreamContent);
@@ -1051,13 +1059,13 @@ public class HttpContextForwardBuilderTests
             Assert.Equal(4, httpRequestBuilder.Headers.Count);
             Assert.Equal("X-Original-URL", httpRequestBuilder.Headers.ElementAt(0).Key);
             Assert.Equal($"http://localhost:{port}/test", httpRequestBuilder.Headers.ElementAt(0).Value.First());
-            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(1).Key);
-            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(1).Value.First());
-            Assert.Equal("Content-Type", httpRequestBuilder.Headers.ElementAt(2).Key);
+            Assert.Equal("Content-Type", httpRequestBuilder.Headers.ElementAt(1).Key);
             Assert.Equal($"multipart/form-data; boundary=\"{boundary}\"",
-                httpRequestBuilder.Headers.ElementAt(2).Value.First());
-            Assert.Equal("Content-Length", httpRequestBuilder.Headers.ElementAt(3).Key);
-            Assert.Equal("433", httpRequestBuilder.Headers.ElementAt(3).Value.First());
+                httpRequestBuilder.Headers.ElementAt(1).Value.First());
+            Assert.Equal("Content-Length", httpRequestBuilder.Headers.ElementAt(2).Key);
+            Assert.Equal("433", httpRequestBuilder.Headers.ElementAt(2).Value.First());
+            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(3).Key);
+            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(3).Value.First());
 
             Assert.NotNull(httpRequestBuilder.MultipartFormDataBuilder);
             var httpMultipartFormDataBuilder = httpRequestBuilder.MultipartFormDataBuilder;
