@@ -10,6 +10,12 @@ namespace HttpAgent;
 public sealed class HttpContextForwardOptions
 {
     /// <summary>
+    ///     是否转发查询参数（URL 参数）
+    /// </summary>
+    /// <remarks>默认值为：<c>true</c>。</remarks>
+    public bool WithQueryParameters { get; set; } = true;
+
+    /// <summary>
     ///     是否转发请求标头
     /// </summary>
     /// <remarks>默认值为：<c>true</c>。</remarks>

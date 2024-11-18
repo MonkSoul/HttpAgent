@@ -9,6 +9,11 @@
                 <see cref="P:HttpAgent.HttpContextForwardBuilder.HttpContext" /> 转发构建器
             </summary>
         </member>
+        <member name="F:HttpAgent.HttpContextForwardBuilder._actionResultContentConverterInstance">
+            <summary>
+                <see cref="T:HttpAgent.IActionResultContentConverter" /> 实例
+            </summary>
+        </member>
         <member name="F:HttpAgent.HttpContextForwardBuilder._ignoreRequestHeaders">
             <summary>
                 忽略在转发时需要跳过的请求标头列表
@@ -1448,6 +1453,12 @@
             <summary>
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" /> 转发配置选项
             </summary>
+        </member>
+        <member name="P:HttpAgent.HttpContextForwardOptions.WithQueryParameters">
+            <summary>
+                是否转发查询参数（URL 参数）
+            </summary>
+            <remarks>默认值为：<c>true</c>。</remarks>
         </member>
         <member name="P:HttpAgent.HttpContextForwardOptions.WithRequestHeaders">
             <summary>

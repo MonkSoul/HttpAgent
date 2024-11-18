@@ -13,6 +13,12 @@ namespace HttpAgent;
 public sealed class HttpContextForwardBuilder
 {
     /// <summary>
+    ///     <see cref="IActionResultContentConverter" /> 实例
+    /// </summary>
+    internal static Lazy<IActionResultContentConverter> _actionResultContentConverterInstance =
+        new(() => new IActionResultContentConverter());
+
+    /// <summary>
     ///     忽略在转发时需要跳过的请求标头列表
     /// </summary>
     internal static HashSet<string> _ignoreRequestHeaders =
@@ -115,7 +121,7 @@ public sealed class HttpContextForwardBuilder
     {
         // 初始化 HttpRequestBuilder 实例
         var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure)
-            .AddHttpContentConverters(() => [new IActionResultContentConverter()]).DisableCache();
+            .AddHttpContentConverters(() => [_actionResultContentConverterInstance.Value]).DisableCache();
 
         // 复制查询参数和路由参数
         CopyQueryAndRouteValues(httpRequestBuilder);
@@ -168,8 +174,12 @@ public sealed class HttpContextForwardBuilder
         // 空检查
         if (queryValues.Length > 0)
         {
-            // 将查询参数添加到查询参数集合中
-            httpRequestBuilder.WithQueryParameters(queryValues);
+            // 检查是否转发查询参数（URL 参数）
+            if (ForwardOptions.WithQueryParameters)
+            {
+                // 将查询参数添加到查询参数集合中
+                httpRequestBuilder.WithQueryParameters(queryValues);
+            }
 
             // 将查询参数添加到路径参数集合中
             httpRequestBuilder.WithPathParameters(queryValues);
