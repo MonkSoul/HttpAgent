@@ -9,7 +9,7 @@
                 <see cref="P:HttpAgent.HttpContextForwardBuilder.HttpContext" /> 转发构建器
             </summary>
         </member>
-        <member name="M:HttpAgent.HttpContextForwardBuilder.#ctor(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpMethod,System.Uri)">
+        <member name="M:HttpAgent.HttpContextForwardBuilder.#ctor(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpMethod,System.Uri,HttpAgent.HttpContextForwardOptions)">
             <summary>
                 <inheritdoc cref="T:HttpAgent.HttpContextForwardBuilder" />
             </summary>
@@ -18,6 +18,9 @@
             </param>
             <param name="httpMethod">请求方式</param>
             <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+            <param name="forwardOptions">
+                <see cref="T:HttpAgent.HttpContextForwardOptions" />
+            </param>
         </member>
         <member name="P:HttpAgent.HttpContextForwardBuilder.RequestUri">
             <summary>
@@ -31,6 +34,35 @@
         </member>
         <member name="P:HttpAgent.HttpContextForwardBuilder.HttpContext">
             <inheritdoc cref="T:Microsoft.AspNetCore.Http.HttpContext" />
+        </member>
+        <member name="P:HttpAgent.HttpContextForwardBuilder.ForwardOptions">
+            <inheritdoc cref="T:HttpAgent.HttpContextForwardOptions" />
+        </member>
+        <member name="M:HttpAgent.HttpContextForwardBuilder.GetTargetUri(Microsoft.AspNetCore.Http.HttpContext,System.Uri)">
+            <summary>
+                获取目标地址
+            </summary>
+            <param name="httpContext">
+                <see cref="P:HttpAgent.HttpContextForwardBuilder.HttpContext" />
+            </param>
+            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+            <returns>
+                <see cref="T:System.Uri" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpContextForwardBuilder.GetForwardOptions(Microsoft.AspNetCore.Http.HttpContext,HttpAgent.HttpContextForwardOptions)">
+            <summary>
+                获取 <see cref="T:HttpAgent.HttpContextForwardOptions" /> 实例
+            </summary>
+            <param name="httpContext">
+                <see cref="P:HttpAgent.HttpContextForwardBuilder.HttpContext" />
+            </param>
+            <param name="forwardOptions">
+                <see cref="T:HttpAgent.HttpContextForwardOptions" />
+            </param>
+            <returns>
+                <see cref="T:HttpAgent.HttpContextForwardOptions" />
+            </returns>
         </member>
         <member name="M:HttpAgent.HttpContextForwardBuilder.Build(System.Action{HttpAgent.HttpRequestBuilder})">
             <summary>
@@ -689,112 +721,66 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Extensions.HttpContextExtensions.CreateRequestBuilder(Microsoft.AspNetCore.Http.HttpContext,System.String,System.Action{HttpAgent.HttpRequestBuilder})">
+        <member name="M:HttpAgent.Extensions.HttpContextExtensions.CreateForwardBuilder(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpMethod,System.String,HttpAgent.HttpContextForwardOptions)">
             <summary>
-                创建 <see cref="T:HttpAgent.HttpRequestBuilder" /> 实例
-            </summary>
-            <param name="httpContext">
-                <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
-            </param>
-            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
-            <param name="configure">自定义配置委托</param>
-            <returns>
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
-            </returns>
-        </member>
-        <member name="M:HttpAgent.Extensions.HttpContextExtensions.CreateRequestBuilder(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpMethod,System.String,System.Action{HttpAgent.HttpRequestBuilder})">
-            <summary>
-                创建 <see cref="T:HttpAgent.HttpRequestBuilder" /> 实例
+                创建 <see cref="T:HttpAgent.HttpContextForwardBuilder" /> 实例
             </summary>
             <param name="httpContext">
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
             <param name="httpMethod">请求方式</param>
             <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
-            <param name="configure">自定义配置委托</param>
+            <param name="forwardOptions">
+                <see cref="T:HttpAgent.HttpContextForwardOptions" />
+            </param>
             <returns>
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
+                <see cref="T:HttpAgent.HttpContextForwardBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Extensions.HttpContextExtensions.CreateRequestBuilder(Microsoft.AspNetCore.Http.HttpContext,System.Uri,System.Action{HttpAgent.HttpRequestBuilder})">
+        <member name="M:HttpAgent.Extensions.HttpContextExtensions.CreateForwardBuilder(Microsoft.AspNetCore.Http.HttpContext,System.String,HttpAgent.HttpContextForwardOptions)">
             <summary>
-                创建 <see cref="T:HttpAgent.HttpRequestBuilder" /> 实例
+                创建 <see cref="T:HttpAgent.HttpContextForwardBuilder" /> 实例
             </summary>
             <param name="httpContext">
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
             <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
-            <param name="configure">自定义配置委托</param>
-            <returns>
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
-            </returns>
-        </member>
-        <member name="M:HttpAgent.Extensions.HttpContextExtensions.CreateRequestBuilder(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpMethod,System.Uri,System.Action{HttpAgent.HttpRequestBuilder})">
-            <summary>
-                创建 <see cref="T:HttpAgent.HttpRequestBuilder" /> 实例
-            </summary>
-            <param name="httpContext">
-                <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
+            <param name="forwardOptions">
+                <see cref="T:HttpAgent.HttpContextForwardOptions" />
             </param>
-            <param name="httpMethod">请求方式</param>
-            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
-            <param name="configure">自定义配置委托</param>
             <returns>
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
+                <see cref="T:HttpAgent.HttpContextForwardBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Extensions.HttpContextExtensions.CreateRequestBuilderAsync(Microsoft.AspNetCore.Http.HttpContext,System.String,System.Action{HttpAgent.HttpRequestBuilder})">
+        <member name="M:HttpAgent.Extensions.HttpContextExtensions.CreateForwardBuilder(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpMethod,System.Uri,HttpAgent.HttpContextForwardOptions)">
             <summary>
-                创建 <see cref="T:HttpAgent.HttpRequestBuilder" /> 实例
-            </summary>
-            <param name="httpContext">
-                <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
-            </param>
-            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
-            <param name="configure">自定义配置委托</param>
-            <returns>
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
-            </returns>
-        </member>
-        <member name="M:HttpAgent.Extensions.HttpContextExtensions.CreateRequestBuilderAsync(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpMethod,System.String,System.Action{HttpAgent.HttpRequestBuilder})">
-            <summary>
-                创建 <see cref="T:HttpAgent.HttpRequestBuilder" /> 实例
+                创建 <see cref="T:HttpAgent.HttpContextForwardBuilder" /> 实例
             </summary>
             <param name="httpContext">
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
             <param name="httpMethod">请求方式</param>
             <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
-            <param name="configure">自定义配置委托</param>
+            <param name="forwardOptions">
+                <see cref="T:HttpAgent.HttpContextForwardOptions" />
+            </param>
             <returns>
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
+                <see cref="T:HttpAgent.HttpContextForwardBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Extensions.HttpContextExtensions.CreateRequestBuilderAsync(Microsoft.AspNetCore.Http.HttpContext,System.Uri,System.Action{HttpAgent.HttpRequestBuilder})">
+        <member name="M:HttpAgent.Extensions.HttpContextExtensions.CreateForwardBuilder(Microsoft.AspNetCore.Http.HttpContext,System.Uri,HttpAgent.HttpContextForwardOptions)">
             <summary>
-                创建 <see cref="T:HttpAgent.HttpRequestBuilder" /> 实例
+                创建 <see cref="T:HttpAgent.HttpContextForwardBuilder" /> 实例
             </summary>
             <param name="httpContext">
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
             </param>
             <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
-            <param name="configure">自定义配置委托</param>
-            <returns>
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
-            </returns>
-        </member>
-        <member name="M:HttpAgent.Extensions.HttpContextExtensions.CreateRequestBuilderAsync(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpMethod,System.Uri,System.Action{HttpAgent.HttpRequestBuilder})">
-            <summary>
-                创建 <see cref="T:HttpAgent.HttpRequestBuilder" /> 实例
-            </summary>
-            <param name="httpContext">
-                <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
+            <param name="forwardOptions">
+                <see cref="T:HttpAgent.HttpContextForwardOptions" />
             </param>
-            <param name="httpMethod">请求方式</param>
-            <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
-            <param name="configure">自定义配置委托</param>
             <returns>
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
+                <see cref="T:HttpAgent.HttpContextForwardBuilder" />
             </returns>
         </member>
         <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardResponseMessage(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpResponseMessage,HttpAgent.HttpContextForwardOptions)">
@@ -810,20 +796,6 @@
             <param name="forwardOptions">
                 <see cref="T:HttpAgent.HttpContextForwardOptions" />
             </param>
-        </member>
-        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ResolveForwardOptions(Microsoft.AspNetCore.Http.HttpContext,HttpAgent.HttpContextForwardOptions)">
-            <summary>
-                获取 <see cref="T:HttpAgent.HttpContextForwardOptions" /> 实例
-            </summary>
-            <param name="httpContext">
-                <see cref="T:Microsoft.AspNetCore.Http.HttpContext" />
-            </param>
-            <param name="forwardOptions">
-                <see cref="T:HttpAgent.HttpContextForwardOptions" />
-            </param>
-            <returns>
-                <see cref="T:HttpAgent.HttpContextForwardOptions" />
-            </returns>
         </member>
         <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardHttpHeaders(Microsoft.AspNetCore.Http.HttpResponse,System.Net.Http.Headers.HttpHeaders)">
             <summary>
@@ -861,7 +833,13 @@
                 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" /> 转发配置选项
             </summary>
         </member>
-        <member name="P:HttpAgent.HttpContextForwardOptions.WithStatusCode">
+        <member name="P:HttpAgent.HttpContextForwardOptions.WithRequestHeaders">
+            <summary>
+                是否转发请求标头
+            </summary>
+            <remarks>默认值为：<c>true</c>。</remarks>
+        </member>
+        <member name="P:HttpAgent.HttpContextForwardOptions.WithResponseStatusCode">
             <summary>
                 是否转发响应状态码
             </summary>

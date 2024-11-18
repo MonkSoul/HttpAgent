@@ -10,10 +10,16 @@ namespace HttpAgent;
 public sealed class HttpContextForwardOptions
 {
     /// <summary>
+    ///     是否转发请求标头
+    /// </summary>
+    /// <remarks>默认值为：<c>true</c>。</remarks>
+    public bool WithRequestHeaders { get; set; } = true;
+
+    /// <summary>
     ///     是否转发响应状态码
     /// </summary>
     /// <remarks>默认值为：<c>true</c>。</remarks>
-    public bool WithStatusCode { get; set; } = true;
+    public bool WithResponseStatusCode { get; set; } = true;
 
     /// <summary>
     ///     是否转发响应标头

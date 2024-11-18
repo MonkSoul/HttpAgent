@@ -7,6 +7,42 @@ namespace HttpAgent.AspNetCore.Tests;
 public class HttpContextForwardBuilderTests
 {
     [Fact]
+    public void GetTargetUri_ReturnOK()
+    {
+        var httpContext1 = new DefaultHttpContext();
+        Assert.Null(HttpContextForwardBuilder.GetTargetUri(httpContext1));
+
+        Assert.NotNull(HttpContextForwardBuilder.GetTargetUri(httpContext1, new Uri("https://furion.net")));
+    }
+
+    [Fact]
+    public void GetForwardOptions_ReturnOK()
+    {
+        var services = new ServiceCollection();
+        services.AddHttpContextAccessor();
+        using var provider = services.BuildServiceProvider();
+        var httpContext = new DefaultHttpContext { RequestServices = provider };
+
+        Assert.NotNull(HttpContextForwardBuilder.GetForwardOptions(httpContext, null));
+
+        var forwardOptions = new HttpContextForwardOptions();
+        var forwardOptions1 = HttpContextForwardBuilder.GetForwardOptions(httpContext, forwardOptions);
+        Assert.Equal(forwardOptions1.GetHashCode(), forwardOptions1.GetHashCode());
+
+        var services2 = new ServiceCollection();
+        services2.AddHttpContextAccessor();
+        services2.AddOptions<HttpContextForwardOptions>().Configure(o =>
+        {
+            o.OnForward = (_, _) => { };
+        });
+        using var provider2 = services2.BuildServiceProvider();
+        var httpContext2 = new DefaultHttpContext { RequestServices = provider2 };
+        var forwardOptions2 = HttpContextForwardBuilder.GetForwardOptions(httpContext2, null);
+        Assert.NotNull(forwardOptions2);
+        Assert.NotNull(forwardOptions2.OnForward);
+    }
+
+    [Fact]
     public void New_Invalid_Parameters()
     {
         Assert.Throws<ArgumentNullException>(() => new HttpContextForwardBuilder(null!, null!));
@@ -17,7 +53,9 @@ public class HttpContextForwardBuilderTests
     [Fact]
     public void New_ReturnOK()
     {
-        var httpContext = new DefaultHttpContext();
+        var services = new ServiceCollection();
+        using var provider = services.BuildServiceProvider();
+        var httpContext = new DefaultHttpContext { RequestServices = provider };
 
         var builder = new HttpContextForwardBuilder(httpContext, HttpMethod.Get);
         Assert.Equal(HttpMethod.Get, builder.Method);
@@ -28,10 +66,11 @@ public class HttpContextForwardBuilderTests
         Assert.NotNull(builder2.RequestUri);
         Assert.Equal("http://localhost/", builder2.RequestUri.ToString());
         Assert.NotNull(builder2.HttpContext);
+        Assert.NotNull(builder2.ForwardOptions);
 
         var httpContext2 = new DefaultHttpContext
         {
-            Request = { Headers = { ["X-Forward-To"] = "https://furion.net" } }
+            Request = { Headers = { ["X-Forward-To"] = "https://furion.net" } }, RequestServices = provider
         };
         var builder3 = new HttpContextForwardBuilder(httpContext2, HttpMethod.Get);
         Assert.Equal(HttpMethod.Get, builder3.Method);

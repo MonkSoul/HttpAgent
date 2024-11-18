@@ -35,169 +35,56 @@ public class HttpContextExtensionsTests
     }
 
     [Fact]
-    public async Task CreateRequestBuilderAsync_ReturnOK()
+    public void CreateForwardBuilder_ReturnOK()
     {
-        var port = NetworkUtility.FindAvailableTcpPort();
-        var urls = new[] { "--urls", $"http://localhost:{port}" };
-        var builder = WebApplication.CreateBuilder(urls);
-        builder.Services.AddHttpClient();
-        await using var app = builder.Build();
+        var services = new ServiceCollection();
+        using var provider = services.BuildServiceProvider();
 
-        app.MapGet("/test", async context =>
+        var httpContext = new DefaultHttpContext { RequestServices = provider };
+        var builder = httpContext.CreateForwardBuilder(HttpMethod.Get, (Uri?)null);
+        Assert.NotNull(builder);
+        Assert.Equal(HttpMethod.Get, builder.Method);
+        Assert.Null(builder.RequestUri);
+        Assert.NotNull(builder.ForwardOptions);
+
+        var httpContext2 = new DefaultHttpContext
         {
-            var httpMethod = Helpers.ParseHttpMethod(context.Request.Method);
-            var requestUri = new Uri($"http://localhost:{port}");
-            var httpRequestBuilder =
-                await context.CreateRequestBuilderAsync(httpMethod, requestUri,
-                    u => u.SetTimeout(TimeSpan.FromSeconds(5)));
+            Request = { Headers = { ["X-Forward-To"] = "https://furion.net" }, Method = "GET" },
+            RequestServices = provider
+        };
 
-            Assert.Equal(HttpMethod.Get, httpRequestBuilder.Method);
-            Assert.Equal($"http://localhost:{port}/", httpRequestBuilder.RequestUri?.ToString());
-            Assert.Equal(TimeSpan.FromSeconds(5), httpRequestBuilder.Timeout);
-            Assert.NotNull(httpRequestBuilder.Headers);
-            Assert.Equal(2, httpRequestBuilder.Headers.Count);
-            Assert.Equal("X-Original-URL", httpRequestBuilder.Headers.ElementAt(0).Key);
-            Assert.Equal($"http://localhost:{port}/test", httpRequestBuilder.Headers.ElementAt(0).Value.First());
-            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(1).Key);
-            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(1).Value.First());
+        var builder2 = httpContext2.CreateForwardBuilder(HttpMethod.Get, (Uri?)null);
+        Assert.NotNull(builder2);
+        Assert.Equal(HttpMethod.Get, builder2.Method);
+        Assert.NotNull(builder2.RequestUri);
+        Assert.Equal("https://furion.net/", builder2.RequestUri.ToString());
+        Assert.NotNull(builder2.ForwardOptions);
 
-
-            var httpRequestBuilder2 =
-                await context.CreateRequestBuilderAsync(requestUri, u => u.SetTimeout(TimeSpan.FromSeconds(5)));
-
-            Assert.Equal(HttpMethod.Get, httpRequestBuilder2.Method);
-            Assert.Equal($"http://localhost:{port}/", httpRequestBuilder2.RequestUri?.ToString());
-            Assert.Equal(TimeSpan.FromSeconds(5), httpRequestBuilder2.Timeout);
-            Assert.NotNull(httpRequestBuilder2.Headers);
-            Assert.Equal(2, httpRequestBuilder2.Headers.Count);
-            Assert.Equal("X-Original-URL", httpRequestBuilder2.Headers.ElementAt(0).Key);
-            Assert.Equal($"http://localhost:{port}/test", httpRequestBuilder2.Headers.ElementAt(0).Value.First());
-            Assert.Equal("Host", httpRequestBuilder2.Headers.ElementAt(1).Key);
-            Assert.Equal($"localhost:{port}", httpRequestBuilder2.Headers.ElementAt(1).Value.First());
-
-            var httpRequestBuilder3 =
-                await context.CreateRequestBuilderAsync(HttpMethod.Get, $"http://localhost:{port}",
-                    u => u.SetTimeout(TimeSpan.FromSeconds(5)));
-
-            Assert.Equal(HttpMethod.Get, httpRequestBuilder3.Method);
-            Assert.Equal($"http://localhost:{port}/", httpRequestBuilder3.RequestUri?.ToString());
-            Assert.Equal(TimeSpan.FromSeconds(5), httpRequestBuilder3.Timeout);
-            Assert.NotNull(httpRequestBuilder3.Headers);
-            Assert.Equal(2, httpRequestBuilder3.Headers.Count);
-            Assert.Equal("X-Original-URL", httpRequestBuilder3.Headers.ElementAt(0).Key);
-            Assert.Equal($"http://localhost:{port}/test", httpRequestBuilder3.Headers.ElementAt(0).Value.First());
-            Assert.Equal("Host", httpRequestBuilder3.Headers.ElementAt(1).Key);
-            Assert.Equal($"localhost:{port}", httpRequestBuilder3.Headers.ElementAt(1).Value.First());
-
-            var httpRequestBuilder4 =
-                await context.CreateRequestBuilderAsync($"http://localhost:{port}",
-                    u => u.SetTimeout(TimeSpan.FromSeconds(5)));
-
-            Assert.Equal(HttpMethod.Get, httpRequestBuilder4.Method);
-            Assert.Equal($"http://localhost:{port}/", httpRequestBuilder4.RequestUri?.ToString());
-            Assert.Equal(TimeSpan.FromSeconds(5), httpRequestBuilder4.Timeout);
-            Assert.NotNull(httpRequestBuilder4.Headers);
-            Assert.Equal(2, httpRequestBuilder4.Headers.Count);
-            Assert.Equal("X-Original-URL", httpRequestBuilder4.Headers.ElementAt(0).Key);
-            Assert.Equal($"http://localhost:{port}/test", httpRequestBuilder4.Headers.ElementAt(0).Value.First());
-            Assert.Equal("Host", httpRequestBuilder4.Headers.ElementAt(1).Key);
-            Assert.Equal($"localhost:{port}", httpRequestBuilder4.Headers.ElementAt(1).Value.First());
-
-            await context.Response.WriteAsync("Hello World!");
-        });
-
-        await app.StartAsync();
-
-        var httpClient = app.Services.GetRequiredService<IHttpClientFactory>().CreateClient();
-        var httpResponseMessage =
-            await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get,
-                new Uri($"http://localhost:{port}/test")));
-        httpResponseMessage.EnsureSuccessStatusCode();
-
-        await app.StopAsync();
-    }
-
-    [Fact]
-    public async Task CreateRequestBuilder_ReturnOK()
-    {
-        var port = NetworkUtility.FindAvailableTcpPort();
-        var urls = new[] { "--urls", $"http://localhost:{port}" };
-        var builder = WebApplication.CreateBuilder(urls);
-        builder.Services.AddHttpClient();
-        await using var app = builder.Build();
-
-        app.MapGet("/test", async context =>
+        var services2 = new ServiceCollection();
+        services2.AddOptions<HttpContextForwardOptions>().Configure(options =>
         {
-            var httpMethod = Helpers.ParseHttpMethod(context.Request.Method);
-            var requestUri = new Uri($"http://localhost:{port}");
-            // ReSharper disable once MethodHasAsyncOverload
-            var httpRequestBuilder = context.CreateRequestBuilder(httpMethod, requestUri,
-                u => u.SetTimeout(TimeSpan.FromSeconds(5)));
-
-            Assert.Equal(HttpMethod.Get, httpRequestBuilder.Method);
-            Assert.Equal($"http://localhost:{port}/", httpRequestBuilder.RequestUri?.ToString());
-            Assert.Equal(TimeSpan.FromSeconds(5), httpRequestBuilder.Timeout);
-            Assert.NotNull(httpRequestBuilder.Headers);
-            Assert.Equal(2, httpRequestBuilder.Headers.Count);
-            Assert.Equal("X-Original-URL", httpRequestBuilder.Headers.ElementAt(0).Key);
-            Assert.Equal($"http://localhost:{port}/test", httpRequestBuilder.Headers.ElementAt(0).Value.First());
-            Assert.Equal("Host", httpRequestBuilder.Headers.ElementAt(1).Key);
-            Assert.Equal($"localhost:{port}", httpRequestBuilder.Headers.ElementAt(1).Value.First());
-
-            // ReSharper disable once MethodHasAsyncOverload
-            var httpRequestBuilder2 =
-                context.CreateRequestBuilder(requestUri, u => u.SetTimeout(TimeSpan.FromSeconds(5)));
-
-            Assert.Equal(HttpMethod.Get, httpRequestBuilder2.Method);
-            Assert.Equal($"http://localhost:{port}/", httpRequestBuilder2.RequestUri?.ToString());
-            Assert.Equal(TimeSpan.FromSeconds(5), httpRequestBuilder2.Timeout);
-            Assert.NotNull(httpRequestBuilder2.Headers);
-            Assert.Equal(2, httpRequestBuilder2.Headers.Count);
-            Assert.Equal("X-Original-URL", httpRequestBuilder2.Headers.ElementAt(0).Key);
-            Assert.Equal($"http://localhost:{port}/test", httpRequestBuilder2.Headers.ElementAt(0).Value.First());
-            Assert.Equal("Host", httpRequestBuilder2.Headers.ElementAt(1).Key);
-            Assert.Equal($"localhost:{port}", httpRequestBuilder2.Headers.ElementAt(1).Value.First());
-
-            // ReSharper disable once MethodHasAsyncOverload
-            var httpRequestBuilder3 = context.CreateRequestBuilder(HttpMethod.Get, $"http://localhost:{port}",
-                u => u.SetTimeout(TimeSpan.FromSeconds(5)));
-
-            Assert.Equal(HttpMethod.Get, httpRequestBuilder3.Method);
-            Assert.Equal($"http://localhost:{port}/", httpRequestBuilder3.RequestUri?.ToString());
-            Assert.Equal(TimeSpan.FromSeconds(5), httpRequestBuilder3.Timeout);
-            Assert.NotNull(httpRequestBuilder3.Headers);
-            Assert.Equal(2, httpRequestBuilder3.Headers.Count);
-            Assert.Equal("X-Original-URL", httpRequestBuilder3.Headers.ElementAt(0).Key);
-            Assert.Equal($"http://localhost:{port}/test", httpRequestBuilder3.Headers.ElementAt(0).Value.First());
-            Assert.Equal("Host", httpRequestBuilder3.Headers.ElementAt(1).Key);
-            Assert.Equal($"localhost:{port}", httpRequestBuilder3.Headers.ElementAt(1).Value.First());
-
-            // ReSharper disable once MethodHasAsyncOverload
-            var httpRequestBuilder4 = context.CreateRequestBuilder($"http://localhost:{port}",
-                u => u.SetTimeout(TimeSpan.FromSeconds(5)));
-
-            Assert.Equal(HttpMethod.Get, httpRequestBuilder4.Method);
-            Assert.Equal($"http://localhost:{port}/", httpRequestBuilder4.RequestUri?.ToString());
-            Assert.Equal(TimeSpan.FromSeconds(5), httpRequestBuilder4.Timeout);
-            Assert.NotNull(httpRequestBuilder4.Headers);
-            Assert.Equal(2, httpRequestBuilder4.Headers.Count);
-            Assert.Equal("X-Original-URL", httpRequestBuilder4.Headers.ElementAt(0).Key);
-            Assert.Equal($"http://localhost:{port}/test", httpRequestBuilder4.Headers.ElementAt(0).Value.First());
-            Assert.Equal("Host", httpRequestBuilder4.Headers.ElementAt(1).Key);
-            Assert.Equal($"localhost:{port}", httpRequestBuilder4.Headers.ElementAt(1).Value.First());
-
-            await context.Response.WriteAsync("Hello World!");
+            options.WithResponseContentHeaders = false;
         });
+        using var provider2 = services2.BuildServiceProvider();
+        var httpContext3 = new DefaultHttpContext { RequestServices = provider2 };
+        var builder3 = httpContext3.CreateForwardBuilder(HttpMethod.Get, (Uri?)null);
+        Assert.NotNull(builder3);
+        Assert.Equal(HttpMethod.Get, builder3.Method);
+        Assert.Null(builder3.RequestUri);
+        Assert.NotNull(builder3.ForwardOptions);
+        Assert.False(builder3.ForwardOptions.WithResponseContentHeaders);
 
-        await app.StartAsync();
+        var builder4 = httpContext2.CreateForwardBuilder((Uri?)null);
+        Assert.NotNull(builder4);
+        Assert.Equal(HttpMethod.Get, builder4.Method);
 
-        var httpClient = app.Services.GetRequiredService<IHttpClientFactory>().CreateClient();
-        var httpResponseMessage =
-            await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get,
-                new Uri($"http://localhost:{port}/test")));
-        httpResponseMessage.EnsureSuccessStatusCode();
+        var builder5 = httpContext2.CreateForwardBuilder(HttpMethod.Get, "https://furion.net");
+        Assert.NotNull(builder5);
+        Assert.Equal("https://furion.net/", builder4.RequestUri?.ToString());
 
-        await app.StopAsync();
+        var builder6 = httpContext2.CreateForwardBuilder("https://furion.net");
+        Assert.NotNull(builder6);
+        Assert.Equal(HttpMethod.Get, builder6.Method);
     }
 
     [Fact]
@@ -1563,6 +1450,19 @@ public class HttpContextExtensionsTests
     }
 
     [Fact]
+    public void ForwardResponseMessage_ReturnOK_Invalid_Parameters()
+    {
+        var httpContext = new DefaultHttpContext();
+        var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+
+        Assert.Throws<ArgumentNullException>(() => HttpContextExtensions.ForwardResponseMessage(null!, null!, null!));
+        Assert.Throws<ArgumentNullException>(() =>
+            HttpContextExtensions.ForwardResponseMessage(httpContext, null!, null!));
+        Assert.Throws<ArgumentNullException>(() =>
+            HttpContextExtensions.ForwardResponseMessage(httpContext, httpResponseMessage, null!));
+    }
+
+    [Fact]
     public void ForwardResponseMessage_ReturnOK()
     {
         var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.InternalServerError);
@@ -1576,7 +1476,8 @@ public class HttpContextExtensionsTests
         using var provider = services.BuildServiceProvider();
         var defaultHttpContext = new DefaultHttpContext { RequestServices = provider };
 
-        HttpContextExtensions.ForwardResponseMessage(defaultHttpContext, httpResponseMessage, null);
+        HttpContextExtensions.ForwardResponseMessage(defaultHttpContext, httpResponseMessage,
+            new HttpContextForwardOptions());
         Assert.Equal(500, defaultHttpContext.Response.StatusCode);
         Assert.Equal("furion", defaultHttpContext.Response.Headers["Framework"]);
         Assert.DoesNotContain(defaultHttpContext.Response.Headers, h => h.Key == "Transfer-Encoding");
@@ -1584,7 +1485,7 @@ public class HttpContextExtensionsTests
 
         var defaultHttpContext2 = new DefaultHttpContext();
         HttpContextExtensions.ForwardResponseMessage(defaultHttpContext2, httpResponseMessage,
-            new HttpContextForwardOptions { WithStatusCode = false, WithResponseHeaders = false });
+            new HttpContextForwardOptions { WithResponseStatusCode = false, WithResponseHeaders = false });
         Assert.Equal(200, defaultHttpContext2.Response.StatusCode);
         Assert.DoesNotContain(defaultHttpContext2.Response.Headers, u => u.Key == "Framework");
 
@@ -1592,7 +1493,7 @@ public class HttpContextExtensionsTests
         HttpContextExtensions.ForwardResponseMessage(defaultHttpContext3, httpResponseMessage,
             new HttpContextForwardOptions
             {
-                WithStatusCode = false,
+                WithResponseStatusCode = false,
                 WithResponseHeaders = false,
                 OnForward =
                     (ctx, res) =>
@@ -1760,32 +1661,5 @@ public class HttpContextExtensionsTests
         Assert.Contains("出错了", str);
 
         await app.StopAsync();
-    }
-
-    [Fact]
-    public void ResolveForwardOptions_ReturnOK()
-    {
-        var services = new ServiceCollection();
-        services.AddHttpContextAccessor();
-        using var provider = services.BuildServiceProvider();
-        var httpContext = new DefaultHttpContext { RequestServices = provider };
-
-        Assert.NotNull(HttpContextExtensions.ResolveForwardOptions(httpContext, null));
-
-        var forwardOptions = new HttpContextForwardOptions();
-        var forwardOptions1 = HttpContextExtensions.ResolveForwardOptions(httpContext, forwardOptions);
-        Assert.Equal(forwardOptions1.GetHashCode(), forwardOptions1.GetHashCode());
-
-        var services2 = new ServiceCollection();
-        services2.AddHttpContextAccessor();
-        services2.AddOptions<HttpContextForwardOptions>().Configure(o =>
-        {
-            o.OnForward = (_, _) => { };
-        });
-        using var provider2 = services2.BuildServiceProvider();
-        var httpContext2 = new DefaultHttpContext { RequestServices = provider2 };
-        var forwardOptions2 = HttpContextExtensions.ResolveForwardOptions(httpContext2, null);
-        Assert.NotNull(forwardOptions2);
-        Assert.NotNull(forwardOptions2.OnForward);
     }
 }
