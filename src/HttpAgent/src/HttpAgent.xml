@@ -1606,7 +1606,7 @@
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.SetOnPostSendRequest(System.Action{System.Net.Http.HttpResponseMessage})">
             <summary>
-                设置在获取 HTTP 响应之后执行的操作
+                设置在收到 HTTP 响应之后执行的操作
             </summary>
             <param name="configure">自定义配置委托</param>
             <returns>
@@ -1972,7 +1972,7 @@
         </member>
         <member name="P:HttpAgent.HttpRequestBuilder.OnPostSendRequest">
             <summary>
-                用于处理在获取 HTTP 响应之后的操作
+                用于处理在收到 HTTP 响应之后的操作
             </summary>
         </member>
         <member name="P:HttpAgent.HttpRequestBuilder.OnSendRequestFailed">
@@ -5084,7 +5084,7 @@
         </member>
         <member name="M:HttpAgent.IHttpRequestEventHandler.OnPostSendRequest(System.Net.Http.HttpResponseMessage)">
             <summary>
-                用于处理在获取 HTTP 响应之后的操作
+                用于处理在收到 HTTP 响应之后的操作
             </summary>
             <param name="httpResponseMessage">
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
@@ -6629,7 +6629,7 @@
         </member>
         <member name="M:HttpAgent.HttpRemoteService.HandlePostSendRequest(HttpAgent.HttpRequestBuilder,HttpAgent.IHttpRequestEventHandler,System.Net.Http.HttpResponseMessage)">
             <summary>
-                处理获取 HTTP 响应之后
+                处理收到 HTTP 响应之后
             </summary>
             <param name="httpRequestBuilder">
                 <see cref="T:HttpAgent.HttpRequestBuilder" />

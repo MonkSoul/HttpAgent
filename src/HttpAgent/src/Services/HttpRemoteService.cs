@@ -481,7 +481,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
             // 停止计时
             stopwatch.Stop();
 
-            // 处理获取 HTTP 响应之后
+            // 处理收到 HTTP 响应之后
             HandlePostSendRequest(httpRequestBuilder, requestEventHandler, httpResponseMessage);
 
             // 释放资源集合
@@ -517,7 +517,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
     }
 
     /// <summary>
-    ///     处理获取 HTTP 响应之后
+    ///     处理收到 HTTP 响应之后
     /// </summary>
     /// <param name="httpRequestBuilder">
     ///     <see cref="HttpRequestBuilder" />

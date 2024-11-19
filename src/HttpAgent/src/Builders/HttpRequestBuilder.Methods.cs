@@ -944,7 +944,7 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
-    ///     设置在获取 HTTP 响应之后执行的操作
+    ///     设置在收到 HTTP 响应之后执行的操作
     /// </summary>
     /// <param name="configure">自定义配置委托</param>
     /// <returns>
