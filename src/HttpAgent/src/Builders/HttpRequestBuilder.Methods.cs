@@ -1121,7 +1121,10 @@ public sealed partial class HttpRequestBuilder
     /// <summary>
     ///     设置是否启用 <see cref="HttpClient" /> 的池化管理
     /// </summary>
-    /// <remarks>用于在并发请求中复用同一个 <see cref="HttpClient" /> 实例。</remarks>
+    /// <remarks>
+    ///     <para>用于在并发请求中复用同一个 <see cref="HttpClient" /> 实例。</para>
+    ///     <para>注意：启用池化管理后，在请求完成之后需手动调用 <see cref="ReleaseResources"/> 方法释放资源。</para>
+    /// </remarks>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
@@ -1133,16 +1136,24 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
-    ///     设置模拟浏览器环境
+    ///     添加请求结束时需要释放的对象
     /// </summary>
-    /// <remarks>设置此配置后，将在单次请求标头中添加主流浏览器的 <c>User-Agent</c> 值。</remarks>
-    /// <param name="simulateMobile">是否模拟移动端，默认值为：<c>false</c>（即模拟桌面端）。</param>
+    /// <param name="disposable">
+    ///     <see cref="IDisposable" />
+    /// </param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
-    public HttpRequestBuilder SimulateBrowser(bool simulateMobile = false) =>
-        WithHeader(HeaderNames.UserAgent,
-            !simulateMobile ? Constants.USER_AGENT_OF_BROWSER : Constants.USER_AGENT_OF_MOBILE_BROWSER, replace: true);
+    public HttpRequestBuilder AddDisposable(IDisposable disposable)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(disposable);
+
+        Disposables ??= [];
+        Disposables.Add(disposable);
+
+        return this;
+    }
 
     /// <summary>
     ///     释放资源集合
@@ -1160,6 +1171,18 @@ public sealed partial class HttpRequestBuilder
         // 释放可释放的对象集合
         ReleaseDisposables();
     }
+
+    /// <summary>
+    ///     设置模拟浏览器环境
+    /// </summary>
+    /// <remarks>设置此配置后，将在单次请求标头中添加主流浏览器的 <c>User-Agent</c> 值。</remarks>
+    /// <param name="simulateMobile">是否模拟移动端，默认值为：<c>false</c>（即模拟桌面端）。</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder SimulateBrowser(bool simulateMobile = false) =>
+        WithHeader(HeaderNames.UserAgent,
+            !simulateMobile ? Constants.USER_AGENT_OF_BROWSER : Constants.USER_AGENT_OF_MOBILE_BROWSER, replace: true);
 
     /// <summary>
     ///     添加状态码处理程序
@@ -1292,26 +1315,6 @@ public sealed partial class HttpRequestBuilder
         return WithProperties(
             propertySource.ObjectToDictionary()!.ToDictionary(u => u.Key.ToCultureString(CultureInfo.InvariantCulture)!,
                 u => u.Value));
-    }
-
-    /// <summary>
-    ///     添加请求结束时需要释放的对象
-    /// </summary>
-    /// <param name="disposable">
-    ///     <see cref="IDisposable" />
-    /// </param>
-    /// <returns>
-    ///     <see cref="HttpRequestBuilder" />
-    /// </returns>
-    internal HttpRequestBuilder AddDisposable(IDisposable disposable)
-    {
-        // 空检查
-        ArgumentNullException.ThrowIfNull(disposable);
-
-        Disposables ??= [];
-        Disposables.Add(disposable);
-
-        return this;
     }
 
     /// <summary>
