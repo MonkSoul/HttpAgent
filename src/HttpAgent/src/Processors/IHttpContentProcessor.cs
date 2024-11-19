@@ -5,9 +5,9 @@
 namespace HttpAgent;
 
 /// <summary>
-///     <see cref="HttpContent" /> 处理器
+///     <see cref="HttpContent" /> 请求内容处理器
 /// </summary>
-/// <remarks>用于将原始请求内容转换成 <see cref="HttpContent" /> 实例</remarks>
+/// <remarks>用于将原始响应内容转换成 <see cref="HttpContent" /> 实例</remarks>
 public interface IHttpContentProcessor
 {
     /// <summary>
@@ -21,7 +21,7 @@ public interface IHttpContentProcessor
     bool CanProcess(object? rawContent, string contentType);
 
     /// <summary>
-    ///     将原始内容转换为 <see cref="HttpContent" /> 实例
+    ///     将原始请求内容转换为 <see cref="HttpContent" /> 实例
     /// </summary>
     /// <param name="rawContent">原始请求内容</param>
     /// <param name="contentType">内容类型</param>

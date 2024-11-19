@@ -885,7 +885,7 @@
         </member>
         <member name="M:HttpAgent.HttpRemoteBuilder.AddHttpContentProcessors(System.Func{System.Collections.Generic.IEnumerable{HttpAgent.IHttpContentProcessor}})">
             <summary>
-                添加 <see cref="T:HttpAgent.IHttpContentProcessor" /> 集合提供器
+                添加 <see cref="T:HttpAgent.IHttpContentProcessor" /> 请求内容处理器
             </summary>
             <remarks>支持多次调用。</remarks>
             <param name="configure"><see cref="T:HttpAgent.IHttpContentProcessor" /> 实例提供器</param>
@@ -895,10 +895,10 @@
         </member>
         <member name="M:HttpAgent.HttpRemoteBuilder.AddHttpContentConverters(System.Func{System.Collections.Generic.IEnumerable{HttpAgent.IHttpContentConverter}})">
             <summary>
-                添加 <see cref="T:HttpAgent.IHttpContentProcessor" /> 集合提供器
+                添加 <see cref="T:HttpAgent.IHttpContentConverter" /> 响应内容转换器
             </summary>
             <remarks>支持多次调用。</remarks>
-            <param name="configure"><see cref="T:HttpAgent.IHttpContentProcessor" /> 实例提供器</param>
+            <param name="configure"><see cref="T:HttpAgent.IHttpContentConverter" /> 实例提供器</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRemoteBuilder" />
             </returns>
@@ -1568,7 +1568,7 @@
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.AddHttpContentProcessors(System.Func{System.Collections.Generic.IEnumerable{HttpAgent.IHttpContentProcessor}})">
             <summary>
-                添加 <see cref="T:HttpAgent.IHttpContentProcessor" /> 集合提供器
+                添加 <see cref="T:HttpAgent.IHttpContentProcessor" /> 请求内容处理器
             </summary>
             <remarks>支持多次调用。</remarks>
             <param name="configure"><see cref="T:HttpAgent.IHttpContentProcessor" /> 实例提供器</param>
@@ -1578,10 +1578,10 @@
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.AddHttpContentConverters(System.Func{System.Collections.Generic.IEnumerable{HttpAgent.IHttpContentConverter}})">
             <summary>
-                添加 <see cref="T:HttpAgent.IHttpContentProcessor" /> 集合提供器
+                添加 <see cref="T:HttpAgent.IHttpContentConverter" /> 响应内容转换器
             </summary>
             <remarks>支持多次调用。</remarks>
-            <param name="configure"><see cref="T:HttpAgent.IHttpContentProcessor" /> 实例提供器</param>
+            <param name="configure"><see cref="T:HttpAgent.IHttpContentConverter" /> 实例提供器</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -2829,7 +2829,7 @@
         </member>
         <member name="T:HttpAgent.IHttpContentConverter">
             <summary>
-                <see cref="T:HttpAgent.IHttpContentConverter`1" /> 默认实现接口
+                <see cref="T:System.Net.Http.HttpResponseMessage" /> 响应内容转换器默认实现接口
             </summary>
         </member>
         <member name="M:HttpAgent.IHttpContentConverter.Read(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
@@ -2864,7 +2864,7 @@
         </member>
         <member name="T:HttpAgent.IHttpContentConverter`1">
             <summary>
-                <see cref="T:System.Net.Http.HttpResponseMessage" /> 转换器
+                <see cref="T:System.Net.Http.HttpResponseMessage" /> 响应内容转换器
             </summary>
             <typeparam name="TResult">转换的目标类型</typeparam>
         </member>
@@ -6321,9 +6321,9 @@
         </member>
         <member name="T:HttpAgent.IHttpContentProcessor">
             <summary>
-                <see cref="T:System.Net.Http.HttpContent" /> 处理器
+                <see cref="T:System.Net.Http.HttpContent" /> 请求内容处理器
             </summary>
-            <remarks>用于将原始请求内容转换成 <see cref="T:System.Net.Http.HttpContent" /> 实例</remarks>
+            <remarks>用于将原始响应内容转换成 <see cref="T:System.Net.Http.HttpContent" /> 实例</remarks>
         </member>
         <member name="M:HttpAgent.IHttpContentProcessor.CanProcess(System.Object,System.String)">
             <summary>
@@ -6337,7 +6337,7 @@
         </member>
         <member name="M:HttpAgent.IHttpContentProcessor.Process(System.Object,System.String,System.Text.Encoding)">
             <summary>
-                将原始内容转换为 <see cref="T:System.Net.Http.HttpContent" /> 实例
+                将原始请求内容转换为 <see cref="T:System.Net.Http.HttpContent" /> 实例
             </summary>
             <param name="rawContent">原始请求内容</param>
             <param name="contentType">内容类型</param>

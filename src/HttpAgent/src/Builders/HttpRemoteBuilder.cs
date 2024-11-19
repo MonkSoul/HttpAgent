@@ -82,7 +82,7 @@ public sealed class HttpRemoteBuilder
     }
 
     /// <summary>
-    ///     添加 <see cref="IHttpContentProcessor" /> 集合提供器
+    ///     添加 <see cref="IHttpContentProcessor" /> 请求内容处理器
     /// </summary>
     /// <remarks>支持多次调用。</remarks>
     /// <param name="configure"><see cref="IHttpContentProcessor" /> 实例提供器</param>
@@ -102,10 +102,10 @@ public sealed class HttpRemoteBuilder
     }
 
     /// <summary>
-    ///     添加 <see cref="IHttpContentProcessor" /> 集合提供器
+    ///     添加 <see cref="IHttpContentConverter" /> 响应内容转换器
     /// </summary>
     /// <remarks>支持多次调用。</remarks>
-    /// <param name="configure"><see cref="IHttpContentProcessor" /> 实例提供器</param>
+    /// <param name="configure"><see cref="IHttpContentConverter" /> 实例提供器</param>
     /// <returns>
     ///     <see cref="HttpRemoteBuilder" />
     /// </returns>

@@ -57,7 +57,7 @@ internal sealed class HttpContentProcessorFactory : IHttpContentProcessorFactory
         // 查找可以处理指定内容类型或数据类型的 IHttpContentProcessor 实例
         var httpContentProcessor = GetProcessor(rawContent, contentType, processors);
 
-        // 将原始内容转换为 HttpContent 实例
+        // 将原始请求内容转换为 HttpContent 实例
         return httpContentProcessor.Process(rawContent, contentType, encoding ?? Encoding.UTF8);
     }
 }

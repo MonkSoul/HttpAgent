@@ -5,7 +5,7 @@
 namespace HttpAgent;
 
 /// <summary>
-///     <see cref="IHttpContentConverter{TResult}" /> 默认实现接口
+///     <see cref="HttpResponseMessage" /> 响应内容转换器默认实现接口
 /// </summary>
 public interface IHttpContentConverter
 {
@@ -43,7 +43,7 @@ public interface IHttpContentConverter
 }
 
 /// <summary>
-///     <see cref="HttpResponseMessage" /> 转换器
+///     <see cref="HttpResponseMessage" /> 响应内容转换器
 /// </summary>
 /// <typeparam name="TResult">转换的目标类型</typeparam>
 public interface IHttpContentConverter<TResult> : IHttpContentConverter
