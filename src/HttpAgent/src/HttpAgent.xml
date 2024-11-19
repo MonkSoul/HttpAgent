@@ -1604,7 +1604,7 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.SetOnPostSendRequest(System.Action{System.Net.Http.HttpResponseMessage})">
+        <member name="M:HttpAgent.HttpRequestBuilder.SetOnPostReceiveResponse(System.Action{System.Net.Http.HttpResponseMessage})">
             <summary>
                 设置在收到 HTTP 响应之后执行的操作
             </summary>
@@ -1613,7 +1613,7 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.SetOnSendRequestFailed(System.Action{System.Exception,System.Net.Http.HttpResponseMessage})">
+        <member name="M:HttpAgent.HttpRequestBuilder.SetOnRequestFailed(System.Action{System.Exception,System.Net.Http.HttpResponseMessage})">
             <summary>
                 设置在发送 HTTP 请求发生异常时的操作
             </summary>
@@ -1970,12 +1970,12 @@
                 用于处理在发送 HTTP 请求之前的操作
             </summary>
         </member>
-        <member name="P:HttpAgent.HttpRequestBuilder.OnPostSendRequest">
+        <member name="P:HttpAgent.HttpRequestBuilder.OnPostReceiveResponse">
             <summary>
                 用于处理在收到 HTTP 响应之后的操作
             </summary>
         </member>
-        <member name="P:HttpAgent.HttpRequestBuilder.OnSendRequestFailed">
+        <member name="P:HttpAgent.HttpRequestBuilder.OnRequestFailed">
             <summary>
                 用于处理在发送 HTTP 请求发生异常时的操作
             </summary>
@@ -5082,7 +5082,7 @@
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
             </param>
         </member>
-        <member name="M:HttpAgent.IHttpRequestEventHandler.OnPostSendRequest(System.Net.Http.HttpResponseMessage)">
+        <member name="M:HttpAgent.IHttpRequestEventHandler.OnPostReceiveResponse(System.Net.Http.HttpResponseMessage)">
             <summary>
                 用于处理在收到 HTTP 响应之后的操作
             </summary>
@@ -5090,7 +5090,7 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </param>
         </member>
-        <member name="M:HttpAgent.IHttpRequestEventHandler.OnSendRequestFailed(System.Exception,System.Net.Http.HttpResponseMessage)">
+        <member name="M:HttpAgent.IHttpRequestEventHandler.OnRequestFailed(System.Exception,System.Net.Http.HttpResponseMessage)">
             <summary>
                 用于处理在发送 HTTP 请求发生异常时的操作
             </summary>
@@ -6627,7 +6627,7 @@
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
             </param>
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.HandlePostSendRequest(HttpAgent.HttpRequestBuilder,HttpAgent.IHttpRequestEventHandler,System.Net.Http.HttpResponseMessage)">
+        <member name="M:HttpAgent.HttpRemoteService.HandlePostReceiveResponse(HttpAgent.HttpRequestBuilder,HttpAgent.IHttpRequestEventHandler,System.Net.Http.HttpResponseMessage)">
             <summary>
                 处理收到 HTTP 响应之后
             </summary>
@@ -6641,9 +6641,9 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </param>
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.HandleSendRequestFailed(HttpAgent.HttpRequestBuilder,HttpAgent.IHttpRequestEventHandler,System.Exception,System.Net.Http.HttpResponseMessage)">
+        <member name="M:HttpAgent.HttpRemoteService.HandleRequestFailed(HttpAgent.HttpRequestBuilder,HttpAgent.IHttpRequestEventHandler,System.Exception,System.Net.Http.HttpResponseMessage)">
             <summary>
-                处理发送 HTTP 请求发送异常
+                处理发送 HTTP 请求发生异常
             </summary>
             <param name="httpRequestBuilder">
                 <see cref="T:HttpAgent.HttpRequestBuilder" />

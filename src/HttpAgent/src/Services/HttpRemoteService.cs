@@ -471,8 +471,8 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         }
         catch (Exception e)
         {
-            // 处理发送 HTTP 请求发送异常
-            HandleSendRequestFailed(httpRequestBuilder, requestEventHandler, e, httpResponseMessage);
+            // 处理发送 HTTP 请求发生异常
+            HandleRequestFailed(httpRequestBuilder, requestEventHandler, e, httpResponseMessage);
 
             throw;
         }
@@ -482,7 +482,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
             stopwatch.Stop();
 
             // 处理收到 HTTP 响应之后
-            HandlePostSendRequest(httpRequestBuilder, requestEventHandler, httpResponseMessage);
+            HandlePostReceiveResponse(httpRequestBuilder, requestEventHandler, httpResponseMessage);
 
             // 释放资源集合
             if (!httpRequestBuilder.HttpClientPoolingEnabled)
@@ -528,7 +528,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
     /// <param name="httpResponseMessage">
     ///     <see cref="HttpResponseMessage" />
     /// </param>
-    internal static void HandlePostSendRequest(HttpRequestBuilder httpRequestBuilder,
+    internal static void HandlePostReceiveResponse(HttpRequestBuilder httpRequestBuilder,
         IHttpRequestEventHandler? requestEventHandler, HttpResponseMessage? httpResponseMessage)
     {
         // 空检查
@@ -540,14 +540,14 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         // 空检查
         if (requestEventHandler is not null)
         {
-            DelegateExtensions.TryInvoke(requestEventHandler.OnPostSendRequest, httpResponseMessage);
+            DelegateExtensions.TryInvoke(requestEventHandler.OnPostReceiveResponse, httpResponseMessage);
         }
 
-        httpRequestBuilder.OnPostSendRequest.TryInvoke(httpResponseMessage);
+        httpRequestBuilder.OnPostReceiveResponse.TryInvoke(httpResponseMessage);
     }
 
     /// <summary>
-    ///     处理发送 HTTP 请求发送异常
+    ///     处理发送 HTTP 请求发生异常
     /// </summary>
     /// <param name="httpRequestBuilder">
     ///     <see cref="HttpRequestBuilder" />
@@ -561,16 +561,16 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
     /// <param name="httpResponseMessage">
     ///     <see cref="HttpResponseMessage" />
     /// </param>
-    internal static void HandleSendRequestFailed(HttpRequestBuilder httpRequestBuilder,
+    internal static void HandleRequestFailed(HttpRequestBuilder httpRequestBuilder,
         IHttpRequestEventHandler? requestEventHandler, Exception e, HttpResponseMessage? httpResponseMessage)
     {
         // 空检查
         if (requestEventHandler is not null)
         {
-            DelegateExtensions.TryInvoke(requestEventHandler.OnSendRequestFailed, e, httpResponseMessage);
+            DelegateExtensions.TryInvoke(requestEventHandler.OnRequestFailed, e, httpResponseMessage);
         }
 
-        httpRequestBuilder.OnSendRequestFailed.TryInvoke(e, httpResponseMessage);
+        httpRequestBuilder.OnRequestFailed.TryInvoke(e, httpResponseMessage);
     }
 
     /// <summary>

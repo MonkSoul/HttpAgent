@@ -209,22 +209,22 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
     }
 
     [Fact]
-    public void HandlePostSendRequest_ReturnOK()
+    public void HandlePostReceiveResponse_ReturnOK()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        httpRequestBuilder.SetOnPostSendRequest(_ => throw new Exception("出错了"));
+        httpRequestBuilder.SetOnPostReceiveResponse(_ => throw new Exception("出错了"));
 
-        HttpRemoteService.HandlePostSendRequest(httpRequestBuilder, new CustomRequestEventHandler(),
+        HttpRemoteService.HandlePostReceiveResponse(httpRequestBuilder, new CustomRequestEventHandler(),
             new HttpResponseMessage());
     }
 
     [Fact]
-    public void HandleSendRequestFailed_ReturnOK()
+    public void HandleRequestFailed_ReturnOK()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        httpRequestBuilder.SetOnSendRequestFailed((_, _) => throw new Exception("出错了"));
+        httpRequestBuilder.SetOnRequestFailed((_, _) => throw new Exception("出错了"));
 
-        HttpRemoteService.HandleSendRequestFailed(httpRequestBuilder, new CustomRequestEventHandler(),
+        HttpRemoteService.HandleRequestFailed(httpRequestBuilder, new CustomRequestEventHandler(),
             new Exception("出错了"),
             new HttpResponseMessage());
     }
@@ -480,7 +480,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
             {
                 i += 1;
             })
-            .SetOnPostSendRequest(_ =>
+            .SetOnPostReceiveResponse(_ =>
             {
                 i += 1;
             });
@@ -521,11 +521,11 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
             {
                 i += 1;
             })
-            .SetOnSendRequestFailed((_, _) =>
+            .SetOnRequestFailed((_, _) =>
             {
                 i += 1;
             })
-            .SetOnPostSendRequest(_ =>
+            .SetOnPostReceiveResponse(_ =>
             {
                 i += 1;
             }).EnsureSuccessStatusCode();
@@ -574,11 +574,11 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
             {
                 i += 1;
             })
-            .SetOnSendRequestFailed((_, _) =>
+            .SetOnRequestFailed((_, _) =>
             {
                 i += 1;
             })
-            .SetOnPostSendRequest(_ =>
+            .SetOnPostReceiveResponse(_ =>
             {
                 i += 1;
             }).SetEventHandler<CustomRequestEventHandler>().EnsureSuccessStatusCode();

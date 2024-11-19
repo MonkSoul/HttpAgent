@@ -950,12 +950,12 @@ public sealed partial class HttpRequestBuilder
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
-    public HttpRequestBuilder SetOnPostSendRequest(Action<HttpResponseMessage> configure)
+    public HttpRequestBuilder SetOnPostReceiveResponse(Action<HttpResponseMessage> configure)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(configure);
 
-        OnPostSendRequest = configure;
+        OnPostReceiveResponse = configure;
 
         return this;
     }
@@ -967,12 +967,12 @@ public sealed partial class HttpRequestBuilder
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
-    public HttpRequestBuilder SetOnSendRequestFailed(Action<Exception, HttpResponseMessage?> configure)
+    public HttpRequestBuilder SetOnRequestFailed(Action<Exception, HttpResponseMessage?> configure)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(configure);
 
-        OnSendRequestFailed = configure;
+        OnRequestFailed = configure;
 
         return this;
     }

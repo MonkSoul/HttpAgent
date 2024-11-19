@@ -1115,43 +1115,43 @@ public class HttpRequestBuilderMethodsTests
     }
 
     [Fact]
-    public void SetOnPostSendRequest_Invalid_Parameters()
+    public void SetOnPostReceiveResponse_Invalid_Parameters()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
 
         Assert.Throws<ArgumentNullException>(() =>
         {
-            httpRequestBuilder.SetOnPostSendRequest(null!);
+            httpRequestBuilder.SetOnPostReceiveResponse(null!);
         });
     }
 
     [Fact]
-    public void SetOnPostSendRequest_ReturnOK()
+    public void SetOnPostReceiveResponse_ReturnOK()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
 
-        httpRequestBuilder.SetOnPostSendRequest(_ => { });
-        Assert.NotNull(httpRequestBuilder.OnPostSendRequest);
+        httpRequestBuilder.SetOnPostReceiveResponse(_ => { });
+        Assert.NotNull(httpRequestBuilder.OnPostReceiveResponse);
     }
 
     [Fact]
-    public void SetOnSendRequestFailed_Invalid_Parameters()
+    public void SetOnRequestFailed_Invalid_Parameters()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
 
         Assert.Throws<ArgumentNullException>(() =>
         {
-            httpRequestBuilder.SetOnSendRequestFailed(null!);
+            httpRequestBuilder.SetOnRequestFailed(null!);
         });
     }
 
     [Fact]
-    public void SetOnSendRequestFailed_ReturnOK()
+    public void SetOnRequestFailed_ReturnOK()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
 
-        httpRequestBuilder.SetOnSendRequestFailed((_, _) => { });
-        Assert.NotNull(httpRequestBuilder.OnSendRequestFailed);
+        httpRequestBuilder.SetOnRequestFailed((_, _) => { });
+        Assert.NotNull(httpRequestBuilder.OnRequestFailed);
     }
 
     [Fact]

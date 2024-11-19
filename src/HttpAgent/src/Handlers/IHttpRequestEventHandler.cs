@@ -23,7 +23,7 @@ public interface IHttpRequestEventHandler
     /// <param name="httpResponseMessage">
     ///     <see cref="HttpResponseMessage" />
     /// </param>
-    void OnPostSendRequest(HttpResponseMessage httpResponseMessage);
+    void OnPostReceiveResponse(HttpResponseMessage httpResponseMessage);
 
     /// <summary>
     ///     用于处理在发送 HTTP 请求发生异常时的操作
@@ -34,5 +34,5 @@ public interface IHttpRequestEventHandler
     /// <param name="httpResponseMessage">
     ///     <see cref="HttpResponseMessage" />
     /// </param>
-    void OnSendRequestFailed(Exception exception, HttpResponseMessage? httpResponseMessage);
+    void OnRequestFailed(Exception exception, HttpResponseMessage? httpResponseMessage);
 }

@@ -54,10 +54,10 @@ public class CustomRequestEventHandler : IHttpRequestEventHandler
     public void OnPreSendRequest(HttpRequestMessage httpRequestMessage) => counter++;
 
     /// <inheritdoc />
-    public void OnPostSendRequest(HttpResponseMessage httpResponseMessage) => counter++;
+    public void OnPostReceiveResponse(HttpResponseMessage httpResponseMessage) => counter++;
 
     /// <inheritdoc />
-    public void OnSendRequestFailed(Exception exception, HttpResponseMessage? httpResponseMessage) => counter++;
+    public void OnRequestFailed(Exception exception, HttpResponseMessage? httpResponseMessage) => counter++;
 }
 
 public class NotImplementFileDownloadEventHandler;
@@ -103,10 +103,10 @@ public class CustomFileTransferEventHandler2 : IHttpFileTransferEventHandler, IH
     public void OnPreSendRequest(HttpRequestMessage httpRequestMessage) => throw new NotImplementedException();
 
     /// <inheritdoc />
-    public void OnPostSendRequest(HttpResponseMessage httpResponseMessage) => throw new NotImplementedException();
+    public void OnPostReceiveResponse(HttpResponseMessage httpResponseMessage) => throw new NotImplementedException();
 
     /// <inheritdoc />
-    public void OnSendRequestFailed(Exception exception, HttpResponseMessage? httpResponseMessage) =>
+    public void OnRequestFailed(Exception exception, HttpResponseMessage? httpResponseMessage) =>
         throw new NotImplementedException();
 }
 
@@ -136,10 +136,10 @@ public class CustomServerSentEventsEventHandler2 : IHttpServerSentEventsEventHan
     public void OnPreSendRequest(HttpRequestMessage httpRequestMessage) => throw new NotImplementedException();
 
     /// <inheritdoc />
-    public void OnPostSendRequest(HttpResponseMessage httpResponseMessage) => throw new NotImplementedException();
+    public void OnPostReceiveResponse(HttpResponseMessage httpResponseMessage) => throw new NotImplementedException();
 
     /// <inheritdoc />
-    public void OnSendRequestFailed(Exception exception, HttpResponseMessage? httpResponseMessage) =>
+    public void OnRequestFailed(Exception exception, HttpResponseMessage? httpResponseMessage) =>
         throw new NotImplementedException();
 
     /// <inheritdoc />
@@ -185,10 +185,10 @@ public class CustomLongPollingEventHandler2 : IHttpLongPollingEventHandler, IHtt
     public void OnPreSendRequest(HttpRequestMessage httpRequestMessage) => throw new NotImplementedException();
 
     /// <inheritdoc />
-    public void OnPostSendRequest(HttpResponseMessage httpResponseMessage) => throw new NotImplementedException();
+    public void OnPostReceiveResponse(HttpResponseMessage httpResponseMessage) => throw new NotImplementedException();
 
     /// <inheritdoc />
-    public void OnSendRequestFailed(Exception exception, HttpResponseMessage? httpResponseMessage) =>
+    public void OnRequestFailed(Exception exception, HttpResponseMessage? httpResponseMessage) =>
         throw new NotImplementedException();
 }
 
