@@ -1378,7 +1378,7 @@ public class HttpRequestBuilderMethodsTests
         Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.WithStatusCodeHandler(null!, null!));
         var exception =
             Assert.Throws<ArgumentException>(() =>
-                httpRequestBuilder.WithStatusCodeHandler(Array.Empty<int>(), null!));
+                httpRequestBuilder.WithStatusCodeHandler([], null!));
 
         Assert.Equal(
             "The status codes array cannot be empty. At least one status code must be provided. (Parameter 'statusCodes')",
@@ -1396,9 +1396,14 @@ public class HttpRequestBuilderMethodsTests
         httpRequestBuilder.WithStatusCodeHandler([200, 204], (_, _) => Task.CompletedTask);
         httpRequestBuilder.WithStatusCodeHandler([200, 204], (_, _) => Task.CompletedTask);
         httpRequestBuilder.WithStatusCodeHandler([200, 209], (_, _) => Task.CompletedTask);
+        httpRequestBuilder.WithStatusCodeHandler(["200", "500", HttpStatusCode.OK, "200-299"],
+            (_, _) => Task.CompletedTask);
+        httpRequestBuilder.WithAnyStatusCodeHandler((_, _) => Task.CompletedTask);
+        Assert.NotNull(httpRequestBuilder.StatusCodeHandlers);
+        Assert.Contains(httpRequestBuilder.StatusCodeHandlers.Keys, k => k.Contains("*"));
 
         Assert.NotNull(httpRequestBuilder.StatusCodeHandlers);
-        Assert.Equal(5, httpRequestBuilder.StatusCodeHandlers.Count);
+        Assert.Equal(7, httpRequestBuilder.StatusCodeHandlers.Count);
     }
 
     [Fact]

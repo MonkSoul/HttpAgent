@@ -368,8 +368,8 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
     /// </param>
-    /// <param name="sendAsyncMethod">异步发送请求的委托</param>
-    /// <param name="sendMethod">同步发送请求的委托</param>
+    /// <param name="sendAsyncMethod">异步发送 HTTP 请求的委托</param>
+    /// <param name="sendMethod">同步发送 HTTP 请求的委托</param>
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
@@ -736,7 +736,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         ArgumentNullException.ThrowIfNull(httpResponseMessage);
 
         // 空检查
-        if (httpRequestBuilder.StatusCodeHandlers.IsNullOrEmpty())
+        if (httpRequestBuilder.StatusCodeHandlers is null || httpRequestBuilder.StatusCodeHandlers.Count == 0)
         {
             return;
         }
@@ -745,7 +745,8 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         var statusCode = (int)httpResponseMessage.StatusCode;
 
         // 查找响应状态码所有处理程序
-        var statusCodeHandlers = httpRequestBuilder.StatusCodeHandlers.Where(u => u.Key.Contains(statusCode))
+        var statusCodeHandlers = httpRequestBuilder.StatusCodeHandlers
+            .Where(u => u.Key.Any(code => IsMatchedStatusCode(code, statusCode)))
             .Select(u => u.Value).ToList();
 
         // 空检查
@@ -757,6 +758,51 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         // 并行执行所有的处理程序，并等待所有任务完成
         await Task.WhenAll(statusCodeHandlers.Select(handler =>
             handler.TryInvokeAsync(httpResponseMessage, cancellationToken)));
+    }
+
+    /// <summary>
+    ///     检查状态码代码是否匹配响应状态码
+    /// </summary>
+    /// <param name="code">状态码代码</param>
+    /// <param name="statusCode">响应状态码</param>
+    /// <returns>
+    ///     <see cref="bool" />
+    /// </returns>
+    internal static bool IsMatchedStatusCode(object code, int statusCode)
+    {
+        switch (code)
+        {
+            // 处理 int 类型状态码
+            case int intStatusCode when intStatusCode == statusCode:
+                return true;
+            // 处理 HttpStatusCode 类型状态码
+            case HttpStatusCode httpStatusCode when (int)httpStatusCode == statusCode:
+                return true;
+            // 处理通配符状态码
+            case "*" or '*':
+                return true;
+            // 处理字符串类型状态码
+            case string stringStatusCode when !stringStatusCode.Contains('+') &&
+                                              int.TryParse(stringStatusCode, out var intStatusCodeResult) &&
+                                              intStatusCodeResult == statusCode:
+                return true;
+            // 处理区间类型状态码，如 200-500
+            case string stringStatusCode when StatusCodeRangeRegex().IsMatch(stringStatusCode):
+                // 根据 - 符号切割
+                var parts = stringStatusCode.Split('-', StringSplitOptions.RemoveEmptyEntries);
+
+                // 比较状态码区间
+                if (parts.Length == 2 && int.TryParse(parts[0], out var start) && int.TryParse(parts[1], out var end))
+                {
+                    return statusCode >= start && statusCode <= end;
+                }
+
+                break;
+            default:
+                return false;
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -809,4 +855,11 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
 
         return httpRemoteResult;
     }
+
+    /// <summary>
+    ///     状态码区间正则表达式
+    /// </summary>
+    /// <returns></returns>
+    [GeneratedRegex(@"^\d+-\d+$")]
+    private static partial Regex StatusCodeRangeRegex();
 }

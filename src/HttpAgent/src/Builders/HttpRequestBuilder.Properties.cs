@@ -224,7 +224,7 @@ public sealed partial class HttpRequestBuilder
     /// <summary>
     ///     状态码处理程序
     /// </summary>
-    internal IDictionary<IEnumerable<int>, Func<HttpResponseMessage, CancellationToken, Task>>? StatusCodeHandlers
+    internal IDictionary<IEnumerable<object>, Func<HttpResponseMessage, CancellationToken, Task>>? StatusCodeHandlers
     {
         get;
         private set;

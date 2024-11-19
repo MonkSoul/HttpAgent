@@ -322,6 +322,27 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         // Assert.Equal(0, j);
     }
 
+    [Theory]
+    [InlineData("200", true)]
+    [InlineData(200, true)]
+    [InlineData(HttpStatusCode.OK, true)]
+    [InlineData("*", true)]
+    [InlineData('*', true)]
+    [InlineData("200-300", true)]
+    [InlineData("100-200", true)]
+    [InlineData("100-199", false)]
+    [InlineData(HttpStatusCode.Accepted, false)]
+    [InlineData(300, false)]
+    [InlineData("300", false)]
+    [InlineData("ok", false)]
+    [InlineData("-200", false)]
+    [InlineData("300-", false)]
+    [InlineData(".", false)]
+    [InlineData("200--300", false)]
+    [InlineData("+200", false)]
+    public void IsMatchedStatusCode_ReturnOK(object code, bool result) =>
+        Assert.Equal(result, HttpRemoteService.IsMatchedStatusCode(code, 200));
+
     [Fact]
     public async Task SendCoreAsync_Invalid_Parameters()
     {

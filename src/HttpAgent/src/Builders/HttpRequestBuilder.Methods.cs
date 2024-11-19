@@ -1123,7 +1123,7 @@ public sealed partial class HttpRequestBuilder
     /// </summary>
     /// <remarks>
     ///     <para>用于在并发请求中复用同一个 <see cref="HttpClient" /> 实例。</para>
-    ///     <para>注意：启用池化管理后，在请求完成之后需手动调用 <see cref="ReleaseResources"/> 方法释放资源。</para>
+    ///     <para>注意：启用池化管理后，在请求完成之后需手动调用 <see cref="ReleaseResources" /> 方法释放资源。</para>
     /// </remarks>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
@@ -1188,12 +1188,36 @@ public sealed partial class HttpRequestBuilder
     ///     添加状态码处理程序
     /// </summary>
     /// <remarks>支持多次调用。</remarks>
+    /// <param name="statusCode">HTTP 状态码</param>
+    /// <param name="handler">自定义处理程序</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder WithStatusCodeHandler(object statusCode,
+        Func<HttpResponseMessage, CancellationToken, Task> handler) =>
+        WithStatusCodeHandler([statusCode], handler);
+
+    /// <summary>
+    ///     添加任何状态码处理程序
+    /// </summary>
+    /// <remarks>支持多次调用。</remarks>
+    /// <param name="handler">自定义处理程序</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder WithAnyStatusCodeHandler(Func<HttpResponseMessage, CancellationToken, Task> handler) =>
+        WithStatusCodeHandler(["*"], handler);
+
+    /// <summary>
+    ///     添加状态码处理程序
+    /// </summary>
+    /// <remarks>支持多次调用。</remarks>
     /// <param name="statusCodes">HTTP 状态码集合</param>
     /// <param name="handler">自定义处理程序</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
-    public HttpRequestBuilder WithStatusCodeHandler(IEnumerable<int> statusCodes,
+    public HttpRequestBuilder WithStatusCodeHandler(IEnumerable<object> statusCodes,
         Func<HttpResponseMessage, CancellationToken, Task> handler)
     {
         // 空检查
@@ -1210,25 +1234,13 @@ public sealed partial class HttpRequestBuilder
         // 空检查
         ArgumentNullException.ThrowIfNull(handler);
 
-        StatusCodeHandlers ??= new Dictionary<IEnumerable<int>, Func<HttpResponseMessage, CancellationToken, Task>>();
+        StatusCodeHandlers ??=
+            new Dictionary<IEnumerable<object>, Func<HttpResponseMessage, CancellationToken, Task>>();
 
         StatusCodeHandlers[statusCodes] = handler;
 
         return this;
     }
-
-    /// <summary>
-    ///     添加状态码处理程序
-    /// </summary>
-    /// <remarks>支持多次调用。</remarks>
-    /// <param name="statusCode">HTTP 状态码</param>
-    /// <param name="handler">自定义处理程序</param>
-    /// <returns>
-    ///     <see cref="HttpRequestBuilder" />
-    /// </returns>
-    public HttpRequestBuilder WithStatusCodeHandler(int statusCode,
-        Func<HttpResponseMessage, CancellationToken, Task> handler) =>
-        WithStatusCodeHandler([statusCode], handler);
 
     /// <summary>
     ///     设置是否启用请求分析工具

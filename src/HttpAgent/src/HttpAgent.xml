@@ -1713,7 +1713,7 @@
             </summary>
             <remarks>
                 <para>用于在并发请求中复用同一个 <see cref="T:System.Net.Http.HttpClient" /> 实例。</para>
-                <para>注意：启用池化管理后，在请求完成之后需手动调用 <see cref="M:HttpAgent.HttpRequestBuilder.ReleaseResources"/> 方法释放资源。</para>
+                <para>注意：启用池化管理后，在请求完成之后需手动调用 <see cref="M:HttpAgent.HttpRequestBuilder.ReleaseResources" /> 方法释放资源。</para>
             </remarks>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
@@ -1746,23 +1746,33 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.WithStatusCodeHandler(System.Collections.Generic.IEnumerable{System.Int32},System.Func{System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken,System.Threading.Tasks.Task})">
-            <summary>
-                添加状态码处理程序
-            </summary>
-            <remarks>支持多次调用。</remarks>
-            <param name="statusCodes">HTTP 状态码集合</param>
-            <param name="handler">自定义处理程序</param>
-            <returns>
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
-            </returns>
-        </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.WithStatusCodeHandler(System.Int32,System.Func{System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken,System.Threading.Tasks.Task})">
+        <member name="M:HttpAgent.HttpRequestBuilder.WithStatusCodeHandler(System.Object,System.Func{System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken,System.Threading.Tasks.Task})">
             <summary>
                 添加状态码处理程序
             </summary>
             <remarks>支持多次调用。</remarks>
             <param name="statusCode">HTTP 状态码</param>
+            <param name="handler">自定义处理程序</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.WithAnyStatusCodeHandler(System.Func{System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken,System.Threading.Tasks.Task})">
+            <summary>
+                添加任何状态码处理程序
+            </summary>
+            <remarks>支持多次调用。</remarks>
+            <param name="handler">自定义处理程序</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.WithStatusCodeHandler(System.Collections.Generic.IEnumerable{System.Object},System.Func{System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken,System.Threading.Tasks.Task})">
+            <summary>
+                添加状态码处理程序
+            </summary>
+            <remarks>支持多次调用。</remarks>
+            <param name="statusCodes">HTTP 状态码集合</param>
             <param name="handler">自定义处理程序</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
@@ -6607,8 +6617,8 @@
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
-            <param name="sendAsyncMethod">异步发送请求的委托</param>
-            <param name="sendMethod">同步发送请求的委托</param>
+            <param name="sendAsyncMethod">异步发送 HTTP 请求的委托</param>
+            <param name="sendMethod">同步发送 HTTP 请求的委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -6732,6 +6742,16 @@
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
+        <member name="M:HttpAgent.HttpRemoteService.IsMatchedStatusCode(System.Object,System.Int32)">
+            <summary>
+                检查状态码代码是否匹配响应状态码
+            </summary>
+            <param name="code">状态码代码</param>
+            <param name="statusCode">响应状态码</param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.HttpRemoteService.DynamicCreateHttpRemoteResult(System.Type,System.Net.Http.HttpResponseMessage,System.Object,System.Int64)">
             <summary>
                 动态创建 <see cref="T:HttpAgent.HttpRemoteResult`1" /> 实例
@@ -6746,6 +6766,20 @@
                 <see cref="T:System.Object" />
             </returns>
             <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.StatusCodeRangeRegex">
+            <remarks>
+            Pattern:<br/>
+            <code>^\\d+-\\d+$</code><br/>
+            Explanation:<br/>
+            <code>
+            ○ Match if at the beginning of the string.<br/>
+            ○ Match a Unicode digit atomically at least once.<br/>
+            ○ Match '-'.<br/>
+            ○ Match a Unicode digit atomically at least once.<br/>
+            ○ Match if at the end of the string or if before an ending newline.<br/>
+            </code>
+            </remarks>
         </member>
         <member name="M:HttpAgent.HttpRemoteService.DownloadFile(System.String,System.String,System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task},HttpAgent.FileExistsBehavior,System.Action{HttpAgent.HttpFileDownloadBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
@@ -11634,6 +11668,38 @@
             <returns>true if a possible match was found; false if no more matches are possible.</returns>
         </member>
         <member name="M:System.Text.RegularExpressions.Generated.FormUrlEncodedFormatRegex_1.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Determine whether <paramref name="inputSpan"/> at base.runtextpos is a match for the regular expression.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if the regular expression matches at the current position; otherwise, false.</returns>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_2">
+            <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the StatusCodeRangeRegex method.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_2.Instance">
+            <summary>Cached, thread-safe singleton instance.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_2.#ctor">
+            <summary>Initializes the instance.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_2.RunnerFactory">
+            <summary>Provides a factory for creating <see cref="T:System.Text.RegularExpressions.RegexRunner"/> instances to be used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_2.RunnerFactory.CreateInstance">
+            <summary>Creates an instance of a <see cref="T:System.Text.RegularExpressions.RegexRunner"/> used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_2.RunnerFactory.Runner">
+            <summary>Provides the runner that contains the custom logic implementing the specified regular expression.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_2.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
+            <summary>Scan the <paramref name="inputSpan"/> starting from base.runtextstart for the next match.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_2.RunnerFactory.Runner.TryFindNextPossibleStartingPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Search <paramref name="inputSpan"/> starting from base.runtextpos for the next location a match could possibly start.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if a possible match was found; false if no more matches are possible.</returns>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_2.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
             <summary>Determine whether <paramref name="inputSpan"/> at base.runtextpos is a match for the regular expression.</summary>
             <param name="inputSpan">The text being scanned by the regular expression.</param>
             <returns>true if the regular expression matches at the current position; otherwise, false.</returns>
