@@ -406,7 +406,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         var httpRequestMessage =
             httpRequestBuilder.Build(RemoteOptions, _httpContentProcessorFactory, httpClient.BaseAddress);
 
-        // 处理发送请求之前
+        // 处理发送 HTTP 请求之前
         HandlePreSendRequest(httpRequestBuilder, requestEventHandler, httpRequestMessage);
 
         // 检查是否启用请求分析工具
@@ -471,7 +471,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         }
         catch (Exception e)
         {
-            // 处理发送请求发送异常
+            // 处理发送 HTTP 请求发送异常
             HandleSendRequestFailed(httpRequestBuilder, requestEventHandler, e, httpResponseMessage);
 
             throw;
@@ -481,7 +481,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
             // 停止计时
             stopwatch.Stop();
 
-            // 处理发送请求之后
+            // 处理获取 HTTP 响应之后
             HandlePostSendRequest(httpRequestBuilder, requestEventHandler, httpResponseMessage);
 
             // 释放资源集合
@@ -493,7 +493,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
     }
 
     /// <summary>
-    ///     处理发送请求之前
+    ///     处理发送 HTTP 请求之前
     /// </summary>
     /// <param name="httpRequestBuilder">
     ///     <see cref="HttpRequestBuilder" />
@@ -517,7 +517,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
     }
 
     /// <summary>
-    ///     处理发送请求之后
+    ///     处理获取 HTTP 响应之后
     /// </summary>
     /// <param name="httpRequestBuilder">
     ///     <see cref="HttpRequestBuilder" />
@@ -547,7 +547,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
     }
 
     /// <summary>
-    ///     处理发送请求发送异常
+    ///     处理发送 HTTP 请求发送异常
     /// </summary>
     /// <param name="httpRequestBuilder">
     ///     <see cref="HttpRequestBuilder" />

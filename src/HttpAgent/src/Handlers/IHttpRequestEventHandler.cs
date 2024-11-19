@@ -18,7 +18,7 @@ public interface IHttpRequestEventHandler
     void OnPreSendRequest(HttpRequestMessage httpRequestMessage);
 
     /// <summary>
-    ///     用于处理在发送 HTTP 请求之后的操作
+    ///     用于处理在获取 HTTP 响应之后的操作
     /// </summary>
     /// <param name="httpResponseMessage">
     ///     <see cref="HttpResponseMessage" />

@@ -152,7 +152,7 @@ public sealed partial class HttpRequestBuilder
     public Action<HttpRequestMessage>? OnPreSendRequest { get; private set; }
 
     /// <summary>
-    ///     用于处理在发送 HTTP 请求之后的操作
+    ///     用于处理在获取 HTTP 响应之后的操作
     /// </summary>
     public Action<HttpResponseMessage>? OnPostSendRequest { get; private set; }
 
