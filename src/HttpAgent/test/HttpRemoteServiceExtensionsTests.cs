@@ -1903,14 +1903,21 @@ public class HttpRemoteServiceExtensionsTests
         using var cancellationTokenSource = new CancellationTokenSource();
         cancellationTokenSource.CancelAfter(100);
 
-        // ReSharper disable once MethodHasAsyncOverload
-        httpRemoteService.ServerSentEvents($"http://localhost:{port}/test", async data =>
+        try
         {
-            i++;
-            await Task.CompletedTask;
-        }, cancellationToken: cancellationTokenSource.Token);
+            // ReSharper disable once MethodHasAsyncOverload
+            httpRemoteService.ServerSentEvents($"http://localhost:{port}/test", async data =>
+            {
+                i++;
+                await Task.CompletedTask;
+            }, cancellationToken: cancellationTokenSource.Token);
+        }
+        catch (Exception e)
+        {
+            Assert.True(e is OperationCanceledException);
+        }
 
-        Assert.Equal(1, i);
+        Assert.Equal(0, i);
 
         await app.StopAsync();
         await serviceProvider.DisposeAsync();

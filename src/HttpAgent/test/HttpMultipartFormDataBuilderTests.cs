@@ -95,6 +95,14 @@ public class HttpMultipartFormDataBuilderTests
         Assert.Equal("application/json", builder._partContents[2].ContentType);
         Assert.Null(builder._partContents[2].ContentEncoding);
         Assert.NotNull(builder._partContents[2].RawContent);
+
+        var builder3 = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
+        builder3.AddJson("{\"id\":1,\"name\":\"furion\"}", "obj");
+        Assert.Single(builder3._partContents);
+        Assert.Equal("obj", builder3._partContents[0].Name);
+        Assert.Equal("application/json", builder3._partContents[0].ContentType);
+        Assert.Null(builder3._partContents[0].ContentEncoding);
+        Assert.Equal("{\"id\":1,\"name\":\"furion\"}", builder3._partContents[0].RawContent);
     }
 
     [Fact]

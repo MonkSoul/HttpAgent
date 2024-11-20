@@ -71,8 +71,8 @@ public sealed class HttpMultipartFormDataBuilder
 
         var rawObject = rawJson;
 
-        // 检查是否是字符串类型
-        if (rawJson is not string rawString)
+        // 检查是否配置表单名或不是字符串类型
+        if (!string.IsNullOrWhiteSpace(name) || rawJson is not string rawString)
         {
             return AddRaw(rawObject, name, MediaTypeNames.Application.Json, contentEncoding);
         }
