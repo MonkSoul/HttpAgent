@@ -590,9 +590,9 @@
             </returns>
             <exception cref="T:System.Text.Json.JsonException"></exception>
         </member>
-        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddProperty(System.Object,System.String,System.Text.Encoding)">
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddFormItem(System.Object,System.String,System.Text.Encoding)">
             <summary>
-                添加单个内容（表单项）
+                添加单个表单项内容
             </summary>
             <param name="value">表单值</param>
             <param name="name">表单名称</param>
@@ -634,11 +634,11 @@
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddRaw(System.Object,System.String,System.String,System.Text.Encoding)">
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddObject(System.Object,System.String,System.String,System.Text.Encoding)">
             <summary>
-                添加原始内容（字符串/对象）
+                添加对象内容
             </summary>
-            <param name="rawObject">字符串/原始对象</param>
+            <param name="rawObject">原始对象</param>
             <param name="name">表单名称。该值不为空时作为表单的一项。否则将遍历对象类型的每一个公开属性作为表单的项。</param>
             <param name="contentType">内容类型</param>
             <param name="contentEncoding">内容编码</param>
@@ -1206,6 +1206,18 @@
                 设置文本内容
             </summary>
             <param name="text">文本</param>
+            <param name="contentEncoding">内容编码</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.SetRawStringContent(System.String,System.String,System.Text.Encoding)">
+            <summary>
+                设置原始字符串内容
+            </summary>
+            <remarks>字符串内容将被双引号包围并发送，格式如下：<c>"内容"</c>。</remarks>
+            <param name="text">文本</param>
+            <param name="contentType">内容类型</param>
             <param name="contentEncoding">内容编码</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
@@ -3811,6 +3823,15 @@
             </summary>
             <remarks>当 <see cref="P:HttpAgent.BodyAttribute.ContentType" /> 值为 <c>application/x-www-form-urlencoded</c> 时有效。</remarks>
         </member>
+        <member name="P:HttpAgent.BodyAttribute.RawString">
+            <summary>
+                是否为原始字符串内容。默认 <c>false</c>
+            </summary>
+            <remarks>
+                <para>作用于 <see cref="T:System.String" /> 类型参数时有效。</para>
+                <para>当属性值设置为 <c>true</c> 时，将校验 <see cref="P:HttpAgent.BodyAttribute.ContentType" /> 属性值是否为空，并且字符串内容将被双引号包围并发送，格式如下：<c>"内容"</c>。</para>
+            </remarks>
+        </member>
         <member name="T:HttpAgent.CookieAttribute">
             <summary>
                 HTTP 声明式 Cookie 特性
@@ -4539,9 +4560,9 @@
             </param>
             <param name="contentEncoding">内容编码</param>
         </member>
-        <member name="M:HttpAgent.MultipartDeclarativeExtractor.AddPropertyOrRaw(System.Object,System.String,System.Type,HttpAgent.MultipartAttribute,HttpAgent.HttpMultipartFormDataBuilder,System.Text.Encoding)">
+        <member name="M:HttpAgent.MultipartDeclarativeExtractor.AddFormItemOrObject(System.Object,System.String,System.Type,HttpAgent.MultipartAttribute,HttpAgent.HttpMultipartFormDataBuilder,System.Text.Encoding)">
             <summary>
-                添加单个表单项或原始内容
+                添加单个表单项或对象
             </summary>
             <param name="value">参数的值</param>
             <param name="name">表单名称</param>

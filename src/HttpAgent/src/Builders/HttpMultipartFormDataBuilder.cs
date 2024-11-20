@@ -74,7 +74,7 @@ public sealed class HttpMultipartFormDataBuilder
         // 检查是否配置表单名或不是字符串类型
         if (!string.IsNullOrWhiteSpace(name) || rawJson is not string rawString)
         {
-            return AddRaw(rawObject, name, MediaTypeNames.Application.Json, contentEncoding);
+            return AddObject(rawObject, name, MediaTypeNames.Application.Json, contentEncoding);
         }
 
         // 尝试验证并获取 JsonDocument 实例（需 using）
@@ -84,11 +84,11 @@ public sealed class HttpMultipartFormDataBuilder
         // 添加请求结束时需要释放的对象
         _httpRequestBuilder.AddDisposable(jsonDocument);
 
-        return AddRaw(rawObject, name, MediaTypeNames.Application.Json, contentEncoding);
+        return AddObject(rawObject, name, MediaTypeNames.Application.Json, contentEncoding);
     }
 
     /// <summary>
-    ///     添加单个内容（表单项）
+    ///     添加单个表单项内容
     /// </summary>
     /// <param name="value">表单值</param>
     /// <param name="name">表单名称</param>
@@ -96,12 +96,12 @@ public sealed class HttpMultipartFormDataBuilder
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
-    public HttpMultipartFormDataBuilder AddProperty(object? value, string name, Encoding? contentEncoding = null)
+    public HttpMultipartFormDataBuilder AddFormItem(object? value, string name, Encoding? contentEncoding = null)
     {
         // 空检查
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
-        return AddRaw(value, name, MediaTypeNames.Text.Plain, contentEncoding);
+        return AddObject(value, name, MediaTypeNames.Text.Plain, contentEncoding);
     }
 
     /// <summary>
@@ -118,7 +118,7 @@ public sealed class HttpMultipartFormDataBuilder
         // 空检查
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
-        return AddRaw(htmlString, name, MediaTypeNames.Text.Html, contentEncoding);
+        return AddObject(htmlString, name, MediaTypeNames.Text.Html, contentEncoding);
     }
 
     /// <summary>
@@ -135,7 +135,7 @@ public sealed class HttpMultipartFormDataBuilder
         // 空检查
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
-        return AddRaw(xmlString, name, MediaTypeNames.Application.Xml, contentEncoding);
+        return AddObject(xmlString, name, MediaTypeNames.Application.Xml, contentEncoding);
     }
 
     /// <summary>
@@ -152,20 +152,20 @@ public sealed class HttpMultipartFormDataBuilder
         // 空检查
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
-        return AddRaw(text, name, MediaTypeNames.Text.Plain, contentEncoding);
+        return AddObject(text, name, MediaTypeNames.Text.Plain, contentEncoding);
     }
 
     /// <summary>
-    ///     添加原始内容（字符串/对象）
+    ///     添加对象内容
     /// </summary>
-    /// <param name="rawObject">字符串/原始对象</param>
+    /// <param name="rawObject">原始对象</param>
     /// <param name="name">表单名称。该值不为空时作为表单的一项。否则将遍历对象类型的每一个公开属性作为表单的项。</param>
     /// <param name="contentType">内容类型</param>
     /// <param name="contentEncoding">内容编码</param>
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
-    public HttpMultipartFormDataBuilder AddRaw(object? rawObject, string? name = null,
+    public HttpMultipartFormDataBuilder AddObject(object? rawObject, string? name = null,
         string contentType = "text/plain", Encoding? contentEncoding = null)
     {
         // 解析内容类型字符串

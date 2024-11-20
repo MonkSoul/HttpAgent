@@ -40,4 +40,8 @@ public class HttpRemoteController : ControllerBase
     public IActionResult GetFile() =>
         new FileStreamResult(System.IO.File.OpenRead(Path.Combine(AppContext.BaseDirectory, "test.txt")),
             "application/octet-stream") { FileDownloadName = "test.txt" };
+
+    [HttpPost]
+    // [Consumes("text/plain")]
+    public string RawString([FromBody] string str) => str;
 }

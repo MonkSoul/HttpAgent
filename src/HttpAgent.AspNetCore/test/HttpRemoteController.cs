@@ -44,9 +44,6 @@ public class HttpRemoteController : ControllerBase
     [HttpGet]
     public IActionResult Request8() => RedirectToAction("RedirectFrom", "HttpRemote");
 
-    [HttpGet]
-    public IActionResult RedirectFrom() => Content("Redirect");
-
     [HttpPost]
     public IActionResult Request9() =>
         new FileStreamResult(System.IO.File.OpenRead(Path.Combine(AppContext.BaseDirectory, "test.txt")),
@@ -57,4 +54,7 @@ public class HttpRemoteController : ControllerBase
 
     [HttpGet]
     public IActionResult Request11() => throw new InvalidOperationException("出错了");
+
+    [HttpGet]
+    public IActionResult RedirectFrom() => Content("Redirect");
 }

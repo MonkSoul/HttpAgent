@@ -106,20 +106,20 @@ public class HttpMultipartFormDataBuilderTests
     }
 
     [Fact]
-    public void AddProperty_Invalid_Parameters()
+    public void AddFormItem_Invalid_Parameters()
     {
         var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
 
-        Assert.Throws<ArgumentNullException>(() => builder.AddProperty(null, null!));
-        Assert.Throws<ArgumentException>(() => builder.AddProperty(null, string.Empty));
-        Assert.Throws<ArgumentException>(() => builder.AddProperty(null, " "));
+        Assert.Throws<ArgumentNullException>(() => builder.AddFormItem(null, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddFormItem(null, string.Empty));
+        Assert.Throws<ArgumentException>(() => builder.AddFormItem(null, " "));
     }
 
     [Fact]
-    public void AddProperty_ReturnOK()
+    public void AddFormItem_ReturnOK()
     {
         var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
-        builder.AddProperty("furion", "name", Encoding.UTF8);
+        builder.AddFormItem("furion", "name", Encoding.UTF8);
         Assert.Single(builder._partContents);
         Assert.Equal("name", builder._partContents[0].Name);
         Assert.Equal("text/plain", builder._partContents[0].ContentType);
@@ -194,63 +194,63 @@ public class HttpMultipartFormDataBuilderTests
     }
 
     [Fact]
-    public void AddRaw_Invalid_Parameters()
+    public void AddObject_Invalid_Parameters()
     {
         var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
 
         // content-type 为空情况
-        Assert.Throws<ArgumentNullException>(() => builder.AddRaw(null!, null, null!));
-        Assert.Throws<ArgumentException>(() => builder.AddRaw(null!, null, string.Empty));
-        Assert.Throws<ArgumentException>(() => builder.AddRaw(null!, null, " "));
+        Assert.Throws<ArgumentNullException>(() => builder.AddObject(null!, null, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddObject(null!, null, string.Empty));
+        Assert.Throws<ArgumentException>(() => builder.AddObject(null!, null, " "));
 
         // rawObject  为空情况
-        Assert.Throws<ArgumentNullException>(() => builder.AddRaw(null, null, "application/json"));
+        Assert.Throws<ArgumentNullException>(() => builder.AddObject(null, null, "application/json"));
 
         // 不能转换为字典情况
-        Assert.Throws<NotSupportedException>(() => builder.AddRaw("", null, "application/json"));
+        Assert.Throws<NotSupportedException>(() => builder.AddObject("", null, "application/json"));
     }
 
     [Fact]
-    public void AddRaw_ReturnOK()
+    public void AddObject_ReturnOK()
     {
         var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
 
-        builder.AddRaw(null, "name");
+        builder.AddObject(null, "name");
         Assert.Single(builder._partContents);
         Assert.Equal("name", builder._partContents[0].Name);
         Assert.Equal("text/plain", builder._partContents[0].ContentType);
         Assert.Null(builder._partContents[0].ContentEncoding);
         Assert.Null(builder._partContents[0].RawContent);
 
-        builder.AddRaw(new { }, "name");
+        builder.AddObject(new { }, "name");
         Assert.Equal(2, builder._partContents.Count);
         Assert.Equal("name", builder._partContents[1].Name);
         Assert.Equal("text/plain", builder._partContents[1].ContentType);
         Assert.Null(builder._partContents[1].ContentEncoding);
         Assert.NotNull(builder._partContents[1].RawContent);
 
-        builder.AddRaw(new { }, "name", "application/json");
+        builder.AddObject(new { }, "name", "application/json");
         Assert.Equal(3, builder._partContents.Count);
         Assert.Equal("name", builder._partContents[2].Name);
         Assert.Equal("application/json", builder._partContents[2].ContentType);
         Assert.Null(builder._partContents[2].ContentEncoding);
         Assert.NotNull(builder._partContents[2].RawContent);
 
-        builder.AddRaw(new { }, "name", "application/json;charset=utf-8");
+        builder.AddObject(new { }, "name", "application/json;charset=utf-8");
         Assert.Equal(4, builder._partContents.Count);
         Assert.Equal("name", builder._partContents[3].Name);
         Assert.Equal("application/json", builder._partContents[3].ContentType);
         Assert.Equal(Encoding.UTF8, builder._partContents[3].ContentEncoding);
         Assert.NotNull(builder._partContents[3].RawContent);
 
-        builder.AddRaw(new MultipartModel(), "name", "application/json;charset=utf-8", Encoding.UTF32);
+        builder.AddObject(new MultipartModel(), "name", "application/json;charset=utf-8", Encoding.UTF32);
         Assert.Equal(5, builder._partContents.Count);
         Assert.Equal("name", builder._partContents[4].Name);
         Assert.Equal("application/json", builder._partContents[4].ContentType);
         Assert.Equal(Encoding.UTF32, builder._partContents[4].ContentEncoding);
         Assert.NotNull(builder._partContents[4].RawContent);
 
-        builder.AddRaw(new MultipartModel { Id = 1, Name = "furion" }, null, "application/json", Encoding.UTF8);
+        builder.AddObject(new MultipartModel { Id = 1, Name = "furion" }, null, "application/json", Encoding.UTF8);
         Assert.Equal(7, builder._partContents.Count);
 
         Assert.Equal("Id", builder._partContents[5].Name);
@@ -899,17 +899,17 @@ public class HttpMultipartFormDataBuilderTests
         var multipartFormDataContent = builder.Build(httpRemoteOptions, httpContentProcessorFactory, null);
         Assert.Null(multipartFormDataContent);
 
-        builder.AddProperty(new { }, "test");
+        builder.AddFormItem(new { }, "test");
         var multipartFormDataContent1 = builder.Build(httpRemoteOptions, httpContentProcessorFactory, null);
         Assert.NotNull(multipartFormDataContent1);
         Assert.Single(multipartFormDataContent1);
 
-        builder.AddProperty(null, "test");
+        builder.AddFormItem(null, "test");
         var multipartFormDataContent2 = builder.Build(httpRemoteOptions, httpContentProcessorFactory, null);
         Assert.NotNull(multipartFormDataContent2);
         Assert.Single(multipartFormDataContent2);
 
-        builder.AddProperty(new { }, "test");
+        builder.AddFormItem(new { }, "test");
         var multipartFormDataContent3 =
             builder.Build(httpRemoteOptions, httpContentProcessorFactory, new CustomStringContentProcessor());
         Assert.NotNull(multipartFormDataContent3);

@@ -47,4 +47,13 @@ public sealed class BodyAttribute : Attribute
     /// </summary>
     /// <remarks>当 <see cref="ContentType" /> 值为 <c>application/x-www-form-urlencoded</c> 时有效。</remarks>
     public bool UseStringContent { get; set; }
+
+    /// <summary>
+    ///     是否为原始字符串内容。默认 <c>false</c>
+    /// </summary>
+    /// <remarks>
+    ///     <para>作用于 <see cref="string" /> 类型参数时有效。</para>
+    ///     <para>当属性值设置为 <c>true</c> 时，将校验 <see cref="ContentType" /> 属性值是否为空，并且字符串内容将被双引号包围并发送，格式如下：<c>"内容"</c>。</para>
+    /// </remarks>
+    public bool RawString { get; set; }
 }

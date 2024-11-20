@@ -443,8 +443,8 @@ public class HttpRemoteCasesTests
                 HttpRequestBuilder.Post($"http://localhost:{port}/HttpRemote/SendMultipart")
                     .SetMultipartContent(mBuilder =>
                     {
-                        mBuilder.AddProperty(1, "id");
-                        mBuilder.AddProperty("furion", "name");
+                        mBuilder.AddFormItem(1, "id");
+                        mBuilder.AddFormItem("furion", "name");
                         mBuilder.AddFileAsStream(filePath, "file");
                     }));
 
@@ -547,6 +547,35 @@ public class HttpRemoteCasesTests
         Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
         Assert.NotNull(httpRemoteResult.Result);
         Assert.True(httpRemoteResult.Result.CanRead);
+
+        await app.StopAsync();
+    }
+
+    [Fact]
+    public async Task SendRawString_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+
+        builder.Services.AddControllers()
+            .AddApplicationPart(typeof(HttpRemoteController).Assembly);
+        builder.Services.AddHttpRemote();
+
+        await using var app = builder.Build();
+
+        app.MapControllers();
+
+        await app.StartAsync();
+
+        var httpRemoteService = app.Services.GetRequiredService<IHttpRemoteService>();
+
+        var str =
+            await httpRemoteService.SendAsAsync<string>(
+                HttpRequestBuilder.Post($"http://localhost:{port}/HttpRemote/RawString")
+                    .SetRawStringContent("Furion", "application/json"));
+
+        Assert.Equal("Furion", str);
 
         await app.StopAsync();
     }

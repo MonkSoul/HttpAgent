@@ -201,6 +201,200 @@ public class HttpContextExtensionsTests
     }
 
     [Fact]
+    public async Task ForwardAsync_FormUrlEncoded_ReturnOK()
+    {
+        var boundary = "---------------" + DateTime.Now.Ticks.ToString("x");
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+
+        builder.Services.AddControllers()
+            .AddApplicationPart(typeof(HttpRemoteController).Assembly);
+        builder.Services.AddHttpRemote();
+
+        await using var app = builder.Build();
+        app.Use(async (ctx, next) =>
+        {
+            ctx.Request.EnableBuffering();
+            ctx.Request.Body.Position = 0;
+
+            await next.Invoke();
+        });
+
+        app.MapControllers();
+
+        app.MapPost("/test", [Consumes("application/x-www-form-urlencoded")]
+            async (HttpContext context, [FromForm] HttpRemoteAspNetCoreModel1 model) =>
+            {
+                var result1 = await context.ForwardAsync<HttpRemoteAspNetCoreModel1>(HttpMethod.Post,
+                    new Uri($"http://localhost:{port}/HttpRemote/Request3"));
+
+                var result2 = await context.ForwardAsync<HttpRemoteAspNetCoreModel1>(
+                    new Uri($"http://localhost:{port}/HttpRemote/Request3"));
+                var result3 = await context.ForwardAsync<HttpRemoteAspNetCoreModel1>(HttpMethod.Post,
+                    $"http://localhost:{port}/HttpRemote/Request3");
+                var result4 =
+                    await context.ForwardAsync<HttpRemoteAspNetCoreModel1>(
+                        $"http://localhost:{port}/HttpRemote/Request3");
+
+                await context.Response.WriteAsync(result1.Result!.Id + " " + result1.Result.Name + " " +
+                                                  result2.Result!.Id + " " + result2.Result.Name +
+                                                  " " + result3.Result!.Id + " " + result3.Result.Name + " " +
+                                                  result4.Result!.Id + " " +
+                                                  result4.Result.Name + "");
+            }).DisableAntiforgery();
+
+        await app.StartAsync();
+
+        var httpClient = app.Services.GetRequiredService<IHttpClientFactory>().CreateClient();
+
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post,
+            new Uri($"http://localhost:{port}/test"));
+
+        var formUrlEncodedContent = new FormUrlEncodedContent([
+            new KeyValuePair<string, string>("id", "1"), new KeyValuePair<string, string>("name", "furion")
+        ]);
+
+        httpRequestMessage.Content = formUrlEncodedContent;
+
+        var httpResponseMessage =
+            await httpClient.SendAsync(httpRequestMessage);
+        httpResponseMessage.EnsureSuccessStatusCode();
+
+        var str = await httpResponseMessage.Content.ReadAsStringAsync();
+        Assert.Equal("1 furion 1 furion 1 furion 1 furion", str);
+
+        await app.StopAsync();
+    }
+
+    [Fact]
+    public async Task ForwardAsync_FormFile_ReturnOK()
+    {
+        var boundary = "---------------" + DateTime.Now.Ticks.ToString("x");
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+
+        builder.Services.AddControllers()
+            .AddApplicationPart(typeof(HttpRemoteController).Assembly);
+        builder.Services.AddHttpRemote();
+
+        await using var app = builder.Build();
+        app.Use(async (ctx, next) =>
+        {
+            ctx.Request.EnableBuffering();
+            ctx.Request.Body.Position = 0;
+
+            await next.Invoke();
+        });
+
+        app.MapControllers();
+
+        app.MapPost("/test", async (HttpContext context, [FromForm] HttpRemoteAspNetCoreMultipartModel1 model) =>
+        {
+            var result1 = await context.ForwardAsync<string>(HttpMethod.Post,
+                new Uri($"http://localhost:{port}/HttpRemote/Request4"));
+
+            var result2 = await context.ForwardAsync<string>(
+                new Uri($"http://localhost:{port}/HttpRemote/Request4"));
+            var result3 = await context.ForwardAsync<string>(HttpMethod.Post,
+                $"http://localhost:{port}/HttpRemote/Request4");
+            var result4 =
+                await context.ForwardAsync<string>($"http://localhost:{port}/HttpRemote/Request4");
+
+            await context.Response.WriteAsync(result1.Result + " " + result2.Result + " " + result3.Result + " " +
+                                              result4.Result);
+        }).DisableAntiforgery();
+
+        await app.StartAsync();
+
+        var httpClient = app.Services.GetRequiredService<IHttpClientFactory>().CreateClient();
+
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post,
+            new Uri($"http://localhost:{port}/test"));
+
+        var multipartFormDataContent = new MultipartFormDataContent(boundary);
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var bytes = await File.ReadAllBytesAsync(filePath);
+        multipartFormDataContent.Add(new ByteArrayContent(bytes), "file", "test.txt");
+
+        httpRequestMessage.Content = multipartFormDataContent;
+
+        var httpResponseMessage =
+            await httpClient.SendAsync(httpRequestMessage);
+        httpResponseMessage.EnsureSuccessStatusCode();
+
+        var str = await httpResponseMessage.Content.ReadAsStringAsync();
+        Assert.Equal("test.txt test.txt test.txt test.txt", str);
+
+        await app.StopAsync();
+    }
+
+    [Fact]
+    public async Task ForwardAsync_FormFileCollection_ReturnOK()
+    {
+        var boundary = "---------------" + DateTime.Now.Ticks.ToString("x");
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+
+        builder.Services.AddControllers()
+            .AddApplicationPart(typeof(HttpRemoteController).Assembly);
+        builder.Services.AddHttpRemote();
+
+        await using var app = builder.Build();
+        app.Use(async (ctx, next) =>
+        {
+            ctx.Request.EnableBuffering();
+            ctx.Request.Body.Position = 0;
+
+            await next.Invoke();
+        });
+
+        app.MapControllers();
+
+        app.MapPost("/test", async (HttpContext context, [FromForm] HttpRemoteAspNetCoreMultipartModel1 model) =>
+        {
+            var result1 = await context.ForwardAsync<string>(HttpMethod.Post,
+                new Uri($"http://localhost:{port}/HttpRemote/Request5"));
+
+            var result2 = await context.ForwardAsync<string>(
+                new Uri($"http://localhost:{port}/HttpRemote/Request5"));
+            var result3 = await context.ForwardAsync<string>(HttpMethod.Post,
+                $"http://localhost:{port}/HttpRemote/Request5");
+            var result4 =
+                await context.ForwardAsync<string>($"http://localhost:{port}/HttpRemote/Request5");
+
+            await context.Response.WriteAsync(result1.Result + " " + result2.Result + " " + result3.Result + " " +
+                                              result4.Result);
+        }).DisableAntiforgery();
+
+        await app.StartAsync();
+
+        var httpClient = app.Services.GetRequiredService<IHttpClientFactory>().CreateClient();
+
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post,
+            new Uri($"http://localhost:{port}/test"));
+
+        var multipartFormDataContent = new MultipartFormDataContent(boundary);
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var bytes = await File.ReadAllBytesAsync(filePath);
+        multipartFormDataContent.Add(new ByteArrayContent(bytes), "files", "test.txt");
+        multipartFormDataContent.Add(new ByteArrayContent(bytes), "files", "test2.txt");
+
+        httpRequestMessage.Content = multipartFormDataContent;
+
+        var httpResponseMessage =
+            await httpClient.SendAsync(httpRequestMessage);
+        httpResponseMessage.EnsureSuccessStatusCode();
+
+        var str = await httpResponseMessage.Content.ReadAsStringAsync();
+        Assert.Equal("test.txt;test2.txt test.txt;test2.txt test.txt;test2.txt test.txt;test2.txt", str);
+
+        await app.StopAsync();
+    }
+
+    [Fact]
     public async Task ForwardAsync_MultipartFormData_ReturnOK()
     {
         var boundary = "---------------" + DateTime.Now.Ticks.ToString("x");
@@ -261,6 +455,67 @@ public class HttpContextExtensionsTests
 
         var str = await httpResponseMessage.Content.ReadAsStringAsync();
         Assert.Equal("1;Furion;test.txt 1;Furion;test.txt 1;Furion;test.txt 1;Furion;test.txt", str);
+
+        await app.StopAsync();
+    }
+
+    [Fact]
+    public async Task ForwardAsync_FromBody_ReturnOK()
+    {
+        var boundary = "---------------" + DateTime.Now.Ticks.ToString("x");
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+
+        builder.Services.AddControllers()
+            .AddApplicationPart(typeof(HttpRemoteController).Assembly);
+        builder.Services.AddHttpRemote();
+
+        await using var app = builder.Build();
+        app.Use(async (ctx, next) =>
+        {
+            ctx.Request.EnableBuffering();
+            ctx.Request.Body.Position = 0;
+
+            await next.Invoke();
+        });
+
+        app.MapControllers();
+
+        app.MapPost("/test", async (HttpContext context, [FromBody] string str) =>
+        {
+            var str1 = await context.ForwardAsAsync<string>(HttpMethod.Post,
+                new Uri($"http://localhost:{port}/HttpRemote/Request7"));
+
+            var str2 = await context.ForwardAsAsync<string>(
+                new Uri($"http://localhost:{port}/HttpRemote/Request7"));
+            var str3 = await context.ForwardAsAsync<string>(HttpMethod.Post,
+                $"http://localhost:{port}/HttpRemote/Request7");
+            var str4 = await context.ForwardAsAsync<string>(
+                $"http://localhost:{port}/HttpRemote/Request7");
+
+            await context.Response.WriteAsync(str1 + " " + str2 + " " + str3 + " " + str4);
+        }).DisableAntiforgery();
+
+        await app.StartAsync();
+
+        var httpClient = app.Services.GetRequiredService<IHttpClientFactory>().CreateClient();
+
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post,
+            new Uri($"http://localhost:{port}/test"));
+        // [FromBody] 必须
+        // httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        var stringContent = new StringContent("\"Furion\"", Encoding.UTF8, "application/json");
+
+        httpRequestMessage.Content = stringContent;
+
+        var httpResponseMessage =
+            await httpClient.SendAsync(httpRequestMessage);
+        httpResponseMessage.EnsureSuccessStatusCode();
+
+        var str = await httpResponseMessage.Content.ReadAsStringAsync();
+        Assert.Equal("Furion Furion Furion Furion", str);
 
         await app.StopAsync();
     }

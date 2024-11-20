@@ -121,7 +121,7 @@ public class GetStartController(
             "https://localhost:7044/HttpRemote/AddForm?id=1",
             builder => builder.SetMultipartContent(multipart => multipart // 设置表单内容
                 .AddJson(new { id = 1, name = "furion" }) // 设置常规字段
-                .AddProperty("age", "Age") // 支持设置单个值
+                .AddFormItem("age", "Age") // 支持设置单个值
                 .AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file") // 设置单个文件（对应表单 File 字段）
                 // 支持互联网文件地址
                 .AddFileFromRemote("https://furion.net/img/furionlogo.png", "files") // 设置多个文件（对应表单 Files 字段）
@@ -493,5 +493,16 @@ public class GetStartController(
         Console.WriteLine(result1.ToString());
 
         return result1.Result;
+    }
+
+    /// <summary>
+    ///     原始字符串
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public Task<string?> PostRawString()
+    {
+        return httpRemoteService.PostAsStringAsync("https://localhost:7044/HttpRemote/RawString",
+            builder => builder.SetRawStringContent("Furion", "application/json"));
     }
 }

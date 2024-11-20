@@ -32,8 +32,20 @@ internal sealed class BodyDeclarativeExtractor : IHttpDeclarativeExtractor
         // 空检查
         ArgumentNullException.ThrowIfNull(bodyAttribute);
 
-        // 设置请求内容
-        httpRequestBuilder.SetContent(value, bodyAttribute.ContentType);
+        // 检查是否为原始字符串内容
+        if (value is string stringValue && bodyAttribute.RawString)
+        {
+            // 空检查
+            ArgumentException.ThrowIfNullOrWhiteSpace(bodyAttribute.ContentType);
+
+            // 设置原始字符串内容
+            httpRequestBuilder.SetRawStringContent(stringValue, bodyAttribute.ContentType);
+        }
+        else
+        {
+            // 设置请求内容
+            httpRequestBuilder.SetContent(value, bodyAttribute.ContentType);
+        }
 
         // 检查是否启用 StringContent 方式构建 application/x-www-form-urlencoded 请求内容
         if (httpRequestBuilder.ContentType.IsIn([MediaTypeNames.Application.FormUrlEncoded]) &&

@@ -24,6 +24,13 @@ public class BodyDeclarativeExtractorTests
 
         Assert.Throws<InvalidOperationException>(() =>
             new BodyDeclarativeExtractor().Extract(httpRequestBuilder, context));
+
+        var method10 = typeof(IBodyDeclarativeTest).GetMethod(nameof(IBodyDeclarativeTest.Test10))!;
+        var context2 = new HttpDeclarativeExtractorContext(method10, ["str1"]);
+        var httpRequestBuilder2 = HttpRequestBuilder.Post("http://localhost");
+
+        Assert.Throws<ArgumentNullException>(() =>
+            new BodyDeclarativeExtractor().Extract(httpRequestBuilder2, context2));
     }
 
     [Fact]
@@ -84,6 +91,13 @@ public class BodyDeclarativeExtractorTests
         Assert.Equal("application/x-www-form-urlencoded", httpRequestBuilder8.ContentType);
         Assert.NotNull(httpRequestBuilder8.HttpContentProcessorProviders);
         Assert.Single(httpRequestBuilder8.HttpContentProcessorProviders);
+
+        var method9 = typeof(IBodyDeclarativeTest).GetMethod(nameof(IBodyDeclarativeTest.Test9))!;
+        var context9 = new HttpDeclarativeExtractorContext(method9, ["Furion"]);
+        var httpRequestBuilder9 = HttpRequestBuilder.Post("http://localhost");
+        new BodyDeclarativeExtractor().Extract(httpRequestBuilder9, context9);
+        Assert.Equal("application/json", httpRequestBuilder9.ContentType);
+        Assert.Equal("\"Furion\"", httpRequestBuilder9.RawContent);
     }
 }
 
@@ -112,4 +126,10 @@ public interface IBodyDeclarativeTest : IHttpDeclarative
 
     [Post("http://localhost:5000")]
     Task Test8([Body("application/x-www-form-urlencoded; charset=utf-8", UseStringContent = true)] object body);
+
+    [Post("http://localhost:5000")]
+    Task Test9([Body("application/json", RawString = true)] string body);
+
+    [Post("http://localhost:5000")]
+    Task Test10([Body(RawString = true)] string body);
 }

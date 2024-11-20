@@ -93,9 +93,10 @@ internal sealed class MultipartDeclarativeExtractor : IFrozenHttpDeclarativeExtr
                 AddFileFromSource(fileSource, name, multipartAttribute, httpMultipartFormDataBuilder,
                     contentEncoding);
                 break;
-            // 添加单个表单项或原始内容
+            // 添加单个表单项或对象
             default:
-                AddPropertyOrRaw(value, name, parameter.ParameterType, multipartAttribute, httpMultipartFormDataBuilder,
+                AddFormItemOrObject(value, name, parameter.ParameterType, multipartAttribute,
+                    httpMultipartFormDataBuilder,
                     contentEncoding);
                 break;
         }
@@ -148,7 +149,7 @@ internal sealed class MultipartDeclarativeExtractor : IFrozenHttpDeclarativeExtr
     }
 
     /// <summary>
-    ///     添加单个表单项或原始内容
+    ///     添加单个表单项或对象
     /// </summary>
     /// <param name="value">参数的值</param>
     /// <param name="name">表单名称</param>
@@ -160,21 +161,21 @@ internal sealed class MultipartDeclarativeExtractor : IFrozenHttpDeclarativeExtr
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </param>
     /// <param name="contentEncoding">内容编码</param>
-    internal static void AddPropertyOrRaw(object? value, string name, Type parameterType,
+    internal static void AddFormItemOrObject(object? value, string name, Type parameterType,
         MultipartAttribute multipartAttribute, HttpMultipartFormDataBuilder httpMultipartFormDataBuilder,
         Encoding? contentEncoding)
     {
         // 检查类型是否是基本类型或枚举类型或由它们组成的数组或集合类型
         if (parameterType.IsBaseTypeOrEnumOrCollection())
         {
-            // 添加单个表单项
-            httpMultipartFormDataBuilder.AddProperty(value.ToCultureString(CultureInfo.InvariantCulture), name,
+            // 添加单个表单项内容
+            httpMultipartFormDataBuilder.AddFormItem(value.ToCultureString(CultureInfo.InvariantCulture), name,
                 contentEncoding);
         }
         // 添加原始内容
         else
         {
-            httpMultipartFormDataBuilder.AddRaw(value, multipartAttribute.AsFormItem ? name : null,
+            httpMultipartFormDataBuilder.AddObject(value, multipartAttribute.AsFormItem ? name : null,
                 multipartAttribute.ContentType ?? MediaTypeNames.Text.Plain, contentEncoding);
         }
     }

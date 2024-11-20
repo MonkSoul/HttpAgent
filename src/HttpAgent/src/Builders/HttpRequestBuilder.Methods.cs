@@ -153,6 +153,25 @@ public sealed partial class HttpRequestBuilder
         SetContent(text, MediaTypeNames.Text.Plain, contentEncoding);
 
     /// <summary>
+    ///     设置原始字符串内容
+    /// </summary>
+    /// <remarks>字符串内容将被双引号包围并发送，格式如下：<c>"内容"</c>。</remarks>
+    /// <param name="text">文本</param>
+    /// <param name="contentType">内容类型</param>
+    /// <param name="contentEncoding">内容编码</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder SetRawStringContent(string text, string contentType, Encoding? contentEncoding = null)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(text);
+        ArgumentException.ThrowIfNullOrWhiteSpace(contentType);
+
+        return SetContent($"\"{text}\"", contentType, contentEncoding);
+    }
+
+    /// <summary>
     ///     设置 URL 编码的键值对表单内容
     /// </summary>
     /// <param name="rawObject">原始对象</param>

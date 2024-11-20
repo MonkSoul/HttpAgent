@@ -309,7 +309,7 @@ public class HttpRequestBuilderTests
 
         httpRequestBuilder.SetContent(new { id = 10, name = "Furion" }).SetMultipartContent(builder =>
         {
-            builder.AddRaw(new { id = 10, name = "Furion" });
+            builder.AddObject(new { id = 10, name = "Furion" });
         });
         httpRequestBuilder.BuildAndSetContent(httpRequestMessage, httpContentProcessorFactory,
             httpRemoteOptions);

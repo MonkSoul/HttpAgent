@@ -213,27 +213,27 @@ public class MultipartDeclarativeExtractorTests
     }
 
     [Fact]
-    public void AddPropertyOrRaw_ReturnOK()
+    public void AddFormItemOrObject_ReturnOK()
     {
         var httpMultipartFormDataBuilder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
 
-        MultipartDeclarativeExtractor.AddPropertyOrRaw(null, "name", typeof(string), new MultipartAttribute("name"),
+        MultipartDeclarativeExtractor.AddFormItemOrObject(null, "name", typeof(string), new MultipartAttribute("name"),
             httpMultipartFormDataBuilder, null);
         Assert.Single(httpMultipartFormDataBuilder._partContents);
         Assert.Equal("name", httpMultipartFormDataBuilder._partContents[0].Name);
 
-        MultipartDeclarativeExtractor.AddPropertyOrRaw("furion", "name1", typeof(string),
+        MultipartDeclarativeExtractor.AddFormItemOrObject("furion", "name1", typeof(string),
             new MultipartAttribute("name1"),
             httpMultipartFormDataBuilder, null);
         Assert.Equal(2, httpMultipartFormDataBuilder._partContents.Count);
         Assert.Equal("name1", httpMultipartFormDataBuilder._partContents[1].Name);
 
-        MultipartDeclarativeExtractor.AddPropertyOrRaw(new { }, "obj", typeof(object), new MultipartAttribute("obj"),
+        MultipartDeclarativeExtractor.AddFormItemOrObject(new { }, "obj", typeof(object), new MultipartAttribute("obj"),
             httpMultipartFormDataBuilder, null);
         Assert.Equal(3, httpMultipartFormDataBuilder._partContents.Count);
         Assert.Equal("obj", httpMultipartFormDataBuilder._partContents[2].Name);
 
-        MultipartDeclarativeExtractor.AddPropertyOrRaw(new { id = 1, name = "furion" }, "obj1", typeof(object),
+        MultipartDeclarativeExtractor.AddFormItemOrObject(new { id = 1, name = "furion" }, "obj1", typeof(object),
             new MultipartAttribute("obj1") { AsFormItem = false },
             httpMultipartFormDataBuilder, null);
         Assert.Equal(5, httpMultipartFormDataBuilder._partContents.Count);

@@ -84,4 +84,10 @@ public class HttpRemoteController : ControllerBase
 
         return new EmptyResult();
     }
+
+    [HttpPost]
+    public string RawString([FromBody] string str)
+    {
+        return str;
+    }
 }

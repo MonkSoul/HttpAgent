@@ -220,6 +220,34 @@ public class HttpRequestBuilderMethodsTests
     }
 
     [Fact]
+    public void SetRawStringContent_Invalid_Parameters()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Post, new Uri("http://localhost"));
+
+        Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.SetRawStringContent(null!, null!));
+
+        Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.SetRawStringContent(string.Empty, null!));
+        Assert.Throws<ArgumentException>(() => httpRequestBuilder.SetRawStringContent(string.Empty, string.Empty));
+        Assert.Throws<ArgumentException>(() => httpRequestBuilder.SetRawStringContent(string.Empty, " "));
+    }
+
+    [Fact]
+    public void SetRawStringContent_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Post, new Uri("http://localhost"));
+
+        httpRequestBuilder.SetRawStringContent(string.Empty, "application/json");
+        Assert.Equal("\"\"", httpRequestBuilder.RawContent);
+        Assert.Equal("application/json", httpRequestBuilder.ContentType);
+        Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
+
+        httpRequestBuilder.SetRawStringContent("furion", "text/plain");
+        Assert.Equal("\"furion\"", httpRequestBuilder.RawContent);
+        Assert.Equal("text/plain", httpRequestBuilder.ContentType);
+        Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
+    }
+
+    [Fact]
     public void SetFormUrlEncodedContent_ReturnOK()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
@@ -315,14 +343,14 @@ public class HttpRequestBuilderMethodsTests
 
         httpRequestBuilder.SetMultipartContent(builder =>
         {
-            builder.AddProperty(new { }, "name");
+            builder.AddFormItem(new { }, "name");
         });
 
         Assert.NotNull(httpRequestBuilder.MultipartFormDataBuilder);
 
         var httpRequestBuilder2 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
         httpRequestBuilder2.SetMultipartContent(
-            new HttpMultipartFormDataBuilder(httpRequestBuilder2).AddProperty(new { }, "name"));
+            new HttpMultipartFormDataBuilder(httpRequestBuilder2).AddFormItem(new { }, "name"));
         Assert.NotNull(httpRequestBuilder2.MultipartFormDataBuilder);
     }
 
