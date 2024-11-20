@@ -287,7 +287,7 @@ public class HttpRequestBuilderTests
         Assert.Null(httpRequestBuilder.RawContent);
         Assert.Null(httpRequestMessage.Content);
 
-        httpRequestBuilder.SetRawContent(new { id = 10, name = "Furion" });
+        httpRequestBuilder.SetContent(new { id = 10, name = "Furion" });
         httpRequestBuilder.BuildAndSetContent(httpRequestMessage, httpContentProcessorFactory,
             httpRemoteOptions);
         Assert.Equal("text/plain", httpRequestBuilder.ContentType);
@@ -295,7 +295,7 @@ public class HttpRequestBuilderTests
         Assert.NotNull(httpRequestMessage.Content);
         Assert.Equal(typeof(StringContent), httpRequestMessage.Content.GetType());
 
-        httpRequestBuilder.SetRawContent(new { id = 10, name = "Furion" }).SetOnPreSetContent(content =>
+        httpRequestBuilder.SetContent(new { id = 10, name = "Furion" }).SetOnPreSetContent(content =>
         {
             content?.Headers.TryAddWithoutValidation("test", "furion");
         });
@@ -307,7 +307,7 @@ public class HttpRequestBuilderTests
         Assert.Equal(typeof(StringContent), httpRequestMessage.Content.GetType());
         Assert.Equal("furion", httpRequestMessage.Content.Headers.GetValues("test").First());
 
-        httpRequestBuilder.SetRawContent(new { id = 10, name = "Furion" }).SetMultipartContent(builder =>
+        httpRequestBuilder.SetContent(new { id = 10, name = "Furion" }).SetMultipartContent(builder =>
         {
             builder.AddRaw(new { id = 10, name = "Furion" });
         });
@@ -349,18 +349,18 @@ public class HttpRequestBuilderTests
         Assert.Equal(MediaTypeNames.Text.Plain, httpRequestBuilder.ContentType);
 
         var httpRequestBuilder2 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        httpRequestBuilder2.SetRawContent(new { });
+        httpRequestBuilder2.SetContent(new { });
         httpRequestBuilder2.SetDefaultContentType(MediaTypeNames.Text.Plain);
         Assert.Equal(MediaTypeNames.Text.Plain, httpRequestBuilder2.ContentType);
 
         var httpRequestBuilder3 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        httpRequestBuilder3.SetRawContent(Array.Empty<byte>());
+        httpRequestBuilder3.SetContent(Array.Empty<byte>());
         httpRequestBuilder3.SetDefaultContentType(MediaTypeNames.Text.Plain);
         Assert.Equal(MediaTypeNames.Application.Octet, httpRequestBuilder3.ContentType);
 
         using var stream = new MemoryStream();
         var httpRequestBuilder4 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        httpRequestBuilder4.SetRawContent(stream);
+        httpRequestBuilder4.SetContent(stream);
         httpRequestBuilder4.SetDefaultContentType(MediaTypeNames.Text.Plain);
         Assert.Equal(MediaTypeNames.Application.Octet, httpRequestBuilder4.ContentType);
 
@@ -369,47 +369,47 @@ public class HttpRequestBuilderTests
         Assert.Equal(MediaTypeNames.Text.Plain, httpRequestBuilder5.ContentType);
 
         var httpRequestBuilder6 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        httpRequestBuilder6.SetRawContent(new ByteArrayContent(Array.Empty<byte>()));
+        httpRequestBuilder6.SetContent(new ByteArrayContent(Array.Empty<byte>()));
         httpRequestBuilder6.SetDefaultContentType(MediaTypeNames.Text.Plain);
         Assert.Equal(MediaTypeNames.Application.Octet, httpRequestBuilder6.ContentType);
 
         var httpRequestBuilder7 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        httpRequestBuilder7.SetRawContent(new StreamContent(stream));
+        httpRequestBuilder7.SetContent(new StreamContent(stream));
         httpRequestBuilder7.SetDefaultContentType(MediaTypeNames.Text.Plain);
         Assert.Equal(MediaTypeNames.Application.Octet, httpRequestBuilder7.ContentType);
 
         var httpRequestBuilder8 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        httpRequestBuilder8.SetRawContent(new FormUrlEncodedContent(Array.Empty<KeyValuePair<string, string>>()));
+        httpRequestBuilder8.SetContent(new FormUrlEncodedContent(Array.Empty<KeyValuePair<string, string>>()));
         httpRequestBuilder8.SetDefaultContentType(MediaTypeNames.Text.Plain);
         Assert.Equal(MediaTypeNames.Application.FormUrlEncoded, httpRequestBuilder8.ContentType);
 
         var httpRequestBuilder9 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        httpRequestBuilder9.SetRawContent(new MultipartContent());
+        httpRequestBuilder9.SetContent(new MultipartContent());
         httpRequestBuilder9.SetDefaultContentType(MediaTypeNames.Text.Plain);
         Assert.Equal(MediaTypeNames.Multipart.FormData, httpRequestBuilder9.ContentType);
 
         var httpRequestBuilder10 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        httpRequestBuilder10.SetRawContent(new StringContent(""));
+        httpRequestBuilder10.SetContent(new StringContent(""));
         httpRequestBuilder10.SetDefaultContentType(MediaTypeNames.Text.Plain);
         Assert.Equal(MediaTypeNames.Text.Plain, httpRequestBuilder10.ContentType);
 
         var httpRequestBuilder11 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        httpRequestBuilder11.SetRawContent(new StringContent(""));
+        httpRequestBuilder11.SetContent(new StringContent(""));
         httpRequestBuilder11.SetDefaultContentType(MediaTypeNames.Application.Json);
         Assert.Equal(MediaTypeNames.Application.Json, httpRequestBuilder11.ContentType);
 
         var httpRequestBuilder12 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        httpRequestBuilder12.SetRawContent(JsonContent.Create(new { }));
+        httpRequestBuilder12.SetContent(JsonContent.Create(new { }));
         httpRequestBuilder12.SetDefaultContentType(MediaTypeNames.Application.Json);
         Assert.Equal(MediaTypeNames.Application.Json, httpRequestBuilder12.ContentType);
 
         var httpRequestBuilder13 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        httpRequestBuilder13.SetRawContent(new ReadOnlyMemoryContent(Array.Empty<byte>()));
+        httpRequestBuilder13.SetContent(new ReadOnlyMemoryContent(Array.Empty<byte>()));
         httpRequestBuilder13.SetDefaultContentType(MediaTypeNames.Application.Octet);
         Assert.Equal(MediaTypeNames.Application.Octet, httpRequestBuilder13.ContentType);
 
         var httpRequestBuilder14 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        httpRequestBuilder14.SetRawContent(new ReadOnlyMemory<byte>([]));
+        httpRequestBuilder14.SetContent(new ReadOnlyMemory<byte>([]));
         httpRequestBuilder14.SetDefaultContentType(MediaTypeNames.Application.Octet);
         Assert.Equal(MediaTypeNames.Application.Octet, httpRequestBuilder14.ContentType);
     }
@@ -436,7 +436,7 @@ public class HttpRequestBuilderTests
         var httpRemoteOptions = new HttpRemoteOptions();
 
         var httpRequestMessage = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost/{id}/{name}"))
-            .SetRawContent(new { })
+            .SetContent(new { })
             .WithQueryParameters(new { id = 10, name = "furion" })
             .WithPathParameters(new { id = 10, name = "furion" })
             .WithCookies(new { id = 10, name = "furion" })
@@ -467,7 +467,7 @@ public class HttpRequestBuilderTests
 
         var httpRequestMessage =
             new HttpRequestBuilder(HttpMethod.Get, new Uri("{id}/{name}", UriKind.RelativeOrAbsolute))
-                .SetRawContent(new { })
+                .SetContent(new { })
                 .WithQueryParameters(new { id = 10, name = "furion" })
                 .WithPathParameters(new { id = 10, name = "furion" })
                 .WithCookies(new { id = 10, name = "furion" })

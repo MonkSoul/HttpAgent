@@ -885,7 +885,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpRequestBuilder =
-            new HttpRequestBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test")).SetRawContent(
+            new HttpRequestBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test")).SetContent(
                     new MessagePackModel1 { Id = 1, Name = "Furion" }, "application/msgpack")
                 .AddHttpContentProcessors(() => [new MessagePackContentProcessor()]).EnsureSuccessStatusCode();
 

@@ -106,7 +106,7 @@ public sealed partial class HttpRequestBuilder
         // 检查是否是字符串类型
         if (rawJson is not string rawString)
         {
-            return SetRawContent(rawObject, MediaTypeNames.Application.Json, contentEncoding);
+            return SetContent(rawObject, MediaTypeNames.Application.Json, contentEncoding);
         }
 
         // 尝试验证并获取 JsonDocument 实例（需 using）
@@ -116,7 +116,7 @@ public sealed partial class HttpRequestBuilder
         // 添加请求结束时需要释放的对象
         AddDisposable(jsonDocument);
 
-        return SetRawContent(rawObject, MediaTypeNames.Application.Json, contentEncoding);
+        return SetContent(rawObject, MediaTypeNames.Application.Json, contentEncoding);
     }
 
     /// <summary>
@@ -128,7 +128,7 @@ public sealed partial class HttpRequestBuilder
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
     public HttpRequestBuilder SetHtmlContent(string? htmlString, Encoding? contentEncoding = null) =>
-        SetRawContent(htmlString, MediaTypeNames.Text.Html, contentEncoding);
+        SetContent(htmlString, MediaTypeNames.Text.Html, contentEncoding);
 
     /// <summary>
     ///     设置 XML 内容
@@ -139,7 +139,7 @@ public sealed partial class HttpRequestBuilder
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
     public HttpRequestBuilder SetXmlContent(string? xmlString, Encoding? contentEncoding = null) =>
-        SetRawContent(xmlString, MediaTypeNames.Application.Xml, contentEncoding);
+        SetContent(xmlString, MediaTypeNames.Application.Xml, contentEncoding);
 
     /// <summary>
     ///     设置文本内容
@@ -150,7 +150,7 @@ public sealed partial class HttpRequestBuilder
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
     public HttpRequestBuilder SetTextContent(string? text, Encoding? contentEncoding = null) =>
-        SetRawContent(text, MediaTypeNames.Text.Plain, contentEncoding);
+        SetContent(text, MediaTypeNames.Text.Plain, contentEncoding);
 
     /// <summary>
     ///     设置 URL 编码的键值对表单内容
@@ -167,7 +167,7 @@ public sealed partial class HttpRequestBuilder
     public HttpRequestBuilder SetFormUrlEncodedContent(object? rawObject, Encoding? contentEncoding = null,
         bool useStringContent = false)
     {
-        SetRawContent(rawObject, MediaTypeNames.Application.FormUrlEncoded, contentEncoding);
+        SetContent(rawObject, MediaTypeNames.Application.FormUrlEncoded, contentEncoding);
 
         // 检查是否启用 StringContent 方式构建 application/x-www-form-urlencoded 请求内容
         if (useStringContent)
@@ -179,7 +179,7 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
-    ///     设置原始请求内容
+    ///     设置请求内容
     /// </summary>
     /// <param name="rawContent">原始请求内容</param>
     /// <param name="contentType">内容类型</param>
@@ -187,7 +187,7 @@ public sealed partial class HttpRequestBuilder
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
-    public HttpRequestBuilder SetRawContent(object? rawContent, string? contentType = null,
+    public HttpRequestBuilder SetContent(object? rawContent, string? contentType = null,
         Encoding? contentEncoding = null)
     {
         // 空检查
@@ -226,7 +226,7 @@ public sealed partial class HttpRequestBuilder
     ///     设置多部分内容表单，请求类型为 <c>multipart/form-data</c>
     /// </summary>
     /// <remarks>
-    ///     该操作将强制覆盖 <see cref="SetRawContent" />、<see cref="SetContentEncoding(System.Text.Encoding)" /> 和
+    ///     该操作将强制覆盖 <see cref="SetContent" />、<see cref="SetContentEncoding(System.Text.Encoding)" /> 和
     ///     <see cref="SetContentType" /> 设置的内容。
     /// </remarks>
     /// <param name="configure">自定义配置委托</param>
@@ -253,7 +253,7 @@ public sealed partial class HttpRequestBuilder
     ///     设置多部分内容表单，请求类型为 <c>multipart/form-data</c>
     /// </summary>
     /// <remarks>
-    ///     该操作将强制覆盖 <see cref="SetRawContent" />、<see cref="SetContentEncoding(System.Text.Encoding)" /> 和
+    ///     该操作将强制覆盖 <see cref="SetContent" />、<see cref="SetContentEncoding(System.Text.Encoding)" /> 和
     ///     <see cref="SetContentType" /> 设置的内容。
     /// </remarks>
     /// <param name="httpMultipartFormDataBuilder">

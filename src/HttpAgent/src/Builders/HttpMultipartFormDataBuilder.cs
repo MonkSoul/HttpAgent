@@ -88,7 +88,7 @@ public sealed class HttpMultipartFormDataBuilder
     }
 
     /// <summary>
-    ///     添加 JSON 单个属性值
+    ///     添加单个内容（表单项）
     /// </summary>
     /// <param name="value">表单值</param>
     /// <param name="name">表单名称</param>
@@ -96,7 +96,7 @@ public sealed class HttpMultipartFormDataBuilder
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
-    public HttpMultipartFormDataBuilder AddJsonProperty(object? value, string name, Encoding? contentEncoding = null)
+    public HttpMultipartFormDataBuilder AddProperty(object? value, string name, Encoding? contentEncoding = null)
     {
         // 空检查
         ArgumentException.ThrowIfNullOrWhiteSpace(name);

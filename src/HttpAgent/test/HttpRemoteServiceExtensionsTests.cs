@@ -1901,7 +1901,7 @@ public class HttpRemoteServiceExtensionsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         using var cancellationTokenSource = new CancellationTokenSource();
-        cancellationTokenSource.CancelAfter(100);
+        cancellationTokenSource.CancelAfter(10);
 
         try
         {

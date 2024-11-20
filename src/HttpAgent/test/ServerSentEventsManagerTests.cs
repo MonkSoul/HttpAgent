@@ -560,7 +560,7 @@ public class ServerSentEventsManagerTests(ITestOutputHelper output)
         var serverSentEventsManager = new ServerSentEventsManager(httpRemoteService, httpServerSentEventsBuilder);
 
         using var cancellationTokenSource = new CancellationTokenSource();
-        cancellationTokenSource.CancelAfter(50);
+        cancellationTokenSource.CancelAfter(10);
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {

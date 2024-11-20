@@ -443,8 +443,8 @@ public class HttpRemoteCasesTests
                 HttpRequestBuilder.Post($"http://localhost:{port}/HttpRemote/SendMultipart")
                     .SetMultipartContent(mBuilder =>
                     {
-                        mBuilder.AddJsonProperty(1, "id");
-                        mBuilder.AddJsonProperty("furion", "name");
+                        mBuilder.AddProperty(1, "id");
+                        mBuilder.AddProperty("furion", "name");
                         mBuilder.AddFileAsStream(filePath, "file");
                     }));
 

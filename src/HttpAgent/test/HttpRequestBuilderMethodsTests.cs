@@ -244,49 +244,49 @@ public class HttpRequestBuilderMethodsTests
     }
 
     [Fact]
-    public void SetRawContent_Invalid_Parameters()
+    public void SetContent_Invalid_Parameters()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
 
         Assert.Throws<FormatException>(() =>
         {
-            httpRequestBuilder.SetRawContent(null, "unknown");
+            httpRequestBuilder.SetContent(null, "unknown");
         });
 
         var exception =
             Assert.Throws<NotSupportedException>(() =>
-                httpRequestBuilder.SetRawContent(new { }, "multipart/form-data"));
+                httpRequestBuilder.SetContent(new { }, "multipart/form-data"));
         Assert.Equal(
             "The method does not support setting the request content type to `multipart/form-data`. Please use the `SetMultipartContent` method instead. If you are using an HTTP declarative requests, define the parameter with the `Action<HttpMultipartFormDataBuilder>` type.",
             exception.Message);
     }
 
     [Fact]
-    public void SetRawContent_ReturnOK()
+    public void SetContent_ReturnOK()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
 
-        httpRequestBuilder.SetRawContent(null);
+        httpRequestBuilder.SetContent(null);
         Assert.Null(httpRequestBuilder.RawContent);
         Assert.Null(httpRequestBuilder.ContentType);
         Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
 
-        httpRequestBuilder.SetRawContent("furion", "text/plain");
+        httpRequestBuilder.SetContent("furion", "text/plain");
         Assert.Equal("furion", httpRequestBuilder.RawContent);
         Assert.Equal("text/plain", httpRequestBuilder.ContentType);
         Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
 
-        httpRequestBuilder.SetRawContent("furion", "text/plain", Encoding.UTF32);
+        httpRequestBuilder.SetContent("furion", "text/plain", Encoding.UTF32);
         Assert.Equal("furion", httpRequestBuilder.RawContent);
         Assert.Equal("text/plain", httpRequestBuilder.ContentType);
         Assert.Equal(Encoding.UTF32, httpRequestBuilder.ContentEncoding);
 
-        httpRequestBuilder.SetRawContent("furion", "text/plain;charset=unicode");
+        httpRequestBuilder.SetContent("furion", "text/plain;charset=unicode");
         Assert.Equal("furion", httpRequestBuilder.RawContent);
         Assert.Equal("text/plain", httpRequestBuilder.ContentType);
         Assert.Equal(Encoding.Unicode, httpRequestBuilder.ContentEncoding);
 
-        httpRequestBuilder.SetRawContent(new MultipartContent(), "multipart/form-data");
+        httpRequestBuilder.SetContent(new MultipartContent(), "multipart/form-data");
         Assert.True(httpRequestBuilder.RawContent is MultipartContent);
         Assert.Equal("multipart/form-data", httpRequestBuilder.ContentType);
         Assert.Equal(Encoding.Unicode, httpRequestBuilder.ContentEncoding);
@@ -315,14 +315,14 @@ public class HttpRequestBuilderMethodsTests
 
         httpRequestBuilder.SetMultipartContent(builder =>
         {
-            builder.AddJsonProperty(new { }, "name");
+            builder.AddProperty(new { }, "name");
         });
 
         Assert.NotNull(httpRequestBuilder.MultipartFormDataBuilder);
 
         var httpRequestBuilder2 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
         httpRequestBuilder2.SetMultipartContent(
-            new HttpMultipartFormDataBuilder(httpRequestBuilder2).AddJsonProperty(new { }, "name"));
+            new HttpMultipartFormDataBuilder(httpRequestBuilder2).AddProperty(new { }, "name"));
         Assert.NotNull(httpRequestBuilder2.MultipartFormDataBuilder);
     }
 

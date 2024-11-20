@@ -298,8 +298,8 @@ public sealed class HttpContextForwardBuilder
         // 初始化 StreamContent 实例
         var streamContent = new StreamContent(bodyStream);
 
-        // 设置原始请求内容
-        httpRequestBuilder.SetRawContent(streamContent, contentType);
+        // 设置请求内容
+        httpRequestBuilder.SetContent(streamContent, contentType);
     }
 
     /// <summary>

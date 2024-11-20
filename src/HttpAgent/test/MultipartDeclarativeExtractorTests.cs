@@ -91,6 +91,90 @@ public class MultipartDeclarativeExtractorTests
     }
 
     [Fact]
+    public void AddMultipart_ReturnOK()
+    {
+        var method2 =
+            typeof(IMultipartDeclarativeExtractorTest).GetMethod(nameof(IMultipartDeclarativeExtractorTest.Test2))!;
+        var context2 = new HttpDeclarativeExtractorContext(method2,
+            [1, "furion", new { }, new MemoryStream(), Array.Empty<byte>(), new StringContent("")]);
+        var httpRequestBuilder2 = HttpRequestBuilder.Get("http://localhost");
+        var httpMultipartFormDataBuilder = new HttpMultipartFormDataBuilder(httpRequestBuilder2);
+
+        foreach (var (parameter, value) in context2.Parameters)
+        {
+            MultipartDeclarativeExtractor.AddMultipart(parameter, value, httpMultipartFormDataBuilder);
+        }
+
+        Assert.NotNull(httpMultipartFormDataBuilder);
+        Assert.Equal(6, httpMultipartFormDataBuilder._partContents.Count);
+        Assert.Equal("id", httpMultipartFormDataBuilder._partContents[0].Name);
+        Assert.Equal("text/plain", httpMultipartFormDataBuilder._partContents[0].ContentType);
+        Assert.Equal("name", httpMultipartFormDataBuilder._partContents[1].Name);
+        Assert.Equal("text/plain", httpMultipartFormDataBuilder._partContents[1].ContentType);
+        Assert.Equal("obj", httpMultipartFormDataBuilder._partContents[2].Name);
+        Assert.Equal("text/plain", httpMultipartFormDataBuilder._partContents[2].ContentType);
+        Assert.Equal("stream", httpMultipartFormDataBuilder._partContents[3].Name);
+        Assert.Equal("application/octet-stream",
+            httpMultipartFormDataBuilder._partContents[3].ContentType);
+        Assert.Equal("bytes", httpMultipartFormDataBuilder._partContents[4].Name);
+        Assert.Equal("application/octet-stream",
+            httpMultipartFormDataBuilder._partContents[4].ContentType);
+        Assert.Equal("content", httpMultipartFormDataBuilder._partContents[5].Name);
+        Assert.Equal("text/plain", httpMultipartFormDataBuilder._partContents[5].ContentType);
+
+
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var base64String = Convert.ToBase64String(File.ReadAllBytes(filePath));
+        const string url =
+            "https://download2.huduntech.com/application/workspace/49/49d0cbe19a9bf7e54c1735b24fa41f27/Installer_%E8%BF%85%E6%8D%B7%E5%B1%8F%E5%B9%95%E5%BD%95%E5%83%8F%E5%B7%A5%E5%85%B7_1.7.9_123.exe";
+
+        var method3 =
+            typeof(IMultipartDeclarativeExtractorTest).GetMethod(nameof(IMultipartDeclarativeExtractorTest.Test3))!;
+        var context3 = new HttpDeclarativeExtractorContext(method3,
+            ["furion", "none", filePath, base64String, url]);
+        var httpRequestBuilder3 = HttpRequestBuilder.Get("http://localhost");
+        var httpMultipartFormDataBuilder2 = new HttpMultipartFormDataBuilder(httpRequestBuilder3);
+
+        foreach (var (parameter, value) in context3.Parameters)
+        {
+            MultipartDeclarativeExtractor.AddMultipart(parameter, value, httpMultipartFormDataBuilder2);
+        }
+
+        Assert.NotNull(httpMultipartFormDataBuilder2);
+        Assert.Equal(5, httpMultipartFormDataBuilder2._partContents.Count);
+        Assert.Equal("name", httpMultipartFormDataBuilder2._partContents[0].Name);
+        Assert.Equal("text/plain", httpMultipartFormDataBuilder2._partContents[0].ContentType);
+        Assert.Equal("none", httpMultipartFormDataBuilder2._partContents[1].Name);
+        Assert.Equal("text/plain", httpMultipartFormDataBuilder2._partContents[1].ContentType);
+        Assert.Equal("filePath", httpMultipartFormDataBuilder2._partContents[2].Name);
+        Assert.Equal("application/octet-stream",
+            httpMultipartFormDataBuilder2._partContents[2].ContentType);
+        Assert.Equal("base64String", httpMultipartFormDataBuilder2._partContents[3].Name);
+        Assert.Equal("application/octet-stream",
+            httpMultipartFormDataBuilder2._partContents[3].ContentType);
+        Assert.Equal("remote", httpMultipartFormDataBuilder2._partContents[4].Name);
+        Assert.Equal("application/octet-stream",
+            httpMultipartFormDataBuilder2._partContents[4].ContentType);
+
+        var method4 =
+            typeof(IMultipartDeclarativeExtractorTest).GetMethod(nameof(IMultipartDeclarativeExtractorTest.Test4))!;
+        var context4 = new HttpDeclarativeExtractorContext(method4,
+            [1, CancellationToken.None]);
+        var httpRequestBuilder4 = HttpRequestBuilder.Get("http://localhost");
+        var httpMultipartFormDataBuilder3 = new HttpMultipartFormDataBuilder(httpRequestBuilder4);
+
+        foreach (var (parameter, value) in context4.Parameters)
+        {
+            MultipartDeclarativeExtractor.AddMultipart(parameter, value, httpMultipartFormDataBuilder3);
+        }
+
+        Assert.NotNull(httpMultipartFormDataBuilder3);
+        Assert.Single(httpMultipartFormDataBuilder3._partContents);
+        Assert.Equal("id", httpMultipartFormDataBuilder3._partContents[0].Name);
+        Assert.Equal("text/plain", httpMultipartFormDataBuilder3._partContents[0].ContentType);
+    }
+
+    [Fact]
     public void AddFileFromSource_ReturnOK()
     {
         var httpMultipartFormDataBuilder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
@@ -129,26 +213,27 @@ public class MultipartDeclarativeExtractorTests
     }
 
     [Fact]
-    public void AddTextOrRaw_ReturnOK()
+    public void AddPropertyOrRaw_ReturnOK()
     {
         var httpMultipartFormDataBuilder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
 
-        MultipartDeclarativeExtractor.AddTextOrRaw(null, "name", typeof(string), new MultipartAttribute("name"),
+        MultipartDeclarativeExtractor.AddPropertyOrRaw(null, "name", typeof(string), new MultipartAttribute("name"),
             httpMultipartFormDataBuilder, null);
         Assert.Single(httpMultipartFormDataBuilder._partContents);
         Assert.Equal("name", httpMultipartFormDataBuilder._partContents[0].Name);
 
-        MultipartDeclarativeExtractor.AddTextOrRaw("furion", "name1", typeof(string), new MultipartAttribute("name1"),
+        MultipartDeclarativeExtractor.AddPropertyOrRaw("furion", "name1", typeof(string),
+            new MultipartAttribute("name1"),
             httpMultipartFormDataBuilder, null);
         Assert.Equal(2, httpMultipartFormDataBuilder._partContents.Count);
         Assert.Equal("name1", httpMultipartFormDataBuilder._partContents[1].Name);
 
-        MultipartDeclarativeExtractor.AddTextOrRaw(new { }, "obj", typeof(object), new MultipartAttribute("obj"),
+        MultipartDeclarativeExtractor.AddPropertyOrRaw(new { }, "obj", typeof(object), new MultipartAttribute("obj"),
             httpMultipartFormDataBuilder, null);
         Assert.Equal(3, httpMultipartFormDataBuilder._partContents.Count);
         Assert.Equal("obj", httpMultipartFormDataBuilder._partContents[2].Name);
 
-        MultipartDeclarativeExtractor.AddTextOrRaw(new { id = 1, name = "furion" }, "obj1", typeof(object),
+        MultipartDeclarativeExtractor.AddPropertyOrRaw(new { id = 1, name = "furion" }, "obj1", typeof(object),
             new MultipartAttribute("obj1") { AsFormItem = false },
             httpMultipartFormDataBuilder, null);
         Assert.Equal(5, httpMultipartFormDataBuilder._partContents.Count);

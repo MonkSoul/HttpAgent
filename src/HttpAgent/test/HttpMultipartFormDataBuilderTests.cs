@@ -106,20 +106,20 @@ public class HttpMultipartFormDataBuilderTests
     }
 
     [Fact]
-    public void AddJsonProperty_Invalid_Parameters()
+    public void AddProperty_Invalid_Parameters()
     {
         var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
 
-        Assert.Throws<ArgumentNullException>(() => builder.AddJsonProperty(null, null!));
-        Assert.Throws<ArgumentException>(() => builder.AddJsonProperty(null, string.Empty));
-        Assert.Throws<ArgumentException>(() => builder.AddJsonProperty(null, " "));
+        Assert.Throws<ArgumentNullException>(() => builder.AddProperty(null, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddProperty(null, string.Empty));
+        Assert.Throws<ArgumentException>(() => builder.AddProperty(null, " "));
     }
 
     [Fact]
-    public void AddJsonProperty_ReturnOK()
+    public void AddProperty_ReturnOK()
     {
         var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
-        builder.AddJsonProperty("furion", "name", Encoding.UTF8);
+        builder.AddProperty("furion", "name", Encoding.UTF8);
         Assert.Single(builder._partContents);
         Assert.Equal("name", builder._partContents[0].Name);
         Assert.Equal("text/plain", builder._partContents[0].ContentType);
@@ -899,17 +899,17 @@ public class HttpMultipartFormDataBuilderTests
         var multipartFormDataContent = builder.Build(httpRemoteOptions, httpContentProcessorFactory, null);
         Assert.Null(multipartFormDataContent);
 
-        builder.AddJsonProperty(new { }, "test");
+        builder.AddProperty(new { }, "test");
         var multipartFormDataContent1 = builder.Build(httpRemoteOptions, httpContentProcessorFactory, null);
         Assert.NotNull(multipartFormDataContent1);
         Assert.Single(multipartFormDataContent1);
 
-        builder.AddJsonProperty(null, "test");
+        builder.AddProperty(null, "test");
         var multipartFormDataContent2 = builder.Build(httpRemoteOptions, httpContentProcessorFactory, null);
         Assert.NotNull(multipartFormDataContent2);
         Assert.Single(multipartFormDataContent2);
 
-        builder.AddJsonProperty(new { }, "test");
+        builder.AddProperty(new { }, "test");
         var multipartFormDataContent3 =
             builder.Build(httpRemoteOptions, httpContentProcessorFactory, new CustomStringContentProcessor());
         Assert.NotNull(multipartFormDataContent3);

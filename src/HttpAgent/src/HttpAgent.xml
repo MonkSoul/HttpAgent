@@ -590,9 +590,9 @@
             </returns>
             <exception cref="T:System.Text.Json.JsonException"></exception>
         </member>
-        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddJsonProperty(System.Object,System.String,System.Text.Encoding)">
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddProperty(System.Object,System.String,System.Text.Encoding)">
             <summary>
-                添加 JSON 单个属性值
+                添加单个内容（表单项）
             </summary>
             <param name="value">表单值</param>
             <param name="name">表单名称</param>
@@ -1225,9 +1225,9 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.SetRawContent(System.Object,System.String,System.Text.Encoding)">
+        <member name="M:HttpAgent.HttpRequestBuilder.SetContent(System.Object,System.String,System.Text.Encoding)">
             <summary>
-                设置原始请求内容
+                设置请求内容
             </summary>
             <param name="rawContent">原始请求内容</param>
             <param name="contentType">内容类型</param>
@@ -1241,7 +1241,7 @@
                 设置多部分内容表单，请求类型为 <c>multipart/form-data</c>
             </summary>
             <remarks>
-                该操作将强制覆盖 <see cref="M:HttpAgent.HttpRequestBuilder.SetRawContent(System.Object,System.String,System.Text.Encoding)" />、<see cref="M:HttpAgent.HttpRequestBuilder.SetContentEncoding(System.Text.Encoding)" /> 和
+                该操作将强制覆盖 <see cref="M:HttpAgent.HttpRequestBuilder.SetContent(System.Object,System.String,System.Text.Encoding)" />、<see cref="M:HttpAgent.HttpRequestBuilder.SetContentEncoding(System.Text.Encoding)" /> 和
                 <see cref="M:HttpAgent.HttpRequestBuilder.SetContentType(System.String)" /> 设置的内容。
             </remarks>
             <param name="configure">自定义配置委托</param>
@@ -1254,7 +1254,7 @@
                 设置多部分内容表单，请求类型为 <c>multipart/form-data</c>
             </summary>
             <remarks>
-                该操作将强制覆盖 <see cref="M:HttpAgent.HttpRequestBuilder.SetRawContent(System.Object,System.String,System.Text.Encoding)" />、<see cref="M:HttpAgent.HttpRequestBuilder.SetContentEncoding(System.Text.Encoding)" /> 和
+                该操作将强制覆盖 <see cref="M:HttpAgent.HttpRequestBuilder.SetContent(System.Object,System.String,System.Text.Encoding)" />、<see cref="M:HttpAgent.HttpRequestBuilder.SetContentEncoding(System.Text.Encoding)" /> 和
                 <see cref="M:HttpAgent.HttpRequestBuilder.SetContentType(System.String)" /> 设置的内容。
             </remarks>
             <param name="httpMultipartFormDataBuilder">
@@ -4513,6 +4513,18 @@
         <member name="P:HttpAgent.MultipartDeclarativeExtractor.Order">
             <inheritdoc />
         </member>
+        <member name="M:HttpAgent.MultipartDeclarativeExtractor.AddMultipart(System.Reflection.ParameterInfo,System.Object,HttpAgent.HttpMultipartFormDataBuilder)">
+            <summary>
+                添加多部分表单内容
+            </summary>
+            <param name="parameter">
+                <see cref="T:System.Reflection.ParameterInfo" />
+            </param>
+            <param name="value">参数值</param>
+            <param name="httpMultipartFormDataBuilder">
+                <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
+            </param>
+        </member>
         <member name="M:HttpAgent.MultipartDeclarativeExtractor.AddFileFromSource(System.String,System.String,HttpAgent.MultipartAttribute,HttpAgent.HttpMultipartFormDataBuilder,System.Text.Encoding)">
             <summary>
                 添加文件
@@ -4527,9 +4539,9 @@
             </param>
             <param name="contentEncoding">内容编码</param>
         </member>
-        <member name="M:HttpAgent.MultipartDeclarativeExtractor.AddTextOrRaw(System.Object,System.String,System.Type,HttpAgent.MultipartAttribute,HttpAgent.HttpMultipartFormDataBuilder,System.Text.Encoding)">
+        <member name="M:HttpAgent.MultipartDeclarativeExtractor.AddPropertyOrRaw(System.Object,System.String,System.Type,HttpAgent.MultipartAttribute,HttpAgent.HttpMultipartFormDataBuilder,System.Text.Encoding)">
             <summary>
-                添加文本或原始内容
+                添加单个表单项或原始内容
             </summary>
             <param name="value">参数的值</param>
             <param name="name">表单名称</param>
