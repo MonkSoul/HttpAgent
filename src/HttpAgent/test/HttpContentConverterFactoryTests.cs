@@ -13,10 +13,10 @@ public class HttpContentConverterFactoryTests
         var httpContentConverterFactory1 = new HttpContentConverterFactory(serviceProvider, null);
         Assert.NotNull(httpContentConverterFactory1._serviceProvider);
         Assert.NotNull(httpContentConverterFactory1._converters);
-        Assert.Equal(4, httpContentConverterFactory1._converters.Count);
+        Assert.Equal(5, httpContentConverterFactory1._converters.Count);
         Assert.Equal(
             [
-                typeof(StringContentConverter), typeof(ByteArrayContentConverter),
+                typeof(HttpResponseMessageConverter), typeof(StringContentConverter), typeof(ByteArrayContentConverter),
                 typeof(StreamContentConverter), typeof(VoidContentConverter)
             ],
             httpContentConverterFactory1._converters.Select(u => u.Key));
@@ -24,10 +24,10 @@ public class HttpContentConverterFactoryTests
         var httpContentConverterFactory2 =
             new HttpContentConverterFactory(serviceProvider, [new CustomStringContentConverter()]);
         Assert.NotNull(httpContentConverterFactory2._converters);
-        Assert.Equal(5, httpContentConverterFactory2._converters.Count);
+        Assert.Equal(6, httpContentConverterFactory2._converters.Count);
         Assert.Equal(
             [
-                typeof(StringContentConverter), typeof(ByteArrayContentConverter),
+                typeof(HttpResponseMessageConverter), typeof(StringContentConverter), typeof(ByteArrayContentConverter),
                 typeof(StreamContentConverter), typeof(VoidContentConverter),
                 typeof(CustomStringContentConverter)
             ],
@@ -37,27 +37,13 @@ public class HttpContentConverterFactoryTests
             new HttpContentConverterFactory(serviceProvider,
                 [new StringContentConverter(), new ByteArrayContentConverter()]);
         Assert.NotNull(httpContentConverterFactory3._converters);
-        Assert.Equal(4, httpContentConverterFactory3._converters.Count);
+        Assert.Equal(5, httpContentConverterFactory3._converters.Count);
         Assert.Equal(
             [
-                typeof(StringContentConverter), typeof(ByteArrayContentConverter),
+                typeof(HttpResponseMessageConverter), typeof(StringContentConverter), typeof(ByteArrayContentConverter),
                 typeof(StreamContentConverter), typeof(VoidContentConverter)
             ],
             httpContentConverterFactory3._converters.Select(u => u.Key));
-    }
-
-    [Fact]
-    public void GetConverter_Invalid_Parameters()
-    {
-        using var serviceProvider = new ServiceCollection().BuildServiceProvider();
-        var httpContentConverterFactory = new HttpContentConverterFactory(serviceProvider, null);
-
-        var exception = Assert.Throws<InvalidOperationException>(() =>
-        {
-            _ = httpContentConverterFactory.GetConverter<HttpResponseMessage>();
-        });
-
-        Assert.Equal("`HttpResponseMessage` type cannot be directly processed as `TResult`.", exception.Message);
     }
 
     [Fact]
@@ -66,6 +52,8 @@ public class HttpContentConverterFactoryTests
         using var serviceProvider = new ServiceCollection().BuildServiceProvider();
         var httpContentConverterFactory = new HttpContentConverterFactory(serviceProvider, null);
 
+        Assert.Equal(typeof(HttpResponseMessageConverter),
+            httpContentConverterFactory.GetConverter<HttpResponseMessage>().GetType());
         Assert.Equal(typeof(StringContentConverter), httpContentConverterFactory.GetConverter<string>().GetType());
         Assert.Equal(typeof(ByteArrayContentConverter), httpContentConverterFactory.GetConverter<byte[]>().GetType());
         Assert.Equal(typeof(StreamContentConverter), httpContentConverterFactory.GetConverter<Stream>().GetType());
@@ -157,20 +145,6 @@ public class HttpContentConverterFactoryTests
         var result = await httpContentConverterFactory.ReadAsync<string>(httpResponseMessage,
             cancellationToken: cancellationTokenSource.Token);
         Assert.Equal("furion", result);
-    }
-
-    [Fact]
-    public void GetConverter_WithType_Invalid_Parameters()
-    {
-        using var serviceProvider = new ServiceCollection().BuildServiceProvider();
-        var httpContentConverterFactory = new HttpContentConverterFactory(serviceProvider, null);
-
-        var exception = Assert.Throws<InvalidOperationException>(() =>
-        {
-            _ = httpContentConverterFactory.GetConverter(typeof(HttpResponseMessage));
-        });
-
-        Assert.Equal("`HttpResponseMessage` type cannot be directly processed as result type.", exception.Message);
     }
 
     [Fact]

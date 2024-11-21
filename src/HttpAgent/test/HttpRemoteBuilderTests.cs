@@ -425,12 +425,11 @@ public class HttpRemoteBuilderTests
         var httpContentConverterFactory =
             (HttpContentConverterFactory)serviceProvider.GetRequiredService(typeof(IHttpContentConverterFactory));
         Assert.NotNull(httpContentConverterFactory._converters);
-        Assert.Equal(5, httpContentConverterFactory._converters.Count);
+        Assert.Equal(6, httpContentConverterFactory._converters.Count);
         Assert.Equal(
             [
-                typeof(StringContentConverter), typeof(ByteArrayContentConverter),
-                typeof(StreamContentConverter), typeof(VoidContentConverter),
-                typeof(CustomStringContentConverter)
+                typeof(HttpResponseMessageConverter), typeof(StringContentConverter), typeof(ByteArrayContentConverter),
+                typeof(StreamContentConverter), typeof(VoidContentConverter), typeof(CustomStringContentConverter)
             ],
             httpContentConverterFactory._converters.Select(u => u.Key));
 

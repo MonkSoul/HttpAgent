@@ -19,7 +19,7 @@ var cookieContainer = new CookieContainer();
 cookieContainer.Add(new Uri("https://furion.net"), new Cookie("cookieName", "cookieValue"));
 
 // 为默认客户端启用
-builder.Services.AddHttpClient(string.Empty)
+builder.Services.AddHttpClient(string.Empty, options => { })
     .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
     {
         CookieContainer = cookieContainer,
@@ -39,7 +39,7 @@ builder.Services.TryAddTransient<AuthorizationDelegatingHandler>();
 builder.Services.AddHttpRemote(options =>
 {
     // 注册单个 HTTP 声明式请求接口
-    options.AddHttpDeclarative<ISampleService>();
+    // options.AddHttpDeclarative<ISampleService>();
 
     // 扫描程序集批量注册 HTTP 声明式请求接口（推荐此方式注册）
     options.AddHttpDeclarativeFromAssemblies([Assembly.GetEntryAssembly()]);

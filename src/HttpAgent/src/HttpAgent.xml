@@ -2858,6 +2858,23 @@
         <member name="M:HttpAgent.ByteArrayContentConverter.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="T:HttpAgent.HttpResponseMessageConverter">
+            <summary>
+                <see cref="T:System.Net.Http.HttpResponseMessage" /> 内容转换器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.HttpResponseMessageConverter.Read(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpResponseMessageConverter.ReadAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpResponseMessageConverter.Read(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpResponseMessageConverter.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="T:HttpAgent.IHttpContentConverter">
             <summary>
                 <see cref="T:System.Net.Http.HttpResponseMessage" /> 响应内容转换器默认实现接口

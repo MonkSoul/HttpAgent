@@ -29,6 +29,7 @@ internal sealed class HttpContentConverterFactory : IHttpContentConverterFactory
         // 初始化响应内容转换器
         _converters = new Dictionary<Type, IHttpContentConverter>
         {
+            [typeof(HttpResponseMessageConverter)] = new HttpResponseMessageConverter(),
             [typeof(StringContentConverter)] = new StringContentConverter(),
             [typeof(ByteArrayContentConverter)] = new ByteArrayContentConverter(),
             [typeof(StreamContentConverter)] = new StreamContentConverter(),
@@ -42,13 +43,6 @@ internal sealed class HttpContentConverterFactory : IHttpContentConverterFactory
     /// <inheritdoc />
     public IHttpContentConverter<TResult> GetConverter<TResult>(params IHttpContentConverter[]? converters)
     {
-        // 检查类型是否是 HttpResponseMessage 类型
-        if (typeof(TResult) == typeof(HttpResponseMessage))
-        {
-            throw new InvalidOperationException(
-                $"`{nameof(HttpResponseMessage)}` type cannot be directly processed as `TResult`.");
-        }
-
         // 初始化新的 IHttpContentConverter 字典集合
         var unionProcessors = new Dictionary<Type, IHttpContentConverter>(_converters);
 
@@ -72,13 +66,6 @@ internal sealed class HttpContentConverterFactory : IHttpContentConverterFactory
     /// <inheritdoc />
     public IHttpContentConverter GetConverter(Type resultType, params IHttpContentConverter[]? converters)
     {
-        // 检查类型是否是 HttpResponseMessage 类型
-        if (resultType == typeof(HttpResponseMessage))
-        {
-            throw new InvalidOperationException(
-                $"`{nameof(HttpResponseMessage)}` type cannot be directly processed as result type.");
-        }
-
         // 初始化新的 IHttpContentConverter 字典集合
         var unionProcessors = new Dictionary<Type, IHttpContentConverter>(_converters);
 
@@ -102,51 +89,24 @@ internal sealed class HttpContentConverterFactory : IHttpContentConverterFactory
 
     /// <inheritdoc />
     public TResult? Read<TResult>(HttpResponseMessage httpResponseMessage, IHttpContentConverter[]? converters = null,
-        CancellationToken cancellationToken = default)
-    {
-        // 检查类型是否是 HttpResponseMessage 类型，如果是直接返回
-        if (typeof(TResult) == typeof(HttpResponseMessage))
-        {
-            return (TResult)(object)httpResponseMessage;
-        }
-
-        return GetConverter<TResult>(converters).Read(httpResponseMessage, cancellationToken);
-    }
+        CancellationToken cancellationToken = default) =>
+        GetConverter<TResult>(converters).Read(httpResponseMessage, cancellationToken);
 
     /// <inheritdoc />
     public object? Read(Type resultType, HttpResponseMessage httpResponseMessage,
         IHttpContentConverter[]? converters = null,
         CancellationToken cancellationToken = default) =>
-        // 检查类型是否是 HttpResponseMessage 类型，如果是直接返回
-        resultType == typeof(HttpResponseMessage)
-            ? httpResponseMessage
-            : GetConverter(resultType, converters).Read(resultType, httpResponseMessage, cancellationToken);
+        GetConverter(resultType, converters).Read(resultType, httpResponseMessage, cancellationToken);
 
     /// <inheritdoc />
     public async Task<TResult?> ReadAsync<TResult>(HttpResponseMessage httpResponseMessage,
         IHttpContentConverter[]? converters = null,
-        CancellationToken cancellationToken = default)
-    {
-        // 检查类型是否是 HttpResponseMessage 类型，如果是直接返回
-        if (typeof(TResult) == typeof(HttpResponseMessage))
-        {
-            return (TResult)(object)httpResponseMessage;
-        }
-
-        return await GetConverter<TResult>(converters).ReadAsync(httpResponseMessage, cancellationToken);
-    }
+        CancellationToken cancellationToken = default) =>
+        await GetConverter<TResult>(converters).ReadAsync(httpResponseMessage, cancellationToken);
 
     /// <inheritdoc />
     public async Task<object?> ReadAsync(Type resultType, HttpResponseMessage httpResponseMessage,
         IHttpContentConverter[]? converters = null,
-        CancellationToken cancellationToken = default)
-    {
-        // 检查类型是否是 HttpResponseMessage 类型，如果是直接返回
-        if (resultType == typeof(HttpResponseMessage))
-        {
-            return httpResponseMessage;
-        }
-
-        return await GetConverter(resultType, converters).ReadAsync(resultType, httpResponseMessage, cancellationToken);
-    }
+        CancellationToken cancellationToken = default) =>
+        await GetConverter(resultType, converters).ReadAsync(resultType, httpResponseMessage, cancellationToken);
 }
