@@ -454,7 +454,7 @@ public class GetStartController(
     }
 
     /// <summary>
-    ///     转发代理到图片
+    ///     转发代理到文件
     /// </summary>
     /// <returns></returns>
     [HttpGet]
@@ -462,7 +462,14 @@ public class GetStartController(
     public Task<IActionResult?> ForwardToDownload()
     {
         return httpContextAccessor.HttpContext.ForwardAsActionResultAsync(
-            "https://download.visualstudio.microsoft.com/download/pr/a17b907f-8457-45a8-90db-53f2665ee49e/49bccd33593ebceb2847674fe5fd768e/aspnetcore-runtime-8.0.10-win-x64.exe");
+            "https://download.visualstudio.microsoft.com/download/pr/a17b907f-8457-45a8-90db-53f2665ee49e/49bccd33593ebceb2847674fe5fd768e/aspnetcore-runtime-8.0.10-win-x64.exe"
+            /*, forwardOptions: new HttpContextForwardOptions
+            {
+                OnForward = (context, message) =>
+                {
+                    context.Response.Headers.ContentDisposition = new StringValues("attachment; filename=abc.exe"); // 自定义返回名称
+                }
+            }*/);
     }
 
     /// <summary>
