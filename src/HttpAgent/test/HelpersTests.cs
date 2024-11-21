@@ -29,7 +29,7 @@ public class HelpersTests
         Assert.NotNull(stream);
 
         var length = tuple.Item2;
-        Assert.NotNull(length);
+        Assert.True(length > 0);
         Assert.Equal(2785992, length);
     }
 

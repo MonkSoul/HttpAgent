@@ -74,14 +74,14 @@ internal sealed class MultipartDeclarativeExtractor : IFrozenHttpDeclarativeExtr
         {
             // 添加流
             case Stream stream:
-                httpMultipartFormDataBuilder.AddStream(stream, name, multipartAttribute.FileName, stream.Length,
-                    multipartAttribute.ContentType ?? MediaTypeNames.Application.Octet, contentEncoding);
+                httpMultipartFormDataBuilder.AddStream(stream, name, multipartAttribute.FileName,
+                    multipartAttribute.ContentType ?? MediaTypeNames.Application.Octet, contentEncoding, stream.Length);
                 break;
             // 添加字节数组
             case byte[] byteArray:
                 httpMultipartFormDataBuilder.AddByteArray(byteArray, name, multipartAttribute.FileName,
-                    byteArray.Length, multipartAttribute.ContentType ?? MediaTypeNames.Application.Octet,
-                    contentEncoding);
+                    multipartAttribute.ContentType ?? MediaTypeNames.Application.Octet, contentEncoding,
+                    byteArray.Length);
                 break;
             // 添加 HttpContent
             case HttpContent httpContent:

@@ -133,9 +133,9 @@ public sealed class HttpStressTestHarnessBuilder
         ArgumentNullException.ThrowIfNull(httpRemoteOptions);
 
         // 初始化 HttpRequestBuilder 实例，并确保请求标头中添加了 X-Stress-Test: Harness；
-        // 同时启用 HttpClient 池化管理
+        // 同时禁用请求分析工具和启用 HttpClient 池化管理
         var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure)
-            .WithHeader(Constants.X_STRESS_TEST_HEADER, Constants.X_STRESS_TEST_VALUE, replace: true)
+            .WithHeader(Constants.X_STRESS_TEST_HEADER, Constants.X_STRESS_TEST_VALUE, replace: true).Profiler(false)
             .UseHttpClientPool();
 
         return httpRequestBuilder;

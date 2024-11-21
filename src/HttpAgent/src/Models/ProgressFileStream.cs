@@ -40,11 +40,10 @@ internal sealed class ProgressFileStream : Stream
     ///     <see cref="Stream" />
     /// </param>
     /// <param name="filePath">文件路径或文件的名称</param>
-    /// <param name="fileLength">文件大小</param>
     /// <param name="progressChannel">文件传输进度信息的通道</param>
     /// <param name="fileName">文件的名称</param>
-    internal ProgressFileStream(Stream fileStream, string filePath, long fileLength,
-        Channel<FileTransferProgress> progressChannel, string? fileName = null)
+    internal ProgressFileStream(Stream fileStream, string filePath, Channel<FileTransferProgress> progressChannel,
+        string? fileName = null)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(fileStream);
@@ -52,7 +51,7 @@ internal sealed class ProgressFileStream : Stream
         ArgumentNullException.ThrowIfNull(progressChannel);
 
         _fileStream = fileStream;
-        _fileLength = fileLength;
+        _fileLength = fileStream.Length;
         _progressChannel = progressChannel;
 
         // 初始化 FileTransferProgress 实例

@@ -607,17 +607,17 @@ public class HttpMultipartFormDataBuilderTests
         using var stream = new MemoryStream();
 
         // stream 为空
-        Assert.Throws<ArgumentNullException>(() => builder.AddStream(null!, null!, null, null, null!));
+        Assert.Throws<ArgumentNullException>(() => builder.AddStream(null!, null!, null, null!));
 
         // name 为空
-        Assert.Throws<ArgumentNullException>(() => builder.AddStream(stream, null!, null, null, null!));
-        Assert.Throws<ArgumentException>(() => builder.AddStream(stream, string.Empty, null, null, null!));
-        Assert.Throws<ArgumentException>(() => builder.AddStream(stream, " ", null, null, null!));
+        Assert.Throws<ArgumentNullException>(() => builder.AddStream(stream, null!, null, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddStream(stream, string.Empty, null, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddStream(stream, " ", null, null!));
 
         // content-type 为空
-        Assert.Throws<ArgumentNullException>(() => builder.AddStream(stream, "test", null, null, null!));
-        Assert.Throws<ArgumentException>(() => builder.AddStream(stream, "test", null, null, string.Empty));
-        Assert.Throws<ArgumentException>(() => builder.AddStream(stream, "test", null, null, " "));
+        Assert.Throws<ArgumentNullException>(() => builder.AddStream(stream, "test", null, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddStream(stream, "test", null, string.Empty));
+        Assert.Throws<ArgumentException>(() => builder.AddStream(stream, "test", null, " "));
     }
 
     [Fact]
@@ -626,7 +626,7 @@ public class HttpMultipartFormDataBuilderTests
         var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
         using var stream = new MemoryStream();
 
-        builder.AddStream(stream, "test", "image.jpg", null, "image/jpeg");
+        builder.AddStream(stream, "test", "image.jpg", "image/jpeg");
         Assert.Single(builder._partContents);
         Assert.Equal("test", builder._partContents[0].Name);
         Assert.Equal("image/jpeg", builder._partContents[0].ContentType);
@@ -634,7 +634,7 @@ public class HttpMultipartFormDataBuilderTests
         Assert.Equal(stream, builder._partContents[0].RawContent);
         Assert.Equal("image.jpg", builder._partContents[0].FileName);
 
-        builder.AddStream(stream, "test", "image.jpg", null, "image/jpeg;charset=utf-8");
+        builder.AddStream(stream, "test", "image.jpg", "image/jpeg;charset=utf-8");
         Assert.Equal(2, builder._partContents.Count);
         Assert.Equal("test", builder._partContents[1].Name);
         Assert.Equal("image/jpeg", builder._partContents[1].ContentType);
@@ -642,7 +642,7 @@ public class HttpMultipartFormDataBuilderTests
         Assert.Equal(stream, builder._partContents[1].RawContent);
         Assert.Equal("image.jpg", builder._partContents[1].FileName);
 
-        builder.AddStream(stream, "test", "image.jpg", null, "image/jpeg;charset=utf-8", Encoding.UTF32);
+        builder.AddStream(stream, "test", "image.jpg", "image/jpeg;charset=utf-8", Encoding.UTF32);
         Assert.Equal(3, builder._partContents.Count);
         Assert.Equal("test", builder._partContents[2].Name);
         Assert.Equal("image/jpeg", builder._partContents[2].ContentType);
@@ -666,7 +666,7 @@ public class HttpMultipartFormDataBuilderTests
         Assert.Equal(stream, builder._partContents[4].RawContent);
         Assert.Null(builder._partContents[4].FileName);
 
-        builder.AddStream(stream, "test", "image.jpg", 21);
+        builder.AddStream(stream, "test", "image.jpg", fileSize: 21);
         Assert.Equal(6, builder._partContents.Count);
         Assert.Equal("test", builder._partContents[5].Name);
         Assert.Equal("application/octet-stream", builder._partContents[5].ContentType);
@@ -683,17 +683,17 @@ public class HttpMultipartFormDataBuilderTests
         var bytes = Array.Empty<byte>();
 
         // stream 为空
-        Assert.Throws<ArgumentNullException>(() => builder.AddByteArray(null!, null!, null, null, null!));
+        Assert.Throws<ArgumentNullException>(() => builder.AddByteArray(null!, null!, null, null!));
 
         // name 为空
-        Assert.Throws<ArgumentNullException>(() => builder.AddByteArray(bytes, null!, null, null, null!));
-        Assert.Throws<ArgumentException>(() => builder.AddByteArray(bytes, string.Empty, null, null, null!));
-        Assert.Throws<ArgumentException>(() => builder.AddByteArray(bytes, " ", null, null, null!));
+        Assert.Throws<ArgumentNullException>(() => builder.AddByteArray(bytes, null!, null, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddByteArray(bytes, string.Empty, null, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddByteArray(bytes, " ", null, null!));
 
         // content-type 为空
-        Assert.Throws<ArgumentNullException>(() => builder.AddByteArray(bytes, "test", null, null, null!));
-        Assert.Throws<ArgumentException>(() => builder.AddByteArray(bytes, "test", null, null, string.Empty));
-        Assert.Throws<ArgumentException>(() => builder.AddByteArray(bytes, "test", null, null, " "));
+        Assert.Throws<ArgumentNullException>(() => builder.AddByteArray(bytes, "test", null, null!));
+        Assert.Throws<ArgumentException>(() => builder.AddByteArray(bytes, "test", null, string.Empty));
+        Assert.Throws<ArgumentException>(() => builder.AddByteArray(bytes, "test", null, " "));
     }
 
     [Fact]
@@ -702,7 +702,7 @@ public class HttpMultipartFormDataBuilderTests
         var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
         var bytes = Array.Empty<byte>();
 
-        builder.AddByteArray(bytes, "test", "image.jpg", null, "image/jpeg");
+        builder.AddByteArray(bytes, "test", "image.jpg", "image/jpeg");
         Assert.Single(builder._partContents);
         Assert.Equal("test", builder._partContents[0].Name);
         Assert.Equal("image/jpeg", builder._partContents[0].ContentType);
@@ -710,7 +710,7 @@ public class HttpMultipartFormDataBuilderTests
         Assert.Equal(bytes, builder._partContents[0].RawContent);
         Assert.Equal("image.jpg", builder._partContents[0].FileName);
 
-        builder.AddByteArray(bytes, "test", "image.jpg", null, "image/jpeg;charset=utf-8");
+        builder.AddByteArray(bytes, "test", "image.jpg", "image/jpeg;charset=utf-8");
         Assert.Equal(2, builder._partContents.Count);
         Assert.Equal("test", builder._partContents[1].Name);
         Assert.Equal("image/jpeg", builder._partContents[1].ContentType);
@@ -718,7 +718,7 @@ public class HttpMultipartFormDataBuilderTests
         Assert.Equal(bytes, builder._partContents[1].RawContent);
         Assert.Equal("image.jpg", builder._partContents[1].FileName);
 
-        builder.AddByteArray(bytes, "test", "image.jpg", null, "image/jpeg;charset=utf-8", Encoding.UTF32);
+        builder.AddByteArray(bytes, "test", "image.jpg", "image/jpeg;charset=utf-8", Encoding.UTF32);
         Assert.Equal(3, builder._partContents.Count);
         Assert.Equal("test", builder._partContents[2].Name);
         Assert.Equal("image/jpeg", builder._partContents[2].ContentType);
@@ -742,7 +742,7 @@ public class HttpMultipartFormDataBuilderTests
         Assert.Equal(bytes, builder._partContents[4].RawContent);
         Assert.Null(builder._partContents[4].FileName);
 
-        builder.AddByteArray(bytes, "test", "image.jpg", 21);
+        builder.AddByteArray(bytes, "test", "image.jpg", fileSize: 21);
         Assert.Equal(6, builder._partContents.Count);
         Assert.Equal("test", builder._partContents[5].Name);
         Assert.Equal("application/octet-stream", builder._partContents[5].ContentType);

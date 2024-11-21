@@ -223,7 +223,7 @@ public sealed class HttpMultipartFormDataBuilder
         // 添加文件流到请求结束时需要释放的集合中
         _httpRequestBuilder.AddDisposable(fileStream);
 
-        return AddStream(fileStream, name, newFileName, fileLength, contentType, contentEncoding);
+        return AddStream(fileStream, name, newFileName, contentType, contentEncoding, fileLength);
     }
 
     /// <summary>
@@ -238,6 +238,7 @@ public sealed class HttpMultipartFormDataBuilder
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
+    /// <exception cref="InvalidOperationException"></exception>
     public HttpMultipartFormDataBuilder AddFileFromBase64String(string base64String, string name,
         string? fileName = null, string contentType = "application/octet-stream", Encoding? contentEncoding = null)
     {
@@ -251,7 +252,15 @@ public sealed class HttpMultipartFormDataBuilder
         // 获取字节数组长度
         var fileLength = bytes.Length;
 
-        return AddByteArray(bytes, name, fileName, fileLength, contentType, contentEncoding);
+        // 限制文件字节数组大小在 50MB 以内
+        const long maxFileSizeInBytes = 52428800L;
+        if (fileLength > maxFileSizeInBytes)
+        {
+            throw new InvalidOperationException(
+                $"The file size exceeds the maximum allowed size of `{maxFileSizeInBytes.ToSizeUnits("MB"):F2} MB`.");
+        }
+
+        return AddByteArray(bytes, name, fileName, contentType, contentEncoding, fileLength);
     }
 
     /// <summary>
@@ -284,18 +293,14 @@ public sealed class HttpMultipartFormDataBuilder
         // 读取文件流（没有 using）
         var fileStream = File.OpenRead(filePath);
 
-        // 获取文件信息
-        var fileInfo = new FileInfo(filePath);
-        var fileLength = fileInfo.Length;
-
         // 添加文件流到请求结束时需要释放的集合中
         _httpRequestBuilder.AddDisposable(fileStream);
 
-        return AddStream(fileStream, name, newFileName, fileLength, contentType, contentEncoding);
+        return AddStream(fileStream, name, newFileName, contentType, contentEncoding, fileStream.Length);
     }
 
     /// <summary>
-    ///     从本地路径中添加文件（带上传进度）
+    ///     从本地路径中添加文件（带文件传输进度）
     /// </summary>
     /// <param name="filePath">文件路径</param>
     /// <param name="name">表单名称</param>
@@ -327,17 +332,14 @@ public sealed class HttpMultipartFormDataBuilder
         // 读取文件流（没有 using）
         var fileStream = File.OpenRead(filePath);
 
-        // 获取文件信息
-        var fileInfo = new FileInfo(filePath);
-        var fileLength = fileInfo.Length;
-
         // 初始化带读写进度的文件流
-        var progressFileStream = new ProgressFileStream(fileStream, filePath, fileLength, progressChannel, newFileName);
+        var progressFileStream = new ProgressFileStream(fileStream, filePath, progressChannel, newFileName);
 
         // 添加文件流到请求结束时需要释放的集合中
         _httpRequestBuilder.AddDisposable(progressFileStream);
 
-        return AddStream(progressFileStream, name, newFileName, fileLength, contentType, contentEncoding);
+        return AddStream(progressFileStream, name, newFileName, contentType, contentEncoding,
+            progressFileStream.Length);
     }
 
     /// <summary>
@@ -370,11 +372,7 @@ public sealed class HttpMultipartFormDataBuilder
         // 读取文件字节数组
         var bytes = File.ReadAllBytes(filePath);
 
-        // 获取文件信息
-        var fileInfo = new FileInfo(filePath);
-        var fileLength = fileInfo.Length;
-
-        return AddByteArray(bytes, name, newFileName, fileLength, contentType, contentEncoding);
+        return AddByteArray(bytes, name, newFileName, contentType, contentEncoding, bytes.Length);
     }
 
     /// <summary>
@@ -385,14 +383,14 @@ public sealed class HttpMultipartFormDataBuilder
     /// </param>
     /// <param name="name">表单名称</param>
     /// <param name="fileName">文件的名称</param>
-    /// <param name="fileSize">文件大小</param>
     /// <param name="contentType">内容类型</param>
     /// <param name="contentEncoding">内容编码</param>
+    /// <param name="fileSize">文件大小</param>
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
     public HttpMultipartFormDataBuilder AddStream(Stream stream, string name, string? fileName = null,
-        long? fileSize = null, string contentType = "application/octet-stream", Encoding? contentEncoding = null)
+        string contentType = "application/octet-stream", Encoding? contentEncoding = null, long? fileSize = null)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(stream);
@@ -407,7 +405,7 @@ public sealed class HttpMultipartFormDataBuilder
             RawContent = stream,
             ContentEncoding = encoding,
             FileName = fileName,
-            FileSize = fileSize
+            FileSize = fileSize ?? stream.Length
         });
 
         return this;
@@ -419,14 +417,14 @@ public sealed class HttpMultipartFormDataBuilder
     /// <param name="byteArray">字节数组</param>
     /// <param name="name">表单名称</param>
     /// <param name="fileName">文件的名称</param>
-    /// <param name="fileSize">文件大小</param>
     /// <param name="contentType">内容类型</param>
     /// <param name="contentEncoding">内容编码</param>
+    /// <param name="fileSize">文件大小</param>
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
     public HttpMultipartFormDataBuilder AddByteArray(byte[] byteArray, string name, string? fileName = null,
-        long? fileSize = null, string contentType = "application/octet-stream", Encoding? contentEncoding = null)
+        string contentType = "application/octet-stream", Encoding? contentEncoding = null, long? fileSize = null)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(byteArray);
@@ -441,7 +439,7 @@ public sealed class HttpMultipartFormDataBuilder
             RawContent = byteArray,
             ContentEncoding = encoding,
             FileName = fileName,
-            FileSize = fileSize
+            FileSize = fileSize ?? byteArray.Length
         });
 
         return this;

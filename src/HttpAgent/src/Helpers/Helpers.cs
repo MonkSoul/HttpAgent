@@ -20,7 +20,7 @@ internal static partial class Helpers
     /// </returns>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="InvalidOperationException"></exception>
-    internal static Tuple<Stream, long?> GetStreamFromRemote(string url)
+    internal static Tuple<Stream, long> GetStreamFromRemote(string url)
     {
         // 空检查
         ArgumentException.ThrowIfNullOrWhiteSpace(url);
@@ -50,7 +50,7 @@ internal static partial class Helpers
 
             // 读取流和长度
             var stream = httpResponseMessage.Content.ReadAsStream();
-            var length = httpResponseMessage.Content.Headers.ContentLength;
+            var length = httpResponseMessage.Content.Headers.ContentLength ?? stream.Length;
 
             return Tuple.Create(stream, length);
         }
