@@ -673,6 +673,7 @@
             <returns>
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
+            <exception cref="T:System.InvalidOperationException"></exception>
         </member>
         <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddFileAsStream(System.String,System.String,System.String,System.String,System.Text.Encoding)">
             <summary>
@@ -689,7 +690,7 @@
         </member>
         <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddFileWithProgressAsStream(System.String,System.String,System.Threading.Channels.Channel{HttpAgent.FileTransferProgress},System.String,System.String,System.Text.Encoding)">
             <summary>
-                从本地路径中添加文件（带上传进度）
+                从本地路径中添加文件（带文件传输进度）
             </summary>
             <param name="filePath">文件路径</param>
             <param name="name">表单名称</param>
@@ -714,7 +715,7 @@
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddStream(System.IO.Stream,System.String,System.String,System.Nullable{System.Int64},System.String,System.Text.Encoding)">
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddStream(System.IO.Stream,System.String,System.String,System.String,System.Text.Encoding,System.Nullable{System.Int64})">
             <summary>
                 添加流
             </summary>
@@ -723,23 +724,23 @@
             </param>
             <param name="name">表单名称</param>
             <param name="fileName">文件的名称</param>
-            <param name="fileSize">文件大小</param>
             <param name="contentType">内容类型</param>
             <param name="contentEncoding">内容编码</param>
+            <param name="fileSize">文件大小</param>
             <returns>
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddByteArray(System.Byte[],System.String,System.String,System.Nullable{System.Int64},System.String,System.Text.Encoding)">
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddByteArray(System.Byte[],System.String,System.String,System.String,System.Text.Encoding,System.Nullable{System.Int64})">
             <summary>
                 添加字节数组
             </summary>
             <param name="byteArray">字节数组</param>
             <param name="name">表单名称</param>
             <param name="fileName">文件的名称</param>
-            <param name="fileSize">文件大小</param>
             <param name="contentType">内容类型</param>
             <param name="contentEncoding">内容编码</param>
+            <param name="fileSize">文件大小</param>
             <returns>
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
@@ -1015,6 +1016,11 @@
             </summary>
             <summary>
                 <see cref="T:System.Net.Http.HttpRequestMessage" /> 构建器
+            </summary>
+        </member>
+        <member name="F:HttpAgent.HttpRequestBuilder._stringContentForFormUrlEncodedContentProcessorInstance">
+            <summary>
+                <see cref="T:HttpAgent.StringContentForFormUrlEncodedContentProcessor" /> 实例
             </summary>
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.#ctor(System.Net.Http.HttpMethod,System.Uri)">
@@ -6080,7 +6086,7 @@
                 已传输的数据量
             </summary>
         </member>
-        <member name="M:HttpAgent.ProgressFileStream.#ctor(System.IO.Stream,System.String,System.Int64,System.Threading.Channels.Channel{HttpAgent.FileTransferProgress},System.String)">
+        <member name="M:HttpAgent.ProgressFileStream.#ctor(System.IO.Stream,System.String,System.Threading.Channels.Channel{HttpAgent.FileTransferProgress},System.String)">
             <summary>
                 <inheritdoc cref="T:HttpAgent.ProgressFileStream" />
             </summary>
@@ -6088,7 +6094,6 @@
                 <see cref="T:System.IO.Stream" />
             </param>
             <param name="filePath">文件路径或文件的名称</param>
-            <param name="fileLength">文件大小</param>
             <param name="progressChannel">文件传输进度信息的通道</param>
             <param name="fileName">文件的名称</param>
         </member>

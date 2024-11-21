@@ -15,7 +15,7 @@ public sealed class HttpContextForwardBuilder
     /// <summary>
     ///     <see cref="IActionResultContentConverter" /> 实例
     /// </summary>
-    internal static Lazy<IActionResultContentConverter> _actionResultContentConverterInstance =
+    internal static readonly Lazy<IActionResultContentConverter> _actionResultContentConverterInstance =
         new(() => new IActionResultContentConverter());
 
     /// <summary>

@@ -474,7 +474,8 @@ public sealed class HttpMultipartFormDataBuilder
         // 检查是否启用 StringContent 方式构建 application/x-www-form-urlencoded 请求内容
         if (useStringContent)
         {
-            _httpRequestBuilder.AddHttpContentProcessors(() => [new StringContentForFormUrlEncodedContentProcessor()]);
+            _httpRequestBuilder.AddHttpContentProcessors(() =>
+                [HttpRequestBuilder._stringContentForFormUrlEncodedContentProcessorInstance.Value]);
         }
 
         return this;

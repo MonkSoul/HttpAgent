@@ -16,6 +16,8 @@ public class HttpRequestBuilderTests
     [Fact]
     public void New_ReturnOK()
     {
+        Assert.NotNull(HttpRequestBuilder._stringContentForFormUrlEncodedContentProcessorInstance);
+
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, null!);
         Assert.Equal(HttpMethod.Get, httpRequestBuilder.Method);
         Assert.Null(httpRequestBuilder.RequestUri);

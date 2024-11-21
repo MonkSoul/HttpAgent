@@ -51,7 +51,8 @@ internal sealed class BodyDeclarativeExtractor : IHttpDeclarativeExtractor
         if (httpRequestBuilder.ContentType.IsIn([MediaTypeNames.Application.FormUrlEncoded]) &&
             bodyAttribute.UseStringContent)
         {
-            httpRequestBuilder.AddHttpContentProcessors(() => [new StringContentForFormUrlEncodedContentProcessor()]);
+            httpRequestBuilder.AddHttpContentProcessors(() =>
+                [HttpRequestBuilder._stringContentForFormUrlEncodedContentProcessorInstance.Value]);
         }
 
         // 设置内容编码

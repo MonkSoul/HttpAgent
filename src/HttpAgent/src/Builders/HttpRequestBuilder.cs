@@ -13,6 +13,13 @@ namespace HttpAgent;
 public sealed partial class HttpRequestBuilder
 {
     /// <summary>
+    ///     <see cref="StringContentForFormUrlEncodedContentProcessor" /> 实例
+    /// </summary>
+    internal static readonly Lazy<StringContentForFormUrlEncodedContentProcessor>
+        _stringContentForFormUrlEncodedContentProcessorInstance =
+            new(() => new StringContentForFormUrlEncodedContentProcessor());
+
+    /// <summary>
     ///     <inheritdoc cref="HttpRequestBuilder" />
     /// </summary>
     /// <param name="httpMethod">请求方式</param>
