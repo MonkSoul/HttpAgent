@@ -33,14 +33,14 @@ public sealed class HttpMultipartFormDataBuilder
     }
 
     /// <summary>
-    ///     多部分内容表单的边界
+    ///     多部分表单内容的边界
     /// </summary>
     public string? Boundary { get; set; }
 
     /// <summary>
-    ///     设置多部分内容表单的边界
+    ///     设置多部分表单内容的边界
     /// </summary>
-    /// <param name="boundary">多部分内容表单的边界</param>
+    /// <param name="boundary">多部分表单内容的边界</param>
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
@@ -446,7 +446,7 @@ public sealed class HttpMultipartFormDataBuilder
     }
 
     /// <summary>
-    ///     添加 URL 编码的键值对表单
+    ///     添加 URL 编码表单
     /// </summary>
     /// <param name="rawObject">原始对象</param>
     /// <param name="name">表单名称</param>
@@ -482,7 +482,7 @@ public sealed class HttpMultipartFormDataBuilder
     }
 
     /// <summary>
-    ///     添加多部分内容表单
+    ///     添加多部分表单内容
     /// </summary>
     /// <param name="rawObject">原始对象</param>
     /// <param name="name">表单名称</param>
@@ -589,7 +589,7 @@ public sealed class HttpMultipartFormDataBuilder
             return null;
         }
 
-        // 获取多部分内容表单的边界；注意：这里可能出现前后双引号问题
+        // 获取多部分表单内容的边界；注意：这里可能出现前后双引号问题
         var boundary = Boundary?.TrimStart('"').TrimEnd('"');
 
         // 初始化 multipartFormDataContent 实例

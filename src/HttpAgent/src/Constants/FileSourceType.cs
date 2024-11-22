@@ -5,7 +5,7 @@
 namespace HttpAgent;
 
 /// <summary>
-///     指定多部分内容表单文件的来源类型
+///     指定多部分表单内容文件的来源类型
 /// </summary>
 public enum FileSourceType
 {

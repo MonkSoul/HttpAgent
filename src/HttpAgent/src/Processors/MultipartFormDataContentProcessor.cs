@@ -5,7 +5,7 @@
 namespace HttpAgent;
 
 /// <summary>
-///     多部分内容表单数据内容处理器
+///     多部分表单内容数据内容处理器
 /// </summary>
 public class MultipartFormDataContentProcessor : IHttpContentProcessor
 {

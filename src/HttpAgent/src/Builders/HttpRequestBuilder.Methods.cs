@@ -172,7 +172,7 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
-    ///     设置 URL 编码的键值对表单内容
+    ///     设置 URL 编码表单内容
     /// </summary>
     /// <param name="rawObject">原始对象</param>
     /// <param name="contentEncoding">内容编码</param>
@@ -243,7 +243,7 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
-    ///     设置多部分内容表单，请求类型为 <c>multipart/form-data</c>
+    ///     设置多部分表单内容，请求类型为 <c>multipart/form-data</c>
     /// </summary>
     /// <remarks>
     ///     该操作将强制覆盖 <see cref="SetContent" />、<see cref="SetContentEncoding(System.Text.Encoding)" /> 和
@@ -270,7 +270,7 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
-    ///     设置多部分内容表单，请求类型为 <c>multipart/form-data</c>
+    ///     设置多部分表单内容，请求类型为 <c>multipart/form-data</c>
     /// </summary>
     /// <remarks>
     ///     该操作将强制覆盖 <see cref="SetContent" />、<see cref="SetContentEncoding(System.Text.Encoding)" /> 和

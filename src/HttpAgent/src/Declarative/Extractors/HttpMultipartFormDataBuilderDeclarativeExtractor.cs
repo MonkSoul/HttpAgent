@@ -5,7 +5,7 @@
 namespace HttpAgent;
 
 /// <summary>
-///     HTTP 声明式 <see cref="HttpMultipartFormDataBuilder" /> 多部分内容表单配置提取器
+///     HTTP 声明式 <see cref="HttpMultipartFormDataBuilder" /> 多部分表单内容配置提取器
 /// </summary>
 internal sealed class HttpMultipartFormDataBuilderDeclarativeExtractor : IFrozenHttpDeclarativeExtractor
 {
@@ -26,7 +26,7 @@ internal sealed class HttpMultipartFormDataBuilderDeclarativeExtractor : IFrozen
         }
         else
         {
-            // 设置多部分内容表单
+            // 设置多部分表单内容
             httpRequestBuilder.SetMultipartContent(multipartFormDataBuilderAction);
         }
     }

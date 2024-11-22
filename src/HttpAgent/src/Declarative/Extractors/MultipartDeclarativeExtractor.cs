@@ -33,7 +33,7 @@ internal sealed class MultipartDeclarativeExtractor : IFrozenHttpDeclarativeExtr
             AddMultipart(parameter, value, httpMultipartFormDataBuilder);
         }
 
-        // 设置多部分内容表单
+        // 设置多部分表单内容
         httpRequestBuilder.SetMultipartContent(httpMultipartFormDataBuilder);
     }
 
@@ -143,6 +143,7 @@ internal sealed class MultipartDeclarativeExtractor : IFrozenHttpDeclarativeExtr
                     contentEncoding);
                 break;
             case FileSourceType.None:
+            // 不做任何操作
             default:
                 break;
         }

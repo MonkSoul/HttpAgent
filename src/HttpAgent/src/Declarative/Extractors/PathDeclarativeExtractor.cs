@@ -5,7 +5,7 @@
 namespace HttpAgent;
 
 /// <summary>
-///     HTTP 声明式 路径参数提取器
+///     HTTP 声明式路径参数提取器
 /// </summary>
 internal sealed class PathDeclarativeExtractor : IHttpDeclarativeExtractor
 {

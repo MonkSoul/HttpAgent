@@ -566,14 +566,14 @@
         </member>
         <member name="P:HttpAgent.HttpMultipartFormDataBuilder.Boundary">
             <summary>
-                多部分内容表单的边界
+                多部分表单内容的边界
             </summary>
         </member>
         <member name="M:HttpAgent.HttpMultipartFormDataBuilder.SetBoundary(System.String)">
             <summary>
-                设置多部分内容表单的边界
+                设置多部分表单内容的边界
             </summary>
-            <param name="boundary">多部分内容表单的边界</param>
+            <param name="boundary">多部分表单内容的边界</param>
             <returns>
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
@@ -747,7 +747,7 @@
         </member>
         <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddFormUrlEncoded(System.Object,System.String,System.Text.Encoding,System.Boolean)">
             <summary>
-                添加 URL 编码的键值对表单
+                添加 URL 编码表单
             </summary>
             <param name="rawObject">原始对象</param>
             <param name="name">表单名称</param>
@@ -762,7 +762,7 @@
         </member>
         <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddMultipartFormData(System.Object,System.String,System.Text.Encoding)">
             <summary>
-                添加多部分内容表单
+                添加多部分表单内容
             </summary>
             <param name="rawObject">原始对象</param>
             <param name="name">表单名称</param>
@@ -1231,7 +1231,7 @@
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.SetFormUrlEncodedContent(System.Object,System.Text.Encoding,System.Boolean)">
             <summary>
-                设置 URL 编码的键值对表单内容
+                设置 URL 编码表单内容
             </summary>
             <param name="rawObject">原始对象</param>
             <param name="contentEncoding">内容编码</param>
@@ -1256,7 +1256,7 @@
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.SetMultipartContent(System.Action{HttpAgent.HttpMultipartFormDataBuilder})">
             <summary>
-                设置多部分内容表单，请求类型为 <c>multipart/form-data</c>
+                设置多部分表单内容，请求类型为 <c>multipart/form-data</c>
             </summary>
             <remarks>
                 该操作将强制覆盖 <see cref="M:HttpAgent.HttpRequestBuilder.SetContent(System.Object,System.String,System.Text.Encoding)" />、<see cref="M:HttpAgent.HttpRequestBuilder.SetContentEncoding(System.Text.Encoding)" /> 和
@@ -1269,7 +1269,7 @@
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.SetMultipartContent(HttpAgent.HttpMultipartFormDataBuilder)">
             <summary>
-                设置多部分内容表单，请求类型为 <c>multipart/form-data</c>
+                设置多部分表单内容，请求类型为 <c>multipart/form-data</c>
             </summary>
             <remarks>
                 该操作将强制覆盖 <see cref="M:HttpAgent.HttpRequestBuilder.SetContent(System.Object,System.String,System.Text.Encoding)" />、<see cref="M:HttpAgent.HttpRequestBuilder.SetContentEncoding(System.Text.Encoding)" /> 和
@@ -2817,7 +2817,7 @@
         </member>
         <member name="T:HttpAgent.FileSourceType">
             <summary>
-                指定多部分内容表单文件的来源类型
+                指定多部分表单内容文件的来源类型
             </summary>
         </member>
         <member name="F:HttpAgent.FileSourceType.None">
@@ -4141,7 +4141,7 @@
         </member>
         <member name="T:HttpAgent.MultipartAttribute">
             <summary>
-                HTTP 声明式多部分内容表单特性
+                HTTP 声明式多部分表单内容特性
             </summary>
         </member>
         <member name="M:HttpAgent.MultipartAttribute.#ctor">
@@ -4179,7 +4179,7 @@
             <summary>
                 将字符串作为多部分表单文件的来源
             </summary>
-            <remarks>用于读取多部分内容表单文件。当参数类型为 <see cref="T:System.String" /> 时有效。</remarks>
+            <remarks>用于读取多部分表单内容文件。当参数类型为 <see cref="T:System.String" /> 时有效。</remarks>
         </member>
         <member name="P:HttpAgent.MultipartAttribute.AsFormItem">
             <summary>
@@ -4500,7 +4500,7 @@
         </member>
         <member name="T:HttpAgent.HttpMultipartFormDataBuilderDeclarativeExtractor">
             <summary>
-                HTTP 声明式 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" /> 多部分内容表单配置提取器
+                HTTP 声明式 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" /> 多部分表单内容配置提取器
             </summary>
         </member>
         <member name="M:HttpAgent.HttpMultipartFormDataBuilderDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
@@ -4600,7 +4600,7 @@
         </member>
         <member name="T:HttpAgent.PathDeclarativeExtractor">
             <summary>
-                HTTP 声明式 路径参数提取器
+                HTTP 声明式路径参数提取器
             </summary>
         </member>
         <member name="M:HttpAgent.PathDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
@@ -6454,7 +6454,7 @@
         </member>
         <member name="T:HttpAgent.MultipartFormDataContentProcessor">
             <summary>
-                多部分内容表单数据内容处理器
+                多部分表单内容数据内容处理器
             </summary>
         </member>
         <member name="M:HttpAgent.MultipartFormDataContentProcessor.CanProcess(System.Object,System.String)">

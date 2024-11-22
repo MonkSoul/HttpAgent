@@ -118,7 +118,7 @@
         </member>
         <member name="M:HttpAgent.HttpContextForwardBuilder.CopyNonMultipartFormData(System.IO.Stream,System.String,HttpAgent.HttpRequestBuilder)">
             <summary>
-                复制非多部分内容表单内容
+                复制非多部分表单内容
             </summary>
             <param name="bodyStream">
                 <see cref="T:System.IO.Stream" />
@@ -130,7 +130,7 @@
         </member>
         <member name="M:HttpAgent.HttpContextForwardBuilder.CopyMultipartFormDataAsync(System.IO.Stream,System.String,HttpAgent.HttpRequestBuilder,System.Threading.CancellationToken)">
             <summary>
-                复制多部分内容表单内容
+                复制多部分表单内容
             </summary>
             <param name="bodyStream">
                 <see cref="T:System.IO.Stream" />
@@ -145,7 +145,7 @@
         </member>
         <member name="M:HttpAgent.HttpContextForwardBuilder.CopyTextMultipartSectionAsync(Microsoft.AspNetCore.WebUtilities.MultipartSection,HttpAgent.HttpMultipartFormDataBuilder,System.Threading.CancellationToken)">
             <summary>
-                复制多部分内容表单文本节内容
+                复制多部分表单内容文本节内容
             </summary>
             <param name="multipartSection">
                 <see cref="T:Microsoft.AspNetCore.WebUtilities.MultipartSection" />
@@ -159,7 +159,7 @@
         </member>
         <member name="M:HttpAgent.HttpContextForwardBuilder.CopyFileMultipartSection(Microsoft.AspNetCore.WebUtilities.FileMultipartSection,HttpAgent.HttpMultipartFormDataBuilder,HttpAgent.HttpRequestBuilder)">
             <summary>
-                复制多部分内容表单文件节内容
+                复制多部分表单内容文件节内容
             </summary>
             <param name="fileMultipartSection">
                 <see cref="T:Microsoft.AspNetCore.WebUtilities.FileMultipartSection" />

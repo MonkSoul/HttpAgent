@@ -5,7 +5,7 @@
 namespace HttpAgent;
 
 /// <summary>
-///     HTTP 声明式多部分内容表单特性
+///     HTTP 声明式多部分表单内容特性
 /// </summary>
 [AttributeUsage(AttributeTargets.Parameter)]
 public sealed class MultipartAttribute : Attribute
@@ -46,7 +46,7 @@ public sealed class MultipartAttribute : Attribute
     /// <summary>
     ///     将字符串作为多部分表单文件的来源
     /// </summary>
-    /// <remarks>用于读取多部分内容表单文件。当参数类型为 <see cref="string" /> 时有效。</remarks>
+    /// <remarks>用于读取多部分表单内容文件。当参数类型为 <see cref="string" /> 时有效。</remarks>
     public FileSourceType AsFileFrom { get; set; }
 
     /// <summary>

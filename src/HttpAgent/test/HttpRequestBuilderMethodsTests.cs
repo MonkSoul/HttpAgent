@@ -854,6 +854,9 @@ public class HttpRequestBuilderMethodsTests
 
         httpRequestBuilder.WithCookie("name", "furi on", true);
         Assert.Equal("furi%20on", httpRequestBuilder.Cookies["name"]);
+
+        httpRequestBuilder.WithCookie("name", new[] { "monksoul", "furion" });
+        Assert.Equal("monksoul,furion", httpRequestBuilder.Cookies["name"]);
     }
 
     [Fact]
