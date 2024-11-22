@@ -72,7 +72,7 @@ internal sealed class CookieDeclarativeExtractor : IHttpDeclarativeExtractor
                 if (!aliasAsDefined)
                 {
                     parameterName = string.IsNullOrWhiteSpace(cookieAttribute.AliasAs)
-                        ? parameterName
+                        ? string.IsNullOrWhiteSpace(cookieAttribute.Name) ? parameterName : cookieAttribute.Name.Trim()
                         : cookieAttribute.AliasAs.Trim();
                 }
 

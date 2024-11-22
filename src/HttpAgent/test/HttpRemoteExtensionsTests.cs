@@ -16,6 +16,7 @@ public class HttpRemoteExtensionsTests
         var httpClientFactoryOptions = serviceProvider.GetService<IOptions<HttpClientFactoryOptions>>()?.Value;
         Assert.NotNull(httpClientFactoryOptions);
         Assert.NotNull(httpClientFactoryOptions.HttpMessageHandlerBuilderActions);
+        Assert.Empty(httpClientFactoryOptions.HttpMessageHandlerBuilderActions);
 
         var services2 = new ServiceCollection();
         services2.AddHttpClient(string.Empty).AddProfilerDelegatingHandler();

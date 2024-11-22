@@ -73,7 +73,7 @@ internal sealed class HeaderDeclarativeExtractor : IHttpDeclarativeExtractor
                 if (!aliasAsDefined)
                 {
                     parameterName = string.IsNullOrWhiteSpace(headerAttribute.AliasAs)
-                        ? parameterName
+                        ? string.IsNullOrWhiteSpace(headerAttribute.Name) ? parameterName : headerAttribute.Name.Trim()
                         : headerAttribute.AliasAs.Trim();
                 }
 

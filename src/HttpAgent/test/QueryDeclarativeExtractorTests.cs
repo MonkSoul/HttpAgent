@@ -55,12 +55,12 @@ public class QueryDeclarativeExtractorTests
         Assert.Equal("value4", httpRequestBuilder3.QueryParameters["query4"].First());
 
         var method4 = typeof(IQueryDeclarativeTest).GetMethod(nameof(IQueryDeclarativeTest.Test4))!;
-        var context4 = new HttpDeclarativeExtractorContext(method4, [1, "furion", 31]);
+        var context4 = new HttpDeclarativeExtractorContext(method4, [1, "furion", 31, "广东省"]);
         var httpRequestBuilder4 = HttpRequestBuilder.Get("http://localhost");
         new QueryDeclarativeExtractor().Extract(httpRequestBuilder4, context4);
 
         Assert.NotNull(httpRequestBuilder4.QueryParameters);
-        Assert.Equal(7, httpRequestBuilder4.QueryParameters.Count);
+        Assert.Equal(8, httpRequestBuilder4.QueryParameters.Count);
         Assert.Equal("value1", httpRequestBuilder4.QueryParameters["query1"].First());
         Assert.Equal("value2", httpRequestBuilder4.QueryParameters["query2"].First());
         Assert.Equal("value3", httpRequestBuilder4.QueryParameters["query3"].First());
@@ -68,13 +68,14 @@ public class QueryDeclarativeExtractorTests
         Assert.Equal("furion", httpRequestBuilder4.QueryParameters["name"].First());
         Assert.Equal("furion", httpRequestBuilder4.QueryParameters["myName"].First());
         Assert.Equal("31", httpRequestBuilder4.QueryParameters["age"].First());
+        Assert.Equal("广东省", httpRequestBuilder4.QueryParameters["address"].First());
 
-        var context5 = new HttpDeclarativeExtractorContext(method4, [1, "furion", null]);
+        var context5 = new HttpDeclarativeExtractorContext(method4, [1, "furion", null, "广东省"]);
         var httpRequestBuilder5 = HttpRequestBuilder.Get("http://localhost");
         new QueryDeclarativeExtractor().Extract(httpRequestBuilder5, context5);
 
         Assert.NotNull(httpRequestBuilder5.QueryParameters);
-        Assert.Equal(7, httpRequestBuilder5.QueryParameters.Count);
+        Assert.Equal(8, httpRequestBuilder5.QueryParameters.Count);
         Assert.Equal("value1", httpRequestBuilder5.QueryParameters["query1"].First());
         Assert.Equal("value2", httpRequestBuilder5.QueryParameters["query2"].First());
         Assert.Equal("value3", httpRequestBuilder5.QueryParameters["query3"].First());
@@ -82,6 +83,7 @@ public class QueryDeclarativeExtractorTests
         Assert.Equal("furion", httpRequestBuilder5.QueryParameters["name"].First());
         Assert.Equal("furion", httpRequestBuilder5.QueryParameters["myName"].First());
         Assert.Equal("30", httpRequestBuilder5.QueryParameters["age"].First());
+        Assert.Equal("广东省", httpRequestBuilder5.QueryParameters["address"].First());
 
         var method5 = typeof(IQueryDeclarativeTest).GetMethod(nameof(IQueryDeclarativeTest.Test5))!;
         var context6 = new HttpDeclarativeExtractorContext(method5, [new { id = 10, name = "furion" }]);
@@ -115,7 +117,8 @@ public interface IQueryDeclarativeTest : IHttpDeclarative
 
     [Get("http://localhost:5000")]
     [Query("query3", "value3")]
-    Task Test4([Query] int id, [Query] [Query(AliasAs = "myName")] string name, [Query(Value = 30)] int? age);
+    Task Test4([Query] int id, [Query] [Query(AliasAs = "myName")] string name, [Query(Value = 30)] int? age,
+        [Query("address")] string abc);
 
     [Get("http://localhost:5000")]
     Task Test5([Query(Prefix = "user")] object obj);

@@ -73,7 +73,7 @@ internal sealed class QueryDeclarativeExtractor : IHttpDeclarativeExtractor
                 if (!aliasAsDefined)
                 {
                     parameterName = string.IsNullOrWhiteSpace(queryAttribute.AliasAs)
-                        ? parameterName
+                        ? string.IsNullOrWhiteSpace(queryAttribute.Name) ? parameterName : queryAttribute.Name.Trim()
                         : queryAttribute.AliasAs.Trim();
                 }
 

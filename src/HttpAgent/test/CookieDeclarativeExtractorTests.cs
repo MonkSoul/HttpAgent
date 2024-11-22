@@ -55,12 +55,12 @@ public class CookieDeclarativeExtractorTests
         Assert.Equal("value4", httpRequestBuilder3.Cookies["header4"]);
 
         var method4 = typeof(ICookieDeclarativeTest).GetMethod(nameof(ICookieDeclarativeTest.Test4))!;
-        var context4 = new HttpDeclarativeExtractorContext(method4, [1, "furion", 31]);
+        var context4 = new HttpDeclarativeExtractorContext(method4, [1, "furion", 31, "GuangDong"]);
         var httpRequestBuilder4 = HttpRequestBuilder.Get("http://localhost");
         new CookieDeclarativeExtractor().Extract(httpRequestBuilder4, context4);
 
         Assert.NotNull(httpRequestBuilder4.Cookies);
-        Assert.Equal(7, httpRequestBuilder4.Cookies.Count);
+        Assert.Equal(8, httpRequestBuilder4.Cookies.Count);
         Assert.Equal("value1", httpRequestBuilder4.Cookies["header1"]);
         Assert.Equal("value2", httpRequestBuilder4.Cookies["header2"]);
         Assert.Equal("value3", httpRequestBuilder4.Cookies["header3"]);
@@ -68,13 +68,14 @@ public class CookieDeclarativeExtractorTests
         Assert.Equal("furion", httpRequestBuilder4.Cookies["name"]);
         Assert.Equal("furion", httpRequestBuilder4.Cookies["myName"]);
         Assert.Equal("31", httpRequestBuilder4.Cookies["age"]);
+        Assert.Equal("GuangDong", httpRequestBuilder4.Cookies["address"]);
 
-        var context5 = new HttpDeclarativeExtractorContext(method4, [1, "furion", null]);
+        var context5 = new HttpDeclarativeExtractorContext(method4, [1, "furion", null, "GuangDong"]);
         var httpRequestBuilder5 = HttpRequestBuilder.Get("http://localhost");
         new CookieDeclarativeExtractor().Extract(httpRequestBuilder5, context5);
 
         Assert.NotNull(httpRequestBuilder5.Cookies);
-        Assert.Equal(7, httpRequestBuilder5.Cookies.Count);
+        Assert.Equal(8, httpRequestBuilder5.Cookies.Count);
         Assert.Equal("value1", httpRequestBuilder5.Cookies["header1"]);
         Assert.Equal("value2", httpRequestBuilder5.Cookies["header2"]);
         Assert.Equal("value3", httpRequestBuilder5.Cookies["header3"]);
@@ -82,6 +83,7 @@ public class CookieDeclarativeExtractorTests
         Assert.Equal("furion", httpRequestBuilder5.Cookies["name"]);
         Assert.Equal("furion", httpRequestBuilder5.Cookies["myName"]);
         Assert.Equal("30", httpRequestBuilder5.Cookies["age"]);
+        Assert.Equal("GuangDong", httpRequestBuilder5.Cookies["address"]);
 
         var method5 = typeof(ICookieDeclarativeTest).GetMethod(nameof(ICookieDeclarativeTest.Test5))!;
         var context6 = new HttpDeclarativeExtractorContext(method5, [new { id = 10, name = "furion" }]);
@@ -115,7 +117,8 @@ public interface ICookieDeclarativeTest : IHttpDeclarative
 
     [Post("http://localhost:5000")]
     [Cookie("header3", "value3")]
-    Task Test4([Cookie] int id, [Cookie] [Cookie(AliasAs = "myName")] string name, [Cookie(Value = 30)] int? age);
+    Task Test4([Cookie] int id, [Cookie] [Cookie(AliasAs = "myName")] string name, [Cookie(Value = 30)] int? age,
+        [Cookie("address")] string abc);
 
     [Post("http://localhost:5000")]
     Task Test5([Cookie] object obj);
