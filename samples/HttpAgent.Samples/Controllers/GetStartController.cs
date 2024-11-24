@@ -4,7 +4,7 @@
 [Route("[controller]/[action]")]
 public class GetStartController(
     IHttpRemoteService httpRemoteService,
-    IHttpService iHttpService,
+    IHttpService httpService,
     IHttpContextAccessor httpContextAccessor) : ControllerBase
 {
     /// <summary>
@@ -157,20 +157,20 @@ public class GetStartController(
     public async Task Declarative()
     {
         // 获取网站内容
-        var content1 = await iHttpService.GetWebSiteContent();
+        var content1 = await httpService.GetWebSiteContent();
 
         // 携带请求数据
-        var content2 = await iHttpService.PostData("furion", new { id = 1, name = "furion" });
+        var content2 = await httpService.PostData("furion", new { id = 1, name = "furion" });
 
         // Form 表单提交
-        var content3 = await iHttpService.PostForm(multipart => multipart
+        var content3 = await httpService.PostForm(multipart => multipart
             .AddJson(new { id = 1, name = "furion" }) // 设置常规字段
             .AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file"));
 
-        var content4 = await iHttpService.PostForm2(new { id = 1, name = "furion" }, @"C:\Workspaces\httptest.jpg");
+        var content4 = await httpService.PostForm2(new { id = 1, name = "furion" }, @"C:\Workspaces\httptest.jpg");
 
         // URL 编码表单提交
-        var content5 = await iHttpService.PostURLForm(new { id = 1, name = "furion" });
+        var content5 = await httpService.PostURLForm(new { id = 1, name = "furion" });
     }
 
     /// <summary>
