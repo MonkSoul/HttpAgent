@@ -38,7 +38,7 @@ public class PathDeclarativeExtractorTests
 
         var method3 = typeof(IPathDeclarativeTest).GetMethod(nameof(IPathDeclarativeTest.Test3))!;
         var context3 = new HttpDeclarativeExtractorContext(method3,
-            [1, "furion", new[] { "广东省", "中山市" }, 30, new { id = 10, name = "furion" }, null]);
+            [1, "furion", new[] { "广东省", "中山市" }, 30, new { id = 10, name = "furion" }, null, CancellationToken.None]);
         var httpRequestBuilder3 = HttpRequestBuilder.Get("http://localhost");
         new PathDeclarativeExtractor().Extract(httpRequestBuilder3, context3);
         Assert.NotNull(httpRequestBuilder3.PathParameters);
@@ -60,5 +60,6 @@ public interface IPathDeclarativeTest : IHttpDeclarative
     Task Test2(Action<HttpRequestBuilder> builder);
 
     [Post("http://localhost:5000")]
-    Task Test3(int id, string name, string[] address, int age, object? obj, object? obj2);
+    Task Test3(int id, string name, string[] address, int age, object? obj, object? obj2,
+        CancellationToken cancellationToken);
 }

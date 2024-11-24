@@ -91,15 +91,17 @@ public sealed class HttpDeclarativeBuilder
         // 检查被调用方法是否贴有 [HttpMethod] 特性
         if (!Method.IsDefined(typeof(HttpMethodAttribute), true))
         {
-            throw new InvalidOperationException($"No `[HttpMethod]` annotation was found in method `{Method.Name}`.");
+            throw new InvalidOperationException(
+                $"No `[HttpMethod]` annotation was found in method `{Method.ToFriendlyString()}` of type `{Method.DeclaringType?.ToFriendlyString()}`.");
         }
 
         // 获取 HttpMethodAttribute 实例
         var httpMethodAttribute = Method.GetCustomAttribute<HttpMethodAttribute>(true)!;
 
-        // 初始化 HttpRequestBuilder 实例
-        var httpRequestBuilder =
-            HttpRequestBuilder.Create(httpMethodAttribute.Method, httpMethodAttribute.RequestUri);
+        // 初始化 HttpRequestBuilder 实例并添加声明式方法签名
+        var httpRequestBuilder = HttpRequestBuilder.Create(httpMethodAttribute.Method, httpMethodAttribute.RequestUri)
+            .WithProperty(Constants.DECLARATIVE_METHOD_KEY,
+                $"{Method.ToFriendlyString()} | {Method.DeclaringType.ToFriendlyString()}");
 
         // 初始化 HttpDeclarativeExtractorContext 实例
         var httpDeclarativeExtractorContext = new HttpDeclarativeExtractorContext(Method, Args);

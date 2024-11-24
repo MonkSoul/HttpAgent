@@ -13,7 +13,7 @@ internal sealed class TraceIdentifierDeclarativeExtractor : IHttpDeclarativeExtr
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
         // 检查方法或接口是否贴有 [TraceIdentifier] 特性
-        if (!context.Method.IsDefined<TraceIdentifierAttribute>(out var traceIdentifierAttribute, true))
+        if (!context.IsMethodDefined<TraceIdentifierAttribute>(out var traceIdentifierAttribute, true))
         {
             return;
         }

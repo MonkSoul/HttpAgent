@@ -15,11 +15,27 @@ public static class HttpRemoteExtensions
     /// <param name="builder">
     ///     <see cref="IHttpClientBuilder" />
     /// </param>
+    /// <param name="disableInProduction">是否在生产环境中禁用。默认值为：<c>false</c>。</param>
     /// <returns>
     ///     <see cref="IHttpClientBuilder" />
     /// </returns>
-    public static IHttpClientBuilder AddProfilerDelegatingHandler(this IHttpClientBuilder builder) =>
-        builder.AddHttpMessageHandler<ProfilerDelegatingHandler>();
+    public static IHttpClientBuilder AddProfilerDelegatingHandler(this IHttpClientBuilder builder,
+        bool disableInProduction = false)
+    {
+        // 获取 IServiceCollection 实例
+        var services = builder.Services;
+
+        // 注册请求分析工具服务
+        services.TryAddTransient<ProfilerDelegatingHandler>();
+
+        // 检查是否在生产环境中禁用
+        if (disableInProduction && GetHostEnvironmentName(services)?.ToLower() == "production")
+        {
+            return builder;
+        }
+
+        return builder.AddHttpMessageHandler<ProfilerDelegatingHandler>();
+    }
 
     /// <summary>
     ///     分析 <see cref="HttpRequestMessage" /> 标头
@@ -81,6 +97,13 @@ public static class HttpRemoteExtensions
         // 获取 HttpContent 实例
         var httpContent = httpRequestMessage.Content;
 
+        // 格式化 HTTP 声明式条目
+        IEnumerable<KeyValuePair<string, IEnumerable<string>>>? declarativeKeyValues =
+            httpRequestMessage.Options.TryGetValue(new HttpRequestOptionsKey<string>(Constants.DECLARATIVE_METHOD_KEY),
+                out var methodSignature)
+                ? [new KeyValuePair<string, IEnumerable<string>>("Declarative", [methodSignature])]
+                : null;
+
         // 格式化常规条目
         var generalEntry = StringUtility.FormatKeyValuesSummary(new[]
         {
@@ -91,11 +114,33 @@ public static class HttpRemoteExtensions
                 [$"{(int)httpResponseMessage.StatusCode} {httpResponseMessage.StatusCode}"]),
             new KeyValuePair<string, IEnumerable<string>>("HTTP Content",
                 [$"{httpContent?.GetType().Name}"])
-        }.ConcatIgnoreNull(generalCustomKeyValues), generalSummary);
+        }.ConcatIgnoreNull(declarativeKeyValues).ConcatIgnoreNull(generalCustomKeyValues), generalSummary);
 
         // 格式化响应条目
         var responseEntry = httpResponseMessage.ProfilerHeaders(responseSummary);
 
         return $"{generalEntry}\r\n{responseEntry}";
+    }
+
+    /// <summary>
+    ///     获取主机环境名
+    /// </summary>
+    /// <param name="services">
+    ///     <see cref="IServiceCollection" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="string" />
+    /// </returns>
+    internal static string? GetHostEnvironmentName(IServiceCollection services)
+    {
+        // 获取主机环境对象
+        var hostEnvironment = services
+            .FirstOrDefault(u => u.ServiceType.FullName == "Microsoft.Extensions.Hosting.IHostEnvironment")
+            ?.ImplementationInstance;
+
+        // 空检查
+        return hostEnvironment is null
+            ? null
+            : Convert.ToString(hostEnvironment.GetType().GetProperty("EnvironmentName")?.GetValue(hostEnvironment));
     }
 }

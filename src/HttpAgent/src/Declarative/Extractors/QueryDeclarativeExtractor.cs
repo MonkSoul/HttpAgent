@@ -15,7 +15,7 @@ internal sealed class QueryDeclarativeExtractor : IHttpDeclarativeExtractor
         /* 情况一：当特性作用于方法或接口时 */
 
         // 获取 QueryAttribute 特性集合
-        var queryAttributes = context.Method.GetDefinedCustomAttributes<QueryAttribute>(true, false)?.ToArray();
+        var queryAttributes = context.GetMethodDefinedCustomAttributes<QueryAttribute>(true, false)?.ToArray();
 
         // 空检查
         if (queryAttributes is { Length: > 0 })
@@ -46,9 +46,7 @@ internal sealed class QueryDeclarativeExtractor : IHttpDeclarativeExtractor
         /* 情况二：当特性作用于参数时 */
 
         // 查找所有贴有 [Query] 特性的参数集合
-        var queryParameters = context.Parameters.Where(u =>
-                !HttpDeclarativeExtractorContext.IsFrozenParameter(u.Key) &&
-                u.Key.IsDefined(typeof(QueryAttribute), true))
+        var queryParameters = context.UnFrozenParameters.Where(u => u.Key.IsDefined(typeof(QueryAttribute), true))
             .ToArray();
 
         // 空检查

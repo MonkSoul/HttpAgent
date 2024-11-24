@@ -58,7 +58,7 @@ internal static class MethodInfoExtensions
     ///     <see cref="Attribute" />
     /// </typeparam>
     /// <returns>
-    ///     <see cref="bool" />
+    ///     <typeparamref name="TAttribute" /><c>[]</c>
     /// </returns>
     internal static TAttribute[]? GetDefinedCustomAttributes<TAttribute>(this MethodInfo method, bool inherit = false,
         bool methodScanFirst = true)
@@ -89,5 +89,40 @@ internal static class MethodInfoExtensions
         }
 
         return attributes.Count > 0 ? attributes.ToArray() : null;
+    }
+
+    /// <summary>
+    ///     输出方法签名的友好字符串
+    /// </summary>
+    /// <param name="method">
+    ///     <see cref="MethodInfo" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="string" />
+    /// </returns>
+    internal static string? ToFriendlyString(this MethodInfo? method)
+    {
+        // 空检查
+        if (method is null)
+        {
+            return default;
+        }
+
+        // 获取方法的基本信息
+        var methodName = method.Name;
+        var returnType = method.ReturnType.ToFriendlyString();
+
+        // 处理泛型方法
+        var genericArguments = method.IsGenericMethod
+            ? method.GetGenericArguments().Select(t => t.ToFriendlyString()).ToArray()
+            : [];
+
+        // 获取参数列表
+        var parameters = method.GetParameters().Select(p => p.ParameterType.ToFriendlyString());
+
+        // 组合字符串
+        var genericPart = genericArguments.Length != 0 ? $"<{string.Join(',', genericArguments)}>" : string.Empty;
+
+        return $"{returnType} {methodName}{genericPart}({string.Join(", ", parameters)})";
     }
 }

@@ -20,11 +20,17 @@ public class HttpRemoteExtensionsTests
 
         var services2 = new ServiceCollection();
         services2.AddHttpClient(string.Empty).AddProfilerDelegatingHandler();
+        Assert.Contains(services2, u => u.ServiceType == typeof(ProfilerDelegatingHandler));
 
         using var serviceProvider2 = services2.BuildServiceProvider();
         var httpClientFactoryOptions2 = serviceProvider2.GetService<IOptions<HttpClientFactoryOptions>>()?.Value;
         Assert.NotNull(httpClientFactoryOptions2);
         Assert.Single(httpClientFactoryOptions2.HttpMessageHandlerBuilderActions);
+
+        var builder = WebApplication.CreateBuilder(new WebApplicationOptions { EnvironmentName = "Production" });
+        builder.Services.AddHttpClient(string.Empty).AddProfilerDelegatingHandler(true);
+        Assert.NotNull(httpClientFactoryOptions.HttpMessageHandlerBuilderActions);
+        Assert.Empty(httpClientFactoryOptions.HttpMessageHandlerBuilderActions);
     }
 
     [Fact]
@@ -86,5 +92,18 @@ public class HttpRemoteExtensionsTests
             "General: \r\n\tRequest URL:          http://localhost\r\n\tHTTP Method:          GET\r\n\tStatus Code:          200 OK\r\n\tHTTP Content:         \r\n\tRequest Duration:     200ms\r\nResponse Headers: \r\n\tAccept:              application/json\r\n\tAccept-Encoding:     gzip, deflate\r\n\tContent-Type:        application/json",
             httpResponseMessage.ProfilerGeneralAndHeaders(generalCustomKeyValues:
                 [new KeyValuePair<string, IEnumerable<string>>("Request Duration", ["200ms"])]));
+    }
+
+    [Fact]
+    public void GetHostEnvironmentName_ReturnOK()
+    {
+        var services = new ServiceCollection();
+        Assert.Null(HttpRemoteExtensions.GetHostEnvironmentName(services));
+
+        var builder = WebApplication.CreateBuilder(new WebApplicationOptions { EnvironmentName = "Development" });
+        Assert.Equal("Development", HttpRemoteExtensions.GetHostEnvironmentName(builder.Services));
+
+        var builder2 = WebApplication.CreateBuilder(new WebApplicationOptions { EnvironmentName = "Production" });
+        Assert.Equal("Production", HttpRemoteExtensions.GetHostEnvironmentName(builder2.Services));
     }
 }

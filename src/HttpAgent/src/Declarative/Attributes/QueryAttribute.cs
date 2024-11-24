@@ -23,8 +23,11 @@ public sealed class QueryAttribute : Attribute
     /// <summary>
     ///     <inheritdoc cref="QueryAttribute" />
     /// </summary>
-    /// <remarks>当特性作用于方法或接口时，则表示移除指定查询参数操作。</remarks>
-    /// <param name="name">查询参数</param>
+    /// <remarks>
+    ///     <para>当特性作用于方法或接口时，则表示移除指定查询参数操作。</para>
+    ///     <para>当特性作用于参数时，则表示添加查询参数，同时设置查询参数键为 <c>name</c> 的值。</para>
+    /// </remarks>
+    /// <param name="name">查询参数键</param>
     public QueryAttribute(string name)
     {
         // 空检查
@@ -36,20 +39,22 @@ public sealed class QueryAttribute : Attribute
     /// <summary>
     ///     <inheritdoc cref="QueryAttribute" />
     /// </summary>
-    /// <param name="name">查询参数</param>
+    /// <param name="name">查询参数键</param>
     /// <param name="value">查询参数的值</param>
     public QueryAttribute(string name, object? value)
         : this(name) =>
         Value = value;
 
     /// <summary>
-    ///     查询参数
+    ///     查询参数键
     /// </summary>
+    /// <remarks>该属性优先级低于 <see cref="AliasAs" /> 属性设置的值。</remarks>
     public string? Name { get; set; }
 
     /// <summary>
     ///     查询参数的值
     /// </summary>
+    /// <remarks>当特性作用于参数时，表示默认值。</remarks>
     public object? Value
     {
         get;
@@ -63,7 +68,10 @@ public sealed class QueryAttribute : Attribute
     /// <summary>
     ///     别名
     /// </summary>
-    /// <remarks>特性用于参数时有效。</remarks>
+    /// <remarks>
+    ///     <para>特性用于参数时有效。</para>
+    ///     <para>该属性优先级高于 <see cref="Name" /> 属性设置的值。</para>
+    /// </remarks>
     public string? AliasAs { get; set; }
 
     /// <summary>
@@ -78,7 +86,7 @@ public sealed class QueryAttribute : Attribute
     public string? Prefix { get; set; }
 
     /// <summary>
-    ///     是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>
+    ///     是否替换已存在的查询参数。默认值为 <c>false</c>
     /// </summary>
     public bool Replace { get; set; }
 

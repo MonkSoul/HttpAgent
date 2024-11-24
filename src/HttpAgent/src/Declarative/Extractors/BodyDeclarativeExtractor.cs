@@ -13,9 +13,8 @@ internal sealed class BodyDeclarativeExtractor : IHttpDeclarativeExtractor
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
         // 查找单个贴有 [Body] 特性的参数
-        var bodyParameter = context.Parameters.SingleOrDefault(u =>
-            !HttpDeclarativeExtractorContext.IsFrozenParameter(u.Key) &&
-            u.Key.IsDefined(typeof(BodyAttribute), true));
+        var bodyParameter =
+            context.UnFrozenParameters.SingleOrDefault(u => u.Key.IsDefined(typeof(BodyAttribute), true));
 
         // 解析参数信息
         var (parameter, value) = bodyParameter;
@@ -51,8 +50,7 @@ internal sealed class BodyDeclarativeExtractor : IHttpDeclarativeExtractor
         if (httpRequestBuilder.ContentType.IsIn([MediaTypeNames.Application.FormUrlEncoded]) &&
             bodyAttribute.UseStringContent)
         {
-            httpRequestBuilder.AddHttpContentProcessors(() =>
-                [HttpRequestBuilder._stringContentForFormUrlEncodedContentProcessorInstance.Value]);
+            httpRequestBuilder.AddStringContentForFormUrlEncodedContentProcessor();
         }
 
         // 设置内容编码

@@ -12,18 +12,8 @@ internal sealed class ValidationDeclarativeExtractor : IHttpDeclarativeExtractor
     /// <inheritdoc />
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
-        // 获取所有参数集合
-        var parameters = context.Parameters.Where(u =>
-            !HttpDeclarativeExtractorContext.IsFrozenParameter(u.Key)).ToArray();
-
-        // 空检查
-        if (parameters.Length == 0)
-        {
-            return;
-        }
-
-        // 遍历所有参数并进行验证操作
-        foreach (var (parameter, value) in parameters)
+        // 遍历所有非冻结类型参数并进行验证操作
+        foreach (var (parameter, value) in context.UnFrozenParameters)
         {
             ValidateParameter(parameter, value);
         }

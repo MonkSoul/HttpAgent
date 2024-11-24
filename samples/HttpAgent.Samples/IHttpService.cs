@@ -1,7 +1,7 @@
 ﻿namespace HttpAgent.Samples;
 
 [Profiler]
-public interface ISampleService : IHttpDeclarative
+public interface IHttpService : IHttpDeclarative
 {
     // 获取网站内容
     [Get("https://furion.net")]
@@ -15,11 +15,11 @@ public interface ISampleService : IHttpDeclarative
         [Body(MediaTypeNames.Application.Json)] object data); // 设置查询参数并指定别名和请求内容
 
     [Profiler(false)]
-    //Form 表单提交
+    // Form 表单提交
     [Post("https://localhost:7044/HttpRemote/AddForm?id=1")]
     Task<YourRemoteFormResult> PostForm(Action<HttpMultipartFormDataBuilder> formBuilder);
 
-    //Form 表单提交
+    // Form 表单提交
     [Post("https://localhost:7044/HttpRemote/AddForm?id=1")]
     Task<YourRemoteFormResult> PostForm2([Multipart(AsFormItem = false)] object obj,
         [Multipart("file", AsFileFrom = FileSourceType.Path)] string filePath);

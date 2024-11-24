@@ -36,6 +36,10 @@ public sealed class HttpDeclarativeExtractorContext
         // 初始化被调用方法的参数键值字典
         Parameters = method.GetParameters().Select((p, i) => new { Parameter = p, Value = args[i] })
             .ToDictionary(u => u.Parameter, u => u.Value).AsReadOnly();
+
+        // 初始化被调用方法的非冻结类型参数键值字典
+        UnFrozenParameters = Parameters.Where(u => !IsFrozenParameter(u.Key)).ToDictionary(u => u.Key, u => u.Value)
+            .AsReadOnly();
     }
 
     /// <summary>
@@ -54,6 +58,11 @@ public sealed class HttpDeclarativeExtractorContext
     public IReadOnlyDictionary<ParameterInfo, object?> Parameters { get; }
 
     /// <summary>
+    ///     被调用方法的非冻结类型参数键值字典
+    /// </summary>
+    public IReadOnlyDictionary<ParameterInfo, object?> UnFrozenParameters { get; }
+
+    /// <summary>
     ///     判断参数是否为冻结参数
     /// </summary>
     /// <remarks>此类参数不应作为外部提取对象。</remarks>
@@ -70,4 +79,36 @@ public sealed class HttpDeclarativeExtractorContext
 
         return _frozenParameterTypes.Contains(parameter.ParameterType);
     }
+
+    /// <summary>
+    ///     检查被调用方法是否定义了指定特性
+    /// </summary>
+    /// <param name="attribute">
+    ///     <typeparamref name="TAttribute" />
+    /// </param>
+    /// <param name="inherit">是否在基类中搜索</param>
+    /// <typeparam name="TAttribute">
+    ///     <see cref="Attribute" />
+    /// </typeparam>
+    /// <returns>
+    ///     <see cref="bool" />
+    /// </returns>
+    public bool IsMethodDefined<TAttribute>([NotNullWhen(true)] out TAttribute? attribute, bool inherit = false)
+        where TAttribute : Attribute =>
+        Method.IsDefined(out attribute, inherit);
+
+    /// <summary>
+    ///     获取被调用方法指定特性的所有实例
+    /// </summary>
+    /// <param name="inherit">是否在基类中搜索</param>
+    /// <param name="methodScanFirst">是否优先查找 <see cref="MethodInfo" /> 的特性。默认值为：<c>true</c>。</param>
+    /// <typeparam name="TAttribute">
+    ///     <see cref="Attribute" />
+    /// </typeparam>
+    /// <returns>
+    ///     <typeparamref name="TAttribute" /><c>[]</c>
+    /// </returns>
+    public TAttribute[]? GetMethodDefinedCustomAttributes<TAttribute>(bool inherit = false, bool methodScanFirst = true)
+        where TAttribute : Attribute =>
+        Method.GetDefinedCustomAttributes<TAttribute>(inherit, methodScanFirst);
 }

@@ -18,11 +18,13 @@ internal static class ObjectExtensions
     /// <param name="culture">
     ///     <see cref="CultureInfo" />
     /// </param>
-    /// <param name="enumAsString">指示是否将枚举类型的值作为名称输出，默认为 <c>true</c>。若为 <c>false</c>，则输出枚举的值</param>
+    /// <param name="enumAsString">指示是否将枚举类型的值作为名称输出，默认值为：<c>true</c>。若为 <c>false</c>，则输出枚举的值</param>
+    /// <param name="separator">集合类型分隔符</param>
     /// <returns>
     ///     <see cref="string" />
     /// </returns>
-    internal static string? ToCultureString(this object? obj, CultureInfo culture, bool enumAsString = true)
+    internal static string? ToCultureString(this object? obj, CultureInfo culture, bool enumAsString = true,
+        string separator = ",")
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(culture);
@@ -37,8 +39,8 @@ internal static class ObjectExtensions
             TimeOnly ot => ot.ToString("HH':'mm':'ss", culture),
             Enum e when enumAsString => e.ToString(),
             Enum e => Convert.ChangeType(e, Enum.GetUnderlyingType(e.GetType())).ToString(),
-            IEnumerable e and not string when typeof(IEnumerable<>).IsDefinitionEquals(e.GetType()) => string.Join(",",
-                e.Cast<object>()),
+            IEnumerable e and not string when typeof(IEnumerable<>).IsDefinitionEquals(e.GetType()) => string.Join(
+                separator, e.Cast<object>()),
             _ => obj.ToString()
         };
     }

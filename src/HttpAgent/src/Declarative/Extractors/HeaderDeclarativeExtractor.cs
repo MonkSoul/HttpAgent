@@ -15,7 +15,7 @@ internal sealed class HeaderDeclarativeExtractor : IHttpDeclarativeExtractor
         /* 情况一：当特性作用于方法或接口时 */
 
         // 获取 HeaderAttribute 特性集合
-        var headerAttributes = context.Method.GetDefinedCustomAttributes<HeaderAttribute>(true, false)?.ToArray();
+        var headerAttributes = context.GetMethodDefinedCustomAttributes<HeaderAttribute>(true, false)?.ToArray();
 
         // 空检查
         if (headerAttributes is { Length: > 0 })
@@ -46,9 +46,7 @@ internal sealed class HeaderDeclarativeExtractor : IHttpDeclarativeExtractor
         /* 情况二：当特性作用于参数时 */
 
         // 查找所有贴有 [Header] 特性的参数集合
-        var headerParameters = context.Parameters.Where(u =>
-                !HttpDeclarativeExtractorContext.IsFrozenParameter(u.Key) &&
-                u.Key.IsDefined(typeof(HeaderAttribute), true))
+        var headerParameters = context.UnFrozenParameters.Where(u => u.Key.IsDefined(typeof(HeaderAttribute), true))
             .ToArray();
 
         // 空检查

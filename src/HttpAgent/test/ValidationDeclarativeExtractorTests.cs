@@ -118,6 +118,29 @@ public class ValidationDeclarativeExtractorTests
         Assert.Equal("The field age must be between 0 and 10.", exception41.Message);
 
         ValidationDeclarativeExtractor.ValidateParameter(parameters2[1], 5);
+
+        // 验证 IValidatableObject
+        var method4 =
+            typeof(IValidationAttributeDeclarativeTest).GetMethod(nameof(IValidationAttributeDeclarativeTest.Test4))!;
+        var parameters4 = method4.GetParameters();
+
+        var exception42 = Assert.Throws<ValidationException>(() =>
+        {
+            ValidationDeclarativeExtractor.ValidateParameter(parameters4[0],
+                new ValidationObject { Id = -1, Name = "Furion" });
+        });
+        Assert.Equal("Id must be greater than or equal to 0.", exception42.Message);
+
+        // 验证自定义特性
+        var method5 =
+            typeof(IValidationAttributeDeclarativeTest).GetMethod(nameof(IValidationAttributeDeclarativeTest.Test5))!;
+        var parameters5 = method5.GetParameters();
+
+        var exception51 = Assert.Throws<ValidationException>(() =>
+        {
+            ValidationDeclarativeExtractor.ValidateParameter(parameters5[0], "Fur");
+        });
+        Assert.Equal("Value is not equal to Furion.", exception51.Message);
     }
 }
 
@@ -130,7 +153,14 @@ public interface IValidationAttributeDeclarativeTest : IHttpDeclarative
     Task Test2(string str, ValidationModel obj);
 
     [Get("http://localhost:5000")]
-    Task Test3([Required] [MinLength(2)] [MaxLength(5)] string str, [Range(0, 10)] int age);
+    Task Test3([Required] [MinLength(2)] [MaxLength(5)] string str, [Range(0, 10)] int age,
+        [Required] CancellationToken cancellationToken);
+
+    [Get("http://localhost:5000")]
+    Task Test4(ValidationObject obj);
+
+    [Get("http://localhost:5000")]
+    Task Test5([StringEqual("Furion")] string str);
 }
 
 public class ValidationModel
@@ -138,4 +168,39 @@ public class ValidationModel
     public int Id { get; set; }
 
     [Required] [MinLength(3)] public string? Name { get; set; }
+}
+
+public class ValidationObject : IValidatableObject
+{
+    public int Id { get; set; }
+
+    [Required] [MinLength(3)] public string? Name { get; set; }
+
+    /// <inheritdoc />
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (Id < 0)
+        {
+            yield return new ValidationResult("Id must be greater than or equal to 0.", [nameof(Id)]);
+        }
+    }
+}
+
+public class StringEqualAttribute : ValidationAttribute
+{
+    public StringEqualAttribute(string value) => Value = value;
+
+    public string Value { get; }
+
+    /// <inheritdoc />
+    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
+    {
+        // ReSharper disable once ConvertIfStatementToReturnStatement
+        if (value?.ToString() != Value)
+        {
+            return new ValidationResult($"Value is not equal to {Value}.");
+        }
+
+        return ValidationResult.Success;
+    }
 }

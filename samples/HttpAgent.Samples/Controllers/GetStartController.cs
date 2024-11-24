@@ -4,7 +4,7 @@
 [Route("[controller]/[action]")]
 public class GetStartController(
     IHttpRemoteService httpRemoteService,
-    ISampleService sampleService,
+    IHttpService iHttpService,
     IHttpContextAccessor httpContextAccessor) : ControllerBase
 {
     /// <summary>
@@ -156,17 +156,21 @@ public class GetStartController(
     [HttpGet]
     public async Task Declarative()
     {
-        var content1 = await sampleService.GetWebSiteContent();
+        // 获取网站内容
+        var content1 = await iHttpService.GetWebSiteContent();
 
-        var content2 = await sampleService.PostData("furion", new { id = 1, name = "furion" });
+        // 携带请求数据
+        var content2 = await iHttpService.PostData("furion", new { id = 1, name = "furion" });
 
-        var content3 = await sampleService.PostForm(multipart => multipart
+        // Form 表单提交
+        var content3 = await iHttpService.PostForm(multipart => multipart
             .AddJson(new { id = 1, name = "furion" }) // 设置常规字段
             .AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file"));
 
-        var content4 = await sampleService.PostForm2(new { id = 1, name = "furion" }, @"C:\Workspaces\httptest.jpg");
+        var content4 = await iHttpService.PostForm2(new { id = 1, name = "furion" }, @"C:\Workspaces\httptest.jpg");
 
-        var content5 = await sampleService.PostURLForm(new { id = 1, name = "furion" });
+        // URL 编码表单提交
+        var content5 = await iHttpService.PostURLForm(new { id = 1, name = "furion" });
     }
 
     /// <summary>
@@ -418,7 +422,7 @@ public class GetStartController(
         // 连接服务器
         await webSocketClient.ConnectAsync(cancellationToken);
 
-        for (var i = 10 - 1; i >= 0; i--)
+        for (var i = 0; i < 10; i++)
         {
             // 向服务器发送消息
             await webSocketClient.SendAsync($"Message at {DateTime.UtcNow}\n\n", cancellationToken: cancellationToken);
@@ -431,7 +435,7 @@ public class GetStartController(
     }
 
     /// <summary>
-    ///     转发代理网站
+    ///     转发代理到网站
     /// </summary>
     /// <returns></returns>
     [HttpGet]

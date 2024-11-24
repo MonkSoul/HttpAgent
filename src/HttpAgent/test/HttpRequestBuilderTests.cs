@@ -21,6 +21,8 @@ public class HttpRequestBuilderTests
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, null!);
         Assert.Equal(HttpMethod.Get, httpRequestBuilder.Method);
         Assert.Null(httpRequestBuilder.RequestUri);
+        Assert.False(httpRequestBuilder._isAddedStringContentForFormUrlEncodedContentProcessor);
+        Assert.NotNull(httpRequestBuilder._lock);
 
         var httpRequestBuilder2 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
         Assert.Equal(HttpMethod.Get, httpRequestBuilder2.Method);
@@ -73,6 +75,12 @@ public class HttpRequestBuilderTests
 
         var finalRequestUri4 = httpRequestBuilder4.BuildFinalRequestUri(new Uri("http://localhost"));
         Assert.Equal("http://localhost/id=10", finalRequestUri4);
+
+        var httpRequestBuilder5 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder5.SetFragment("#furion");
+
+        var finalRequestUri5 = httpRequestBuilder5.BuildFinalRequestUri(null);
+        Assert.Equal("http://localhost/#furion", finalRequestUri5);
     }
 
     [Fact]

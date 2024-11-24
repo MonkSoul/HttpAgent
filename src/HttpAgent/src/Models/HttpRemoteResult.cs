@@ -36,9 +36,14 @@ public sealed class HttpRemoteResult<TResult>
     public string? ContentType { get; private set; }
 
     /// <summary>
-    ///     内容编码
+    ///     字符集
     /// </summary>
     public string? CharSet { get; private set; }
+
+    /// <summary>
+    ///     内容编码
+    /// </summary>
+    public ICollection<string> ContentEncoding { get; private set; } = null!;
 
     /// <summary>
     ///     内容大小
@@ -133,6 +138,7 @@ public sealed class HttpRemoteResult<TResult>
         ContentLength = contentHeaders.ContentLength;
         ContentType = contentHeaders.ContentType?.MediaType;
         CharSet = contentHeaders.ContentType?.CharSet;
+        ContentEncoding = contentHeaders.ContentEncoding;
     }
 
     /// <summary>

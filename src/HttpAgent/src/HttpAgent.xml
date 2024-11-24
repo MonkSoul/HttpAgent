@@ -650,7 +650,7 @@
             <summary>
                 从互联网 URL 中添加文件
             </summary>
-            <remarks>文件大小限制在 <c>50MB</c> 以内。</remarks>
+            <remarks>文件大小限制在 <c>100MB</c> 以内。</remarks>
             <param name="url">互联网 URL 地址</param>
             <param name="name">表单名称</param>
             <param name="fileName">文件的名称</param>
@@ -659,12 +659,14 @@
             <returns>
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
+            <exception cref="T:System.ArgumentException"></exception>
+            <exception cref="T:System.InvalidOperationException"></exception>
         </member>
         <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddFileFromBase64String(System.String,System.String,System.String,System.String,System.Text.Encoding)">
             <summary>
                 从 Base64 字符串中添加文件
             </summary>
-            <remarks>文件大小限制在 <c>50MB</c> 以内。</remarks>
+            <remarks>文件大小限制在 <c>100MB</c> 以内。</remarks>
             <param name="base64String">Base64 字符串</param>
             <param name="name">表单名称</param>
             <param name="fileName">文件的名称</param>
@@ -1139,6 +1141,17 @@
             </summary>
             <param name="defaultContentType">默认请求内容类型</param>
         </member>
+        <member name="F:HttpAgent.HttpRequestBuilder._lock">
+            <summary>
+                线程锁
+            </summary>
+            <remarks>用于保证 <see cref="M:HttpAgent.HttpRequestBuilder.AddStringContentForFormUrlEncodedContentProcessor" /> 方法调用是线程安全的。</remarks>
+        </member>
+        <member name="F:HttpAgent.HttpRequestBuilder._isAddedStringContentForFormUrlEncodedContentProcessor">
+            <summary>
+                表示是否已添加了 <see cref="T:HttpAgent.StringContentForFormUrlEncodedContentProcessor" /> 处理器
+            </summary>
+        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.SetTraceIdentifier(System.String,System.Boolean)">
             <summary>
                 设置跟踪标识
@@ -1296,7 +1309,7 @@
             <param name="comparer">
                 <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
             </param>
-            <param name="replace">是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>。</param>
+            <param name="replace">是否替换已存在的请求标头。默认值为 <c>false</c>。</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -1314,7 +1327,7 @@
             <param name="comparer">
                 <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
             </param>
-            <param name="replace">是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>。</param>
+            <param name="replace">是否替换已存在的请求标头。默认值为 <c>false</c>。</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -1332,7 +1345,7 @@
             <param name="comparer">
                 <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
             </param>
-            <param name="replace">是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>。</param>
+            <param name="replace">是否替换已存在的请求标头。默认值为 <c>false</c>。</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -1389,7 +1402,7 @@
             <param name="comparer">
                 <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
             </param>
-            <param name="replace">是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>。</param>
+            <param name="replace">是否替换已存在的查询参数。默认值为 <c>false</c>。</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -1407,7 +1420,7 @@
             <param name="comparer">
                 <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
             </param>
-            <param name="replace">是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>。</param>
+            <param name="replace">是否替换已存在的查询参数。默认值为 <c>false</c>。</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -1426,7 +1439,7 @@
             <param name="comparer">
                 <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
             </param>
-            <param name="replace">是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>。</param>
+            <param name="replace">是否替换已存在的查询参数。默认值为 <c>false</c>。</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -1436,7 +1449,7 @@
                 设置需要从 URL 中移除的查询参数集合
             </summary>
             <remarks>支持多次调用。</remarks>
-            <param name="parameterNames">查询参数名集合</param>
+            <param name="parameterNames">查询参数键集合</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -1551,7 +1564,7 @@
                 需要从请求中移除的 Cookie 集合
             </summary>
             <remarks>支持多次调用。</remarks>
-            <param name="cookieNames">Cookie 名集合</param>
+            <param name="cookieNames">Cookie 键集合</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -1608,6 +1621,7 @@
             <summary>
                 设置用于处理在设置 <see cref="T:System.Net.Http.HttpRequestMessage" /> 的 <c>Content</c> 时的操作
             </summary>
+            <remarks>支持多次调用。</remarks>
             <param name="configure">自定义配置委托</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
@@ -1741,6 +1755,7 @@
             <summary>
                 添加请求结束时需要释放的对象
             </summary>
+            <remarks>支持多次调用。</remarks>
             <param name="disposable">
                 <see cref="T:System.IDisposable" />
             </param>
@@ -1857,6 +1872,11 @@
         <member name="M:HttpAgent.HttpRequestBuilder.ReleaseDisposables">
             <summary>
                 释放可释放的对象集合
+            </summary>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.AddStringContentForFormUrlEncodedContentProcessor">
+            <summary>
+                添加 <see cref="T:HttpAgent.StringContentForFormUrlEncodedContentProcessor" /> 处理器
             </summary>
         </member>
         <member name="P:HttpAgent.HttpRequestBuilder.RequestUri">
@@ -2782,6 +2802,13 @@
             <summary>
                 禁用请求分析工具键
             </summary>
+            <remarks>被用于从 <see cref="T:System.Net.Http.HttpRequestMessage" /> 的 <c>Options</c> 属性中读取。</remarks>
+        </member>
+        <member name="F:HttpAgent.Constants.DECLARATIVE_METHOD_KEY">
+            <summary>
+                HTTP 声明式请求方法签名键
+            </summary>
+            <remarks>被用于从 <see cref="T:System.Net.Http.HttpRequestMessage" /> 的 <c>Options</c> 属性中读取。</remarks>
         </member>
         <member name="F:HttpAgent.Constants.USER_AGENT_OF_BROWSER">
             <summary>
@@ -2828,17 +2855,17 @@
         </member>
         <member name="F:HttpAgent.FileSourceType.Path">
             <summary>
-                文件路径
+                本地文件路径
             </summary>
         </member>
         <member name="F:HttpAgent.FileSourceType.Base64String">
             <summary>
-                Base64 字符串
+                Base64 字符串文件
             </summary>
         </member>
         <member name="F:HttpAgent.FileSourceType.Remote">
             <summary>
-                互联网地址
+                互联网文件地址
             </summary>
         </member>
         <member name="T:HttpAgent.ByteArrayContentConverter">
@@ -3275,7 +3302,18 @@
                 <see cref="T:System.Attribute" />
             </typeparam>
             <returns>
-                <see cref="T:System.Boolean" />
+                <typeparamref name="TAttribute" /><c>[]</c>
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Core.Extensions.MethodInfoExtensions.ToFriendlyString(System.Reflection.MethodInfo)">
+            <summary>
+                输出方法签名的友好字符串
+            </summary>
+            <param name="method">
+                <see cref="T:System.Reflection.MethodInfo" />
+            </param>
+            <returns>
+                <see cref="T:System.String" />
             </returns>
         </member>
         <member name="T:HttpAgent.Core.Extensions.NumberExtensions">
@@ -3310,7 +3348,7 @@
                 <see cref="T:System.Object" /> 拓展类
             </summary>
         </member>
-        <member name="M:HttpAgent.Core.Extensions.ObjectExtensions.ToCultureString(System.Object,System.Globalization.CultureInfo,System.Boolean)">
+        <member name="M:HttpAgent.Core.Extensions.ObjectExtensions.ToCultureString(System.Object,System.Globalization.CultureInfo,System.Boolean,System.String)">
             <summary>
                 将对象转换为基于特定文化的字符串表示形式
             </summary>
@@ -3320,7 +3358,8 @@
             <param name="culture">
                 <see cref="T:System.Globalization.CultureInfo" />
             </param>
-            <param name="enumAsString">指示是否将枚举类型的值作为名称输出，默认为 <c>true</c>。若为 <c>false</c>，则输出枚举的值</param>
+            <param name="enumAsString">指示是否将枚举类型的值作为名称输出，默认值为：<c>true</c>。若为 <c>false</c>，则输出枚举的值</param>
+            <param name="separator">集合类型分隔符</param>
             <returns>
                 <see cref="T:System.String" />
             </returns>
@@ -3603,6 +3642,17 @@
                 <see cref="T:System.Func`2" />
             </returns>
         </member>
+        <member name="M:HttpAgent.Core.Extensions.TypeExtensions.ToFriendlyString(System.Type)">
+            <summary>
+                输出类型的友好字符串
+            </summary>
+            <param name="type">
+                <see cref="T:System.Type" />
+            </param>
+            <returns>
+                <see cref="T:System.String" />
+            </returns>
+        </member>
         <member name="T:HttpAgent.Core.Utilities.AliasAsUtility">
             <summary>
                 提供别名获取实用方法
@@ -3720,6 +3770,7 @@
             <returns>
                 <see cref="T:System.Text.Json.JsonDocument" />
             </returns>
+            <exception cref="T:System.Text.Json.JsonException"></exception>
         </member>
         <member name="M:HttpAgent.Core.Utilities.JsonUtility.TryParse(System.String,System.Text.Json.JsonDocument@)">
             <summary>
@@ -3804,7 +3855,7 @@
         </member>
         <member name="P:HttpAgent.AcceptLanguageAttribute.Language">
             <summary>
-                自然语言和区域设置
+                客户端偏好的语言和区域
             </summary>
         </member>
         <member name="T:HttpAgent.BodyAttribute">
@@ -3871,31 +3922,39 @@
             <summary>
                 <inheritdoc cref="T:HttpAgent.CookieAttribute" />
             </summary>
-            <remarks>当特性作用于方法或接口时，则表示移除指定 Cookie 操作。</remarks>
-            <param name="name">Cookie</param>
+            <remarks>
+                <para>当特性作用于方法或接口时，则表示移除指定Cookie 操作。</para>
+                <para>当特性作用于参数时，则表示添加Cookie ，同时设置Cookie 键为 <c>name</c> 的值。</para>
+            </remarks>
+            <param name="name">Cookie 键</param>
         </member>
         <member name="M:HttpAgent.CookieAttribute.#ctor(System.String,System.Object)">
             <summary>
                 <inheritdoc cref="T:HttpAgent.CookieAttribute" />
             </summary>
-            <param name="name">Cookie</param>
+            <param name="name">Cookie 键</param>
             <param name="value">Cookie 的值</param>
         </member>
         <member name="P:HttpAgent.CookieAttribute.Name">
             <summary>
-                Cookie
+                Cookie 键
             </summary>
+            <remarks>该属性优先级低于 <see cref="P:HttpAgent.CookieAttribute.AliasAs" /> 属性设置的值。</remarks>
         </member>
         <member name="P:HttpAgent.CookieAttribute.Value">
             <summary>
                 Cookie 的值
             </summary>
+            <remarks>当特性作用于参数时，表示默认值。</remarks>
         </member>
         <member name="P:HttpAgent.CookieAttribute.AliasAs">
             <summary>
                 别名
             </summary>
-            <remarks>特性用于参数时有效。</remarks>
+            <remarks>
+                <para>特性用于参数时有效。</para>
+                <para>该属性优先级高于 <see cref="P:HttpAgent.CookieAttribute.Name" /> 属性设置的值。</para>
+            </remarks>
         </member>
         <member name="P:HttpAgent.CookieAttribute.Escape">
             <summary>
@@ -3965,31 +4024,39 @@
             <summary>
                 <inheritdoc cref="T:HttpAgent.HeaderAttribute" />
             </summary>
-            <remarks>当特性作用于方法或接口时，则表示移除指定标头操作。</remarks>
-            <param name="name">标头</param>
+            <remarks>
+                <para>当特性作用于方法或接口时，则表示移除指定请求标头操作。</para>
+                <para>当特性作用于参数时，则表示添加请求标头，同时设置请求标头键为 <c>name</c> 的值。</para>
+            </remarks>
+            <param name="name">请求标头键</param>
         </member>
         <member name="M:HttpAgent.HeaderAttribute.#ctor(System.String,System.Object)">
             <summary>
                 <inheritdoc cref="T:HttpAgent.HeaderAttribute" />
             </summary>
-            <param name="name">标头</param>
-            <param name="value">标头的值</param>
+            <param name="name">请求标头键</param>
+            <param name="value">请求标头的值</param>
         </member>
         <member name="P:HttpAgent.HeaderAttribute.Name">
             <summary>
-                标头
+                请求标头键
             </summary>
+            <remarks>该属性优先级低于 <see cref="P:HttpAgent.HeaderAttribute.AliasAs" /> 属性设置的值。</remarks>
         </member>
         <member name="P:HttpAgent.HeaderAttribute.Value">
             <summary>
-                标头的值
+                请求标头的值
             </summary>
+            <remarks>当特性作用于参数时，表示默认值。</remarks>
         </member>
         <member name="P:HttpAgent.HeaderAttribute.AliasAs">
             <summary>
                 别名
             </summary>
-            <remarks>特性用于参数时有效。</remarks>
+            <remarks>
+                <para>特性用于参数时有效。</para>
+                <para>该属性优先级高于 <see cref="P:HttpAgent.HeaderAttribute.Name" /> 属性设置的值。</para>
+            </remarks>
         </member>
         <member name="P:HttpAgent.HeaderAttribute.Escape">
             <summary>
@@ -3998,7 +4065,7 @@
         </member>
         <member name="P:HttpAgent.HeaderAttribute.Replace">
             <summary>
-                是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>
+                是否替换已存在的请求标头。默认值为 <c>false</c>
             </summary>
         </member>
         <member name="P:HttpAgent.HeaderAttribute.HasSetValue">
@@ -4141,7 +4208,7 @@
         </member>
         <member name="T:HttpAgent.MultipartAttribute">
             <summary>
-                HTTP 声明式多部分表单内容特性
+                HTTP 声明式多部分表单项内容特性
             </summary>
         </member>
         <member name="M:HttpAgent.MultipartAttribute.#ctor">
@@ -4177,9 +4244,9 @@
         </member>
         <member name="P:HttpAgent.MultipartAttribute.AsFileFrom">
             <summary>
-                将字符串作为多部分表单文件的来源
+                表示将字符串作为多部分表单文件的来源
             </summary>
-            <remarks>用于读取多部分表单内容文件。当参数类型为 <see cref="T:System.String" /> 时有效。</remarks>
+            <remarks>用于设置多部分表单文件内容。当参数类型为 <see cref="T:System.String" /> 时有效。</remarks>
         </member>
         <member name="P:HttpAgent.MultipartAttribute.AsFormItem">
             <summary>
@@ -4189,6 +4256,28 @@
                 <para>当参数类型为对象类型时有效。</para>
                 <para>该属性值为 <c>true</c> 时作为表单的一项。否则将遍历对象类型的每一个公开属性作为表单的项。默认值为：<c>true</c>。</para>
             </remarks>
+        </member>
+        <member name="T:HttpAgent.MultipartFormAttribute">
+            <summary>
+                HTTP 声明式多部分表单内容特性
+            </summary>
+            <remarks>需配合 <see cref="T:HttpAgent.MultipartAttribute" /> 使用。</remarks>
+        </member>
+        <member name="M:HttpAgent.MultipartFormAttribute.#ctor">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.MultipartFormAttribute" />
+            </summary>
+        </member>
+        <member name="M:HttpAgent.MultipartFormAttribute.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.MultipartFormAttribute" />
+            </summary>
+            <param name="boundary">多部分表单内容的边界</param>
+        </member>
+        <member name="P:HttpAgent.MultipartFormAttribute.Boundary">
+            <summary>
+                多部分表单内容的边界
+            </summary>
         </member>
         <member name="T:HttpAgent.PathAttribute">
             <summary>
@@ -4204,12 +4293,12 @@
         </member>
         <member name="P:HttpAgent.PathAttribute.Name">
             <summary>
-                参数名称
+                路径参数键
             </summary>
         </member>
         <member name="P:HttpAgent.PathAttribute.Value">
             <summary>
-                参数值
+                路径参数的值
             </summary>
         </member>
         <member name="T:HttpAgent.ProfilerAttribute">
@@ -4249,31 +4338,39 @@
             <summary>
                 <inheritdoc cref="T:HttpAgent.QueryAttribute" />
             </summary>
-            <remarks>当特性作用于方法或接口时，则表示移除指定查询参数操作。</remarks>
-            <param name="name">查询参数</param>
+            <remarks>
+                <para>当特性作用于方法或接口时，则表示移除指定查询参数操作。</para>
+                <para>当特性作用于参数时，则表示添加查询参数，同时设置查询参数键为 <c>name</c> 的值。</para>
+            </remarks>
+            <param name="name">查询参数键</param>
         </member>
         <member name="M:HttpAgent.QueryAttribute.#ctor(System.String,System.Object)">
             <summary>
                 <inheritdoc cref="T:HttpAgent.QueryAttribute" />
             </summary>
-            <param name="name">查询参数</param>
+            <param name="name">查询参数键</param>
             <param name="value">查询参数的值</param>
         </member>
         <member name="P:HttpAgent.QueryAttribute.Name">
             <summary>
-                查询参数
+                查询参数键
             </summary>
+            <remarks>该属性优先级低于 <see cref="P:HttpAgent.QueryAttribute.AliasAs" /> 属性设置的值。</remarks>
         </member>
         <member name="P:HttpAgent.QueryAttribute.Value">
             <summary>
                 查询参数的值
             </summary>
+            <remarks>当特性作用于参数时，表示默认值。</remarks>
         </member>
         <member name="P:HttpAgent.QueryAttribute.AliasAs">
             <summary>
                 别名
             </summary>
-            <remarks>特性用于参数时有效。</remarks>
+            <remarks>
+                <para>特性用于参数时有效。</para>
+                <para>该属性优先级高于 <see cref="P:HttpAgent.QueryAttribute.Name" /> 属性设置的值。</para>
+            </remarks>
         </member>
         <member name="P:HttpAgent.QueryAttribute.Escape">
             <summary>
@@ -4288,7 +4385,7 @@
         </member>
         <member name="P:HttpAgent.QueryAttribute.Replace">
             <summary>
-                是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>
+                是否替换已存在的查询参数。默认值为 <c>false</c>
             </summary>
         </member>
         <member name="P:HttpAgent.QueryAttribute.HasSetValue">
@@ -4557,6 +4654,17 @@
         <member name="P:HttpAgent.MultipartDeclarativeExtractor.Order">
             <inheritdoc />
         </member>
+        <member name="M:HttpAgent.MultipartDeclarativeExtractor.SetBoundary(System.Reflection.MethodInfo,HttpAgent.HttpMultipartFormDataBuilder)">
+            <summary>
+                设置多部分表单内容的边界
+            </summary>
+            <param name="method">
+                <see cref="T:System.Reflection.MethodInfo" />
+            </param>
+            <param name="httpMultipartFormDataBuilder">
+                <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
+            </param>
+        </member>
         <member name="M:HttpAgent.MultipartDeclarativeExtractor.AddMultipart(System.Reflection.ParameterInfo,System.Object,HttpAgent.HttpMultipartFormDataBuilder)">
             <summary>
                 添加多部分表单内容
@@ -4714,6 +4822,11 @@
                 被调用方法的参数键值字典
             </summary>
         </member>
+        <member name="P:HttpAgent.HttpDeclarativeExtractorContext.UnFrozenParameters">
+            <summary>
+                被调用方法的非冻结类型参数键值字典
+            </summary>
+        </member>
         <member name="M:HttpAgent.HttpDeclarativeExtractorContext.IsFrozenParameter(System.Reflection.ParameterInfo)">
             <summary>
                 判断参数是否为冻结参数
@@ -4724,6 +4837,34 @@
             </param>
             <returns>
                 <see cref="T:System.Boolean" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeExtractorContext.IsMethodDefined``1(``0@,System.Boolean)">
+            <summary>
+                检查被调用方法是否定义了指定特性
+            </summary>
+            <param name="attribute">
+                <typeparamref name="TAttribute" />
+            </param>
+            <param name="inherit">是否在基类中搜索</param>
+            <typeparam name="TAttribute">
+                <see cref="T:System.Attribute" />
+            </typeparam>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpDeclarativeExtractorContext.GetMethodDefinedCustomAttributes``1(System.Boolean,System.Boolean)">
+            <summary>
+                获取被调用方法指定特性的所有实例
+            </summary>
+            <param name="inherit">是否在基类中搜索</param>
+            <param name="methodScanFirst">是否优先查找 <see cref="T:System.Reflection.MethodInfo" /> 的特性。默认值为：<c>true</c>。</param>
+            <typeparam name="TAttribute">
+                <see cref="T:System.Attribute" />
+            </typeparam>
+            <returns>
+                <typeparamref name="TAttribute" /><c>[]</c>
             </returns>
         </member>
         <member name="T:HttpAgent.IHttpDeclarative">
@@ -4825,13 +4966,14 @@
                 HTTP 远程服务拓展类
             </summary>
         </member>
-        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.AddProfilerDelegatingHandler(Microsoft.Extensions.DependencyInjection.IHttpClientBuilder)">
+        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.AddProfilerDelegatingHandler(Microsoft.Extensions.DependencyInjection.IHttpClientBuilder,System.Boolean)">
             <summary>
                 添加 HTTP 远程请求分析工具处理委托
             </summary>
             <param name="builder">
                 <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />
             </param>
+            <param name="disableInProduction">是否在生产环境中禁用。默认值为：<c>false</c>。</param>
             <returns>
                 <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />
             </returns>
@@ -4870,6 +5012,17 @@
             <param name="responseSummary">响应标头摘要</param>
             <param name="generalSummary">常规摘要</param>
             <param name="generalCustomKeyValues">自定义常规摘要键值集合</param>
+            <returns>
+                <see cref="T:System.String" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.GetHostEnvironmentName(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+                获取主机环境名
+            </summary>
+            <param name="services">
+                <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
+            </param>
             <returns>
                 <see cref="T:System.String" />
             </returns>
@@ -5204,11 +5357,12 @@
                 HTTP 远程请求模块帮助类
             </summary>
         </member>
-        <member name="M:HttpAgent.Helpers.GetStreamFromRemote(System.String)">
+        <member name="M:HttpAgent.Helpers.GetStreamFromRemote(System.String,System.Int64)">
             <summary>
                 从互联网 URL 地址中加载流
             </summary>
             <param name="url">互联网 URL 地址</param>
+            <param name="maxResponseContentBufferSize">响应内容的最大缓存大小。默认值为：<c>100MB</c>。</param>
             <returns>
                 <see cref="T:System.Tuple`2" />
             </returns>
@@ -5942,6 +6096,11 @@
             </summary>
         </member>
         <member name="P:HttpAgent.HttpRemoteResult`1.CharSet">
+            <summary>
+                字符集
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HttpRemoteResult`1.ContentEncoding">
             <summary>
                 内容编码
             </summary>

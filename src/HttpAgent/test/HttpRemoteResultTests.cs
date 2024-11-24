@@ -19,6 +19,8 @@ public class HttpRemoteResultTests
         Assert.Equal(httpResponseMessage, httpRemoteResult.ResponseMessage);
         Assert.Null(httpRemoteResult.ContentType);
         Assert.Null(httpRemoteResult.CharSet);
+        Assert.NotNull(httpRemoteResult.ContentEncoding);
+        Assert.Empty(httpRemoteResult.ContentEncoding);
         Assert.Equal(0, httpRemoteResult.ContentLength);
         Assert.Null(httpRemoteResult.RawSetCookies);
         Assert.Null(httpRemoteResult.SetCookies);

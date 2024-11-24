@@ -55,7 +55,8 @@ public class CookieDeclarativeExtractorTests
         Assert.Equal("value4", httpRequestBuilder3.Cookies["header4"]);
 
         var method4 = typeof(ICookieDeclarativeTest).GetMethod(nameof(ICookieDeclarativeTest.Test4))!;
-        var context4 = new HttpDeclarativeExtractorContext(method4, [1, "furion", 31, "GuangDong"]);
+        var context4 =
+            new HttpDeclarativeExtractorContext(method4, [1, "furion", 31, "GuangDong", CancellationToken.None]);
         var httpRequestBuilder4 = HttpRequestBuilder.Get("http://localhost");
         new CookieDeclarativeExtractor().Extract(httpRequestBuilder4, context4);
 
@@ -70,7 +71,8 @@ public class CookieDeclarativeExtractorTests
         Assert.Equal("31", httpRequestBuilder4.Cookies["age"]);
         Assert.Equal("GuangDong", httpRequestBuilder4.Cookies["address"]);
 
-        var context5 = new HttpDeclarativeExtractorContext(method4, [1, "furion", null, "GuangDong"]);
+        var context5 =
+            new HttpDeclarativeExtractorContext(method4, [1, "furion", null, "GuangDong", CancellationToken.None]);
         var httpRequestBuilder5 = HttpRequestBuilder.Get("http://localhost");
         new CookieDeclarativeExtractor().Extract(httpRequestBuilder5, context5);
 
@@ -118,7 +120,7 @@ public interface ICookieDeclarativeTest : IHttpDeclarative
     [Post("http://localhost:5000")]
     [Cookie("header3", "value3")]
     Task Test4([Cookie] int id, [Cookie] [Cookie(AliasAs = "myName")] string name, [Cookie(Value = 30)] int? age,
-        [Cookie("address")] string abc);
+        [Cookie("address")] string abc, [Cookie] CancellationToken cancellationToken);
 
     [Post("http://localhost:5000")]
     Task Test5([Cookie] object obj);

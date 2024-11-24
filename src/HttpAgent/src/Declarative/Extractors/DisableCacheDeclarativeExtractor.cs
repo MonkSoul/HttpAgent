@@ -13,7 +13,7 @@ internal sealed class DisableCacheDeclarativeExtractor : IHttpDeclarativeExtract
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
         // 检查方法或接口是否贴有 [DisableCache] 特性
-        if (!context.Method.IsDefined<DisableCacheAttribute>(out var disableCacheAttribute, true))
+        if (!context.IsMethodDefined<DisableCacheAttribute>(out var disableCacheAttribute, true))
         {
             return;
         }

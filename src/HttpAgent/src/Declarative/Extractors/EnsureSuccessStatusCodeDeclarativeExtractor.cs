@@ -13,7 +13,7 @@ internal sealed class EnsureSuccessStatusCodeDeclarativeExtractor : IHttpDeclara
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
         // 检查方法或接口是否贴有 [EnsureSuccessStatusCode] 特性
-        if (!context.Method.IsDefined<EnsureSuccessStatusCodeAttribute>(out var ensureSuccessStatusCodeAttribute, true))
+        if (!context.IsMethodDefined<EnsureSuccessStatusCodeAttribute>(out var ensureSuccessStatusCodeAttribute, true))
         {
             return;
         }

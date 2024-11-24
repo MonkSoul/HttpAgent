@@ -285,7 +285,7 @@ public class HttpRequestBuilderMethodsTests
             Assert.Throws<NotSupportedException>(() =>
                 httpRequestBuilder.SetContent(new { }, "multipart/form-data"));
         Assert.Equal(
-            "The method does not support setting the request content type to `multipart/form-data`. Please use the `SetMultipartContent` method instead. If you are using an HTTP declarative requests, define the parameter with the `Action<HttpMultipartFormDataBuilder>` type.",
+            "The method does not support setting the request content type to `multipart/form-data`. Please use the `SetMultipartContent` method instead. If you are using an HTTP declarative requests, define the parameter with the `Action<HttpMultipartFormDataBuilder>` type or annotate the parameter with the `MultipartAttribute`.",
             exception.Message);
     }
 
@@ -1538,5 +1538,17 @@ public class HttpRequestBuilderMethodsTests
         Assert.Equal(2, httpRequestBuilder2.Properties.Count);
         Assert.Equal("bar", httpRequestBuilder2.Properties["foo"]);
         Assert.Equal("bar2", httpRequestBuilder2.Properties["foo2"]);
+    }
+
+    [Fact]
+    public void AddStringContentForFormUrlEncodedContentProcessor_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder.AddStringContentForFormUrlEncodedContentProcessor();
+        httpRequestBuilder.AddStringContentForFormUrlEncodedContentProcessor();
+        httpRequestBuilder.AddStringContentForFormUrlEncodedContentProcessor();
+
+        Assert.NotNull(httpRequestBuilder.HttpContentProcessorProviders);
+        Assert.Single(httpRequestBuilder.HttpContentProcessorProviders);
     }
 }

@@ -1011,7 +1011,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
 
         var exception = Assert.Throws<HttpRequestException>(() =>
             HttpRemoteService.CheckContentLengthWithinLimit(httpRequestBuilder, httpResponseMessage));
-        Assert.Equal("Cannot write more bytes to the buffer than the configured maximum buffer size: 10.",
+        Assert.Equal("Cannot write more bytes to the buffer than the configured maximum buffer size: `10`.",
             exception.Message);
     }
 

@@ -55,7 +55,7 @@ public class QueryDeclarativeExtractorTests
         Assert.Equal("value4", httpRequestBuilder3.QueryParameters["query4"].First());
 
         var method4 = typeof(IQueryDeclarativeTest).GetMethod(nameof(IQueryDeclarativeTest.Test4))!;
-        var context4 = new HttpDeclarativeExtractorContext(method4, [1, "furion", 31, "广东省"]);
+        var context4 = new HttpDeclarativeExtractorContext(method4, [1, "furion", 31, "广东省", CancellationToken.None]);
         var httpRequestBuilder4 = HttpRequestBuilder.Get("http://localhost");
         new QueryDeclarativeExtractor().Extract(httpRequestBuilder4, context4);
 
@@ -70,7 +70,7 @@ public class QueryDeclarativeExtractorTests
         Assert.Equal("31", httpRequestBuilder4.QueryParameters["age"].First());
         Assert.Equal("广东省", httpRequestBuilder4.QueryParameters["address"].First());
 
-        var context5 = new HttpDeclarativeExtractorContext(method4, [1, "furion", null, "广东省"]);
+        var context5 = new HttpDeclarativeExtractorContext(method4, [1, "furion", null, "广东省", CancellationToken.None]);
         var httpRequestBuilder5 = HttpRequestBuilder.Get("http://localhost");
         new QueryDeclarativeExtractor().Extract(httpRequestBuilder5, context5);
 
@@ -118,7 +118,7 @@ public interface IQueryDeclarativeTest : IHttpDeclarative
     [Get("http://localhost:5000")]
     [Query("query3", "value3")]
     Task Test4([Query] int id, [Query] [Query(AliasAs = "myName")] string name, [Query(Value = 30)] int? age,
-        [Query("address")] string abc);
+        [Query("address")] string abc, [Query] CancellationToken cancellationToken);
 
     [Get("http://localhost:5000")]
     Task Test5([Query(Prefix = "user")] object obj);

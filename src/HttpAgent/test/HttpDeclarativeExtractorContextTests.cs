@@ -29,7 +29,9 @@ public class HttpDeclarativeExtractorContextTests
         Assert.Equal(method1, context1.Method);
         Assert.Equal([], context1.Args);
         Assert.Empty(context1.Parameters);
+        Assert.Empty(context1.UnFrozenParameters);
         Assert.Equal(typeof(ReadOnlyDictionary<,>), context1.Parameters.GetType().GetGenericTypeDefinition());
+        Assert.Equal(typeof(ReadOnlyDictionary<,>), context1.UnFrozenParameters.GetType().GetGenericTypeDefinition());
 
         var method2 = typeof(IHttpDeclarativeTest).GetMethod(nameof(IHttpDeclarativeTest.Method2));
         var args2 = new object?[] { 1, "furion" };
@@ -42,6 +44,14 @@ public class HttpDeclarativeExtractorContextTests
         Assert.Equal(1, context2.Parameters.Values.First());
         Assert.Equal("name", context2.Parameters.Keys.Last().Name);
         Assert.Equal("furion", context2.Parameters.Values.Last());
+
+        var method3 = typeof(IHttpDeclarativeTest).GetMethod(nameof(IHttpDeclarativeTest.GetUrl));
+        var args3 = new object?[] { "https://furion.net", CancellationToken.None };
+        var context3 = new HttpDeclarativeExtractorContext(method3!, args3);
+        Assert.Equal(method3, context3.Method);
+        Assert.Equal(args3, context3.Args);
+        Assert.Equal(2, context3.Parameters.Count);
+        Assert.Single(context3.UnFrozenParameters);
     }
 
     [Fact]
@@ -60,5 +70,30 @@ public class HttpDeclarativeExtractorContextTests
         Assert.True(HttpDeclarativeExtractorContext.IsFrozenParameter(parameters[3]));
         Assert.True(HttpDeclarativeExtractorContext.IsFrozenParameter(parameters[4]));
         Assert.True(HttpDeclarativeExtractorContext.IsFrozenParameter(parameters[5]));
+    }
+
+    [Fact]
+    public void IsMethodDefined_ReturnOK()
+    {
+        var method = typeof(IHttpDeclarativeTest).GetMethod(nameof(IHttpDeclarativeTest.GetAttribute))!;
+        var context1 = new HttpDeclarativeExtractorContext(method, []);
+        Assert.True(context1.IsMethodDefined<TimeoutAttribute>(out var attribute, true));
+        Assert.NotNull(attribute);
+
+        Assert.False(context1.IsMethodDefined<ProfilerAttribute>(out var attribute2, true));
+        Assert.Null(attribute2);
+    }
+
+    [Fact]
+    public void GetMethodDefinedCustomAttributes_ReturnOK()
+    {
+        var method = typeof(IHttpDeclarativeTest).GetMethod(nameof(IHttpDeclarativeTest.GetMethodAttributes))!;
+        var context1 = new HttpDeclarativeExtractorContext(method, []);
+        var attributes = context1.GetMethodDefinedCustomAttributes<PathAttribute>(true, false);
+        Assert.NotNull(attributes);
+        Assert.Equal(2, attributes.Length);
+
+        var attributes2 = context1.GetMethodDefinedCustomAttributes<QueryAttribute>(true, false);
+        Assert.Null(attributes2);
     }
 }

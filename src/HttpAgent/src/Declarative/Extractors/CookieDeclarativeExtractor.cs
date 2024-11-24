@@ -15,7 +15,7 @@ internal sealed class CookieDeclarativeExtractor : IHttpDeclarativeExtractor
         /* 情况一：当特性作用于方法或接口时 */
 
         // 获取 CookieAttribute 特性集合
-        var cookieAttributes = context.Method.GetDefinedCustomAttributes<CookieAttribute>(true, false)?.ToArray();
+        var cookieAttributes = context.GetMethodDefinedCustomAttributes<CookieAttribute>(true, false)?.ToArray();
 
         // 空检查
         if (cookieAttributes is { Length: > 0 })
@@ -23,7 +23,7 @@ internal sealed class CookieDeclarativeExtractor : IHttpDeclarativeExtractor
             // 遍历所有 [Cookie] 特性并添加到 HttpRequestBuilder 中
             foreach (var cookieAttribute in cookieAttributes)
             {
-                // 获取 Cookie 名
+                // 获取 Cookie 键
                 var cookieName = cookieAttribute.Name;
 
                 // 空检查
@@ -45,9 +45,7 @@ internal sealed class CookieDeclarativeExtractor : IHttpDeclarativeExtractor
         /* 情况二：当特性作用于参数时 */
 
         // 查找所有贴有 [Cookie] 特性的参数集合
-        var cookieParameters = context.Parameters.Where(u =>
-                !HttpDeclarativeExtractorContext.IsFrozenParameter(u.Key) &&
-                u.Key.IsDefined(typeof(CookieAttribute), true))
+        var cookieParameters = context.UnFrozenParameters.Where(u => u.Key.IsDefined(typeof(CookieAttribute), true))
             .ToArray();
 
         // 空检查

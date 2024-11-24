@@ -25,12 +25,12 @@ public sealed class PathAttribute : Attribute
     }
 
     /// <summary>
-    ///     参数名称
+    ///     路径参数键
     /// </summary>
     public string Name { get; set; }
 
     /// <summary>
-    ///     参数值
+    ///     路径参数的值
     /// </summary>
     public object? Value { get; set; }
 }

@@ -13,7 +13,7 @@ internal sealed class AcceptLanguageDeclarativeExtractor : IHttpDeclarativeExtra
     public void Extract(HttpRequestBuilder httpRequestBuilder, HttpDeclarativeExtractorContext context)
     {
         // 检查方法或接口是否贴有 [AcceptLanguage] 特性
-        if (!context.Method.IsDefined<AcceptLanguageAttribute>(out var acceptLanguageAttribute, true))
+        if (!context.IsMethodDefined<AcceptLanguageAttribute>(out var acceptLanguageAttribute, true))
         {
             return;
         }

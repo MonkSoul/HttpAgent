@@ -55,7 +55,8 @@ public class HeaderDeclarativeExtractorTests
         Assert.Equal("value4", httpRequestBuilder3.Headers["header4"].First());
 
         var method4 = typeof(IHeaderDeclarativeTest).GetMethod(nameof(IHeaderDeclarativeTest.Test4))!;
-        var context4 = new HttpDeclarativeExtractorContext(method4, [1, "furion", 31, "GuangDong"]);
+        var context4 =
+            new HttpDeclarativeExtractorContext(method4, [1, "furion", 31, "GuangDong", CancellationToken.None]);
         var httpRequestBuilder4 = HttpRequestBuilder.Get("http://localhost");
         new HeaderDeclarativeExtractor().Extract(httpRequestBuilder4, context4);
 
@@ -70,7 +71,8 @@ public class HeaderDeclarativeExtractorTests
         Assert.Equal("31", httpRequestBuilder4.Headers["age"].First());
         Assert.Equal("GuangDong", httpRequestBuilder4.Headers["address"].First());
 
-        var context5 = new HttpDeclarativeExtractorContext(method4, [1, "furion", null, "GuangDong"]);
+        var context5 =
+            new HttpDeclarativeExtractorContext(method4, [1, "furion", null, "GuangDong", CancellationToken.None]);
         var httpRequestBuilder5 = HttpRequestBuilder.Get("http://localhost");
         new HeaderDeclarativeExtractor().Extract(httpRequestBuilder5, context5);
 
@@ -118,7 +120,7 @@ public interface IHeaderDeclarativeTest : IHttpDeclarative
     [Post("http://localhost:5000")]
     [Header("header3", "value3")]
     Task Test4([Header] int id, [Header] [Header(AliasAs = "myName")] string name, [Header(Value = 30)] int? age,
-        [Header("address")] string abc);
+        [Header("address")] string abc, [Header] CancellationToken cancellationToken);
 
     [Post("http://localhost:5000")]
     Task Test5([Header] object obj);

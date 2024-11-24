@@ -50,6 +50,7 @@ public class MultipartDeclarativeExtractorTests
             httpRequestBuilder2.MultipartFormDataBuilder._partContents[4].ContentType);
         Assert.Equal("content", httpRequestBuilder2.MultipartFormDataBuilder._partContents[5].Name);
         Assert.Equal("text/plain", httpRequestBuilder2.MultipartFormDataBuilder._partContents[5].ContentType);
+        Assert.Equal("--------------------", httpRequestBuilder2.MultipartFormDataBuilder.Boundary);
 
         var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var base64String = Convert.ToBase64String(File.ReadAllBytes(filePath));
@@ -88,6 +89,27 @@ public class MultipartDeclarativeExtractorTests
         Assert.Single(httpRequestBuilder4.MultipartFormDataBuilder._partContents);
         Assert.Equal("id", httpRequestBuilder4.MultipartFormDataBuilder._partContents[0].Name);
         Assert.Equal("text/plain", httpRequestBuilder4.MultipartFormDataBuilder._partContents[0].ContentType);
+    }
+
+    [Fact]
+    public void SetBoundary_ReturnOK()
+    {
+        var method1 =
+            typeof(IMultipartDeclarativeExtractorTest).GetMethod(nameof(IMultipartDeclarativeExtractorTest.Test1))!;
+        var httpRequestBuilder1 = HttpRequestBuilder.Get("http://localhost");
+        var httpMultipartFormDataBuilder = new HttpMultipartFormDataBuilder(httpRequestBuilder1);
+
+        MultipartDeclarativeExtractor.SetBoundary(method1, httpMultipartFormDataBuilder);
+        Assert.Null(httpMultipartFormDataBuilder.Boundary);
+
+        var method2 =
+            typeof(IMultipartDeclarativeExtractorTest).GetMethod(nameof(IMultipartDeclarativeExtractorTest.Test2))!;
+        var httpRequestBuilder2 = HttpRequestBuilder.Get("http://localhost");
+        var httpMultipartFormDataBuilder2 = new HttpMultipartFormDataBuilder(httpRequestBuilder2);
+
+        MultipartDeclarativeExtractor.SetBoundary(method2, httpMultipartFormDataBuilder2);
+        Assert.NotNull(httpMultipartFormDataBuilder2.Boundary);
+        Assert.Equal("--------------------", httpMultipartFormDataBuilder2.Boundary);
     }
 
     [Fact]
@@ -175,6 +197,25 @@ public class MultipartDeclarativeExtractorTests
     }
 
     [Fact]
+    public void AddFileFromSource_Invalid_Parameters()
+    {
+        var httpMultipartFormDataBuilder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
+
+        Assert.Throws<ArgumentNullException>(() => MultipartDeclarativeExtractor.AddFileFromSource(null!, "noneName",
+            new MultipartAttribute("noneName"),
+            httpMultipartFormDataBuilder, null));
+
+        Assert.Throws<ArgumentException>(() => MultipartDeclarativeExtractor.AddFileFromSource(string.Empty,
+            "noneName",
+            new MultipartAttribute("noneName"),
+            httpMultipartFormDataBuilder, null));
+
+        Assert.Throws<ArgumentException>(() => MultipartDeclarativeExtractor.AddFileFromSource(" ", "noneName",
+            new MultipartAttribute("noneName"),
+            httpMultipartFormDataBuilder, null));
+    }
+
+    [Fact]
     public void AddFileFromSource_ReturnOK()
     {
         var httpMultipartFormDataBuilder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
@@ -248,6 +289,7 @@ public interface IMultipartDeclarativeExtractorTest : IHttpDeclarative
     Task Test1();
 
     [Post("http://localhost:5000")]
+    [MultipartForm("--------------------")]
     Task Test2([Multipart] int id, [Multipart] string name, [Multipart] object obj, [Multipart] Stream stream,
         [Multipart("bytes")] byte[] byteArray, [Multipart] StringContent content);
 

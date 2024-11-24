@@ -72,7 +72,14 @@ internal static class Constants
     /// <summary>
     ///     禁用请求分析工具键
     /// </summary>
+    /// <remarks>被用于从 <see cref="HttpRequestMessage" /> 的 <c>Options</c> 属性中读取。</remarks>
     internal const string DISABLED_PROFILER_KEY = "__Disabled_Profiler__";
+
+    /// <summary>
+    ///     HTTP 声明式请求方法签名键
+    /// </summary>
+    /// <remarks>被用于从 <see cref="HttpRequestMessage" /> 的 <c>Options</c> 属性中读取。</remarks>
+    internal const string DECLARATIVE_METHOD_KEY = "__DECLARATIVE_METHOD__";
 
     /// <summary>
     ///     浏览器的 <c>User-Agent</c> 标头值

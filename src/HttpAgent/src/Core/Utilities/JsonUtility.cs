@@ -16,6 +16,7 @@ public static class JsonUtility
     /// <returns>
     ///     <see cref="JsonDocument" />
     /// </returns>
+    /// <exception cref="JsonException"></exception>
     public static JsonDocument Parse(string jsonString)
     {
         // 空检查

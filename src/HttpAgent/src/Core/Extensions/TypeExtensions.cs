@@ -391,4 +391,44 @@ internal static class TypeExtensions
         // 创建一个委托并将其转换为适当的 Func 类型
         return (Func<object, object?>)dynamicMethod.CreateDelegate(typeof(Func<object, object?>));
     }
+
+    /// <summary>
+    ///     输出类型的友好字符串
+    /// </summary>
+    /// <param name="type">
+    ///     <see cref="Type" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="string" />
+    /// </returns>
+    internal static string? ToFriendlyString(this Type? type)
+    {
+        // 空检查
+        if (type is null)
+        {
+            return default;
+        }
+
+        // 检查是否是泛型类型
+        if (type.IsGenericType)
+        {
+            // 获取类型名称
+            var typeName = type.Name.Split('`')[0];
+
+            // 获取泛型参数
+            var genericArguments = type.GetGenericArguments().Select(ToFriendlyString).ToArray();
+
+            return $"{type.Namespace}.{typeName}<{string.Join(',', genericArguments)}>";
+        }
+
+        // 检查是否是非泛型且不是数组类型
+        // ReSharper disable once InvertIf
+        if (type.IsArray)
+        {
+            var rank = new string(',', type.GetArrayRank() - 1);
+            return $"{ToFriendlyString(type.GetElementType()!)}[{rank}]";
+        }
+
+        return type.FullName ?? type.Name;
+    }
 }

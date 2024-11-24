@@ -15,7 +15,7 @@ internal sealed class PathDeclarativeExtractor : IHttpDeclarativeExtractor
         /* 情况一：当特性作用于方法或接口时 */
 
         // 获取 PathAttribute 特性集合
-        var pathAttributes = context.Method.GetDefinedCustomAttributes<PathAttribute>(true, false)?.ToArray();
+        var pathAttributes = context.GetMethodDefinedCustomAttributes<PathAttribute>(true, false)?.ToArray();
 
         // 空检查
         if (pathAttributes is { Length: > 0 })
@@ -28,20 +28,10 @@ internal sealed class PathDeclarativeExtractor : IHttpDeclarativeExtractor
             }
         }
 
-        /* 情况二：将所有非特殊参数添加到路径参数中 */
-
-        // 查找所有路径参数集合
-        var pathParameters = context.Parameters
-            .Where(u => !HttpDeclarativeExtractorContext.IsFrozenParameter(u.Key)).ToArray();
-
-        // 空检查
-        if (pathParameters.Length == 0)
-        {
-            return;
-        }
+        /* 情况二：将所有非冻结类型参数添加到路径参数中 */
 
         // 遍历所有路径参数
-        foreach (var (parameter, value) in pathParameters)
+        foreach (var (parameter, value) in context.UnFrozenParameters)
         {
             // 获取参数名
             var parameterName = AliasAsUtility.GetParameterName(parameter, out _);

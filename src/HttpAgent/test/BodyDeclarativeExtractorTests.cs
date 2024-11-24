@@ -53,7 +53,7 @@ public class BodyDeclarativeExtractorTests
         Assert.Equal("utf-8", httpRequestBuilder2.ContentEncoding?.BodyName);
 
         var method4 = typeof(IBodyDeclarativeTest).GetMethod(nameof(IBodyDeclarativeTest.Test4))!;
-        var context4 = new HttpDeclarativeExtractorContext(method4, ["str"]);
+        var context4 = new HttpDeclarativeExtractorContext(method4, ["str", CancellationToken.None]);
         var httpRequestBuilder4 = HttpRequestBuilder.Get("http://localhost");
         new BodyDeclarativeExtractor().Extract(httpRequestBuilder4, context4);
         Assert.Equal("str", httpRequestBuilder4.RawContent);
@@ -113,7 +113,7 @@ public interface IBodyDeclarativeTest : IHttpDeclarative
     Task Test3([Body] string body, [Body] string body2);
 
     [Post("http://localhost:5000")]
-    Task Test4([Body("text/plain")] string body);
+    Task Test4([Body("text/plain")] string body, [Body] CancellationToken cancellationToken);
 
     [Post("http://localhost:5000")]
     Task Test5([Body("text/plain", "utf-8")] string body);

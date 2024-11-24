@@ -69,22 +69,19 @@ public sealed class HttpMultipartFormDataBuilder
         // 空检查
         ArgumentNullException.ThrowIfNull(rawJson);
 
-        var rawObject = rawJson;
-
         // 检查是否配置表单名或不是字符串类型
         if (!string.IsNullOrWhiteSpace(name) || rawJson is not string rawString)
         {
-            return AddObject(rawObject, name, MediaTypeNames.Application.Json, contentEncoding);
+            return AddObject(rawJson, name, MediaTypeNames.Application.Json, contentEncoding);
         }
 
         // 尝试验证并获取 JsonDocument 实例（需 using）
         var jsonDocument = JsonUtility.Parse(rawString);
-        rawObject = jsonDocument;
 
         // 添加请求结束时需要释放的对象
         _httpRequestBuilder.AddDisposable(jsonDocument);
 
-        return AddObject(rawObject, name, MediaTypeNames.Application.Json, contentEncoding);
+        return AddObject(jsonDocument, name, MediaTypeNames.Application.Json, contentEncoding);
     }
 
     /// <summary>
@@ -198,7 +195,7 @@ public sealed class HttpMultipartFormDataBuilder
     /// <summary>
     ///     从互联网 URL 中添加文件
     /// </summary>
-    /// <remarks>文件大小限制在 <c>50MB</c> 以内。</remarks>
+    /// <remarks>文件大小限制在 <c>100MB</c> 以内。</remarks>
     /// <param name="url">互联网 URL 地址</param>
     /// <param name="name">表单名称</param>
     /// <param name="fileName">文件的名称</param>
@@ -207,6 +204,8 @@ public sealed class HttpMultipartFormDataBuilder
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
+    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="InvalidOperationException"></exception>
     public HttpMultipartFormDataBuilder AddFileFromRemote(string url, string name, string? fileName = null,
         string contentType = "application/octet-stream", Encoding? contentEncoding = null)
     {
@@ -229,7 +228,7 @@ public sealed class HttpMultipartFormDataBuilder
     /// <summary>
     ///     从 Base64 字符串中添加文件
     /// </summary>
-    /// <remarks>文件大小限制在 <c>50MB</c> 以内。</remarks>
+    /// <remarks>文件大小限制在 <c>100MB</c> 以内。</remarks>
     /// <param name="base64String">Base64 字符串</param>
     /// <param name="name">表单名称</param>
     /// <param name="fileName">文件的名称</param>
@@ -252,8 +251,8 @@ public sealed class HttpMultipartFormDataBuilder
         // 获取字节数组长度
         var fileLength = bytes.Length;
 
-        // 限制文件字节数组大小在 50MB 以内
-        const long maxFileSizeInBytes = 52428800L;
+        // 限制文件字节数组大小在 100MB 以内
+        const long maxFileSizeInBytes = 104857600L;
         if (fileLength > maxFileSizeInBytes)
         {
             throw new InvalidOperationException(
@@ -474,8 +473,7 @@ public sealed class HttpMultipartFormDataBuilder
         // 检查是否启用 StringContent 方式构建 application/x-www-form-urlencoded 请求内容
         if (useStringContent)
         {
-            _httpRequestBuilder.AddHttpContentProcessors(() =>
-                [HttpRequestBuilder._stringContentForFormUrlEncodedContentProcessorInstance.Value]);
+            _httpRequestBuilder.AddStringContentForFormUrlEncodedContentProcessor();
         }
 
         return this;
@@ -556,7 +554,6 @@ public sealed class HttpMultipartFormDataBuilder
         _partContents.Add(new MultipartFormDataItem(formName)
         {
             ContentType = mediaType, RawContent = httpContent, ContentEncoding = encoding
-            // FileName = httpContent.Headers.ContentDisposition?.FileName
         });
 
         return this;

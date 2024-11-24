@@ -30,6 +30,21 @@ public class DeclarativeAttributeTests
     }
 
     [Fact]
+    public void MultipartFormAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(MultipartFormAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Method, attributeUsage.ValidOn);
+        Assert.False(attributeUsage.AllowMultiple);
+
+        var attribute = new MultipartFormAttribute();
+        Assert.Null(attribute.Boundary);
+
+        var attribute2 = new MultipartFormAttribute("--------------------");
+        Assert.Equal("--------------------", attribute2.Boundary);
+    }
+
+    [Fact]
     public void MultipartAttribute_ReturnOK()
     {
         var attributeUsage = typeof(MultipartAttribute).GetCustomAttribute<AttributeUsageAttribute>();

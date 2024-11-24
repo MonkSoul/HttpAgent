@@ -326,7 +326,7 @@ public class HttpRemoteBuilderTests
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpContentProcessorFactory));
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpContentConverterFactory));
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpRemoteService));
-        Assert.Equal(29, services.Count);
+        Assert.Equal(28, services.Count);
     }
 
     [Fact]
@@ -343,7 +343,7 @@ public class HttpRemoteBuilderTests
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpContentProcessorFactory));
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpContentConverterFactory));
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpRemoteService));
-        Assert.Equal(29, services.Count);
+        Assert.Equal(28, services.Count);
     }
 
     [Fact]
@@ -358,7 +358,7 @@ public class HttpRemoteBuilderTests
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpContentConverterFactory));
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpRemoteService));
         Assert.Contains(services, u => u.ServiceType == typeof(IObjectContentConverterFactory));
-        Assert.Equal(30, services.Count);
+        Assert.Equal(29, services.Count);
     }
 
     [Fact]
@@ -375,7 +375,7 @@ public class HttpRemoteBuilderTests
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpContentConverterFactory));
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpRemoteService));
         Assert.Contains(services, u => u.ServiceType == typeof(IObjectContentConverterFactory));
-        Assert.Equal(30, services.Count);
+        Assert.Equal(29, services.Count);
     }
 
     [Fact]

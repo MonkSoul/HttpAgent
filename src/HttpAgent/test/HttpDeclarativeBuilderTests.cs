@@ -71,19 +71,25 @@ public class HttpDeclarativeBuilderTests
         Assert.Throws<ArgumentNullException>(() => builder.Build(null!));
 
         var exception = Assert.Throws<InvalidOperationException>(() => builder.Build(new HttpRemoteOptions()));
-        Assert.Equal("No `[HttpMethod]` annotation was found in method `InvalidMethod`.", exception.Message);
+        Assert.Equal(
+            $"No `[HttpMethod]` annotation was found in method `System.Threading.Tasks.Task InvalidMethod()` of type `{typeof(IHttpDeclarativeTest).ToFriendlyString()}`.",
+            exception.Message);
     }
 
     [Fact]
     public void Build_ReturnOK()
     {
-        var method = typeof(IHttpDeclarativeTest).GetMethod(nameof(IHttpDeclarativeTest.Method1));
+        var method = typeof(IHttpDeclarativeTest).GetMethod(nameof(IHttpDeclarativeTest.Method1))!;
         var builder = new HttpDeclarativeBuilder(method!, []);
 
         var httpRequestBuilder = builder.Build(new HttpRemoteOptions());
         Assert.Equal(HttpMethod.Get, httpRequestBuilder.Method);
         Assert.Equal("https://furion.net/", httpRequestBuilder.RequestUri?.ToString());
         Assert.True(builder._hasLoadedExtractors);
+
+        Assert.Equal(
+            $"System.Threading.Tasks.Task<System.String> Method1() | {method.DeclaringType.ToFriendlyString()}",
+            httpRequestBuilder.Properties["__DECLARATIVE_METHOD__"]);
     }
 
     [Fact]

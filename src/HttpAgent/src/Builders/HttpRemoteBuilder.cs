@@ -218,7 +218,8 @@ public sealed class HttpRemoteBuilder
         ArgumentNullException.ThrowIfNull(assemblies);
 
         AddHttpDeclaratives(assemblies.SelectMany(ass =>
-            (ass?.GetExportedTypes() ?? []).Where(t => t.IsInterface && typeof(IHttpDeclarative).IsAssignableFrom(t))));
+            (ass?.GetExportedTypes() ?? Enumerable.Empty<Type>()).Where(t =>
+                t.IsInterface && typeof(IHttpDeclarative).IsAssignableFrom(t))));
 
         return this;
     }
@@ -282,9 +283,6 @@ public sealed class HttpRemoteBuilder
 
         // 注册日志服务
         services.AddLogging();
-
-        // 注册分析中间件服务
-        services.TryAddTransient<ProfilerDelegatingHandler>();
 
         // 注册默认 HttpClient 客户端
         if (services.All(u => u.ServiceType != typeof(IHttpClientFactory)))

@@ -239,6 +239,15 @@ public interface IHttpDeclarativeTest : IHttpDeclarative
 
     [Get("{url}")]
     Task<string> GetUrlAsync(string url, CancellationToken cancellationToken);
+
+    [Get("https://furion.net/")]
+    [Timeout(1000)]
+    Task<string> GetAttribute();
+
+    [Get("https://furion.net/")]
+    [Path("key1", "value1")]
+    [Path("key2", "value2")]
+    Task<string> GetMethodAttributes();
 }
 
 public class CustomHttpDeclarativeExtractor : IHttpDeclarativeExtractor

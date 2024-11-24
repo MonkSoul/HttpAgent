@@ -23,8 +23,11 @@ public sealed class HeaderAttribute : Attribute
     /// <summary>
     ///     <inheritdoc cref="HeaderAttribute" />
     /// </summary>
-    /// <remarks>当特性作用于方法或接口时，则表示移除指定标头操作。</remarks>
-    /// <param name="name">标头</param>
+    /// <remarks>
+    ///     <para>当特性作用于方法或接口时，则表示移除指定请求标头操作。</para>
+    ///     <para>当特性作用于参数时，则表示添加请求标头，同时设置请求标头键为 <c>name</c> 的值。</para>
+    /// </remarks>
+    /// <param name="name">请求标头键</param>
     public HeaderAttribute(string name)
     {
         // 空检查
@@ -36,20 +39,22 @@ public sealed class HeaderAttribute : Attribute
     /// <summary>
     ///     <inheritdoc cref="HeaderAttribute" />
     /// </summary>
-    /// <param name="name">标头</param>
-    /// <param name="value">标头的值</param>
+    /// <param name="name">请求标头键</param>
+    /// <param name="value">请求标头的值</param>
     public HeaderAttribute(string name, object? value)
         : this(name) =>
         Value = value;
 
     /// <summary>
-    ///     标头
+    ///     请求标头键
     /// </summary>
+    /// <remarks>该属性优先级低于 <see cref="AliasAs" /> 属性设置的值。</remarks>
     public string? Name { get; set; }
 
     /// <summary>
-    ///     标头的值
+    ///     请求标头的值
     /// </summary>
+    /// <remarks>当特性作用于参数时，表示默认值。</remarks>
     public object? Value
     {
         get;
@@ -63,7 +68,10 @@ public sealed class HeaderAttribute : Attribute
     /// <summary>
     ///     别名
     /// </summary>
-    /// <remarks>特性用于参数时有效。</remarks>
+    /// <remarks>
+    ///     <para>特性用于参数时有效。</para>
+    ///     <para>该属性优先级高于 <see cref="Name" /> 属性设置的值。</para>
+    /// </remarks>
     public string? AliasAs { get; set; }
 
     /// <summary>
@@ -72,7 +80,7 @@ public sealed class HeaderAttribute : Attribute
     public bool Escape { get; set; }
 
     /// <summary>
-    ///     是否值已存在时则采用替换的方式，否则采用追加方式。默认值为 <c>false</c>
+    ///     是否替换已存在的请求标头。默认值为 <c>false</c>
     /// </summary>
     public bool Replace { get; set; }
 

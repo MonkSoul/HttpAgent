@@ -15,12 +15,13 @@ internal static partial class Helpers
     ///     从互联网 URL 地址中加载流
     /// </summary>
     /// <param name="url">互联网 URL 地址</param>
+    /// <param name="maxResponseContentBufferSize">响应内容的最大缓存大小。默认值为：<c>100MB</c>。</param>
     /// <returns>
     ///     <see cref="Tuple{T1, T2}" />
     /// </returns>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="InvalidOperationException"></exception>
-    internal static Tuple<Stream, long> GetStreamFromRemote(string url)
+    internal static Tuple<Stream, long> GetStreamFromRemote(string url, long maxResponseContentBufferSize = 104857600L)
     {
         // 空检查
         ArgumentException.ThrowIfNullOrWhiteSpace(url);
@@ -34,8 +35,8 @@ internal static partial class Helpers
         // 初始化 HttpClient 实例
         using var httpClient = new HttpClient();
 
-        // 限制流大小在 50MB 以内
-        httpClient.MaxResponseContentBufferSize = 52428800L;
+        // 限制流大小
+        httpClient.MaxResponseContentBufferSize = maxResponseContentBufferSize;
 
         // 设置默认 User-Agent
         httpClient.DefaultRequestHeaders.TryAddWithoutValidation(HeaderNames.UserAgent,
@@ -46,6 +47,8 @@ internal static partial class Helpers
             // 发送 HTTP 远程请求
             var httpResponseMessage = httpClient.Send(new HttpRequestMessage(HttpMethod.Get, url),
                 HttpCompletionOption.ResponseHeadersRead);
+
+            // 确保请求成功
             httpResponseMessage.EnsureSuccessStatusCode();
 
             // 读取流和长度

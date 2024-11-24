@@ -17,7 +17,7 @@ public sealed class AcceptLanguageAttribute : Attribute
     public AcceptLanguageAttribute(string? language) => Language = language;
 
     /// <summary>
-    ///     自然语言和区域设置
+    ///     客户端偏好的语言和区域
     /// </summary>
     public string? Language { get; set; }
 }
