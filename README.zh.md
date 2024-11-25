@@ -5,7 +5,7 @@
 HttpAgent 是一个高性能、灵活且易用的开源库，提供了全面的 HTTP 功能支持，包括文件传输、轮询、测试工具、实时通信、请求管理、Media
 类型处理、MessagePack 支持、声明式请求等，并具有低资源消耗和高测试覆盖率的特点。
 
-![HttpAgent.drawio](https://gitee.com/dotnetchina/HttpAgent/raw/master/drawio/HttpAgent.drawio.png "HttpAgent.drawio.png")
+![HttpAgent.drawio](https://gitee.com/dotnetchina/HttpAgent/raw/master/drawio/HttpAgent.drawio.jpg "HttpAgent.drawio.jpg")
 
 [**查看高清架构图**](https://diagram-viewer.giteeusercontent.com?repo=dotnetchina/HttpAgent&ref=master&file=drawio/HttpAgent.drawio)
 

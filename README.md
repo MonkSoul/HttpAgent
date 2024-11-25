@@ -7,7 +7,7 @@ HTTP functionalities, including file transfer, polling, testing tools, real-time
 media type handling, MessagePack support, Declarative Requests, and more. It is characterized by low resource
 consumption and high test coverage.
 
-![HttpAgent.drawio](https://gitee.com/dotnetchina/HttpAgent/raw/master/drawio/HttpAgent.drawio.png "HttpAgent.drawio.png")
+![HttpAgent.drawio](https://gitee.com/dotnetchina/HttpAgent/raw/master/drawio/HttpAgent.drawio.jpg "HttpAgent.drawio.jpg")
 
 [**View High-Definition Architecture Diagram**](https://diagram-viewer.giteeusercontent.com?repo=dotnetchina/HttpAgent&ref=master&file=drawio/HttpAgent.drawio)
 
