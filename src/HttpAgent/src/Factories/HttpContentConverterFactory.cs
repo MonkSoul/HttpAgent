@@ -82,15 +82,9 @@ internal sealed class HttpContentConverterFactory : IHttpContentConverterFactory
         // 查找可以处理目标类型的响应内容转换器
         var typeConverter = unionProcessors.Values.OfType<IHttpContentConverter<TResult>>().LastOrDefault();
 
-        // 空检查
-        if (typeConverter is not null)
-        {
-            return typeConverter;
-        }
-
-        // 如果未找到，则统一使用 ObjectContentConverter<TResult> 转换器进行处理
-        return _serviceProvider.GetService<IObjectContentConverterFactory>()?.GetConverter<TResult>() ??
-               new ObjectContentConverter<TResult>();
+        // 如果未找到，则调用 IObjectContentConverterFactory 实例的 GetConverter<TResult> 返回
+        return typeConverter ??
+               _serviceProvider.GetRequiredService<IObjectContentConverterFactory>().GetConverter<TResult>();
     }
 
     /// <summary>
@@ -113,14 +107,8 @@ internal sealed class HttpContentConverterFactory : IHttpContentConverterFactory
         var typeConverter = unionProcessors.Values.OfType(typeof(IHttpContentConverter<>).MakeGenericType(resultType))
             .Cast<IHttpContentConverter>().LastOrDefault();
 
-        // 空检查
-        if (typeConverter is not null)
-        {
-            return typeConverter;
-        }
-
-        // 如果未找到，则统一使用 ObjectContentConverter 转换器进行处理
-        return _serviceProvider.GetService<IObjectContentConverterFactory>()?.GetConverter(resultType) ??
-               new ObjectContentConverter();
+        // 如果未找到，则调用 IObjectContentConverterFactory 实例的 GetConverter 返回
+        return typeConverter ??
+               _serviceProvider.GetRequiredService<IObjectContentConverterFactory>().GetConverter(resultType);
     }
 }

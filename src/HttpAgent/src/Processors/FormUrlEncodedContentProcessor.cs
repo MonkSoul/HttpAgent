@@ -7,27 +7,20 @@ namespace HttpAgent;
 /// <summary>
 ///     URL 编码的表单内容处理器
 /// </summary>
-public class FormUrlEncodedContentProcessor : IHttpContentProcessor
+public class FormUrlEncodedContentProcessor : HttpContentProcessorBase
 {
     /// <inheritdoc />
-    public virtual bool CanProcess(object? rawContent, string contentType) =>
+    public override bool CanProcess(object? rawContent, string contentType) =>
         rawContent is FormUrlEncodedContent || contentType.IsIn([MediaTypeNames.Application.FormUrlEncoded],
             StringComparer.OrdinalIgnoreCase);
 
     /// <inheritdoc />
-    public virtual HttpContent? Process(object? rawContent, string contentType, Encoding? encoding)
+    public override HttpContent? Process(object? rawContent, string contentType, Encoding? encoding)
     {
-        // 跳过空值和 HttpContent 类型
-        switch (rawContent)
+        // 尝试解析 HttpContent 类型
+        if (TryProcess(rawContent, contentType, encoding, out var httpContent))
         {
-            case null:
-                return null;
-            case HttpContent httpContent:
-                // 设置 Content-Type
-                httpContent.Headers.ContentType ??=
-                    new MediaTypeHeaderValue(contentType) { CharSet = encoding?.BodyName ?? Constants.UTF8_ENCODING };
-
-                return httpContent;
+            return httpContent;
         }
 
         // 将原始请求类型转换为字符串字典类型

@@ -7,25 +7,15 @@ namespace HttpAgent;
 /// <summary>
 ///     字节数组内容转换器
 /// </summary>
-public class ByteArrayContentConverter : IHttpContentConverter<byte[]>
+public class ByteArrayContentConverter : HttpContentConverterBase<byte[]>
 {
     /// <inheritdoc />
-    public virtual byte[]? Read(HttpResponseMessage httpResponseMessage,
+    public override byte[]? Read(HttpResponseMessage httpResponseMessage,
         CancellationToken cancellationToken = default) =>
         httpResponseMessage.Content.ReadAsByteArrayAsync(cancellationToken).GetAwaiter().GetResult();
 
     /// <inheritdoc />
-    public virtual async Task<byte[]?> ReadAsync(HttpResponseMessage httpResponseMessage,
+    public override async Task<byte[]?> ReadAsync(HttpResponseMessage httpResponseMessage,
         CancellationToken cancellationToken = default) =>
         await httpResponseMessage.Content.ReadAsByteArrayAsync(cancellationToken);
-
-    /// <inheritdoc />
-    public virtual object? Read(Type resultType, HttpResponseMessage httpResponseMessage,
-        CancellationToken cancellationToken = default) =>
-        Read(httpResponseMessage, cancellationToken);
-
-    /// <inheritdoc />
-    public virtual async Task<object?> ReadAsync(Type resultType, HttpResponseMessage httpResponseMessage,
-        CancellationToken cancellationToken = default) =>
-        await ReadAsync(httpResponseMessage, cancellationToken);
 }

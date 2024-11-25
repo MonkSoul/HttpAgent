@@ -16,10 +16,10 @@ public class MessagePackContentProcessorTests
         Assert.NotNull(MessagePackContentProcessor._serializerCache);
         Assert.NotNull(MessagePackContentProcessor._messagePackSerializerLazy);
         Assert.NotNull(MessagePackContentProcessor._messagePackSerializerLazy.Value);
-        Assert.NotNull(messagePackContentProcessor._messagePackSerializer);
+        Assert.NotNull(MessagePackContentProcessor.MessagePackSerializer);
 
         Assert.Equal(MessagePackContentProcessor._messagePackSerializerLazy.Value,
-            messagePackContentProcessor._messagePackSerializer);
+            MessagePackContentProcessor.MessagePackSerializer);
     }
 
     [Fact]

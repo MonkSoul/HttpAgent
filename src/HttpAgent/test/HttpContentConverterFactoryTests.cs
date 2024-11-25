@@ -49,7 +49,9 @@ public class HttpContentConverterFactoryTests
     [Fact]
     public void GetConverter_ReturnOK()
     {
-        using var serviceProvider = new ServiceCollection().BuildServiceProvider();
+        var services = new ServiceCollection();
+        services.TryAddSingleton<IObjectContentConverterFactory, ObjectContentConverterFactory>();
+        using var serviceProvider = services.BuildServiceProvider();
         var httpContentConverterFactory = new HttpContentConverterFactory(serviceProvider, null);
 
         Assert.Equal(typeof(HttpResponseMessageConverter),
@@ -151,7 +153,9 @@ public class HttpContentConverterFactoryTests
     [Fact]
     public void GetConverter_WithType_ReturnOK()
     {
-        using var serviceProvider = new ServiceCollection().BuildServiceProvider();
+        var services = new ServiceCollection();
+        services.TryAddSingleton<IObjectContentConverterFactory, ObjectContentConverterFactory>();
+        using var serviceProvider = services.BuildServiceProvider();
         var httpContentConverterFactory = new HttpContentConverterFactory(serviceProvider, null);
 
         Assert.Equal(typeof(StringContentConverter),

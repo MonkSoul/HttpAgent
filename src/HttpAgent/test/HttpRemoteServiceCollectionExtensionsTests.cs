@@ -66,6 +66,6 @@ public class HttpRemoteServiceCollectionExtensionsTests
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpContentConverterFactory));
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpRemoteService));
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpTest));
-        Assert.Equal(29, services.Count);
+        Assert.Equal(30, services.Count);
     }
 }

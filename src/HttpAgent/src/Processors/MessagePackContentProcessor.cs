@@ -8,7 +8,7 @@ namespace HttpAgent;
 ///     <c>application/msgpack</c> 内容处理器
 /// </summary>
 /// <remarks>要使用 <c>application/msgpack</c> 内容处理器需在项目中安装 <c>MessagePack</c> 依赖包。https://www.nuget.org/packages/MessagePack。</remarks>
-public class MessagePackContentProcessor : IHttpContentProcessor
+public class MessagePackContentProcessor : HttpContentProcessorBase
 {
     /// <summary>
     ///     MessagePack 序列化器委托字典缓存
@@ -43,30 +43,23 @@ public class MessagePackContentProcessor : IHttpContentProcessor
     /// <summary>
     ///     MessagePack 序列化器委托
     /// </summary>
-    internal Func<object, byte[]> _messagePackSerializer => _messagePackSerializerLazy.Value;
+    internal static Func<object, byte[]> MessagePackSerializer => _messagePackSerializerLazy.Value;
 
     /// <inheritdoc />
-    public virtual bool CanProcess(object? rawContent, string contentType) =>
+    public override bool CanProcess(object? rawContent, string contentType) =>
         contentType.IsIn(["application/msgpack"], StringComparer.OrdinalIgnoreCase);
 
     /// <inheritdoc />
-    public virtual HttpContent? Process(object? rawContent, string contentType, Encoding? encoding)
+    public override HttpContent? Process(object? rawContent, string contentType, Encoding? encoding)
     {
-        // 跳过空值和 HttpContent 类型
-        switch (rawContent)
+        // 尝试解析 HttpContent 类型
+        if (TryProcess(rawContent, contentType, encoding, out var httpContent))
         {
-            case null:
-                return null;
-            case HttpContent httpContent:
-                // 设置 Content-Type
-                httpContent.Headers.ContentType ??=
-                    new MediaTypeHeaderValue(contentType) { CharSet = encoding?.BodyName ?? Constants.UTF8_ENCODING };
-
-                return httpContent;
+            return httpContent;
         }
 
         // 将原始请求内容转换为字节数组
-        var content = rawContent as byte[] ?? _messagePackSerializer(rawContent);
+        var content = rawContent as byte[] ?? MessagePackSerializer(rawContent);
 
         // 初始化 ByteArrayContent 实例
         var byteArrayContent = new ByteArrayContent(content);

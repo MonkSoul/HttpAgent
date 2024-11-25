@@ -7,25 +7,15 @@ namespace HttpAgent;
 /// <summary>
 ///     流内容转换器
 /// </summary>
-public class StreamContentConverter : IHttpContentConverter<Stream>
+public class StreamContentConverter : HttpContentConverterBase<Stream>
 {
     /// <inheritdoc />
-    public virtual Stream? Read(HttpResponseMessage httpResponseMessage,
+    public override Stream? Read(HttpResponseMessage httpResponseMessage,
         CancellationToken cancellationToken = default) =>
         httpResponseMessage.Content.ReadAsStream(cancellationToken);
 
     /// <inheritdoc />
-    public virtual async Task<Stream?> ReadAsync(HttpResponseMessage httpResponseMessage,
+    public override async Task<Stream?> ReadAsync(HttpResponseMessage httpResponseMessage,
         CancellationToken cancellationToken = default) =>
         await httpResponseMessage.Content.ReadAsStreamAsync(cancellationToken);
-
-    /// <inheritdoc />
-    public virtual object? Read(Type resultType, HttpResponseMessage httpResponseMessage,
-        CancellationToken cancellationToken = default) =>
-        Read(httpResponseMessage, cancellationToken);
-
-    /// <inheritdoc />
-    public virtual async Task<object?> ReadAsync(Type resultType, HttpResponseMessage httpResponseMessage,
-        CancellationToken cancellationToken = default) =>
-        await ReadAsync(httpResponseMessage, cancellationToken);
 }

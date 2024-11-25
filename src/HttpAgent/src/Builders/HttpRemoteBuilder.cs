@@ -299,6 +299,9 @@ public sealed class HttpRemoteBuilder
             new HttpContentConverterFactory(provider,
                 _httpContentConverterProviders?.SelectMany(u => u.Invoke()).ToArray()));
 
+        // 注册对象内容转换器工厂
+        services.TryAddSingleton<IObjectContentConverterFactory, ObjectContentConverterFactory>();
+
         // 注册 HTTP 远程请求服务
         services.TryAddSingleton<IHttpRemoteService>(provider =>
             ActivatorUtilities.CreateInstance<HttpRemoteService>(provider,
@@ -309,8 +312,9 @@ public sealed class HttpRemoteBuilder
                     HttpDeclarativeExtractors = _httpDeclarativeExtractors?.AsReadOnly()
                 }));
 
-        // 注册或替换 IObjectContentConverterFactory 工厂
-        if (_objectContentConverterFactoryType is not null)
+        // 检查是否自定义了对象内容转换器工厂，如果存在则替换
+        if (_objectContentConverterFactoryType is not null &&
+            _objectContentConverterFactoryType != typeof(ObjectContentConverterFactory))
         {
             services.Replace(ServiceDescriptor.Singleton(typeof(IObjectContentConverterFactory),
                 _objectContentConverterFactoryType));

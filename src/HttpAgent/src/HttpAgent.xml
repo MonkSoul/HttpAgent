@@ -2879,10 +2879,22 @@
         <member name="M:HttpAgent.ByteArrayContentConverter.ReadAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.ByteArrayContentConverter.Read(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+        <member name="T:HttpAgent.HttpContentConverterBase`1">
+            <summary>
+                <see cref="T:HttpAgent.IHttpContentConverter`1" /> 内容处理器基类
+            </summary>
+            <typeparam name="TResult">转换的目标类型</typeparam>
+        </member>
+        <member name="M:HttpAgent.HttpContentConverterBase`1.Read(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.ByteArrayContentConverter.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpContentConverterBase`1.ReadAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpContentConverterBase`1.Read(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpContentConverterBase`1.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="T:HttpAgent.HttpResponseMessageConverter">
@@ -2894,12 +2906,6 @@
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpResponseMessageConverter.ReadAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:HttpAgent.HttpResponseMessageConverter.Read(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:HttpAgent.HttpResponseMessageConverter.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="T:HttpAgent.IHttpContentConverter">
@@ -3005,12 +3011,6 @@
         <member name="M:HttpAgent.StreamContentConverter.ReadAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.StreamContentConverter.Read(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:HttpAgent.StreamContentConverter.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
         <member name="T:HttpAgent.StringContentConverter">
             <summary>
                 字符串内容转换器
@@ -3022,12 +3022,6 @@
         <member name="M:HttpAgent.StringContentConverter.ReadAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.StringContentConverter.Read(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:HttpAgent.StringContentConverter.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
         <member name="T:HttpAgent.VoidContentConverter">
             <summary>
                 <see cref="T:HttpAgent.VoidContent" /> 内容转换器
@@ -3037,12 +3031,6 @@
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.VoidContentConverter.ReadAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:HttpAgent.VoidContentConverter.Read(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:HttpAgent.VoidContentConverter.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="T:HttpAgent.Core.Extensions.AssemblyExtensions">
@@ -5220,6 +5208,15 @@
                 <see cref="T:HttpAgent.ObjectContentConverter" />
             </returns>
         </member>
+        <member name="T:HttpAgent.ObjectContentConverterFactory">
+            <inheritdoc cref="T:HttpAgent.IObjectContentConverterFactory" />
+        </member>
+        <member name="M:HttpAgent.ObjectContentConverterFactory.GetConverter``1">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.ObjectContentConverterFactory.GetConverter(System.Type)">
+            <inheritdoc />
+        </member>
         <member name="T:HttpAgent.IHttpFileTransferEventHandler">
             <summary>
                 HTTP 文件传输事件处理程序
@@ -6537,6 +6534,31 @@
         <member name="M:HttpAgent.FormUrlEncodedContentProcessor.Process(System.Object,System.String,System.Text.Encoding)">
             <inheritdoc />
         </member>
+        <member name="T:HttpAgent.HttpContentProcessorBase">
+            <summary>
+                <see cref="T:HttpAgent.IHttpContentProcessor" /> 内容处理器基类
+            </summary>
+        </member>
+        <member name="M:HttpAgent.HttpContentProcessorBase.CanProcess(System.Object,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpContentProcessorBase.Process(System.Object,System.String,System.Text.Encoding)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpContentProcessorBase.TryProcess(System.Object,System.String,System.Text.Encoding,System.Net.Http.HttpContent@)">
+            <summary>
+                尝试解析 <see cref="T:System.Net.Http.HttpContent" /> 类型
+            </summary>
+            <param name="rawContent">原始请求内容</param>
+            <param name="contentType">内容类型</param>
+            <param name="encoding">内容编码</param>
+            <param name="httpContent">
+                <see cref="T:System.Net.Http.HttpContent" />
+            </param>
+            <returns>
+                <see cref="T:System.Net.Http.HttpContent" />
+            </returns>
+        </member>
         <member name="T:HttpAgent.IHttpContentProcessor">
             <summary>
                 <see cref="T:System.Net.Http.HttpContent" /> 请求内容处理器
@@ -6580,7 +6602,7 @@
                 初始化 MessagePack 序列化器委托
             </summary>
         </member>
-        <member name="P:HttpAgent.MessagePackContentProcessor._messagePackSerializer">
+        <member name="P:HttpAgent.MessagePackContentProcessor.MessagePackSerializer">
             <summary>
                 MessagePack 序列化器委托
             </summary>

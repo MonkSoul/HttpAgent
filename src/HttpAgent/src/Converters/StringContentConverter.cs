@@ -7,25 +7,15 @@ namespace HttpAgent;
 /// <summary>
 ///     字符串内容转换器
 /// </summary>
-public class StringContentConverter : IHttpContentConverter<string>
+public class StringContentConverter : HttpContentConverterBase<string>
 {
     /// <inheritdoc />
-    public virtual string? Read(HttpResponseMessage httpResponseMessage,
+    public override string? Read(HttpResponseMessage httpResponseMessage,
         CancellationToken cancellationToken = default) =>
         httpResponseMessage.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
 
     /// <inheritdoc />
-    public virtual async Task<string?> ReadAsync(HttpResponseMessage httpResponseMessage,
+    public override async Task<string?> ReadAsync(HttpResponseMessage httpResponseMessage,
         CancellationToken cancellationToken = default) =>
         await httpResponseMessage.Content.ReadAsStringAsync(cancellationToken);
-
-    /// <inheritdoc />
-    public virtual object? Read(Type resultType, HttpResponseMessage httpResponseMessage,
-        CancellationToken cancellationToken = default) =>
-        Read(httpResponseMessage, cancellationToken);
-
-    /// <inheritdoc />
-    public virtual async Task<object?> ReadAsync(Type resultType, HttpResponseMessage httpResponseMessage,
-        CancellationToken cancellationToken = default) =>
-        await ReadAsync(httpResponseMessage, cancellationToken);
 }
