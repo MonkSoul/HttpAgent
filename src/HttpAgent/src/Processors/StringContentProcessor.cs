@@ -11,7 +11,7 @@ public class StringContentProcessor : IHttpContentProcessor
 {
     /// <inheritdoc />
     public virtual bool CanProcess(object? rawContent, string contentType) =>
-        rawContent is StringContent ||
+        rawContent is StringContent or JsonContent ||
         contentType.IsIn([
             MediaTypeNames.Application.Json,
             MediaTypeNames.Application.JsonPatch,

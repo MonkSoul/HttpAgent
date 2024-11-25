@@ -139,27 +139,27 @@ public class HttpContentProcessorFactoryTests
     }
 
     [Fact]
-    public void BuildHttpContent_ReturnOK()
+    public void Build_ReturnOK()
     {
         var httpContentProcessorFactory1 = new HttpContentProcessorFactory(null);
 
-        var httpContent1 = httpContentProcessorFactory1.BuildHttpContent("", "application/json");
+        var httpContent1 = httpContentProcessorFactory1.Build("", "application/json");
         Assert.NotNull(httpContent1);
         Assert.Equal(typeof(StringContent), httpContent1.GetType());
 
         var httpContent2 =
-            httpContentProcessorFactory1.BuildHttpContent(new Dictionary<string, string>(),
+            httpContentProcessorFactory1.Build(new Dictionary<string, string>(),
                 "application/x-www-form-urlencoded");
         Assert.NotNull(httpContent2);
         Assert.Equal(typeof(FormUrlEncodedContent), httpContent2.GetType());
 
         var httpContent3 =
-            httpContentProcessorFactory1.BuildHttpContent(Array.Empty<byte>(), "application/octet-stream");
+            httpContentProcessorFactory1.Build(Array.Empty<byte>(), "application/octet-stream");
         Assert.NotNull(httpContent3);
         Assert.Equal(typeof(ByteArrayContent), httpContent3.GetType());
 
         using var stream = new MemoryStream();
-        var httpContent4 = httpContentProcessorFactory1.BuildHttpContent(stream, "application/octet-stream");
+        var httpContent4 = httpContentProcessorFactory1.Build(stream, "application/octet-stream");
         Assert.NotNull(httpContent4);
         Assert.Equal(typeof(StreamContent), httpContent4.GetType());
     }

@@ -34,7 +34,26 @@ internal sealed class HttpContentProcessorFactory : IHttpContentProcessorFactory
     }
 
     /// <inheritdoc />
-    public IHttpContentProcessor GetProcessor(object? rawContent, string contentType,
+    public HttpContent? Build(object? rawContent, string contentType, Encoding? encoding = null,
+        params IHttpContentProcessor[]? processors)
+    {
+        // 查找可以处理指定内容类型或数据类型的 IHttpContentProcessor 实例
+        var httpContentProcessor = GetProcessor(rawContent, contentType, processors);
+
+        // 将原始请求内容转换为 HttpContent 实例
+        return httpContentProcessor.Process(rawContent, contentType, encoding ?? Encoding.UTF8);
+    }
+
+    /// <summary>
+    ///     查找可以处理指定内容类型或数据类型的 <see cref="IHttpContentProcessor" /> 实例
+    /// </summary>
+    /// <param name="rawContent">原始请求内容</param>
+    /// <param name="contentType">内容类型</param>
+    /// <param name="processors">自定义 <see cref="IHttpContentProcessor" /> 数组</param>
+    /// <returns>
+    ///     <see cref="IHttpContentProcessor" />
+    /// </returns>
+    internal IHttpContentProcessor GetProcessor(object? rawContent, string contentType,
         params IHttpContentProcessor[]? processors)
     {
         // 初始化新的 IHttpContentProcessor 字典集合
@@ -48,16 +67,5 @@ internal sealed class HttpContentProcessorFactory : IHttpContentProcessorFactory
                throw new InvalidOperationException(
                    $"No processor found that can handle the content type `{contentType}` and the provided raw content of type `{rawContent?.GetType()}`. " +
                    "Please ensure that the correct content type is specified and that a suitable processor is registered.");
-    }
-
-    /// <inheritdoc />
-    public HttpContent? BuildHttpContent(object? rawContent, string contentType, Encoding? encoding = null,
-        params IHttpContentProcessor[]? processors)
-    {
-        // 查找可以处理指定内容类型或数据类型的 IHttpContentProcessor 实例
-        var httpContentProcessor = GetProcessor(rawContent, contentType, processors);
-
-        // 将原始请求内容转换为 HttpContent 实例
-        return httpContentProcessor.Process(rawContent, contentType, encoding ?? Encoding.UTF8);
     }
 }

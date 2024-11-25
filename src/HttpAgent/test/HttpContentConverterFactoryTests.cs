@@ -74,10 +74,11 @@ public class HttpContentConverterFactoryTests
         });
 
         using var serviceProvider = services.BuildServiceProvider();
-        var httpContentConverterFactory = serviceProvider.GetRequiredService<IHttpContentConverterFactory>();
+        var httpContentConverterFactory =
+            serviceProvider.GetRequiredService<IHttpContentConverterFactory>() as HttpContentConverterFactory;
 
         Assert.Equal(typeof(CustomObjectContentConverter<ObjectModel>),
-            httpContentConverterFactory.GetConverter<ObjectModel>().GetType());
+            httpContentConverterFactory!.GetConverter<ObjectModel>().GetType());
     }
 
     [Fact]
@@ -174,10 +175,11 @@ public class HttpContentConverterFactoryTests
         });
 
         using var serviceProvider = services.BuildServiceProvider();
-        var httpContentConverterFactory = serviceProvider.GetRequiredService<IHttpContentConverterFactory>();
+        var httpContentConverterFactory =
+            serviceProvider.GetRequiredService<IHttpContentConverterFactory>() as HttpContentConverterFactory;
 
         Assert.Equal(typeof(CustomObjectContentConverter),
-            httpContentConverterFactory.GetConverter(typeof(ObjectModel)).GetType());
+            httpContentConverterFactory!.GetConverter(typeof(ObjectModel)).GetType());
     }
 
     [Fact]

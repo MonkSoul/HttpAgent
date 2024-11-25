@@ -5047,12 +5047,6 @@
             </param>
             <param name="converters"><see cref="T:HttpAgent.IHttpContentConverter`1" /> 数组</param>
         </member>
-        <member name="M:HttpAgent.HttpContentConverterFactory.GetConverter``1(HttpAgent.IHttpContentConverter[])">
-            <inheritdoc />
-        </member>
-        <member name="M:HttpAgent.HttpContentConverterFactory.GetConverter(System.Type,HttpAgent.IHttpContentConverter[])">
-            <inheritdoc />
-        </member>
         <member name="M:HttpAgent.HttpContentConverterFactory.Read``1(System.Net.Http.HttpResponseMessage,HttpAgent.IHttpContentConverter[],System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
@@ -5064,6 +5058,26 @@
         </member>
         <member name="M:HttpAgent.HttpContentConverterFactory.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,HttpAgent.IHttpContentConverter[],System.Threading.CancellationToken)">
             <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.HttpContentConverterFactory.GetConverter``1(HttpAgent.IHttpContentConverter[])">
+            <summary>
+                获取 <see cref="T:HttpAgent.IHttpContentConverter`1" /> 实例
+            </summary>
+            <param name="converters"><see cref="T:HttpAgent.IHttpContentConverter`1" /> 数组</param>
+            <typeparam name="TResult">转换的目标类型</typeparam>
+            <returns>
+                <see cref="T:HttpAgent.IHttpContentConverter`1" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpContentConverterFactory.GetConverter(System.Type,HttpAgent.IHttpContentConverter[])">
+            <summary>
+                获取 <see cref="T:HttpAgent.IHttpContentConverter" /> 实例
+            </summary>
+            <param name="resultType">转换的目标类型</param>
+            <param name="converters"><see cref="T:HttpAgent.IHttpContentConverter`1" /> 数组</param>
+            <returns>
+                <see cref="T:HttpAgent.IHttpContentConverter" />
+            </returns>
         </member>
         <member name="T:HttpAgent.HttpContentProcessorFactory">
             <inheritdoc cref="T:HttpAgent.IHttpContentProcessorFactory" />
@@ -5079,36 +5093,24 @@
             </summary>
             <param name="processors"><see cref="T:HttpAgent.IHttpContentProcessor" /> 数组</param>
         </member>
-        <member name="M:HttpAgent.HttpContentProcessorFactory.GetProcessor(System.Object,System.String,HttpAgent.IHttpContentProcessor[])">
+        <member name="M:HttpAgent.HttpContentProcessorFactory.Build(System.Object,System.String,System.Text.Encoding,HttpAgent.IHttpContentProcessor[])">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpContentProcessorFactory.BuildHttpContent(System.Object,System.String,System.Text.Encoding,HttpAgent.IHttpContentProcessor[])">
-            <inheritdoc />
+        <member name="M:HttpAgent.HttpContentProcessorFactory.GetProcessor(System.Object,System.String,HttpAgent.IHttpContentProcessor[])">
+            <summary>
+                查找可以处理指定内容类型或数据类型的 <see cref="T:HttpAgent.IHttpContentProcessor" /> 实例
+            </summary>
+            <param name="rawContent">原始请求内容</param>
+            <param name="contentType">内容类型</param>
+            <param name="processors">自定义 <see cref="T:HttpAgent.IHttpContentProcessor" /> 数组</param>
+            <returns>
+                <see cref="T:HttpAgent.IHttpContentProcessor" />
+            </returns>
         </member>
         <member name="T:HttpAgent.IHttpContentConverterFactory">
             <summary>
                 <see cref="T:HttpAgent.IHttpContentConverter`1" /> 工厂
             </summary>
-        </member>
-        <member name="M:HttpAgent.IHttpContentConverterFactory.GetConverter``1(HttpAgent.IHttpContentConverter[])">
-            <summary>
-                获取 <see cref="T:HttpAgent.IHttpContentConverter`1" /> 实例
-            </summary>
-            <param name="converters"><see cref="T:HttpAgent.IHttpContentConverter`1" /> 数组</param>
-            <typeparam name="TResult">转换的目标类型</typeparam>
-            <returns>
-                <see cref="T:HttpAgent.IHttpContentConverter`1" />
-            </returns>
-        </member>
-        <member name="M:HttpAgent.IHttpContentConverterFactory.GetConverter(System.Type,HttpAgent.IHttpContentConverter[])">
-            <summary>
-                获取 <see cref="T:HttpAgent.IHttpContentConverter" /> 实例
-            </summary>
-            <param name="resultType">转换的目标类型</param>
-            <param name="converters"><see cref="T:HttpAgent.IHttpContentConverter`1" /> 数组</param>
-            <returns>
-                <see cref="T:HttpAgent.IHttpContentConverter" />
-            </returns>
         </member>
         <member name="M:HttpAgent.IHttpContentConverterFactory.Read``1(System.Net.Http.HttpResponseMessage,HttpAgent.IHttpContentConverter[],System.Threading.CancellationToken)">
             <summary>
@@ -5183,18 +5185,7 @@
                 <see cref="T:HttpAgent.IHttpContentProcessor" /> 工厂
             </summary>
         </member>
-        <member name="M:HttpAgent.IHttpContentProcessorFactory.GetProcessor(System.Object,System.String,HttpAgent.IHttpContentProcessor[])">
-            <summary>
-                查找可以处理指定内容类型或数据类型的 <see cref="T:HttpAgent.IHttpContentProcessor" /> 实例
-            </summary>
-            <param name="rawContent">原始请求内容</param>
-            <param name="contentType">内容类型</param>
-            <param name="processors">自定义 <see cref="T:HttpAgent.IHttpContentProcessor" /> 数组</param>
-            <returns>
-                <see cref="T:HttpAgent.IHttpContentProcessor" />
-            </returns>
-        </member>
-        <member name="M:HttpAgent.IHttpContentProcessorFactory.BuildHttpContent(System.Object,System.String,System.Text.Encoding,HttpAgent.IHttpContentProcessor[])">
+        <member name="M:HttpAgent.IHttpContentProcessorFactory.Build(System.Object,System.String,System.Text.Encoding,HttpAgent.IHttpContentProcessor[])">
             <summary>
                 构建 <see cref="T:System.Net.Http.HttpContent" /> 实例
             </summary>
@@ -6550,7 +6541,7 @@
             <summary>
                 <see cref="T:System.Net.Http.HttpContent" /> 请求内容处理器
             </summary>
-            <remarks>用于将原始响应内容转换成 <see cref="T:System.Net.Http.HttpContent" /> 实例</remarks>
+            <remarks>用于将原始请求内容转换成 <see cref="T:System.Net.Http.HttpContent" /> 实例</remarks>
         </member>
         <member name="M:HttpAgent.IHttpContentProcessor.CanProcess(System.Object,System.String)">
             <summary>

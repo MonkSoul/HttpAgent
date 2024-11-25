@@ -20,6 +20,7 @@ public class StringContentProcessorTests
         var processor = new StringContentProcessor();
 
         Assert.True(processor.CanProcess(new StringContent(""), "text/plain"));
+        Assert.True(processor.CanProcess(JsonContent.Create(new { id = 1, name = "Furion" }), "application/json"));
         Assert.True(processor.CanProcess(null, "application/json"));
         Assert.True(processor.CanProcess(null, "application/json-patch+json"));
         Assert.True(processor.CanProcess(null, "application/xml"));

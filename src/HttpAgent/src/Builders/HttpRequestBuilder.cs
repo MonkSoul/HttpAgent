@@ -343,8 +343,7 @@ public sealed partial class HttpRequestBuilder
         SetDefaultContentType(httpRemoteOptions.DefaultContentType);
 
         // 构建 HttpContent 实例
-        var httpContent =
-            httpContentProcessorFactory.BuildHttpContent(RawContent, ContentType!, ContentEncoding, processors);
+        var httpContent = httpContentProcessorFactory.Build(RawContent, ContentType!, ContentEncoding, processors);
 
         // 调用用于处理在设置请求消息的内容时的操作
         OnPreSetContent?.Invoke(httpContent);

@@ -635,7 +635,7 @@ public sealed class HttpMultipartFormDataBuilder
         ArgumentException.ThrowIfNullOrWhiteSpace(contentType);
 
         // 构建 HttpContent 实例
-        var httpContent = httpContentProcessorFactory.BuildHttpContent(multipartFormDataItem.RawContent, contentType,
+        var httpContent = httpContentProcessorFactory.Build(multipartFormDataItem.RawContent, contentType,
             multipartFormDataItem.ContentEncoding, processors);
 
         // 处理 ByteArrayContent、StreamContent 和 ReadOnlyMemoryContent 类型文件的名称
