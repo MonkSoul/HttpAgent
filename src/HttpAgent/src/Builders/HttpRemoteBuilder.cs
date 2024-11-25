@@ -122,7 +122,7 @@ public sealed class HttpRemoteBuilder
     }
 
     /// <summary>
-    ///     添加自定义 <see cref="ObjectContentConverter{TResult}" /> 工厂
+    ///     设置 <see cref="IObjectContentConverterFactory" /> 对象内容转换器工厂
     /// </summary>
     /// <typeparam name="TFactory">
     ///     <see cref="IObjectContentConverterFactory" />
@@ -135,7 +135,7 @@ public sealed class HttpRemoteBuilder
         UseObjectContentConverterFactory(typeof(TFactory));
 
     /// <summary>
-    ///     添加自定义 <see cref="ObjectContentConverter{TResult}" /> 工厂
+    ///     设置 <see cref="IObjectContentConverterFactory" /> 对象内容转换器工厂
     /// </summary>
     /// <param name="factoryType">
     ///     <see cref="IObjectContentConverterFactory" />
@@ -204,26 +204,7 @@ public sealed class HttpRemoteBuilder
 
         return this;
     }
-
-    /// <summary>
-    ///     扫描程序集并添加 HTTP 声明式服务
-    /// </summary>
-    /// <param name="assemblies"><see cref="Assembly" /> 集合</param>
-    /// <returns>
-    ///     <see cref="HttpRemoteBuilder" />
-    /// </returns>
-    public HttpRemoteBuilder AddHttpDeclarativeFromAssemblies(params IEnumerable<Assembly?> assemblies)
-    {
-        // 空检查
-        ArgumentNullException.ThrowIfNull(assemblies);
-
-        AddHttpDeclaratives(assemblies.SelectMany(ass =>
-            (ass?.GetExportedTypes() ?? Enumerable.Empty<Type>()).Where(t =>
-                t.IsInterface && typeof(IHttpDeclarative).IsAssignableFrom(t))));
-
-        return this;
-    }
-
+    
     /// <summary>
     ///     添加 HTTP 声明式服务
     /// </summary>
@@ -248,7 +229,26 @@ public sealed class HttpRemoteBuilder
     }
 
     /// <summary>
-    ///     添加 HTTP 声明式 <see cref="IHttpDeclarativeExtractor" /> 集合提取器
+    ///     扫描程序集并添加 HTTP 声明式服务
+    /// </summary>
+    /// <param name="assemblies"><see cref="Assembly" /> 集合</param>
+    /// <returns>
+    ///     <see cref="HttpRemoteBuilder" />
+    /// </returns>
+    public HttpRemoteBuilder AddHttpDeclarativeFromAssemblies(params IEnumerable<Assembly?> assemblies)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(assemblies);
+
+        AddHttpDeclaratives(assemblies.SelectMany(ass =>
+            (ass?.GetExportedTypes() ?? Enumerable.Empty<Type>()).Where(t =>
+                t.IsInterface && typeof(IHttpDeclarative).IsAssignableFrom(t))));
+
+        return this;
+    }
+
+    /// <summary>
+    ///     添加 HTTP 声明式 <see cref="IHttpDeclarativeExtractor" /> 提取器
     /// </summary>
     /// <remarks>支持多次调用。</remarks>
     /// <param name="configure"><see cref="IHttpDeclarativeExtractor" /> 实例提供器</param>

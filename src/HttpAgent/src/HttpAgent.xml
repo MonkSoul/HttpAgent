@@ -908,7 +908,7 @@
         </member>
         <member name="M:HttpAgent.HttpRemoteBuilder.UseObjectContentConverterFactory``1">
             <summary>
-                添加自定义 <see cref="T:HttpAgent.ObjectContentConverter`1" /> 工厂
+                设置 <see cref="T:HttpAgent.IObjectContentConverterFactory" /> 对象内容转换器工厂
             </summary>
             <typeparam name="TFactory">
                 <see cref="T:HttpAgent.IObjectContentConverterFactory" />
@@ -919,7 +919,7 @@
         </member>
         <member name="M:HttpAgent.HttpRemoteBuilder.UseObjectContentConverterFactory(System.Type)">
             <summary>
-                添加自定义 <see cref="T:HttpAgent.ObjectContentConverter`1" /> 工厂
+                设置 <see cref="T:HttpAgent.IObjectContentConverterFactory" /> 对象内容转换器工厂
             </summary>
             <param name="factoryType">
                 <see cref="T:HttpAgent.IObjectContentConverterFactory" />
@@ -952,15 +952,6 @@
             </returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:HttpAgent.HttpRemoteBuilder.AddHttpDeclarativeFromAssemblies(System.Collections.Generic.IEnumerable{System.Reflection.Assembly})">
-            <summary>
-                扫描程序集并添加 HTTP 声明式服务
-            </summary>
-            <param name="assemblies"><see cref="T:System.Reflection.Assembly" /> 集合</param>
-            <returns>
-                <see cref="T:HttpAgent.HttpRemoteBuilder" />
-            </returns>
-        </member>
         <member name="M:HttpAgent.HttpRemoteBuilder.AddHttpDeclaratives(System.Collections.Generic.IEnumerable{System.Type})">
             <summary>
                 添加 HTTP 声明式服务
@@ -973,9 +964,18 @@
             </returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
+        <member name="M:HttpAgent.HttpRemoteBuilder.AddHttpDeclarativeFromAssemblies(System.Collections.Generic.IEnumerable{System.Reflection.Assembly})">
+            <summary>
+                扫描程序集并添加 HTTP 声明式服务
+            </summary>
+            <param name="assemblies"><see cref="T:System.Reflection.Assembly" /> 集合</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRemoteBuilder" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.HttpRemoteBuilder.AddHttpDeclarativeExtractors(System.Func{System.Collections.Generic.IEnumerable{HttpAgent.IHttpDeclarativeExtractor}})">
             <summary>
-                添加 HTTP 声明式 <see cref="T:HttpAgent.IHttpDeclarativeExtractor" /> 集合提取器
+                添加 HTTP 声明式 <see cref="T:HttpAgent.IHttpDeclarativeExtractor" /> 提取器
             </summary>
             <remarks>支持多次调用。</remarks>
             <param name="configure"><see cref="T:HttpAgent.IHttpDeclarativeExtractor" /> 实例提供器</param>
