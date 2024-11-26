@@ -62,42 +62,42 @@ public sealed partial class WebSocketClient
     /// <summary>
     ///     触发开始连接事件
     /// </summary>
-    internal void OnConnecting() => Connecting?.Invoke(this, EventArgs.Empty);
+    internal void OnConnecting() => Connecting?.TryInvoke(this, EventArgs.Empty);
 
     /// <summary>
     ///     触发连接成功事件
     /// </summary>
-    internal void OnConnected() => Connected?.Invoke(this, EventArgs.Empty);
+    internal void OnConnected() => Connected?.TryInvoke(this, EventArgs.Empty);
 
     /// <summary>
     ///     触发开始重新连接事件
     /// </summary>
-    internal void OnReconnecting() => Reconnecting?.Invoke(this, EventArgs.Empty);
+    internal void OnReconnecting() => Reconnecting?.TryInvoke(this, EventArgs.Empty);
 
     /// <summary>
     ///     触发重新连接成功事件
     /// </summary>
-    internal void OnReconnected() => Reconnected?.Invoke(this, EventArgs.Empty);
+    internal void OnReconnected() => Reconnected?.TryInvoke(this, EventArgs.Empty);
 
     /// <summary>
     ///     触发开始关闭连接事件
     /// </summary>
-    internal void OnClosing() => Closing?.Invoke(this, EventArgs.Empty);
+    internal void OnClosing() => Closing?.TryInvoke(this, EventArgs.Empty);
 
     /// <summary>
     ///     触发关闭连接成功事件
     /// </summary>
-    internal void OnClosed() => Closed?.Invoke(this, EventArgs.Empty);
+    internal void OnClosed() => Closed?.TryInvoke(this, EventArgs.Empty);
 
     /// <summary>
     ///     触发开始接收消息事件
     /// </summary>
-    internal void OnReceivingStarted() => ReceivingStarted?.Invoke(this, EventArgs.Empty);
+    internal void OnReceivingStarted() => ReceivingStarted?.TryInvoke(this, EventArgs.Empty);
 
     /// <summary>
     ///     触发停止接收消息事件
     /// </summary>
-    internal void OnReceivingStopped() => ReceivingStopped?.Invoke(this, EventArgs.Empty);
+    internal void OnReceivingStopped() => ReceivingStopped?.TryInvoke(this, EventArgs.Empty);
 
     /// <summary>
     ///     触发接收文本消息事件
@@ -105,7 +105,8 @@ public sealed partial class WebSocketClient
     /// <param name="receiveResult">
     ///     <see cref="WebSocketTextReceiveResult" />
     /// </param>
-    internal void OnTextReceived(WebSocketTextReceiveResult receiveResult) => TextReceived?.Invoke(this, receiveResult);
+    internal void OnTextReceived(WebSocketTextReceiveResult receiveResult) =>
+        TextReceived?.TryInvoke(this, receiveResult);
 
     /// <summary>
     ///     触发接收二进制消息事件
@@ -114,5 +115,5 @@ public sealed partial class WebSocketClient
     ///     <see cref="WebSocketBinaryReceiveResult" />
     /// </param>
     internal void OnBinaryReceived(WebSocketBinaryReceiveResult receiveResult) =>
-        BinaryReceived?.Invoke(this, receiveResult);
+        BinaryReceived?.TryInvoke(this, receiveResult);
 }

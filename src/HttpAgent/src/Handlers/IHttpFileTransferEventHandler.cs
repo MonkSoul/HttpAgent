@@ -15,6 +15,17 @@ public interface IHttpFileTransferEventHandler
     void OnTransferStarted();
 
     /// <summary>
+    ///     用于传输进度发生变化时的操作
+    /// </summary>
+    /// <param name="fileTransferProgress">
+    ///     <see cref="FileTransferProgress" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="Task" />
+    /// </returns>
+    Task OnProgressChangedAsync(FileTransferProgress fileTransferProgress);
+
+    /// <summary>
     ///     用于处理在文件传输完成时的操作
     /// </summary>
     /// <param name="duration">总耗时（毫秒）</param>
@@ -27,15 +38,4 @@ public interface IHttpFileTransferEventHandler
     ///     <see cref="Exception" />
     /// </param>
     void OnTransferFailed(Exception exception);
-
-    /// <summary>
-    ///     用于传输进度发生变化时的操作
-    /// </summary>
-    /// <param name="fileTransferProgress">
-    ///     <see cref="FileTransferProgress" />
-    /// </param>
-    /// <returns>
-    ///     <see cref="Task" />
-    /// </returns>
-    Task OnProgressChangedAsync(FileTransferProgress fileTransferProgress);
 }

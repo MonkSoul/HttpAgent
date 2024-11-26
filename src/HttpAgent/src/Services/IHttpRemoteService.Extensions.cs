@@ -222,6 +222,9 @@ public partial interface IHttpRemoteService
     /// <param name="numberOfRequests">并发请求数量，默认值为：100。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="requestConfigure">自定义配置委托</param>
+    /// <param name="completionOption">
+    ///     <see cref="HttpCompletionOption" />
+    /// </param>
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
@@ -230,6 +233,7 @@ public partial interface IHttpRemoteService
     /// </returns>
     StressTestHarnessResult StressTestHarness(string? requestUri, int numberOfRequests = 100,
         Action<HttpStressTestHarnessBuilder>? configure = null, Action<HttpRequestBuilder>? requestConfigure = null,
+        HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -239,6 +243,9 @@ public partial interface IHttpRemoteService
     /// <param name="numberOfRequests">并发请求数量，默认值为：100。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="requestConfigure">自定义配置委托</param>
+    /// <param name="completionOption">
+    ///     <see cref="HttpCompletionOption" />
+    /// </param>
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
@@ -247,6 +254,7 @@ public partial interface IHttpRemoteService
     /// </returns>
     Task<StressTestHarnessResult> StressTestHarnessAsync(string? requestUri, int numberOfRequests = 100,
         Action<HttpStressTestHarnessBuilder>? configure = null, Action<HttpRequestBuilder>? requestConfigure = null,
+        HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -256,6 +264,9 @@ public partial interface IHttpRemoteService
     ///     <see cref="HttpStressTestHarnessBuilder" />
     /// </param>
     /// <param name="configure">自定义配置委托</param>
+    /// <param name="completionOption">
+    ///     <see cref="HttpCompletionOption" />
+    /// </param>
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
@@ -263,7 +274,9 @@ public partial interface IHttpRemoteService
     ///     <see cref="StressTestHarnessResult" />
     /// </returns>
     StressTestHarnessResult Send(HttpStressTestHarnessBuilder httpStressTestHarnessBuilder,
-        Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default);
+        Action<HttpRequestBuilder>? configure = null,
+        HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     压力测试
@@ -272,6 +285,9 @@ public partial interface IHttpRemoteService
     ///     <see cref="HttpStressTestHarnessBuilder" />
     /// </param>
     /// <param name="configure">自定义配置委托</param>
+    /// <param name="completionOption">
+    ///     <see cref="HttpCompletionOption" />
+    /// </param>
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
@@ -279,7 +295,9 @@ public partial interface IHttpRemoteService
     ///     <see cref="Task{TResult}" />
     /// </returns>
     Task<StressTestHarnessResult> SendAsync(HttpStressTestHarnessBuilder httpStressTestHarnessBuilder,
-        Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default);
+        Action<HttpRequestBuilder>? configure = null,
+        HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     发送长轮询请求

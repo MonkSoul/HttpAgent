@@ -138,7 +138,7 @@ public class StressTestHarnessManagerTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            stressTestHarnessManager.Start(cancellationTokenSource.Token);
+            stressTestHarnessManager.Start(HttpCompletionOption.ResponseContentRead, cancellationTokenSource.Token);
         });
 
         await app.StopAsync();
@@ -243,7 +243,8 @@ public class StressTestHarnessManagerTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            await stressTestHarnessManager.StartAsync(cancellationTokenSource.Token);
+            await stressTestHarnessManager.StartAsync(HttpCompletionOption.ResponseContentRead,
+                cancellationTokenSource.Token);
         });
 
         await app.StopAsync();

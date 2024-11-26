@@ -224,6 +224,55 @@ public class LongPollingManagerTests
         await serviceProvider.DisposeAsync();
     }
 
+    [Fact]
+    public async Task HandleEndOfStreamAsync_Invalid_Parameters()
+    {
+        var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
+        var httpLongPollingBuilder =
+            new HttpLongPollingBuilder(HttpMethod.Get, new Uri("https://furion.net"));
+        var longPollingManager = new LongPollingManager(httpRemoteService, httpLongPollingBuilder);
+
+        await Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await longPollingManager.HandleEndOfStreamAsync(null!));
+
+        await serviceProvider.DisposeAsync();
+    }
+
+    [Fact]
+    public async Task HandleEndOfStreamAsync_ReturnOK()
+    {
+        var customLongPollingEventHandler = new CustomLongPollingEventHandler();
+        var (httpRemoteService, serviceProvider) =
+            Helpers.CreateHttpRemoteService(longPollingEventHandler: customLongPollingEventHandler);
+        var httpLongPollingBuilder =
+            new HttpLongPollingBuilder(HttpMethod.Get, new Uri("https://furion.net"));
+        var longPollingManager = new LongPollingManager(httpRemoteService, httpLongPollingBuilder);
+
+        var httpResponseMessage =
+            new HttpResponseMessage { StatusCode = HttpStatusCode.InternalServerError };
+        await longPollingManager.HandleEndOfStreamAsync(httpResponseMessage);
+
+        var i = 0;
+        httpLongPollingBuilder.SetOnEndOfStream(async _ =>
+        {
+            i++;
+            await Task.CompletedTask;
+        });
+
+        var longPollingManager2 = new LongPollingManager(httpRemoteService, httpLongPollingBuilder);
+        await longPollingManager2.HandleEndOfStreamAsync(httpResponseMessage);
+
+        Assert.Equal(1, i);
+        Assert.Equal(0, customLongPollingEventHandler.counter);
+
+        httpLongPollingBuilder.SetEventHandler<CustomLongPollingEventHandler>();
+        var longPollingManager3 = new LongPollingManager(httpRemoteService, httpLongPollingBuilder);
+        await longPollingManager3.HandleEndOfStreamAsync(httpResponseMessage);
+
+        Assert.Equal(0, customLongPollingEventHandler.counter);
+
+        await serviceProvider.DisposeAsync();
+    }
 
     [Fact]
     public async Task HandleResponseAsync_Invalid_Parameters()
@@ -264,6 +313,10 @@ public class LongPollingManagerTests
             {
                 msg = "Error";
                 await Task.CompletedTask;
+            }).SetOnEndOfStream(async _ =>
+            {
+                msg = "EndOfStream";
+                await Task.CompletedTask;
             });
 
         var longPollingManager2 = new LongPollingManager(httpRemoteService, httpLongPollingBuilder);
@@ -274,9 +327,14 @@ public class LongPollingManagerTests
         await longPollingManager2.HandleResponseAsync(httpResponseMessage);
         Assert.Equal("Error", msg);
 
+        httpResponseMessage.Headers.TryAddWithoutValidation(Constants.X_END_OF_STREAM_HEADER, "TRUE");
+        await longPollingManager2.HandleResponseAsync(httpResponseMessage);
+        Assert.Equal("EndOfStream", msg);
+
         Assert.Equal(0, customLongPollingEventHandler.counter);
 
         httpLongPollingBuilder.SetEventHandler<CustomLongPollingEventHandler>();
+        httpResponseMessage.Headers.Remove(Constants.X_END_OF_STREAM_HEADER);
         var longPollingManager3 = new LongPollingManager(httpRemoteService, httpLongPollingBuilder);
         await longPollingManager3.HandleResponseAsync(httpResponseMessage);
 
@@ -284,7 +342,6 @@ public class LongPollingManagerTests
 
         await serviceProvider.DisposeAsync();
     }
-
 
     [Fact]
     public void ShouldTerminatePolling_Invalid_Parameters()

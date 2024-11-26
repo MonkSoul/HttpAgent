@@ -63,6 +63,11 @@ public sealed class HttpLongPollingBuilder
     public Func<HttpResponseMessage, Task>? OnError { get; private set; }
 
     /// <summary>
+    ///     用于响应标头包含 <c>X-End-Of-Stream</c> 时触发的操作
+    /// </summary>
+    public Func<HttpResponseMessage, Task>? OnEndOfStream { get; private set; }
+
+    /// <summary>
     ///     实现 <see cref="IHttpLongPollingEventHandler" /> 的类型
     /// </summary>
     internal Type? LongPollingEventHandlerType { get; private set; }
@@ -173,6 +178,23 @@ public sealed class HttpLongPollingBuilder
         ArgumentNullException.ThrowIfNull(configure);
 
         OnError = configure;
+
+        return this;
+    }
+
+    /// <summary>
+    ///     设置在响应标头包含 <c>X-End-Of-Stream</c> 时触发的操作
+    /// </summary>
+    /// <param name="configure">自定义配置委托</param>
+    /// <returns>
+    ///     <see cref="HttpLongPollingBuilder" />
+    /// </returns>
+    public HttpLongPollingBuilder SetOnEndOfStream(Func<HttpResponseMessage, Task> configure)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(configure);
+
+        OnEndOfStream = configure;
 
         return this;
     }

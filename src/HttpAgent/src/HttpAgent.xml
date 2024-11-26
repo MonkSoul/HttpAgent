@@ -65,6 +65,11 @@
                 用于处理在文件传输发生异常时的操作
             </summary>
         </member>
+        <member name="P:HttpAgent.HttpFileDownloadBuilder.OnFileExistAndSkip">
+            <summary>
+                用于处理在文件存在且配置为跳过时的操作
+            </summary>
+        </member>
         <member name="P:HttpAgent.HttpFileDownloadBuilder.OnProgressChanged">
             <summary>
                 用于传输进度发生变化时的操作
@@ -98,15 +103,6 @@
                 <see cref="T:HttpAgent.HttpFileDownloadBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpFileDownloadBuilder.SetOnProgressChanged(System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task})">
-            <summary>
-                设置用于传输进度发生变化时执行的委托
-            </summary>
-            <param name="configure">自定义配置委托</param>
-            <returns>
-                <see cref="T:HttpAgent.HttpFileDownloadBuilder" />
-            </returns>
-        </member>
         <member name="M:HttpAgent.HttpFileDownloadBuilder.SetFileExistsBehavior(HttpAgent.FileExistsBehavior)">
             <summary>
                 设置当目标文件已存在时的行为
@@ -120,7 +116,7 @@
         </member>
         <member name="M:HttpAgent.HttpFileDownloadBuilder.SetProgressInterval(System.TimeSpan)">
             <summary>
-                设置进度更新（通知）的间隔时间
+                设置文件传输进度（通知）的间隔时间
             </summary>
             <param name="progressInterval">进度更新（通知）的间隔时间</param>
             <returns>
@@ -130,6 +126,15 @@
         <member name="M:HttpAgent.HttpFileDownloadBuilder.SetOnTransferStarted(System.Action)">
             <summary>
                 设置在文件开始传输时的操作
+            </summary>
+            <param name="configure">自定义配置委托</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpFileDownloadBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpFileDownloadBuilder.SetOnProgressChanged(System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task})">
+            <summary>
+                设置用于传输进度发生变化时执行的委托
             </summary>
             <param name="configure">自定义配置委托</param>
             <returns>
@@ -148,6 +153,15 @@
         <member name="M:HttpAgent.HttpFileDownloadBuilder.SetOnTransferFailed(System.Action{System.Exception})">
             <summary>
                 设置在文件传输发生异常时的操作
+            </summary>
+            <param name="configure">自定义配置委托</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpFileDownloadBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpFileDownloadBuilder.SetOnFileExistAndSkip(System.Action)">
+            <summary>
+                设置在文件存在且配置为跳过时的操作
             </summary>
             <param name="configure">自定义配置委托</param>
             <returns>
@@ -276,7 +290,7 @@
         </member>
         <member name="M:HttpAgent.HttpFileUploadBuilder.SetContentType(System.String)">
             <summary>
-                设置内容类型
+                设置内容类型（文件类型）
             </summary>
             <param name="contentType">内容类型</param>
             <returns>
@@ -311,18 +325,9 @@
             </returns>
             <exception cref="T:System.ArgumentOutOfRangeException"></exception>
         </member>
-        <member name="M:HttpAgent.HttpFileUploadBuilder.SetOnProgressChanged(System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task})">
-            <summary>
-                设置用于上传进度发生变化时执行的委托
-            </summary>
-            <param name="configure">自定义配置委托</param>
-            <returns>
-                <see cref="T:HttpAgent.HttpFileUploadBuilder" />
-            </returns>
-        </member>
         <member name="M:HttpAgent.HttpFileUploadBuilder.SetProgressInterval(System.TimeSpan)">
             <summary>
-                设置进度更新（通知）的间隔时间
+                设置文件传输进度（通知）的间隔时间
             </summary>
             <param name="progressInterval">进度更新（通知）的间隔时间</param>
             <returns>
@@ -332,6 +337,15 @@
         <member name="M:HttpAgent.HttpFileUploadBuilder.SetOnTransferStarted(System.Action)">
             <summary>
                 设置在文件开始传输时的操作
+            </summary>
+            <param name="configure">自定义配置委托</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpFileUploadBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpFileUploadBuilder.SetOnProgressChanged(System.Func{HttpAgent.FileTransferProgress,System.Threading.Tasks.Task})">
+            <summary>
+                设置用于上传进度发生变化时执行的委托
             </summary>
             <param name="configure">自定义配置委托</param>
             <returns>
@@ -449,6 +463,11 @@
                 用于接收服务器返回非 <c>200~299</c> 状态码的数据的操作
             </summary>
         </member>
+        <member name="P:HttpAgent.HttpLongPollingBuilder.OnEndOfStream">
+            <summary>
+                用于响应标头包含 <c>X-End-Of-Stream</c> 时触发的操作
+            </summary>
+        </member>
         <member name="P:HttpAgent.HttpLongPollingBuilder.LongPollingEventHandlerType">
             <summary>
                 实现 <see cref="T:HttpAgent.IHttpLongPollingEventHandler" /> 的类型
@@ -504,6 +523,15 @@
         <member name="M:HttpAgent.HttpLongPollingBuilder.SetOnError(System.Func{System.Net.Http.HttpResponseMessage,System.Threading.Tasks.Task})">
             <summary>
                 设置在接收服务器返回非 <c>200~299</c> 状态码的数据的操作
+            </summary>
+            <param name="configure">自定义配置委托</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpLongPollingBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpLongPollingBuilder.SetOnEndOfStream(System.Func{System.Net.Http.HttpResponseMessage,System.Threading.Tasks.Task})">
+            <summary>
+                设置在响应标头包含 <c>X-End-Of-Stream</c> 时触发的操作
             </summary>
             <param name="configure">自定义配置委托</param>
             <returns>
@@ -2654,7 +2682,7 @@
             <summary>
                 压力测试构建器
             </summary>
-            <remarks>使用 <c>HttpRequestBuilder.StressTestHarness(requestUri)</c> 静态方法创建。</remarks>
+            <remarks>使用 <c>HttpRequestBuilder.StressTestHarness(requestUri, numberOfRequests)</c> 静态方法创建。</remarks>
         </member>
         <member name="M:HttpAgent.HttpStressTestHarnessBuilder.#ctor(System.Net.Http.HttpMethod,System.Uri)">
             <summary>
@@ -3108,6 +3136,26 @@
                 尝试执行同步委托
             </summary>
             <param name="action">同步委托</param>
+        </member>
+        <member name="T:HttpAgent.Core.Extensions.EventHandlerExtensions">
+            <summary>
+                <see cref="T:System.EventHandler`1" /> 拓展类
+            </summary>
+        </member>
+        <member name="M:HttpAgent.Core.Extensions.EventHandlerExtensions.TryInvoke``1(System.EventHandler{``0},System.Object,``0)">
+            <summary>
+                尝试执行事件处理程序
+            </summary>
+            <param name="handler">
+                <see cref="T:System.EventHandler`1" />
+            </param>
+            <param name="sender">
+                <see cref="T:System.Object" />
+            </param>
+            <param name="args">
+                <typeparamref name="TEventArgs" />
+            </param>
+            <typeparam name="TEventArgs">事件参数</typeparam>
         </member>
         <member name="T:HttpAgent.Core.Extensions.ICollectionExtensions">
             <summary>
@@ -5227,6 +5275,17 @@
                 用于处理在文件开始传输时的操作
             </summary>
         </member>
+        <member name="M:HttpAgent.IHttpFileTransferEventHandler.OnProgressChangedAsync(HttpAgent.FileTransferProgress)">
+            <summary>
+                用于传输进度发生变化时的操作
+            </summary>
+            <param name="fileTransferProgress">
+                <see cref="T:HttpAgent.FileTransferProgress" />
+            </param>
+            <returns>
+                <see cref="T:System.Threading.Tasks.Task" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.IHttpFileTransferEventHandler.OnTransferCompleted(System.Int64)">
             <summary>
                 用于处理在文件传输完成时的操作
@@ -5240,17 +5299,6 @@
             <param name="exception">
                 <see cref="T:System.Exception" />
             </param>
-        </member>
-        <member name="M:HttpAgent.IHttpFileTransferEventHandler.OnProgressChangedAsync(HttpAgent.FileTransferProgress)">
-            <summary>
-                用于传输进度发生变化时的操作
-            </summary>
-            <param name="fileTransferProgress">
-                <see cref="T:HttpAgent.FileTransferProgress" />
-            </param>
-            <returns>
-                <see cref="T:System.Threading.Tasks.Task" />
-            </returns>
         </member>
         <member name="T:HttpAgent.IHttpLongPollingEventHandler">
             <summary>
@@ -5271,6 +5319,17 @@
         <member name="M:HttpAgent.IHttpLongPollingEventHandler.OnErrorAsync(System.Net.Http.HttpResponseMessage)">
             <summary>
                 用于接收服务器返回非 <c>200~299</c> 状态码的数据的操作
+            </summary>
+            <param name="httpResponseMessage">
+                <see cref="T:System.Net.Http.HttpResponseMessage" />
+            </param>
+            <returns>
+                <see cref="T:System.Threading.Tasks.Task" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IHttpLongPollingEventHandler.OnEndOfStreamAsync(System.Net.Http.HttpResponseMessage)">
+            <summary>
+                用于响应标头包含 <c>X-End-Of-Stream</c> 时触发的操作
             </summary>
             <param name="httpResponseMessage">
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
@@ -5505,6 +5564,11 @@
             <param name="e">
                 <see cref="T:System.Exception" />
             </param>
+        </member>
+        <member name="M:HttpAgent.FileDownloadManager.HandleFileExistAndSkip">
+            <summary>
+                处理文件存在且配置为跳过时的操作
+            </summary>
         </member>
         <member name="M:HttpAgent.FileDownloadManager.HandleProgressChangedAsync(HttpAgent.FileTransferProgress)">
             <summary>
@@ -5764,6 +5828,14 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </param>
         </member>
+        <member name="M:HttpAgent.LongPollingManager.HandleEndOfStreamAsync(System.Net.Http.HttpResponseMessage)">
+            <summary>
+                处理服务器响应标头包含 <c>X-End-Of-Stream</c> 时触发的操作
+            </summary>
+            <param name="httpResponseMessage">
+                <see cref="T:System.Net.Http.HttpResponseMessage" />
+            </param>
+        </member>
         <member name="T:HttpAgent.ServerSentEventsManager">
             <summary>
                 Server-Sent Events 管理器
@@ -5927,10 +5999,13 @@
                 <inheritdoc cref="T:HttpAgent.HttpRequestBuilder" />
             </summary>
         </member>
-        <member name="M:HttpAgent.StressTestHarnessManager.Start(System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.StressTestHarnessManager.Start(System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
             <summary>
                 开始测试
             </summary>
+            <param name="completionOption">
+                <see cref="T:System.Net.Http.HttpCompletionOption" />
+            </param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -5938,10 +6013,13 @@
                 <see cref="T:HttpAgent.StressTestHarnessResult" />
             </returns>
         </member>
-        <member name="M:HttpAgent.StressTestHarnessManager.StartAsync(System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.StressTestHarnessManager.StartAsync(System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
             <summary>
                 开始测试
             </summary>
+            <param name="completionOption">
+                <see cref="T:System.Net.Http.HttpCompletionOption" />
+            </param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -7044,16 +7122,16 @@
         <member name="M:HttpAgent.HttpRemoteService.SendAsync(HttpAgent.HttpServerSentEventsBuilder,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.StressTestHarness(System.String,System.Int32,System.Action{HttpAgent.HttpStressTestHarnessBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.StressTestHarness(System.String,System.Int32,System.Action{HttpAgent.HttpStressTestHarnessBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.StressTestHarnessAsync(System.String,System.Int32,System.Action{HttpAgent.HttpStressTestHarnessBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.StressTestHarnessAsync(System.String,System.Int32,System.Action{HttpAgent.HttpStressTestHarnessBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.Send(HttpAgent.HttpStressTestHarnessBuilder,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.Send(HttpAgent.HttpStressTestHarnessBuilder,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.SendAsync(HttpAgent.HttpStressTestHarnessBuilder,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.SendAsync(HttpAgent.HttpStressTestHarnessBuilder,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.LongPolling(System.String,System.Func{System.Net.Http.HttpResponseMessage,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpLongPollingBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -8305,7 +8383,7 @@
                 <see cref="T:System.Threading.Tasks.Task" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.StressTestHarness(System.String,System.Int32,System.Action{HttpAgent.HttpStressTestHarnessBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.StressTestHarness(System.String,System.Int32,System.Action{HttpAgent.HttpStressTestHarnessBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
             <summary>
                 压力测试
             </summary>
@@ -8313,6 +8391,9 @@
             <param name="numberOfRequests">并发请求数量，默认值为：100。</param>
             <param name="configure">自定义配置委托</param>
             <param name="requestConfigure">自定义配置委托</param>
+            <param name="completionOption">
+                <see cref="T:System.Net.Http.HttpCompletionOption" />
+            </param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -8320,7 +8401,7 @@
                 <see cref="T:HttpAgent.StressTestHarnessResult" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.StressTestHarnessAsync(System.String,System.Int32,System.Action{HttpAgent.HttpStressTestHarnessBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.StressTestHarnessAsync(System.String,System.Int32,System.Action{HttpAgent.HttpStressTestHarnessBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
             <summary>
                 压力测试
             </summary>
@@ -8328,6 +8409,9 @@
             <param name="numberOfRequests">并发请求数量，默认值为：100。</param>
             <param name="configure">自定义配置委托</param>
             <param name="requestConfigure">自定义配置委托</param>
+            <param name="completionOption">
+                <see cref="T:System.Net.Http.HttpCompletionOption" />
+            </param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -8335,7 +8419,7 @@
                 <see cref="T:System.Threading.Tasks.Task`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.Send(HttpAgent.HttpStressTestHarnessBuilder,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.Send(HttpAgent.HttpStressTestHarnessBuilder,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
             <summary>
                 压力测试
             </summary>
@@ -8343,6 +8427,9 @@
                 <see cref="T:HttpAgent.HttpStressTestHarnessBuilder" />
             </param>
             <param name="configure">自定义配置委托</param>
+            <param name="completionOption">
+                <see cref="T:System.Net.Http.HttpCompletionOption" />
+            </param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -8350,7 +8437,7 @@
                 <see cref="T:HttpAgent.StressTestHarnessResult" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.SendAsync(HttpAgent.HttpStressTestHarnessBuilder,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.SendAsync(HttpAgent.HttpStressTestHarnessBuilder,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
             <summary>
                 压力测试
             </summary>
@@ -8358,6 +8445,9 @@
                 <see cref="T:HttpAgent.HttpStressTestHarnessBuilder" />
             </param>
             <param name="configure">自定义配置委托</param>
+            <param name="completionOption">
+                <see cref="T:System.Net.Http.HttpCompletionOption" />
+            </param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11532,7 +11622,7 @@
             <summary>
                 向服务器发送消息
             </summary>
-            <param name="bytes">二进制消息</param>
+            <param name="byteArray">二进制消息</param>
             <param name="endOfMessage">是否作为消息的最后一部分，默认值为 <c>true</c>。</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
@@ -11688,7 +11778,7 @@
         </member>
         <member name="P:HttpAgent.WebSocketClientOptions.ReconnectInterval">
             <summary>
-                重新连接的间隔时间（毫秒）
+                重连的间隔时间（毫秒）
             </summary>
             <remarks>默认值为 2 秒。</remarks>
         </member>
@@ -11707,7 +11797,7 @@
             <summary>
                 接收服务器新消息缓冲区大小
             </summary>
-            <remarks>默认值为：4096。</remarks>
+            <remarks>以字节为单位，默认值为 <c>4 KB</c>。</remarks>
         </member>
         <member name="P:HttpAgent.WebSocketClientOptions.ConfigureClientWebSocketOptions">
             <summary>

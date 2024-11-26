@@ -96,26 +96,34 @@ internal sealed partial class HttpRemoteService
     /// <inheritdoc />
     public StressTestHarnessResult StressTestHarness(string? requestUri, int numberOfRequests = 100,
         Action<HttpStressTestHarnessBuilder>? configure = null, Action<HttpRequestBuilder>? requestConfigure = null,
+        HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
         CancellationToken cancellationToken = default) =>
         Send(HttpRequestBuilder.StressTestHarness(requestUri, numberOfRequests, configure), requestConfigure,
-            cancellationToken);
+            completionOption, cancellationToken);
 
     /// <inheritdoc />
     public Task<StressTestHarnessResult> StressTestHarnessAsync(string? requestUri, int numberOfRequests = 100,
         Action<HttpStressTestHarnessBuilder>? configure = null, Action<HttpRequestBuilder>? requestConfigure = null,
+        HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
         CancellationToken cancellationToken = default) =>
         SendAsync(HttpRequestBuilder.StressTestHarness(requestUri, numberOfRequests, configure), requestConfigure,
-            cancellationToken);
+            completionOption, cancellationToken);
 
     /// <inheritdoc />
     public StressTestHarnessResult Send(HttpStressTestHarnessBuilder httpStressTestHarnessBuilder,
-        Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) =>
-        new StressTestHarnessManager(this, httpStressTestHarnessBuilder, configure).Start(cancellationToken);
+        Action<HttpRequestBuilder>? configure = null,
+        HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
+        CancellationToken cancellationToken = default) =>
+        new StressTestHarnessManager(this, httpStressTestHarnessBuilder, configure).Start(completionOption,
+            cancellationToken);
 
     /// <inheritdoc />
     public Task<StressTestHarnessResult> SendAsync(HttpStressTestHarnessBuilder httpStressTestHarnessBuilder,
-        Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) =>
-        new StressTestHarnessManager(this, httpStressTestHarnessBuilder, configure).StartAsync(cancellationToken);
+        Action<HttpRequestBuilder>? configure = null,
+        HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
+        CancellationToken cancellationToken = default) =>
+        new StressTestHarnessManager(this, httpStressTestHarnessBuilder, configure).StartAsync(completionOption,
+            cancellationToken);
 
     /// <inheritdoc />
     public void LongPolling(string? requestUri, Func<HttpResponseMessage, Task> onDataReceived,

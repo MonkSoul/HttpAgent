@@ -533,9 +533,8 @@ public sealed partial class HttpRequestBuilder
     /// <returns>
     ///     <see cref="HttpLongPollingBuilder" />
     /// </returns>
-    public static HttpLongPollingBuilder
-        LongPolling(HttpMethod httpMethod, Uri? requestUri, Func<HttpResponseMessage, Task> onDataReceived,
-            Action<HttpLongPollingBuilder>? configure = null)
+    public static HttpLongPollingBuilder LongPolling(HttpMethod httpMethod, Uri? requestUri,
+        Func<HttpResponseMessage, Task> onDataReceived, Action<HttpLongPollingBuilder>? configure = null)
     {
         // 初始化 HttpLongPollingBuilder 实例
         var httpLongPollingBuilder =

@@ -7,7 +7,7 @@ namespace HttpAgent;
 /// <summary>
 ///     压力测试构建器
 /// </summary>
-/// <remarks>使用 <c>HttpRequestBuilder.StressTestHarness(requestUri)</c> 静态方法创建。</remarks>
+/// <remarks>使用 <c>HttpRequestBuilder.StressTestHarness(requestUri, numberOfRequests)</c> 静态方法创建。</remarks>
 public sealed class HttpStressTestHarnessBuilder
 {
     /// <summary>

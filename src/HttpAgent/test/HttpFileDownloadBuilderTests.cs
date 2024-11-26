@@ -29,6 +29,7 @@ public class HttpFileDownloadBuilderTests
         Assert.Null(builder2.OnTransferStarted);
         Assert.Null(builder2.OnTransferCompleted);
         Assert.Null(builder2.OnTransferFailed);
+        Assert.Null(builder2.OnFileExistAndSkip);
         Assert.Null(builder2.FileTransferEventHandlerType);
     }
 
@@ -163,6 +164,22 @@ public class HttpFileDownloadBuilderTests
         builder.SetOnTransferFailed(_ => { });
 
         Assert.NotNull(builder.OnTransferFailed);
+    }
+
+    [Fact]
+    public void SetOnFileExistAndSkip_Invalid_Parameters()
+    {
+        var builder = new HttpFileDownloadBuilder(HttpMethod.Get, null);
+        Assert.Throws<ArgumentNullException>(() => builder.SetOnFileExistAndSkip(null!));
+    }
+
+    [Fact]
+    public void SetOnFileExistAndSkip_ReturnOK()
+    {
+        var builder = new HttpFileDownloadBuilder(HttpMethod.Get, null);
+        builder.SetOnFileExistAndSkip(() => { });
+
+        Assert.NotNull(builder.OnFileExistAndSkip);
     }
 
     [Fact]

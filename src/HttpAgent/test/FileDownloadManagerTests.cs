@@ -299,6 +299,23 @@ public class FileDownloadManagerTests(ITestOutputHelper output)
     }
 
     [Fact]
+    public void HandleFileExistAndSkip_ReturnOK()
+    {
+        var i = 0;
+        var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
+        var httpFileDownloadBuilder =
+            new HttpFileDownloadBuilder(HttpMethod.Get, new Uri("https://furion.net")).SetDestinationPath(
+                Path.Combine(AppContext.BaseDirectory, "test.txt")).SetOnFileExistAndSkip(() =>
+            {
+                i++;
+            });
+        var fileDownloadManager = new FileDownloadManager(httpRemoteService, httpFileDownloadBuilder);
+
+        fileDownloadManager.HandleFileExistAndSkip();
+        Assert.Equal(1, i);
+    }
+
+    [Fact]
     public async Task HandleProgressChangedAsync_Invalid_Parameters()
     {
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();

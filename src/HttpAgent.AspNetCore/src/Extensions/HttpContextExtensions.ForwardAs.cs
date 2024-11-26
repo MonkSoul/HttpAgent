@@ -838,7 +838,7 @@ public static partial class HttpContextExtensions
     /// <returns>
     ///     <see cref="IActionResult" />
     /// </returns>
-    public static IActionResult? ForwardAsActionResult(this HttpContext? httpContext, string? requestUri = null,
+    public static IActionResult? ForwardAsResult(this HttpContext? httpContext, string? requestUri = null,
         Action<HttpRequestBuilder>? configure = null,
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
         HttpContextForwardOptions? forwardOptions = null) =>
@@ -860,7 +860,7 @@ public static partial class HttpContextExtensions
     /// <returns>
     ///     <see cref="IActionResult" />
     /// </returns>
-    public static IActionResult? ForwardAsActionResult(this HttpContext? httpContext, HttpMethod httpMethod,
+    public static IActionResult? ForwardAsResult(this HttpContext? httpContext, HttpMethod httpMethod,
         string? requestUri = null, Action<HttpRequestBuilder>? configure = null,
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
         HttpContextForwardOptions? forwardOptions = null) => ForwardAs<IActionResult>(httpContext, httpMethod,
@@ -884,7 +884,7 @@ public static partial class HttpContextExtensions
     /// <returns>
     ///     <see cref="IActionResult" />
     /// </returns>
-    public static IActionResult? ForwardAsActionResult(this HttpContext? httpContext, Uri? requestUri = null,
+    public static IActionResult? ForwardAsResult(this HttpContext? httpContext, Uri? requestUri = null,
         Action<HttpRequestBuilder>? configure = null,
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
         HttpContextForwardOptions? forwardOptions = null) =>
@@ -908,7 +908,7 @@ public static partial class HttpContextExtensions
     /// <returns>
     ///     <see cref="IActionResult" />
     /// </returns>
-    public static IActionResult? ForwardAsActionResult(this HttpContext? httpContext, HttpMethod httpMethod,
+    public static IActionResult? ForwardAsResult(this HttpContext? httpContext, HttpMethod httpMethod,
         Uri? requestUri = null,
         Action<HttpRequestBuilder>? configure = null,
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
@@ -932,7 +932,7 @@ public static partial class HttpContextExtensions
     /// <returns>
     ///     <see cref="IActionResult" />
     /// </returns>
-    public static Task<IActionResult?> ForwardAsActionResultAsync(this HttpContext? httpContext,
+    public static Task<IActionResult?> ForwardAsResultAsync(this HttpContext? httpContext,
         string? requestUri = null,
         Action<HttpRequestBuilder>? configure = null,
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
@@ -955,7 +955,7 @@ public static partial class HttpContextExtensions
     /// <returns>
     ///     <see cref="IActionResult" />
     /// </returns>
-    public static Task<IActionResult?> ForwardAsActionResultAsync(this HttpContext? httpContext, HttpMethod httpMethod,
+    public static Task<IActionResult?> ForwardAsResultAsync(this HttpContext? httpContext, HttpMethod httpMethod,
         string? requestUri = null, Action<HttpRequestBuilder>? configure = null,
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
         HttpContextForwardOptions? forwardOptions = null) =>
@@ -978,7 +978,7 @@ public static partial class HttpContextExtensions
     /// <returns>
     ///     <see cref="IActionResult" />
     /// </returns>
-    public static Task<IActionResult?> ForwardAsActionResultAsync(this HttpContext? httpContext, Uri? requestUri = null,
+    public static Task<IActionResult?> ForwardAsResultAsync(this HttpContext? httpContext, Uri? requestUri = null,
         Action<HttpRequestBuilder>? configure = null,
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
         HttpContextForwardOptions? forwardOptions = null) =>
@@ -1002,7 +1002,7 @@ public static partial class HttpContextExtensions
     /// <returns>
     ///     <see cref="IActionResult" />
     /// </returns>
-    public static Task<IActionResult?> ForwardAsActionResultAsync(this HttpContext? httpContext, HttpMethod httpMethod,
+    public static Task<IActionResult?> ForwardAsResultAsync(this HttpContext? httpContext, HttpMethod httpMethod,
         Uri? requestUri = null, Action<HttpRequestBuilder>? configure = null,
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
         HttpContextForwardOptions? forwardOptions = null) =>

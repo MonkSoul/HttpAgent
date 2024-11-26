@@ -39,7 +39,7 @@ public sealed class WebSocketClientOptions
     public Uri ServerUri { get; }
 
     /// <summary>
-    ///     重新连接的间隔时间（毫秒）
+    ///     重连的间隔时间（毫秒）
     /// </summary>
     /// <remarks>默认值为 2 秒。</remarks>
     public TimeSpan ReconnectInterval { get; set; } = TimeSpan.FromSeconds(2);
@@ -58,7 +58,7 @@ public sealed class WebSocketClientOptions
     /// <summary>
     ///     接收服务器新消息缓冲区大小
     /// </summary>
-    /// <remarks>默认值为：4096。</remarks>
+    /// <remarks>以字节为单位，默认值为 <c>4 KB</c>。</remarks>
     public int ReceiveBufferSize { get; set; } = 1024 * 4;
 
     /// <summary>

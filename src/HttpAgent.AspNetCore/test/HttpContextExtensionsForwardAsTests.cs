@@ -831,7 +831,7 @@ public class HttpContextExtensionsForwardAsTests
     }
 
     [Fact]
-    public async Task ForwardAsActionResult_ReturnOK()
+    public async Task ForwardAsResult_ReturnOK()
     {
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -855,17 +855,17 @@ public class HttpContextExtensionsForwardAsTests
         app.MapGet("/test", async context =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var str = ActionResultToString(context.ForwardAsActionResult(HttpMethod.Get,
+            var str = ActionResultToString(context.ForwardAsResult(HttpMethod.Get,
                 new Uri($"http://localhost:{port}/HttpRemote/Request1"))!);
             // ReSharper disable once MethodHasAsyncOverload
             var str2 = ActionResultToString(
-                context.ForwardAsActionResult(new Uri($"http://localhost:{port}/HttpRemote/Request1"))!);
+                context.ForwardAsResult(new Uri($"http://localhost:{port}/HttpRemote/Request1"))!);
             // ReSharper disable once MethodHasAsyncOverload
-            var str3 = ActionResultToString(context.ForwardAsActionResult(HttpMethod.Get,
+            var str3 = ActionResultToString(context.ForwardAsResult(HttpMethod.Get,
                 $"http://localhost:{port}/HttpRemote/Request1")!);
             // ReSharper disable once MethodHasAsyncOverload
             var str4 = ActionResultToString(
-                context.ForwardAsActionResult($"http://localhost:{port}/HttpRemote/Request1")!);
+                context.ForwardAsResult($"http://localhost:{port}/HttpRemote/Request1")!);
 
             await context.Response.WriteAsync(str + " " + str2 + " " + str3 + " " + str4);
         });
@@ -884,7 +884,7 @@ public class HttpContextExtensionsForwardAsTests
     }
 
     [Fact]
-    public async Task ForwardAsActionResultAsync_ReturnOK()
+    public async Task ForwardAsResultAsync_ReturnOK()
     {
         var port = NetworkUtility.FindAvailableTcpPort();
         var urls = new[] { "--urls", $"http://localhost:{port}" };
@@ -907,14 +907,14 @@ public class HttpContextExtensionsForwardAsTests
 
         app.MapGet("/test", async context =>
         {
-            var str = ActionResultToString((await context.ForwardAsActionResultAsync(HttpMethod.Get,
+            var str = ActionResultToString((await context.ForwardAsResultAsync(HttpMethod.Get,
                 new Uri($"http://localhost:{port}/HttpRemote/Request1")))!);
             var str2 = ActionResultToString(
-                (await context.ForwardAsActionResultAsync(new Uri($"http://localhost:{port}/HttpRemote/Request1")))!);
-            var str3 = ActionResultToString((await context.ForwardAsActionResultAsync(HttpMethod.Get,
+                (await context.ForwardAsResultAsync(new Uri($"http://localhost:{port}/HttpRemote/Request1")))!);
+            var str3 = ActionResultToString((await context.ForwardAsResultAsync(HttpMethod.Get,
                 $"http://localhost:{port}/HttpRemote/Request1"))!);
             var str4 = ActionResultToString(
-                (await context.ForwardAsActionResultAsync($"http://localhost:{port}/HttpRemote/Request1"))!);
+                (await context.ForwardAsResultAsync($"http://localhost:{port}/HttpRemote/Request1"))!);
 
             await context.Response.WriteAsync(str + " " + str2 + " " + str3 + " " + str4);
         });

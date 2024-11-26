@@ -377,15 +377,16 @@ public sealed partial class WebSocketClient : IDisposable
     /// <summary>
     ///     向服务器发送消息
     /// </summary>
-    /// <param name="bytes">二进制消息</param>
+    /// <param name="byteArray">二进制消息</param>
     /// <param name="endOfMessage">是否作为消息的最后一部分，默认值为 <c>true</c>。</param>
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
-    public async Task SendAsync(byte[] bytes, bool endOfMessage = true, CancellationToken cancellationToken = default)
+    public async Task SendAsync(byte[] byteArray, bool endOfMessage = true,
+        CancellationToken cancellationToken = default)
     {
         // 空检查
-        ArgumentNullException.ThrowIfNull(bytes);
+        ArgumentNullException.ThrowIfNull(byteArray);
 
         // 检查连接是否处于打开状态
         if (State != WebSocketState.Open)
@@ -397,7 +398,7 @@ public sealed partial class WebSocketClient : IDisposable
         ArgumentNullException.ThrowIfNull(_clientWebSocket);
 
         // 初始化 ArraySegment 实例
-        var arraySegment = new ArraySegment<byte>(bytes);
+        var arraySegment = new ArraySegment<byte>(byteArray);
 
         // 向服务器发送二进制消息
         await _clientWebSocket.SendAsync(arraySegment, WebSocketMessageType.Binary, endOfMessage, cancellationToken);

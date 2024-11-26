@@ -204,7 +204,7 @@ public sealed class HttpRemoteBuilder
 
         return this;
     }
-    
+
     /// <summary>
     ///     添加 HTTP 声明式服务
     /// </summary>

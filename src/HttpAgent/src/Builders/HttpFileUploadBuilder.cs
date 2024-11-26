@@ -106,7 +106,7 @@ public sealed class HttpFileUploadBuilder
     internal Type? FileTransferEventHandlerType { get; private set; }
 
     /// <summary>
-    ///     设置内容类型
+    ///     设置内容类型（文件类型）
     /// </summary>
     /// <param name="contentType">内容类型</param>
     /// <returns>
@@ -182,24 +182,7 @@ public sealed class HttpFileUploadBuilder
     }
 
     /// <summary>
-    ///     设置用于上传进度发生变化时执行的委托
-    /// </summary>
-    /// <param name="configure">自定义配置委托</param>
-    /// <returns>
-    ///     <see cref="HttpFileUploadBuilder" />
-    /// </returns>
-    public HttpFileUploadBuilder SetOnProgressChanged(Func<FileTransferProgress, Task> configure)
-    {
-        // 空检查
-        ArgumentNullException.ThrowIfNull(configure);
-
-        OnProgressChanged = configure;
-
-        return this;
-    }
-
-    /// <summary>
-    ///     设置进度更新（通知）的间隔时间
+    ///     设置文件传输进度（通知）的间隔时间
     /// </summary>
     /// <param name="progressInterval">进度更新（通知）的间隔时间</param>
     /// <returns>
@@ -231,6 +214,23 @@ public sealed class HttpFileUploadBuilder
         ArgumentNullException.ThrowIfNull(configure);
 
         OnTransferStarted = configure;
+
+        return this;
+    }
+
+    /// <summary>
+    ///     设置用于上传进度发生变化时执行的委托
+    /// </summary>
+    /// <param name="configure">自定义配置委托</param>
+    /// <returns>
+    ///     <see cref="HttpFileUploadBuilder" />
+    /// </returns>
+    public HttpFileUploadBuilder SetOnProgressChanged(Func<FileTransferProgress, Task> configure)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(configure);
+
+        OnProgressChanged = configure;
 
         return this;
     }

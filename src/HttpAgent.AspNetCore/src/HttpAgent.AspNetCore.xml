@@ -194,12 +194,6 @@
         <member name="M:HttpAgent.IActionResultContentConverter.ReadAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.IActionResultContentConverter.Read(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:HttpAgent.IActionResultContentConverter.ReadAsync(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
         <member name="M:HttpAgent.IActionResultContentConverter.TryGetStatusCodeResult(System.Net.Http.HttpResponseMessage,System.Net.HttpStatusCode@,Microsoft.AspNetCore.Mvc.IActionResult@)">
             <summary>
                 处理特定状态码结果
@@ -1277,7 +1271,7 @@
                 <see cref="T:System.IO.Stream" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardAsActionResult(Microsoft.AspNetCore.Http.HttpContext,System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,HttpAgent.HttpContextForwardOptions)">
+        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardAsResult(Microsoft.AspNetCore.Http.HttpContext,System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,HttpAgent.HttpContextForwardOptions)">
             <summary>
                 转发 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" /> 到新的 HTTP 远程地址
             </summary>
@@ -1296,7 +1290,7 @@
                 <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardAsActionResult(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpMethod,System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,HttpAgent.HttpContextForwardOptions)">
+        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardAsResult(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpMethod,System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,HttpAgent.HttpContextForwardOptions)">
             <summary>
                 转发 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" /> 到新的 HTTP 远程地址
             </summary>
@@ -1314,7 +1308,7 @@
                 <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardAsActionResult(Microsoft.AspNetCore.Http.HttpContext,System.Uri,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,HttpAgent.HttpContextForwardOptions)">
+        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardAsResult(Microsoft.AspNetCore.Http.HttpContext,System.Uri,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,HttpAgent.HttpContextForwardOptions)">
             <summary>
                 转发 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" /> 到新的 HTTP 远程地址
             </summary>
@@ -1333,7 +1327,7 @@
                 <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardAsActionResult(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpMethod,System.Uri,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,HttpAgent.HttpContextForwardOptions)">
+        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardAsResult(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpMethod,System.Uri,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,HttpAgent.HttpContextForwardOptions)">
             <summary>
                 转发 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" /> 到新的 HTTP 远程地址
             </summary>
@@ -1353,7 +1347,7 @@
                 <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardAsActionResultAsync(Microsoft.AspNetCore.Http.HttpContext,System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,HttpAgent.HttpContextForwardOptions)">
+        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardAsResultAsync(Microsoft.AspNetCore.Http.HttpContext,System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,HttpAgent.HttpContextForwardOptions)">
             <summary>
                 转发 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" /> 到新的 HTTP 远程地址
             </summary>
@@ -1372,7 +1366,7 @@
                 <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardAsActionResultAsync(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpMethod,System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,HttpAgent.HttpContextForwardOptions)">
+        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardAsResultAsync(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpMethod,System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,HttpAgent.HttpContextForwardOptions)">
             <summary>
                 转发 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" /> 到新的 HTTP 远程地址
             </summary>
@@ -1390,7 +1384,7 @@
                 <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardAsActionResultAsync(Microsoft.AspNetCore.Http.HttpContext,System.Uri,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,HttpAgent.HttpContextForwardOptions)">
+        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardAsResultAsync(Microsoft.AspNetCore.Http.HttpContext,System.Uri,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,HttpAgent.HttpContextForwardOptions)">
             <summary>
                 转发 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" /> 到新的 HTTP 远程地址
             </summary>
@@ -1409,7 +1403,7 @@
                 <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardAsActionResultAsync(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpMethod,System.Uri,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,HttpAgent.HttpContextForwardOptions)">
+        <member name="M:HttpAgent.Extensions.HttpContextExtensions.ForwardAsResultAsync(Microsoft.AspNetCore.Http.HttpContext,System.Net.Http.HttpMethod,System.Uri,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,HttpAgent.HttpContextForwardOptions)">
             <summary>
                 转发 <see cref="T:Microsoft.AspNetCore.Http.HttpContext" /> 到新的 HTTP 远程地址
             </summary>
@@ -1486,7 +1480,7 @@
         </member>
         <member name="P:HttpAgent.HttpContextForwardOptions.ResetHostRequestHeader">
             <summary>
-                表示是否重新设置 Host 请求标头
+                是否重新设置 <c>Host</c> 请求标头
             </summary>
             <remarks>在一些目标服务器中，可能需要校验该请求标头。默认值为：<c>false</c>。</remarks>
         </member>

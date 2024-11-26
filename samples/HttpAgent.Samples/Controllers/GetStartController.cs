@@ -442,7 +442,7 @@ public class GetStartController(
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)] // 禁用浏览器缓存
     public Task<IActionResult?> ForwardToWebSite()
     {
-        return httpContextAccessor.HttpContext.ForwardAsActionResultAsync("https://github.com");
+        return httpContextAccessor.HttpContext.ForwardAsResultAsync("https://github.com");
     }
 
     /// <summary>
@@ -453,7 +453,7 @@ public class GetStartController(
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)] // 禁用浏览器缓存
     public Task<IActionResult?> ForwardToImage()
     {
-        return httpContextAccessor.HttpContext.ForwardAsActionResultAsync(
+        return httpContextAccessor.HttpContext.ForwardAsResultAsync(
             "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA1u7RJI.img?w=584&h=326&m=6");
     }
 
@@ -465,7 +465,7 @@ public class GetStartController(
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)] // 禁用浏览器缓存
     public Task<IActionResult?> ForwardToDownload()
     {
-        return httpContextAccessor.HttpContext.ForwardAsActionResultAsync(
+        return httpContextAccessor.HttpContext.ForwardAsResultAsync(
             "https://download.visualstudio.microsoft.com/download/pr/a17b907f-8457-45a8-90db-53f2665ee49e/49bccd33593ebceb2847674fe5fd768e/aspnetcore-runtime-8.0.10-win-x64.exe"
             /*, forwardOptions: new HttpContextForwardOptions
             {

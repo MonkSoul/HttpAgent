@@ -48,25 +48,35 @@ internal sealed class StressTestHarnessManager
     /// <summary>
     ///     开始测试
     /// </summary>
+    /// <param name="completionOption">
+    ///     <see cref="HttpCompletionOption" />
+    /// </param>
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
     /// <returns>
     ///     <see cref="StressTestHarnessResult" />
     /// </returns>
-    internal StressTestHarnessResult Start(CancellationToken cancellationToken = default) =>
-        StartAsync(cancellationToken).GetAwaiter().GetResult();
+    internal StressTestHarnessResult Start(
+        HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
+        CancellationToken cancellationToken = default) =>
+        StartAsync(completionOption, cancellationToken).GetAwaiter().GetResult();
 
     /// <summary>
     ///     开始测试
     /// </summary>
+    /// <param name="completionOption">
+    ///     <see cref="HttpCompletionOption" />
+    /// </param>
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
     /// <returns>
     ///     <see cref="StressTestHarnessResult" />
     /// </returns>
-    internal async Task<StressTestHarnessResult> StartAsync(CancellationToken cancellationToken = default)
+    internal async Task<StressTestHarnessResult> StartAsync(
+        HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
+        CancellationToken cancellationToken = default)
     {
         // 初始化压力测试次数和轮次
         var numberOfRequests = _httpStressTestHarnessBuilder.NumberOfRequests;
@@ -118,7 +128,7 @@ internal sealed class StressTestHarnessManager
                     {
                         // 发送 HTTP 远程请求
                         var httpResponseMessage =
-                            await _httpRemoteService.SendAsync(RequestBuilder, cancellationToken);
+                            await _httpRemoteService.SendAsync(RequestBuilder, completionOption, cancellationToken);
 
                         // 检查响应状态码是否是成功状态
                         if (httpResponseMessage.IsSuccessStatusCode)

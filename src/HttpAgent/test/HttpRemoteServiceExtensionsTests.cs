@@ -2179,7 +2179,8 @@ public class HttpRemoteServiceExtensionsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            httpRemoteService.Send(httpStressTestHarnessBuilder, null, cancellationTokenSource.Token);
+            httpRemoteService.Send(httpStressTestHarnessBuilder, null, HttpCompletionOption.ResponseContentRead,
+                cancellationTokenSource.Token);
         });
 
         await app.StopAsync();
@@ -2289,7 +2290,8 @@ public class HttpRemoteServiceExtensionsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            await httpRemoteService.SendAsync(httpStressTestHarnessBuilder, null, cancellationTokenSource.Token);
+            await httpRemoteService.SendAsync(httpStressTestHarnessBuilder, null,
+                HttpCompletionOption.ResponseContentRead, cancellationTokenSource.Token);
         });
 
         await app.StopAsync();

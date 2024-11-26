@@ -30,4 +30,15 @@ public interface IHttpLongPollingEventHandler
     ///     <see cref="Task" />
     /// </returns>
     Task OnErrorAsync(HttpResponseMessage httpResponseMessage);
+
+    /// <summary>
+    ///     用于响应标头包含 <c>X-End-Of-Stream</c> 时触发的操作
+    /// </summary>
+    /// <param name="httpResponseMessage">
+    ///     <see cref="HttpResponseMessage" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="Task" />
+    /// </returns>
+    Task OnEndOfStreamAsync(HttpResponseMessage httpResponseMessage);
 }

@@ -171,6 +171,9 @@ public class CustomLongPollingEventHandler : IHttpLongPollingEventHandler
         counter++;
         return Task.CompletedTask;
     }
+
+    /// <inheritdoc />
+    public Task OnEndOfStreamAsync(HttpResponseMessage httpResponseMessage) => Task.CompletedTask;
 }
 
 public class CustomLongPollingEventHandler2 : IHttpLongPollingEventHandler, IHttpRequestEventHandler
@@ -180,6 +183,9 @@ public class CustomLongPollingEventHandler2 : IHttpLongPollingEventHandler, IHtt
 
     /// <inheritdoc />
     public Task OnErrorAsync(HttpResponseMessage httpResponseMessage) => throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task OnEndOfStreamAsync(HttpResponseMessage httpResponseMessage) => throw new NotImplementedException();
 
     /// <inheritdoc />
     public void OnPreSendRequest(HttpRequestMessage httpRequestMessage) => throw new NotImplementedException();

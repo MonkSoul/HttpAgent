@@ -93,14 +93,14 @@ internal sealed class LongPollingManager
                 // 发送 HTTP 远程请求
                 var httpResponseMessage = _httpRemoteService.Send(RequestBuilder, cancellationToken);
 
+                // 发送响应数据对象到通道
+                _dataChannel.Writer.TryWrite(httpResponseMessage);
+
                 // 检查是否应该终止长轮询
                 if (ShouldTerminatePolling(httpResponseMessage))
                 {
                     break;
                 }
-
-                // 发送响应数据对象到通道
-                _dataChannel.Writer.TryWrite(httpResponseMessage);
 
                 // 检查是否请求成功
                 if (httpResponseMessage.IsSuccessStatusCode)
@@ -173,14 +173,14 @@ internal sealed class LongPollingManager
                 // 发送 HTTP 远程请求
                 var httpResponseMessage = await _httpRemoteService.SendAsync(RequestBuilder, cancellationToken);
 
+                // 发送响应数据对象到通道
+                await _dataChannel.Writer.WriteAsync(httpResponseMessage, cancellationToken);
+
                 // 检查是否应该终止长轮询
                 if (ShouldTerminatePolling(httpResponseMessage))
                 {
                     break;
                 }
-
-                // 发送响应数据对象到通道
-                await _dataChannel.Writer.WriteAsync(httpResponseMessage, cancellationToken);
 
                 // 检查是否请求成功
                 if (httpResponseMessage.IsSuccessStatusCode)
@@ -355,6 +355,14 @@ internal sealed class LongPollingManager
         // 空检查
         ArgumentNullException.ThrowIfNull(httpResponseMessage);
 
+        // 检查响应标头中是否存在长轮询结束符
+        if (httpResponseMessage.Headers.TryGetValues(Constants.X_END_OF_STREAM_HEADER, out _))
+        {
+            await HandleEndOfStreamAsync(httpResponseMessage);
+
+            return;
+        }
+
         // 处理服务器返回 <c>200~299</c> 状态码的数据
         if (httpResponseMessage.IsSuccessStatusCode)
         {
@@ -405,5 +413,25 @@ internal sealed class LongPollingManager
         }
 
         await _httpLongPollingBuilder.OnError.TryInvokeAsync(httpResponseMessage);
+    }
+
+    /// <summary>
+    ///     处理服务器响应标头包含 <c>X-End-Of-Stream</c> 时触发的操作
+    /// </summary>
+    /// <param name="httpResponseMessage">
+    ///     <see cref="HttpResponseMessage" />
+    /// </param>
+    internal async Task HandleEndOfStreamAsync(HttpResponseMessage httpResponseMessage)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(httpResponseMessage);
+
+        // 空检查
+        if (LongPollingEventHandler is not null)
+        {
+            await DelegateExtensions.TryInvokeAsync(LongPollingEventHandler.OnEndOfStreamAsync, httpResponseMessage);
+        }
+
+        await _httpLongPollingBuilder.OnEndOfStream.TryInvokeAsync(httpResponseMessage);
     }
 }

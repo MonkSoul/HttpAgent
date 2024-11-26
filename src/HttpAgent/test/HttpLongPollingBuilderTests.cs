@@ -27,6 +27,7 @@ public class HttpLongPollingBuilderTests
         Assert.Equal(100, builder2.MaxRetries);
         Assert.Null(builder2.OnDataReceived);
         Assert.Null(builder2.OnError);
+        Assert.Null(builder2.OnEndOfStream);
         Assert.Null(builder2.LongPollingEventHandlerType);
     }
 
@@ -125,6 +126,21 @@ public class HttpLongPollingBuilderTests
         var builder = new HttpLongPollingBuilder(HttpMethod.Get, new Uri("http://localhost"));
         builder.SetOnError(async _ => await Task.CompletedTask);
         Assert.NotNull(builder.OnError);
+    }
+
+    [Fact]
+    public void SetOnEndOfStream_Invalid_Parameters()
+    {
+        var builder = new HttpLongPollingBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        Assert.Throws<ArgumentNullException>(() => builder.SetOnEndOfStream(null!));
+    }
+
+    [Fact]
+    public void SetOnEndOfStream_ReturnOK()
+    {
+        var builder = new HttpLongPollingBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        builder.SetOnEndOfStream(async _ => await Task.CompletedTask);
+        Assert.NotNull(builder.OnEndOfStream);
     }
 
     [Fact]
