@@ -772,21 +772,21 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
     {
         switch (code)
         {
-            // 处理 int 类型状态码
+            // 处理正整数类型
             case int intStatusCode when intStatusCode == statusCode:
                 return true;
-            // 处理 HttpStatusCode 类型状态码
+            // 处理 HttpStatusCode 枚举类型
             case HttpStatusCode httpStatusCode when (int)httpStatusCode == statusCode:
                 return true;
-            // 处理通配符状态码
+            // 处理特殊字符串
             case "*" or '*':
                 return true;
-            // 处理字符串类型状态码
+            // 处理字符串类型
             case string stringStatusCode when !stringStatusCode.Contains('+') &&
                                               int.TryParse(stringStatusCode, out var intStatusCodeResult) &&
                                               intStatusCodeResult == statusCode:
                 return true;
-            // 处理区间类型状态码，如 200-500
+            // 处理字符串区间类型，如 200-500
             case string stringStatusCode when StatusCodeRangeRegex().IsMatch(stringStatusCode):
                 // 根据 - 符号切割
                 var parts = stringStatusCode.Split('-', StringSplitOptions.RemoveEmptyEntries);
@@ -798,6 +798,28 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
                 }
 
                 break;
+            // 处理包含比较符号的类型：如：>=200, <=300, <100, =100, >100
+            case string compareStatusCode when StatusCodeCompareRegex().IsMatch(compareStatusCode):
+                // 提取正则表达式内容并获取符号和数字部分
+                var match = StatusCodeCompareRegex().Match(compareStatusCode);
+                var symbolPart = match.Groups[1].Value;
+                var numberPart = match.Groups[2].Value;
+
+                // 获取状态码
+                if (!int.TryParse(numberPart, out var number))
+                {
+                    return false;
+                }
+
+                return symbolPart switch
+                {
+                    ">=" => statusCode >= number,
+                    "<=" => statusCode <= number,
+                    ">" => statusCode > number,
+                    "<" => statusCode < number,
+                    "=" => statusCode == number,
+                    _ => false
+                };
             default:
                 return false;
         }
@@ -862,4 +884,11 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
     /// <returns></returns>
     [GeneratedRegex(@"^\d+-\d+$")]
     private static partial Regex StatusCodeRangeRegex();
+
+    /// <summary>
+    ///     状态码比较正则表达式
+    /// </summary>
+    /// <returns></returns>
+    [GeneratedRegex(@"^([<>]=?|=|>|<)(\d+)$")]
+    private static partial Regex StatusCodeCompareRegex();
 }

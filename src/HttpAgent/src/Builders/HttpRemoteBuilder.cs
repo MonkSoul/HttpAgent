@@ -268,6 +268,25 @@ public sealed class HttpRemoteBuilder
     }
 
     /// <summary>
+    ///     扫描程序集并添加 HTTP 声明式 <see cref="IHttpDeclarativeExtractor" /> 提取器
+    /// </summary>
+    /// <remarks>支持多次调用。</remarks>
+    /// <param name="assemblies"><see cref="Assembly" /> 集合</param>
+    /// <returns>
+    ///     <see cref="HttpRemoteBuilder" />
+    /// </returns>
+    public HttpRemoteBuilder AddHttpDeclarativeExtractorFromAssemblies(params IEnumerable<Assembly?> assemblies)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(assemblies);
+
+        return AddHttpDeclarativeExtractors(() => assemblies.SelectMany(ass =>
+            (ass?.GetExportedTypes() ?? Enumerable.Empty<Type>()).Where(t =>
+                t.HasDefinePublicParameterlessConstructor() && typeof(IHttpDeclarativeExtractor).IsAssignableFrom(t))
+            .Select(t => (IHttpDeclarativeExtractor)Activator.CreateInstance(t)!)));
+    }
+
+    /// <summary>
     ///     构建模块服务
     /// </summary>
     /// <param name="services">

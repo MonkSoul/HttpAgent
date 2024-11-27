@@ -10,12 +10,13 @@ public class FileSourceTypeTests
     public void Definition_ReturnOK()
     {
         var names = Enum.GetNames<FileSourceType>();
-        Assert.Equal(4, names.Length);
+        Assert.Equal(6, names.Length);
 
         string[] strings =
         [
             nameof(FileSourceType.None), nameof(FileSourceType.Path),
-            nameof(FileSourceType.Base64String), nameof(FileSourceType.Remote)
+            nameof(FileSourceType.Base64String), nameof(FileSourceType.Remote), nameof(FileSourceType.Stream),
+            nameof(FileSourceType.ByteArray)
         ];
         Assert.True(strings.SequenceEqual(names));
     }

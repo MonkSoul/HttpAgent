@@ -290,6 +290,27 @@ public class HttpRemoteBuilderTests
     }
 
     [Fact]
+    public void AddHttpDeclarativeExtractorFromAssemblies_Invalid_Parameters()
+    {
+        var builder = new HttpRemoteBuilder();
+
+        Assert.Throws<ArgumentNullException>(() =>
+        {
+            builder.AddHttpDeclarativeExtractorFromAssemblies(null!);
+        });
+    }
+
+    [Fact]
+    public void AddHttpDeclarativeExtractorFromAssemblies_ReturnOK()
+    {
+        var builder = new HttpRemoteBuilder();
+
+        builder.AddHttpDeclarativeExtractorFromAssemblies([typeof(HttpRemoteBuilderTests).Assembly, null]);
+        Assert.NotNull(builder._httpDeclarativeExtractors);
+        Assert.Single(builder._httpDeclarativeExtractors);
+    }
+
+    [Fact]
     public void EnsureLegalData_Invalid_Parameters()
     {
         var exception = Assert.Throws<ArgumentException>(() => HttpRemoteBuilder.EnsureLegalData("unknown"));

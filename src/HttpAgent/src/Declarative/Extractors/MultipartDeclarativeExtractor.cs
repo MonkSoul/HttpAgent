@@ -113,6 +113,10 @@ internal sealed class MultipartDeclarativeExtractor : IFrozenHttpDeclarativeExtr
                     multipartAttribute.ContentType ?? MediaTypeNames.Application.Octet, contentEncoding,
                     byteArray.Length);
                 break;
+            // 添加 MultipartFile
+            case MultipartFile multipartFile:
+                httpMultipartFormDataBuilder.AddFile(multipartFile);
+                break;
             // 添加 HttpContent
             case HttpContent httpContent:
                 httpMultipartFormDataBuilder.Add(httpContent, name, multipartAttribute.ContentType,
@@ -170,9 +174,11 @@ internal sealed class MultipartDeclarativeExtractor : IFrozenHttpDeclarativeExtr
                 httpMultipartFormDataBuilder.AddFileFromRemote(fileSource, name, fileName, contentType,
                     contentEncoding);
                 break;
+            // 不做任何操作
             case FileSourceType.None:
+            case FileSourceType.ByteArray:
+            case FileSourceType.Stream:
             default:
-                // 不做任何操作
                 break;
         }
     }

@@ -718,13 +718,13 @@
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddFileWithProgressAsStream(System.String,System.String,System.Threading.Channels.Channel{HttpAgent.FileTransferProgress},System.String,System.String,System.Text.Encoding)">
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddFileWithProgressAsStream(System.String,System.Threading.Channels.Channel{HttpAgent.FileTransferProgress},System.String,System.String,System.String,System.Text.Encoding)">
             <summary>
                 从本地路径中添加文件（带文件传输进度）
             </summary>
             <param name="filePath">文件路径</param>
-            <param name="name">表单名称</param>
             <param name="progressChannel">文件传输进度信息的通道</param>
+            <param name="name">表单名称</param>
             <param name="fileName">文件的名称</param>
             <param name="contentType">内容类型</param>
             <param name="contentEncoding">内容编码</param>
@@ -741,6 +741,18 @@
             <param name="fileName">文件的名称</param>
             <param name="contentType">内容类型</param>
             <param name="contentEncoding">内容编码</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddFile(HttpAgent.MultipartFile)">
+            <summary>
+                添加文件
+            </summary>
+            <remarks>使用 <c>MultipartFile.CreateFrom[Source]</c> 静态方法创建。</remarks>
+            <param name="multipartFile">
+                <see cref="T:HttpAgent.MultipartFile" />
+            </param>
             <returns>
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
@@ -1007,6 +1019,16 @@
             </summary>
             <remarks>支持多次调用。</remarks>
             <param name="configure"><see cref="T:HttpAgent.IHttpDeclarativeExtractor" /> 实例提供器</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRemoteBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRemoteBuilder.AddHttpDeclarativeExtractorFromAssemblies(System.Collections.Generic.IEnumerable{System.Reflection.Assembly})">
+            <summary>
+                扫描程序集并添加 HTTP 声明式 <see cref="T:HttpAgent.IHttpDeclarativeExtractor" /> 提取器
+            </summary>
+            <remarks>支持多次调用。</remarks>
+            <param name="assemblies"><see cref="T:System.Reflection.Assembly" /> 集合</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRemoteBuilder" />
             </returns>
@@ -2896,6 +2918,16 @@
                 互联网文件地址
             </summary>
         </member>
+        <member name="F:HttpAgent.FileSourceType.Stream">
+            <summary>
+                <see cref="F:HttpAgent.FileSourceType.Stream" />
+            </summary>
+        </member>
+        <member name="F:HttpAgent.FileSourceType.ByteArray">
+            <summary>
+                字节数组
+            </summary>
+        </member>
         <member name="T:HttpAgent.ByteArrayContentConverter">
             <summary>
                 字节数组内容转换器
@@ -3559,6 +3591,40 @@
                 <see cref="T:System.Type" />
             </param>
             <param name="underlyingType">元素类型</param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Core.Extensions.TypeExtensions.IsStatic(System.Type)">
+            <summary>
+                检查类型是否是静态类型
+            </summary>
+            <param name="type">
+                <see cref="T:System.Type" />
+            </param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Core.Extensions.TypeExtensions.IsInstantiable(System.Type)">
+            <summary>
+                检查类型是否可实例化
+            </summary>
+            <param name="type">
+                <see cref="T:System.Type" />
+            </param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Core.Extensions.TypeExtensions.HasDefinePublicParameterlessConstructor(System.Type)">
+            <summary>
+                检查类型是否定义了公开无参构造函数
+            </summary>
+            <remarks>用于 <see cref="M:System.Activator.CreateInstance(System.Type)" /> 实例化</remarks>
+            <param name="type">
+                <see cref="T:System.Type" />
+            </param>
             <returns>
                 <see cref="T:System.Boolean" />
             </returns>
@@ -6256,6 +6322,116 @@
                 HTTP 远程服务日志类别
             </summary>
         </member>
+        <member name="T:HttpAgent.MultipartFile">
+            <summary>
+                多部分表单文件
+            </summary>
+            <remarks>使用 <c>MultipartFile.CreateFrom[Source]</c> 静态方法创建。</remarks>
+        </member>
+        <member name="M:HttpAgent.MultipartFile.#ctor">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.MultipartFile" />
+            </summary>
+        </member>
+        <member name="P:HttpAgent.MultipartFile.Name">
+            <summary>
+                表单名称
+            </summary>
+        </member>
+        <member name="P:HttpAgent.MultipartFile.FileName">
+            <summary>
+                文件的名称
+            </summary>
+        </member>
+        <member name="P:HttpAgent.MultipartFile.ContentType">
+            <summary>
+                内容类型
+            </summary>
+        </member>
+        <member name="P:HttpAgent.MultipartFile.ContentEncoding">
+            <summary>
+                内容编码
+            </summary>
+        </member>
+        <member name="P:HttpAgent.MultipartFile.Source">
+            <summary>
+                文件来源
+            </summary>
+        </member>
+        <member name="P:HttpAgent.MultipartFile.FileSourceType">
+            <summary>
+                <see cref="P:HttpAgent.MultipartFile.FileSourceType" />
+            </summary>
+        </member>
+        <member name="M:HttpAgent.MultipartFile.CreateFromByteArray(System.Byte[],System.String,System.String,System.String,System.Text.Encoding)">
+            <summary>
+                从字节数组中添加文件
+            </summary>
+            <param name="byteArray">字节数组</param>
+            <param name="name">表单名称</param>
+            <param name="fileName">文件的名称</param>
+            <param name="contentType">内容类型</param>
+            <param name="contentEncoding">内容编码</param>
+            <returns>
+                <see cref="T:HttpAgent.MultipartFile" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.MultipartFile.CreateFromStream(System.IO.Stream,System.String,System.String,System.String,System.Text.Encoding)">
+            <summary>
+                从 <see cref="T:System.IO.Stream" /> 中添加文件
+            </summary>
+            <param name="stream">
+                <see cref="T:System.IO.Stream" />
+            </param>
+            <param name="name">表单名称</param>
+            <param name="fileName">文件的名称</param>
+            <param name="contentType">内容类型</param>
+            <param name="contentEncoding">内容编码</param>
+            <returns>
+                <see cref="T:HttpAgent.MultipartFile" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.MultipartFile.CreateFromPath(System.String,System.String,System.String,System.String,System.Text.Encoding)">
+            <summary>
+                从本地路径中添加文件
+            </summary>
+            <param name="filePath">文件路径</param>
+            <param name="name">表单名称</param>
+            <param name="fileName">文件的名称</param>
+            <param name="contentType">内容类型</param>
+            <param name="contentEncoding">内容编码</param>
+            <returns>
+                <see cref="T:HttpAgent.MultipartFile" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.MultipartFile.CreateFromBase64String(System.String,System.String,System.String,System.String,System.Text.Encoding)">
+            <summary>
+                从 Base64 字符串中添加文件
+            </summary>
+            <remarks>文件大小限制在 <c>100MB</c> 以内。</remarks>
+            <param name="base64String">Base64 字符串</param>
+            <param name="name">表单名称</param>
+            <param name="fileName">文件的名称</param>
+            <param name="contentType">内容类型</param>
+            <param name="contentEncoding">内容编码</param>
+            <returns>
+                <see cref="T:HttpAgent.MultipartFile" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.MultipartFile.CreateFromRemote(System.String,System.String,System.String,System.String,System.Text.Encoding)">
+            <summary>
+                从互联网 URL 中添加文件
+            </summary>
+            <remarks>文件大小限制在 <c>100MB</c> 以内。</remarks>
+            <param name="url">互联网 URL 地址</param>
+            <param name="name">表单名称</param>
+            <param name="fileName">文件的名称</param>
+            <param name="contentType">内容类型</param>
+            <param name="contentEncoding">内容编码</param>
+            <returns>
+                <see cref="T:HttpAgent.MultipartFile" />
+            </returns>
+        </member>
         <member name="T:HttpAgent.MultipartFormDataItem">
             <summary>
                 <see cref="T:System.Net.Http.MultipartFormDataContent" /> 条目
@@ -7082,6 +7258,25 @@
             ○ Match a Unicode digit atomically at least once.<br/>
             ○ Match '-'.<br/>
             ○ Match a Unicode digit atomically at least once.<br/>
+            ○ Match if at the end of the string or if before an ending newline.<br/>
+            </code>
+            </remarks>
+        </member>
+        <member name="M:HttpAgent.HttpRemoteService.StatusCodeCompareRegex">
+            <remarks>
+            Pattern:<br/>
+            <code>^([&lt;&gt;]=?|=|&gt;|&lt;)(\\d+)$</code><br/>
+            Explanation:<br/>
+            <code>
+            ○ Match if at the beginning of the string.<br/>
+            ○ 1st capture group.<br/>
+                ○ Match with 2 alternative expressions.<br/>
+                    ○ Match a sequence of expressions.<br/>
+                        ○ Match a character in the set [&lt;&gt;].<br/>
+                        ○ Match '=' atomically, optionally.<br/>
+                    ○ Match a character in the set [&lt;-&gt;].<br/>
+            ○ 2nd capture group.<br/>
+                ○ Match a Unicode digit atomically at least once.<br/>
             ○ Match if at the end of the string or if before an ending newline.<br/>
             </code>
             </remarks>
@@ -12017,6 +12212,38 @@
             <returns>true if a possible match was found; false if no more matches are possible.</returns>
         </member>
         <member name="M:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_2.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Determine whether <paramref name="inputSpan"/> at base.runtextpos is a match for the regular expression.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if the regular expression matches at the current position; otherwise, false.</returns>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_3">
+            <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the StatusCodeCompareRegex method.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_3.Instance">
+            <summary>Cached, thread-safe singleton instance.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_3.#ctor">
+            <summary>Initializes the instance.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_3.RunnerFactory">
+            <summary>Provides a factory for creating <see cref="T:System.Text.RegularExpressions.RegexRunner"/> instances to be used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_3.RunnerFactory.CreateInstance">
+            <summary>Creates an instance of a <see cref="T:System.Text.RegularExpressions.RegexRunner"/> used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_3.RunnerFactory.Runner">
+            <summary>Provides the runner that contains the custom logic implementing the specified regular expression.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_3.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
+            <summary>Scan the <paramref name="inputSpan"/> starting from base.runtextstart for the next match.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_3.RunnerFactory.Runner.TryFindNextPossibleStartingPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Search <paramref name="inputSpan"/> starting from base.runtextpos for the next location a match could possibly start.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if a possible match was found; false if no more matches are possible.</returns>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_3.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
             <summary>Determine whether <paramref name="inputSpan"/> at base.runtextpos is a match for the regular expression.</summary>
             <param name="inputSpan">The text being scanned by the regular expression.</param>
             <returns>true if the regular expression matches at the current position; otherwise, false.</returns>

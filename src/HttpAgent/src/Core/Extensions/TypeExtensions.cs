@@ -50,6 +50,44 @@ internal static class TypeExtensions
     }
 
     /// <summary>
+    ///     检查类型是否是静态类型
+    /// </summary>
+    /// <param name="type">
+    ///     <see cref="Type" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="bool" />
+    /// </returns>
+    internal static bool IsStatic(this Type type) => type is { IsSealed: true, IsAbstract: true };
+
+    /// <summary>
+    ///     检查类型是否可实例化
+    /// </summary>
+    /// <param name="type">
+    ///     <see cref="Type" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="bool" />
+    /// </returns>
+    internal static bool IsInstantiable(this Type type) =>
+        type is { IsClass: true, IsAbstract: false }
+        && !type.IsStatic();
+
+    /// <summary>
+    ///     检查类型是否定义了公开无参构造函数
+    /// </summary>
+    /// <remarks>用于 <see cref="Activator.CreateInstance(Type)" /> 实例化</remarks>
+    /// <param name="type">
+    ///     <see cref="Type" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="bool" />
+    /// </returns>
+    internal static bool HasDefinePublicParameterlessConstructor(this Type type) =>
+        type.IsInstantiable()
+        && type.GetConstructor(BindingFlags.Instance | BindingFlags.Public, Type.EmptyTypes) is not null;
+
+    /// <summary>
     ///     检查类型是否是基本类型
     /// </summary>
     /// <param name="type">

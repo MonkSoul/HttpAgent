@@ -206,7 +206,7 @@ public sealed class HttpMultipartFormDataBuilder
     /// </returns>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="InvalidOperationException"></exception>
-    public HttpMultipartFormDataBuilder AddFileFromRemote(string url, string name, string? fileName = null,
+    public HttpMultipartFormDataBuilder AddFileFromRemote(string url, string name = "file", string? fileName = null,
         string contentType = "application/octet-stream", Encoding? contentEncoding = null)
     {
         // 空检查
@@ -238,7 +238,7 @@ public sealed class HttpMultipartFormDataBuilder
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public HttpMultipartFormDataBuilder AddFileFromBase64String(string base64String, string name,
+    public HttpMultipartFormDataBuilder AddFileFromBase64String(string base64String, string name = "file",
         string? fileName = null, string contentType = "application/octet-stream", Encoding? contentEncoding = null)
     {
         // 空检查
@@ -273,7 +273,7 @@ public sealed class HttpMultipartFormDataBuilder
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
-    public HttpMultipartFormDataBuilder AddFileAsStream(string filePath, string name, string? fileName = null,
+    public HttpMultipartFormDataBuilder AddFileAsStream(string filePath, string name = "file", string? fileName = null,
         string contentType = "application/octet-stream", Encoding? contentEncoding = null)
     {
         // 空检查
@@ -302,16 +302,16 @@ public sealed class HttpMultipartFormDataBuilder
     ///     从本地路径中添加文件（带文件传输进度）
     /// </summary>
     /// <param name="filePath">文件路径</param>
-    /// <param name="name">表单名称</param>
     /// <param name="progressChannel">文件传输进度信息的通道</param>
+    /// <param name="name">表单名称</param>
     /// <param name="fileName">文件的名称</param>
     /// <param name="contentType">内容类型</param>
     /// <param name="contentEncoding">内容编码</param>
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
-    public HttpMultipartFormDataBuilder AddFileWithProgressAsStream(string filePath, string name,
-        Channel<FileTransferProgress> progressChannel, string? fileName = null,
+    public HttpMultipartFormDataBuilder AddFileWithProgressAsStream(string filePath,
+        Channel<FileTransferProgress> progressChannel, string name = "file", string? fileName = null,
         string contentType = "application/octet-stream", Encoding? contentEncoding = null)
     {
         // 空检查
@@ -352,8 +352,8 @@ public sealed class HttpMultipartFormDataBuilder
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
-    public HttpMultipartFormDataBuilder AddFileAsByteArray(string filePath, string name, string? fileName = null,
-        string contentType = "application/octet-stream", Encoding? contentEncoding = null)
+    public HttpMultipartFormDataBuilder AddFileAsByteArray(string filePath, string name = "file",
+        string? fileName = null, string contentType = "application/octet-stream", Encoding? contentEncoding = null)
     {
         // 空检查
         ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
@@ -375,6 +375,50 @@ public sealed class HttpMultipartFormDataBuilder
     }
 
     /// <summary>
+    ///     添加文件
+    /// </summary>
+    /// <remarks>使用 <c>MultipartFile.CreateFrom[Source]</c> 静态方法创建。</remarks>
+    /// <param name="multipartFile">
+    ///     <see cref="MultipartFile" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="HttpMultipartFormDataBuilder" />
+    /// </returns>
+    public HttpMultipartFormDataBuilder AddFile(MultipartFile multipartFile)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(multipartFile);
+
+        switch (multipartFile.FileSourceType)
+        {
+            // 字节数组
+            case FileSourceType.ByteArray:
+                return AddByteArray((byte[])multipartFile.Source!, multipartFile.Name!, multipartFile.FileName,
+                    multipartFile.ContentType!, multipartFile.ContentEncoding);
+            // Stream
+            case FileSourceType.Stream:
+                return AddStream((Stream)multipartFile.Source!, multipartFile.Name!, multipartFile.FileName,
+                    multipartFile.ContentType!, multipartFile.ContentEncoding);
+            // 本地文件路径
+            case FileSourceType.Path:
+                return AddFileAsStream((string)multipartFile.Source!, multipartFile.Name!, multipartFile.FileName,
+                    multipartFile.ContentType!, multipartFile.ContentEncoding);
+            // Base64 字符串文件
+            case FileSourceType.Base64String:
+                return AddFileFromBase64String((string)multipartFile.Source!, multipartFile.Name!,
+                    multipartFile.FileName, multipartFile.ContentType!, multipartFile.ContentEncoding);
+            // 互联网文件地址
+            case FileSourceType.Remote:
+                return AddFileFromRemote((string)multipartFile.Source!, multipartFile.Name!, multipartFile.FileName,
+                    multipartFile.ContentType!, multipartFile.ContentEncoding);
+            // 不做处理
+            case FileSourceType.None:
+            default:
+                return this;
+        }
+    }
+
+    /// <summary>
     ///     添加流
     /// </summary>
     /// <param name="stream">
@@ -388,7 +432,7 @@ public sealed class HttpMultipartFormDataBuilder
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
-    public HttpMultipartFormDataBuilder AddStream(Stream stream, string name, string? fileName = null,
+    public HttpMultipartFormDataBuilder AddStream(Stream stream, string name = "file", string? fileName = null,
         string contentType = "application/octet-stream", Encoding? contentEncoding = null, long? fileSize = null)
     {
         // 空检查
@@ -422,7 +466,7 @@ public sealed class HttpMultipartFormDataBuilder
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
-    public HttpMultipartFormDataBuilder AddByteArray(byte[] byteArray, string name, string? fileName = null,
+    public HttpMultipartFormDataBuilder AddByteArray(byte[] byteArray, string name = "file", string? fileName = null,
         string contentType = "application/octet-stream", Encoding? contentEncoding = null, long? fileSize = null)
     {
         // 空检查

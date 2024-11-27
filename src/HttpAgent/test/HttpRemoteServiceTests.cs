@@ -330,7 +330,16 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
     [InlineData('*', true)]
     [InlineData("200-300", true)]
     [InlineData("100-200", true)]
+    [InlineData(">=200", true)]
+    [InlineData("<=200", true)]
+    [InlineData("=200", true)]
+    [InlineData("<201", true)]
+    [InlineData(">199", true)]
+    [InlineData(">200", false)]
+    [InlineData(">= 200", false)]
+    [InlineData("<= 200", false)]
     [InlineData("100-199", false)]
+    [InlineData(">=200$", false)]
     [InlineData(HttpStatusCode.Accepted, false)]
     [InlineData(300, false)]
     [InlineData("300", false)]
@@ -340,7 +349,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
     [InlineData(".", false)]
     [InlineData("200--300", false)]
     [InlineData("+200", false)]
-    public void IsMatchedStatusCode_ReturnOK(object code, bool result) =>
+    public void IsMatched200StatusCode_ReturnOK(object code, bool result) =>
         Assert.Equal(result, HttpRemoteService.IsMatchedStatusCode(code, 200));
 
     [Fact]
@@ -835,7 +844,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
             new HttpRequestBuilder(HttpMethod.Post, new Uri($"http://localhost:{port}/test")).SetMultipartContent(
                 mBuilder =>
                 {
-                    mBuilder.AddFileAsStream(filePath, "file");
+                    mBuilder.AddFileAsStream(filePath);
                 });
 
         _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,

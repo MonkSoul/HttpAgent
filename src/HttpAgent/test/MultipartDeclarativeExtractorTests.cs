@@ -31,11 +31,14 @@ public class MultipartDeclarativeExtractorTests
         var method2 =
             typeof(IMultipartDeclarativeExtractorTest).GetMethod(nameof(IMultipartDeclarativeExtractorTest.Test2))!;
         var context2 = new HttpDeclarativeExtractorContext(method2,
-            [1, "furion", new { }, new MemoryStream(), Array.Empty<byte>(), new StringContent("")]);
+        [
+            1, "furion", new { }, new MemoryStream(), Array.Empty<byte>(), new StringContent(""),
+            MultipartFile.CreateFromByteArray([])
+        ]);
         var httpRequestBuilder2 = HttpRequestBuilder.Get("http://localhost");
         new MultipartDeclarativeExtractor().Extract(httpRequestBuilder2, context2);
         Assert.NotNull(httpRequestBuilder2.MultipartFormDataBuilder);
-        Assert.Equal(6, httpRequestBuilder2.MultipartFormDataBuilder._partContents.Count);
+        Assert.Equal(7, httpRequestBuilder2.MultipartFormDataBuilder._partContents.Count);
         Assert.Equal("id", httpRequestBuilder2.MultipartFormDataBuilder._partContents[0].Name);
         Assert.Equal("text/plain", httpRequestBuilder2.MultipartFormDataBuilder._partContents[0].ContentType);
         Assert.Equal("name", httpRequestBuilder2.MultipartFormDataBuilder._partContents[1].Name);
@@ -50,6 +53,9 @@ public class MultipartDeclarativeExtractorTests
             httpRequestBuilder2.MultipartFormDataBuilder._partContents[4].ContentType);
         Assert.Equal("content", httpRequestBuilder2.MultipartFormDataBuilder._partContents[5].Name);
         Assert.Equal("text/plain", httpRequestBuilder2.MultipartFormDataBuilder._partContents[5].ContentType);
+        Assert.Equal("file", httpRequestBuilder2.MultipartFormDataBuilder._partContents[6].Name);
+        Assert.Equal("application/octet-stream",
+            httpRequestBuilder2.MultipartFormDataBuilder._partContents[6].ContentType);
         Assert.Equal("--------------------", httpRequestBuilder2.MultipartFormDataBuilder.Boundary);
 
         var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
@@ -118,7 +124,10 @@ public class MultipartDeclarativeExtractorTests
         var method2 =
             typeof(IMultipartDeclarativeExtractorTest).GetMethod(nameof(IMultipartDeclarativeExtractorTest.Test2))!;
         var context2 = new HttpDeclarativeExtractorContext(method2,
-            [1, "furion", new { }, new MemoryStream(), Array.Empty<byte>(), new StringContent("")]);
+        [
+            1, "furion", new { }, new MemoryStream(), Array.Empty<byte>(), new StringContent(""),
+            MultipartFile.CreateFromByteArray([])
+        ]);
         var httpRequestBuilder2 = HttpRequestBuilder.Get("http://localhost");
         var httpMultipartFormDataBuilder = new HttpMultipartFormDataBuilder(httpRequestBuilder2);
 
@@ -128,7 +137,7 @@ public class MultipartDeclarativeExtractorTests
         }
 
         Assert.NotNull(httpMultipartFormDataBuilder);
-        Assert.Equal(6, httpMultipartFormDataBuilder._partContents.Count);
+        Assert.Equal(7, httpMultipartFormDataBuilder._partContents.Count);
         Assert.Equal("id", httpMultipartFormDataBuilder._partContents[0].Name);
         Assert.Equal("text/plain", httpMultipartFormDataBuilder._partContents[0].ContentType);
         Assert.Equal("name", httpMultipartFormDataBuilder._partContents[1].Name);
@@ -143,6 +152,8 @@ public class MultipartDeclarativeExtractorTests
             httpMultipartFormDataBuilder._partContents[4].ContentType);
         Assert.Equal("content", httpMultipartFormDataBuilder._partContents[5].Name);
         Assert.Equal("text/plain", httpMultipartFormDataBuilder._partContents[5].ContentType);
+        Assert.Equal("file", httpMultipartFormDataBuilder._partContents[6].Name);
+        Assert.Equal("application/octet-stream", httpMultipartFormDataBuilder._partContents[6].ContentType);
 
 
         var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
@@ -291,7 +302,7 @@ public interface IMultipartDeclarativeExtractorTest : IHttpDeclarative
     [Post("http://localhost:5000")]
     [MultipartForm("--------------------")]
     Task Test2([Multipart] int id, [Multipart] string name, [Multipart] object obj, [Multipart] Stream stream,
-        [Multipart("bytes")] byte[] byteArray, [Multipart] StringContent content);
+        [Multipart("bytes")] byte[] byteArray, [Multipart] StringContent content, [Multipart] MultipartFile file);
 
     [Post("http://localhost:5000")]
     Task Test3([Multipart] string name, [Multipart(AsFileFrom = FileSourceType.None)] string none,

@@ -28,5 +28,15 @@ public enum FileSourceType
     /// <summary>
     ///     互联网文件地址
     /// </summary>
-    Remote
+    Remote,
+
+    /// <summary>
+    ///     <see cref="Stream" />
+    /// </summary>
+    Stream,
+
+    /// <summary>
+    ///     字节数组
+    /// </summary>
+    ByteArray
 }
