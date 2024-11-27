@@ -43,6 +43,8 @@ builder.Services.AddHttpRemote(options =>
 
     // 扫描程序集批量注册 HTTP 声明式请求接口（推荐此方式注册）
     options.AddHttpDeclarativeFromAssemblies([Assembly.GetEntryAssembly()]);
+    options.AddHttpDeclarativeExtractors(() =>
+        [new AuthenticationDeclarativeExtractor(), new AllowAnonymousDeclarativeExtractor()]);
 });
 
 var app = builder.Build();

@@ -5,7 +5,8 @@
 public class GetStartController(
     IHttpRemoteService httpRemoteService,
     IHttpService httpService,
-    IHttpContextAccessor httpContextAccessor) : ControllerBase
+    IHttpContextAccessor httpContextAccessor,
+    IAuthService authService) : ControllerBase
 {
     /// <summary>
     ///     获取网站内容
@@ -515,5 +516,12 @@ public class GetStartController(
     {
         return httpRemoteService.PostAsStringAsync("https://localhost:7044/HttpRemote/RawString",
             builder => builder.SetRawStringContent("Furion", "application/json"));
+    }
+
+    [HttpGet]
+    public async Task CheckAuth()
+    {
+        var str = await authService.GetDataAsync();
+        var result = await authService.LoginAsync("admin", "admin");
     }
 }
