@@ -31,13 +31,13 @@ public sealed class HttpRemoteOptions
     public string? DefaultFileDownloadDirectory { get; set; }
 
     /// <summary>
-    ///     自定义 HTTP 声明式 <see cref="IHttpDeclarativeExtractor" /> 集合提供器
-    /// </summary>
-    /// <value>返回多个包含实现 <see cref="IHttpDeclarativeExtractor" /> 集合的集合。</value>
-    public IReadOnlyList<Func<IEnumerable<IHttpDeclarativeExtractor>>>? HttpDeclarativeExtractors { get; set; }
-
-    /// <summary>
     ///     JSON 序列化配置
     /// </summary>
     public JsonSerializerOptions JsonSerializerOptions { get; set; } = JsonSerializerOptionsDefault;
+
+    /// <summary>
+    ///     自定义 HTTP 声明式 <see cref="IHttpDeclarativeExtractor" /> 集合提供器
+    /// </summary>
+    /// <value>返回多个包含实现 <see cref="IHttpDeclarativeExtractor" /> 集合的集合。</value>
+    internal IReadOnlyList<Func<IEnumerable<IHttpDeclarativeExtractor>>>? HttpDeclarativeExtractors { get; set; }
 }
