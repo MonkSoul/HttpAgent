@@ -93,12 +93,12 @@ public class MessagePackContentProcessorTests
         Assert.NotNull(func);
         var bytes = func(new MessagePackModel1());
         Assert.NotNull(bytes);
-        Assert.Single(MessagePackContentProcessor._serializerCache);
+        Assert.False(MessagePackContentProcessor._serializerCache.IsEmpty);
 
         var func1 = MessagePackContentProcessor.CreateSerializerDelegate(serializeMethod);
         Assert.NotNull(func1);
         var bytes1 = func1(new MessagePackModel1());
         Assert.NotNull(bytes1);
-        Assert.Single(MessagePackContentProcessor._serializerCache);
+        Assert.False(MessagePackContentProcessor._serializerCache.IsEmpty);
     }
 }

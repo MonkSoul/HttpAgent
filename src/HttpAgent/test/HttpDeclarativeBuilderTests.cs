@@ -46,7 +46,7 @@ public class HttpDeclarativeBuilderTests
             { typeof(BodyDeclarativeExtractor), new BodyDeclarativeExtractor() }
         };
 
-        Assert.True(extractors.Keys.ToHashSet().SetEquals(HttpDeclarativeBuilder._extractors.Keys.ToHashSet()));
+        Assert.True(extractors.Keys.ToHashSet().SetEquals(HttpDeclarativeBuilder._extractors.Keys));
 
         Dictionary<Type, IHttpDeclarativeExtractor> freezeExtractors = new()
         {
@@ -58,8 +58,7 @@ public class HttpDeclarativeBuilderTests
             { typeof(HttpRequestBuilderDeclarativeExtractor), new HttpRequestBuilderDeclarativeExtractor() }
         };
 
-        Assert.True(freezeExtractors.Keys.ToHashSet()
-            .SetEquals(HttpDeclarativeBuilder._frozenExtractors.Keys.ToHashSet()));
+        Assert.True(freezeExtractors.Keys.ToHashSet().SetEquals(HttpDeclarativeBuilder._frozenExtractors.Keys));
     }
 
     [Fact]
@@ -128,7 +127,7 @@ public class HttpDeclarativeBuilderTests
             { typeof(CustomHttpDeclarativeExtractor), new CustomHttpDeclarativeExtractor() }
         };
 
-        Assert.True(extractors.Keys.ToHashSet().SetEquals(HttpDeclarativeBuilder._extractors.Keys.ToHashSet()));
+        Assert.True(extractors.Keys.ToHashSet().SetEquals(HttpDeclarativeBuilder._extractors.Keys));
 
         Dictionary<Type, IHttpDeclarativeExtractor> freezeExtractors = new()
         {
@@ -140,7 +139,6 @@ public class HttpDeclarativeBuilderTests
             { typeof(HttpRequestBuilderDeclarativeExtractor), new HttpRequestBuilderDeclarativeExtractor() }
         };
 
-        Assert.True(freezeExtractors.Keys.ToHashSet()
-            .SetEquals(HttpDeclarativeBuilder._frozenExtractors.Keys.ToHashSet()));
+        Assert.True(freezeExtractors.Keys.ToHashSet().SetEquals(HttpDeclarativeBuilder._frozenExtractors.Keys));
     }
 }

@@ -120,7 +120,7 @@ public class ProgressFileStreamTests(ITestOutputHelper output)
     [Fact]
     public void SetLength_ReturnOK()
     {
-        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test6.txt");
         using var fileStream = File.OpenWrite(filePath);
         var progressChannel = Channel.CreateUnbounded<FileTransferProgress>();
         using var progressFileStream =

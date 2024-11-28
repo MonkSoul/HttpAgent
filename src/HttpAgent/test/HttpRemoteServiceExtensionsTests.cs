@@ -1878,6 +1878,7 @@ public class HttpRemoteServiceExtensionsTests
 
         app.MapGet("/test", async context =>
         {
+            await Task.Delay(100);
             context.Response.ContentType = "text/event-stream";
             context.Response.Headers.CacheControl = "no-cache";
             context.Response.Headers.Connection = "keep-alive";

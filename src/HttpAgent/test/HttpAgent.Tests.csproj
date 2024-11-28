@@ -14,6 +14,7 @@
         <None Remove="test3.txt"/>
         <None Remove="test4.txt"/>
         <None Remove="test5.txt"/>
+        <None Remove="test6.txt"/>
         <Content Include="test.txt">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
@@ -27,6 +28,9 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="test5.txt">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="test6.txt">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
