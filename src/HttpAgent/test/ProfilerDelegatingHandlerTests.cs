@@ -11,10 +11,11 @@ public class ProfilerDelegatingHandlerTests
     {
         var services = new ServiceCollection();
         services.AddLogging();
+        services.Configure<HttpRemoteOptions>(options => { });
         using var provider = services.BuildServiceProvider();
         var logger = provider.GetRequiredService<ILogger<Logging>>();
 
-        var handler = new ProfilerDelegatingHandler(logger);
+        var handler = new ProfilerDelegatingHandler(logger, provider.GetRequiredService<IOptions<HttpRemoteOptions>>());
         Assert.NotNull(handler);
     }
 
@@ -30,7 +31,7 @@ public class ProfilerDelegatingHandlerTests
         httpRequestMessage.Headers.TryAddWithoutValidation("Accept", "application/json");
         httpRequestMessage.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
 
-        ProfilerDelegatingHandler.LogRequestHeaders(logger, httpRequestMessage);
+        ProfilerDelegatingHandler.LogRequestHeaders(logger, LogLevel.Warning, httpRequestMessage);
     }
 
     [Fact]
@@ -51,12 +52,12 @@ public class ProfilerDelegatingHandlerTests
         httpResponseMessage.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
         httpResponseMessage.Content.Headers.TryAddWithoutValidation("Content-Type", "application/json");
 
-        ProfilerDelegatingHandler.LogResponseHeadersAndSummary(logger, httpResponseMessage, 200);
+        ProfilerDelegatingHandler.LogResponseHeadersAndSummary(logger, LogLevel.Warning, httpResponseMessage, 200);
     }
 
     [Fact]
     public void Log_Invalid_Parameters() =>
-        Assert.Throws<ArgumentNullException>(() => ProfilerDelegatingHandler.Log(null!, null!));
+        Assert.Throws<ArgumentNullException>(() => ProfilerDelegatingHandler.Log(null!, LogLevel.Warning, null!));
 
     [Fact]
     public void Log_ReturnOK()
@@ -66,10 +67,10 @@ public class ProfilerDelegatingHandlerTests
         using var provider = services.BuildServiceProvider();
         var logger = provider.GetRequiredService<ILogger<Logging>>();
 
-        ProfilerDelegatingHandler.Log(logger, null);
-        ProfilerDelegatingHandler.Log(logger, string.Empty);
-        ProfilerDelegatingHandler.Log(logger, " ");
-        ProfilerDelegatingHandler.Log(logger, "HttpAgent.Tests");
+        ProfilerDelegatingHandler.Log(logger, LogLevel.Warning, null);
+        ProfilerDelegatingHandler.Log(logger, LogLevel.Warning, string.Empty);
+        ProfilerDelegatingHandler.Log(logger, LogLevel.Warning, " ");
+        ProfilerDelegatingHandler.Log(logger, LogLevel.Warning, "HttpAgent.Tests");
     }
 
     [Fact]
@@ -108,10 +109,10 @@ public class ProfilerDelegatingHandlerTests
 
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost"));
 
-        ProfilerDelegatingHandler.LogCookieContainer(logger, httpRequestMessage, null);
+        ProfilerDelegatingHandler.LogCookieContainer(logger, LogLevel.Warning, httpRequestMessage, null);
 
         var cookieContainer = new CookieContainer();
         cookieContainer.Add(new Uri("http://localhost"), new Cookie("cookieName", "cookieValue"));
-        ProfilerDelegatingHandler.LogCookieContainer(logger, httpRequestMessage, cookieContainer);
+        ProfilerDelegatingHandler.LogCookieContainer(logger, LogLevel.Warning, httpRequestMessage, cookieContainer);
     }
 }

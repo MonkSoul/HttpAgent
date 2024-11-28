@@ -13,6 +13,7 @@ public class HttpRemoteOptionsTests
         Assert.Equal("text/plain", httpRemoteOptions.DefaultContentType);
         Assert.Null(httpRemoteOptions.DefaultFileDownloadDirectory);
         Assert.Null(httpRemoteOptions.HttpDeclarativeExtractors);
+        Assert.Equal(LogLevel.Warning, httpRemoteOptions.ProfilerLogLevel);
 
         Assert.True(HttpRemoteOptions.JsonSerializerOptionsDefault.PropertyNameCaseInsensitive);
         Assert.Equal(JsonNamingPolicy.CamelCase, HttpRemoteOptions.JsonSerializerOptionsDefault.PropertyNamingPolicy);

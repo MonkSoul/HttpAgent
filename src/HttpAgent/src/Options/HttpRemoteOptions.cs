@@ -31,6 +31,11 @@ public sealed class HttpRemoteOptions
     public string? DefaultFileDownloadDirectory { get; set; }
 
     /// <summary>
+    ///     请求分析工具日志级别
+    /// </summary>
+    public LogLevel ProfilerLogLevel { get; set; } = LogLevel.Warning;
+
+    /// <summary>
     ///     JSON 序列化配置
     /// </summary>
     public JsonSerializerOptions JsonSerializerOptions { get; set; } = JsonSerializerOptionsDefault;

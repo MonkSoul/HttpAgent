@@ -413,7 +413,8 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         // 检查是否启用请求分析工具
         if (httpRequestBuilder.ProfilerEnabled)
         {
-            ProfilerDelegatingHandler.LogRequestHeaders(_logger, httpRequestMessage);
+            ProfilerDelegatingHandler.LogRequestHeaders(_logger, _httpRemoteOptions.ProfilerLogLevel,
+                httpRequestMessage);
         }
 
         // 创建关联的超时 Token 标识
@@ -456,7 +457,8 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
             // 检查是否启用请求分析工具
             if (httpRequestBuilder.ProfilerEnabled)
             {
-                ProfilerDelegatingHandler.LogResponseHeadersAndSummary(_logger, httpResponseMessage, requestDuration);
+                ProfilerDelegatingHandler.LogResponseHeadersAndSummary(_logger, _httpRemoteOptions.ProfilerLogLevel,
+                    httpResponseMessage, requestDuration);
             }
 
             // 检查 HTTP 响应内容长度是否在设定的最大缓冲区大小限制内
