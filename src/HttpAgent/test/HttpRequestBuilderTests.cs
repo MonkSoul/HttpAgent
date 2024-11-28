@@ -469,7 +469,7 @@ public class HttpRequestBuilderTests
         Assert.NotNull(httpRequestMessage.Content);
         Assert.Equal(typeof(StringContent), httpRequestMessage.Content.GetType());
         Assert.Equal("text/plain", httpRequestMessage.Content.Headers.ContentType!.MediaType);
-        Assert.Equal("utf-8", httpRequestMessage.Content.Headers.ContentType!.CharSet);
+        Assert.Null(httpRequestMessage.Content.Headers.ContentType!.CharSet);
         Assert.Single(httpRequestMessage.Options);
         Assert.True(httpRequestMessage.Options.TryGetValue(
             new HttpRequestOptionsKey<string>(Constants.DISABLED_PROFILER_KEY), out var value));
@@ -501,6 +501,6 @@ public class HttpRequestBuilderTests
         Assert.NotNull(httpRequestMessage.Content);
         Assert.Equal(typeof(StringContent), httpRequestMessage.Content.GetType());
         Assert.Equal("text/plain", httpRequestMessage.Content.Headers.ContentType!.MediaType);
-        Assert.Equal("utf-8", httpRequestMessage.Content.Headers.ContentType!.CharSet);
+        Assert.Null(httpRequestMessage.Content.Headers.ContentType!.CharSet);
     }
 }

@@ -11,13 +11,6 @@ public class ConstantsTests
         Assert.Equal("X-Trace-ID", Constants.X_TRACE_ID_HEADER);
 
     [Fact]
-    public void UTF8_ENCODING()
-    {
-        Assert.Equal("utf-8", Constants.UTF8_ENCODING);
-        Assert.Equal(Encoding.UTF8, Encoding.GetEncoding(Constants.UTF8_ENCODING));
-    }
-
-    [Fact]
     public void UNKNOWN_USER_AGENT_VERSION() => Assert.Equal("unknown", Constants.UNKNOWN_USER_AGENT_VERSION);
 
     [Fact]

@@ -41,7 +41,7 @@ public abstract class HttpContentProcessorBase : IHttpContentProcessor
             case HttpContent content:
                 // 设置 Content-Type
                 content.Headers.ContentType ??=
-                    new MediaTypeHeaderValue(contentType) { CharSet = encoding?.BodyName ?? Constants.UTF8_ENCODING };
+                    new MediaTypeHeaderValue(contentType) { CharSet = encoding?.BodyName };
 
                 httpContent = content;
                 return true;

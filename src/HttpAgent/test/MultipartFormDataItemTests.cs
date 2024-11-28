@@ -21,7 +21,7 @@ public class MultipartFormDataItemTests
 
         Assert.Equal("name", multipartFormDataItem.Name);
         Assert.Null(multipartFormDataItem.ContentType);
-        Assert.Equal(Encoding.UTF8, multipartFormDataItem.ContentEncoding);
+        Assert.Null(multipartFormDataItem.ContentEncoding);
         Assert.Null(multipartFormDataItem.RawContent);
         Assert.Null(multipartFormDataItem.FileName);
         Assert.Null(multipartFormDataItem.FileSize);

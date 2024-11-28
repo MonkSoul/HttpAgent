@@ -56,7 +56,7 @@ public class StringContentProcessorTests
         Assert.Equal(typeof(StringContent), httpContent2.GetType());
         Assert.Equal("furion", await httpContent2.ReadAsStringAsync());
         Assert.Equal("text/plain", httpContent2.Headers.ContentType?.MediaType);
-        Assert.Equal("utf-8", httpContent2.Headers.ContentType?.CharSet);
+        Assert.Null(httpContent2.Headers.ContentType?.CharSet);
 
         var httpContent3 = processor.Process(new { id = 10, name = "furion" }, "application/json", Encoding.UTF32);
         Assert.NotNull(httpContent3);
@@ -70,14 +70,14 @@ public class StringContentProcessorTests
         Assert.Equal(typeof(StringContent), httpContent4.GetType());
         Assert.Equal("10", await httpContent4.ReadAsStringAsync());
         Assert.Equal("text/plain", httpContent4.Headers.ContentType?.MediaType);
-        Assert.Equal("utf-8", httpContent4.Headers.ContentType?.CharSet);
+        Assert.Null(httpContent4.Headers.ContentType?.CharSet);
 
         var httpContent5 = processor.Process(EnumModel.Default, "text/plain", null);
         Assert.NotNull(httpContent5);
         Assert.Equal(typeof(StringContent), httpContent5.GetType());
         Assert.Equal("1", await httpContent5.ReadAsStringAsync());
         Assert.Equal("text/plain", httpContent5.Headers.ContentType?.MediaType);
-        Assert.Equal("utf-8", httpContent5.Headers.ContentType?.CharSet);
+        Assert.Null(httpContent5.Headers.ContentType?.CharSet);
 
         using var jsonDocument = JsonDocument.Parse("\"furion\"");
         var httpContent6 = processor.Process(jsonDocument.RootElement, "application/json",
@@ -104,7 +104,7 @@ public class StringContentProcessorTests
         Assert.Equal(typeof(StringContent), httpContent8.GetType());
         Assert.Equal("{\"id\":1,\"name\":\"Furion\"}", await httpContent8.ReadAsStringAsync());
         Assert.Equal("application/json", httpContent8.Headers.ContentType?.MediaType);
-        Assert.Equal("utf-8", httpContent8.Headers.ContentType?.CharSet);
+        Assert.Null(httpContent8.Headers.ContentType?.CharSet);
     }
 }
 

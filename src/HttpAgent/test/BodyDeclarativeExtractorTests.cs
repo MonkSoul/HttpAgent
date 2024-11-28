@@ -42,7 +42,7 @@ public class BodyDeclarativeExtractorTests
         new BodyDeclarativeExtractor().Extract(httpRequestBuilder1, context1);
         Assert.Null(httpRequestBuilder1.RawContent);
         Assert.Null(httpRequestBuilder1.ContentType);
-        Assert.Equal("utf-8", httpRequestBuilder1.ContentEncoding?.BodyName);
+        Assert.Null(httpRequestBuilder1.ContentEncoding?.BodyName);
 
         var method2 = typeof(IBodyDeclarativeTest).GetMethod(nameof(IBodyDeclarativeTest.Test2))!;
         var context2 = new HttpDeclarativeExtractorContext(method2, ["str"]);
@@ -50,7 +50,7 @@ public class BodyDeclarativeExtractorTests
         new BodyDeclarativeExtractor().Extract(httpRequestBuilder2, context2);
         Assert.Equal("str", httpRequestBuilder2.RawContent);
         Assert.Null(httpRequestBuilder2.ContentType);
-        Assert.Equal("utf-8", httpRequestBuilder2.ContentEncoding?.BodyName);
+        Assert.Null(httpRequestBuilder2.ContentEncoding?.BodyName);
 
         var method4 = typeof(IBodyDeclarativeTest).GetMethod(nameof(IBodyDeclarativeTest.Test4))!;
         var context4 = new HttpDeclarativeExtractorContext(method4, ["str", CancellationToken.None]);
@@ -58,7 +58,7 @@ public class BodyDeclarativeExtractorTests
         new BodyDeclarativeExtractor().Extract(httpRequestBuilder4, context4);
         Assert.Equal("str", httpRequestBuilder4.RawContent);
         Assert.Equal("text/plain", httpRequestBuilder4.ContentType);
-        Assert.Equal("utf-8", httpRequestBuilder4.ContentEncoding?.BodyName);
+        Assert.Null(httpRequestBuilder4.ContentEncoding?.BodyName);
 
         var method5 = typeof(IBodyDeclarativeTest).GetMethod(nameof(IBodyDeclarativeTest.Test5))!;
         var context5 = new HttpDeclarativeExtractorContext(method5, ["str"]);

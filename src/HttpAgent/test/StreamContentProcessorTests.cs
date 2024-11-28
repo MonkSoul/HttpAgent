@@ -54,7 +54,7 @@ public class StreamContentProcessorTests
         Assert.NotNull(streamContent2);
         Assert.NotNull(streamContent2.ReadAsStream());
         Assert.Equal("application/octet-stream", streamContent2.Headers.ContentType?.MediaType);
-        Assert.Equal("utf-8", streamContent2.Headers.ContentType?.CharSet);
+        Assert.Null(streamContent2.Headers.ContentType?.CharSet);
 
         var streamContent3 = processor.Process(stream, "application/octet-stream", Encoding.UTF32);
         Assert.NotNull(streamContent3);
@@ -67,6 +67,6 @@ public class StreamContentProcessorTests
         Assert.NotNull(streamContent4);
         Assert.NotNull(streamContent4.ReadAsStream());
         Assert.Equal("application/octet-stream", streamContent4.Headers.ContentType?.MediaType);
-        Assert.Equal("utf-8", streamContent4.Headers.ContentType?.CharSet);
+        Assert.Null(streamContent4.Headers.ContentType?.CharSet);
     }
 }

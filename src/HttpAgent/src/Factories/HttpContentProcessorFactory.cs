@@ -49,7 +49,7 @@ internal sealed class HttpContentProcessorFactory : IHttpContentProcessorFactory
         var httpContentProcessor = GetProcessor(rawContent, contentType, processors);
 
         // 将原始请求内容转换为 HttpContent 实例
-        return httpContentProcessor.Process(rawContent, contentType, encoding ?? Encoding.UTF8);
+        return httpContentProcessor.Process(rawContent, contentType, encoding);
     }
 
     /// <summary>

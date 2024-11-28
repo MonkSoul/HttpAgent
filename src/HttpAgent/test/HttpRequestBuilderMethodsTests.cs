@@ -72,7 +72,7 @@ public class HttpRequestBuilderMethodsTests
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
         httpRequestBuilder.SetContentType("text/plain");
         Assert.Equal("text/plain", httpRequestBuilder.ContentType);
-        Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
+        Assert.Null(httpRequestBuilder.ContentEncoding);
 
         httpRequestBuilder.SetContentType("text/html;charset=utf-8");
         Assert.Equal("text/html", httpRequestBuilder.ContentType);
@@ -154,17 +154,17 @@ public class HttpRequestBuilderMethodsTests
         httpRequestBuilder.SetJsonContent(null);
         Assert.Null(httpRequestBuilder.RawContent);
         Assert.Equal("application/json", httpRequestBuilder.ContentType);
-        Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
+        Assert.Null(httpRequestBuilder.ContentEncoding);
 
         httpRequestBuilder.SetJsonContent(new { id = 1, name = "furion" });
         Assert.NotNull(httpRequestBuilder.RawContent);
         Assert.Equal("application/json", httpRequestBuilder.ContentType);
-        Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
+        Assert.Null(httpRequestBuilder.ContentEncoding);
 
         httpRequestBuilder.SetJsonContent("{\"id\":1,\"name\":\"furion\"}");
         Assert.NotNull(httpRequestBuilder.RawContent);
         Assert.Equal("application/json", httpRequestBuilder.ContentType);
-        Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
+        Assert.Null(httpRequestBuilder.ContentEncoding);
         Assert.True(httpRequestBuilder.RawContent is JsonDocument);
         Assert.NotNull(httpRequestBuilder.Disposables);
         Assert.Single(httpRequestBuilder.Disposables);
@@ -179,12 +179,12 @@ public class HttpRequestBuilderMethodsTests
         httpRequestBuilder.SetHtmlContent(null);
         Assert.Null(httpRequestBuilder.RawContent);
         Assert.Equal("text/html", httpRequestBuilder.ContentType);
-        Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
+        Assert.Null(httpRequestBuilder.ContentEncoding);
 
         httpRequestBuilder.SetHtmlContent("<html><head></head><body></body></html>");
         Assert.Equal("<html><head></head><body></body></html>", httpRequestBuilder.RawContent);
         Assert.Equal("text/html", httpRequestBuilder.ContentType);
-        Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
+        Assert.Null(httpRequestBuilder.ContentEncoding);
     }
 
     [Fact]
@@ -195,12 +195,12 @@ public class HttpRequestBuilderMethodsTests
         httpRequestBuilder.SetXmlContent(null);
         Assert.Null(httpRequestBuilder.RawContent);
         Assert.Equal("application/xml", httpRequestBuilder.ContentType);
-        Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
+        Assert.Null(httpRequestBuilder.ContentEncoding);
 
         httpRequestBuilder.SetXmlContent("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         Assert.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", httpRequestBuilder.RawContent);
         Assert.Equal("application/xml", httpRequestBuilder.ContentType);
-        Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
+        Assert.Null(httpRequestBuilder.ContentEncoding);
     }
 
     [Fact]
@@ -211,12 +211,12 @@ public class HttpRequestBuilderMethodsTests
         httpRequestBuilder.SetTextContent(null);
         Assert.Null(httpRequestBuilder.RawContent);
         Assert.Equal("text/plain", httpRequestBuilder.ContentType);
-        Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
+        Assert.Null(httpRequestBuilder.ContentEncoding);
 
         httpRequestBuilder.SetTextContent("furion");
         Assert.Equal("furion", httpRequestBuilder.RawContent);
         Assert.Equal("text/plain", httpRequestBuilder.ContentType);
-        Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
+        Assert.Null(httpRequestBuilder.ContentEncoding);
     }
 
     [Fact]
@@ -239,12 +239,12 @@ public class HttpRequestBuilderMethodsTests
         httpRequestBuilder.SetRawStringContent(string.Empty, "application/json");
         Assert.Equal("\"\"", httpRequestBuilder.RawContent);
         Assert.Equal("application/json", httpRequestBuilder.ContentType);
-        Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
+        Assert.Null(httpRequestBuilder.ContentEncoding);
 
         httpRequestBuilder.SetRawStringContent("furion", "text/plain");
         Assert.Equal("\"furion\"", httpRequestBuilder.RawContent);
         Assert.Equal("text/plain", httpRequestBuilder.ContentType);
-        Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
+        Assert.Null(httpRequestBuilder.ContentEncoding);
     }
 
     [Fact]
@@ -255,12 +255,12 @@ public class HttpRequestBuilderMethodsTests
         httpRequestBuilder.SetFormUrlEncodedContent(null);
         Assert.Null(httpRequestBuilder.RawContent);
         Assert.Equal("application/x-www-form-urlencoded", httpRequestBuilder.ContentType);
-        Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
+        Assert.Null(httpRequestBuilder.ContentEncoding);
 
         httpRequestBuilder.SetFormUrlEncodedContent(new { id = 1, name = "furion" });
         Assert.NotNull(httpRequestBuilder.RawContent);
         Assert.Equal("application/x-www-form-urlencoded", httpRequestBuilder.ContentType);
-        Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
+        Assert.Null(httpRequestBuilder.ContentEncoding);
         Assert.Null(httpRequestBuilder.HttpContentProcessorProviders);
 
         var httpRequestBuilder2 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
@@ -297,12 +297,12 @@ public class HttpRequestBuilderMethodsTests
         httpRequestBuilder.SetContent(null);
         Assert.Null(httpRequestBuilder.RawContent);
         Assert.Null(httpRequestBuilder.ContentType);
-        Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
+        Assert.Null(httpRequestBuilder.ContentEncoding);
 
         httpRequestBuilder.SetContent("furion", "text/plain");
         Assert.Equal("furion", httpRequestBuilder.RawContent);
         Assert.Equal("text/plain", httpRequestBuilder.ContentType);
-        Assert.Equal(Encoding.UTF8, httpRequestBuilder.ContentEncoding);
+        Assert.Null(httpRequestBuilder.ContentEncoding);
 
         httpRequestBuilder.SetContent("furion", "text/plain", Encoding.UTF32);
         Assert.Equal("furion", httpRequestBuilder.RawContent);

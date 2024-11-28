@@ -32,7 +32,7 @@ public class FormUrlEncodedContentProcessor : HttpContentProcessorBase
         // 初始化 FormUrlEncodedContent 实例
         var formUrlEncodedContent = new FormUrlEncodedContent(nameValueCollection);
         formUrlEncodedContent.Headers.ContentType =
-            new MediaTypeHeaderValue(contentType) { CharSet = encoding?.BodyName ?? Constants.UTF8_ENCODING };
+            new MediaTypeHeaderValue(contentType) { CharSet = encoding?.BodyName };
 
         return formUrlEncodedContent;
     }

@@ -34,8 +34,7 @@ internal sealed class MultipartFormDataItem
     /// <summary>
     ///     内容编码
     /// </summary>
-    /// <remarks>默认值为 <c>utf-8</c> 编码。</remarks>
-    internal Encoding? ContentEncoding { get; init; } = Encoding.UTF8;
+    internal Encoding? ContentEncoding { get; init; }
 
     /// <summary>
     ///     原始请求内容

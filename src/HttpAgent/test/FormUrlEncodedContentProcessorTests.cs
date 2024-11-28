@@ -56,7 +56,7 @@ public class FormUrlEncodedContentProcessorTests
         Assert.NotNull(httpContent2);
         Assert.Equal(typeof(FormUrlEncodedContent), httpContent2.GetType());
         Assert.Equal("application/x-www-form-urlencoded", httpContent2.Headers.ContentType?.MediaType);
-        Assert.Equal("utf-8", httpContent2.Headers.ContentType?.CharSet);
+        Assert.Null(httpContent2.Headers.ContentType?.CharSet);
 
         var httpContent3 = processor.Process(new { }, "application/x-www-form-urlencoded", Encoding.UTF32);
         Assert.NotNull(httpContent3);

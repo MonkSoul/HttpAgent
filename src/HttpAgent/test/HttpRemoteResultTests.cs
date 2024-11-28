@@ -50,7 +50,7 @@ public class HttpRemoteResultTests
         var httpResponseMessage = new HttpResponseMessage();
         httpResponseMessage.Headers.TryAddWithoutValidation("test", "furion");
         var stringContent = new StringContent("furion", Encoding.UTF8,
-            new MediaTypeHeaderValue("application/json") { CharSet = Constants.UTF8_ENCODING });
+            new MediaTypeHeaderValue("application/json") { CharSet = "utf-8" });
         httpResponseMessage.Content = stringContent;
 
         var httpRemoteResult = new HttpRemoteResult<string>(httpResponseMessage);
@@ -67,7 +67,7 @@ public class HttpRemoteResultTests
     {
         var httpResponseMessage = new HttpResponseMessage();
         var stringContent = new StringContent("furion", Encoding.UTF8,
-            new MediaTypeHeaderValue("application/json") { CharSet = Constants.UTF8_ENCODING });
+            new MediaTypeHeaderValue("application/json") { CharSet = "utf-8" });
         httpResponseMessage.Content = stringContent;
 
         var httpRemoteResult = new HttpRemoteResult<string>(httpResponseMessage);

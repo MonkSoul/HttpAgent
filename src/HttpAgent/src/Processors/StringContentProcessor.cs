@@ -40,7 +40,7 @@ public class StringContentProcessor : HttpContentProcessorBase
 
         // 初始化 StringContent 实例
         var stringContent = new StringContent(content!, encoding,
-            new MediaTypeHeaderValue(contentType) { CharSet = encoding?.BodyName ?? Constants.UTF8_ENCODING });
+            new MediaTypeHeaderValue(contentType) { CharSet = encoding?.BodyName });
 
         return stringContent;
     }

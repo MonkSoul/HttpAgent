@@ -59,7 +59,7 @@ public class ByteArrayContentProcessorTests
         Assert.NotNull(byteArrayContent2);
         Assert.NotNull(byteArrayContent2.ReadAsStream());
         Assert.Equal("application/octet-stream", byteArrayContent2.Headers.ContentType?.MediaType);
-        Assert.Equal("utf-8", byteArrayContent2.Headers.ContentType?.CharSet);
+        Assert.Null(byteArrayContent2.Headers.ContentType?.CharSet);
 
         var byteArrayContent3 =
             processor.Process(Array.Empty<byte>(), "application/octet-stream", Encoding.UTF32);
@@ -74,6 +74,6 @@ public class ByteArrayContentProcessorTests
         Assert.NotNull(byteArrayContent4);
         Assert.NotNull(byteArrayContent4.ReadAsStream());
         Assert.Equal("application/octet-stream", byteArrayContent4.Headers.ContentType?.MediaType);
-        Assert.Equal("utf-8", byteArrayContent4.Headers.ContentType?.CharSet);
+        Assert.Null(byteArrayContent4.Headers.ContentType?.CharSet);
     }
 }

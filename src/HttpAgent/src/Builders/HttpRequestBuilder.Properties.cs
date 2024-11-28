@@ -36,8 +36,7 @@ public sealed partial class HttpRequestBuilder
     /// <summary>
     ///     内容编码
     /// </summary>
-    /// <remarks>默认值为 <c>utf-8</c> 编码。</remarks>
-    public Encoding? ContentEncoding { get; private set; } = Encoding.UTF8;
+    public Encoding? ContentEncoding { get; private set; }
 
     /// <summary>
     ///     原始请求内容

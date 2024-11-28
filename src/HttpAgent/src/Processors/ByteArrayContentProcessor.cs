@@ -29,7 +29,7 @@ public class ByteArrayContentProcessor : HttpContentProcessorBase
             var byteArrayContent = new ByteArrayContent(bytes);
             byteArrayContent.Headers.ContentType = new MediaTypeHeaderValue(contentType)
             {
-                CharSet = encoding?.BodyName ?? Constants.UTF8_ENCODING
+                CharSet = encoding?.BodyName
             };
 
             return byteArrayContent;

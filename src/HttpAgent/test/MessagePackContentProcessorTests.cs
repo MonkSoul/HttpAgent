@@ -55,7 +55,7 @@ public class MessagePackContentProcessorTests
         Assert.NotNull(messagePackContent2);
         Assert.NotNull(messagePackContent2.ReadAsStream());
         Assert.Equal("application/msgpack", messagePackContent2.Headers.ContentType?.MediaType);
-        Assert.Equal("utf-8", messagePackContent2.Headers.ContentType?.CharSet);
+        Assert.Null(messagePackContent2.Headers.ContentType?.CharSet);
 
         var messagePackContent3 =
             processor.Process(Array.Empty<byte>(), "application/msgpack", Encoding.UTF32);
@@ -70,7 +70,7 @@ public class MessagePackContentProcessorTests
         Assert.NotNull(messagePackContent4);
         Assert.NotNull(messagePackContent4.ReadAsStream());
         Assert.Equal("application/msgpack", messagePackContent4.Headers.ContentType?.MediaType);
-        Assert.Equal("utf-8", messagePackContent4.Headers.ContentType?.CharSet);
+        Assert.Null(messagePackContent4.Headers.ContentType?.CharSet);
     }
 
     [Fact]

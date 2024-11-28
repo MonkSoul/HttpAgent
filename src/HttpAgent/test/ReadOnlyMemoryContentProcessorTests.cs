@@ -57,7 +57,7 @@ public class ReadOnlyMemoryContentProcessorTests
         Assert.NotNull(readOnlyMemoryContent2);
         Assert.NotNull(readOnlyMemoryContent2.ReadAsStream());
         Assert.Equal("application/octet-stream", readOnlyMemoryContent2.Headers.ContentType?.MediaType);
-        Assert.Equal("utf-8", readOnlyMemoryContent2.Headers.ContentType?.CharSet);
+        Assert.Null(readOnlyMemoryContent2.Headers.ContentType?.CharSet);
 
         var readOnlyMemoryContent3 =
             processor.Process(new ReadOnlyMemory<byte>([]), "application/octet-stream",
