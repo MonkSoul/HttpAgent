@@ -16,78 +16,6 @@ public class HttpRemoteBuilderTests
         Assert.Null(builder._httpDeclarativeExtractors);
         Assert.Null(builder._objectContentConverterFactoryType);
         Assert.Null(builder._httpDeclarativeTypes);
-        Assert.Null(builder.DefaultContentType);
-        Assert.Null(builder.DefaultFileDownloadDirectory);
-    }
-
-    [Fact]
-    public void SetDefaultContentType_Invalid_Parameters()
-    {
-        var builder = new HttpRemoteBuilder();
-
-        Assert.Throws<ArgumentNullException>(() =>
-        {
-            builder.SetDefaultContentType(null!);
-        });
-
-        Assert.Throws<ArgumentException>(() =>
-        {
-            builder.SetDefaultContentType(string.Empty);
-        });
-
-        Assert.Throws<ArgumentException>(() =>
-        {
-            builder.SetDefaultContentType(" ");
-        });
-
-        Assert.Throws<FormatException>(() =>
-        {
-            builder.SetDefaultContentType("unknown");
-        });
-    }
-
-    [Fact]
-    public void SetDefaultContentType_ReturnOK()
-    {
-        var builder = new HttpRemoteBuilder();
-        builder.SetDefaultContentType("text/plain");
-        Assert.Equal("text/plain", builder.DefaultContentType);
-
-        builder.SetDefaultContentType("text/html;charset=utf-8");
-        Assert.Equal("text/html", builder.DefaultContentType);
-
-        builder.SetDefaultContentType("text/html; charset=unicode");
-        Assert.Equal("text/html", builder.DefaultContentType);
-    }
-
-    [Fact]
-    public void SetDefaultFileDownloadDirectory_Invalid_Parameters()
-    {
-        var builder = new HttpRemoteBuilder();
-
-        Assert.Throws<ArgumentNullException>(() =>
-        {
-            builder.SetDefaultFileDownloadDirectory(null!);
-        });
-
-        Assert.Throws<ArgumentException>(() =>
-        {
-            builder.SetDefaultFileDownloadDirectory(string.Empty);
-        });
-
-        Assert.Throws<ArgumentException>(() =>
-        {
-            builder.SetDefaultFileDownloadDirectory(" ");
-        });
-    }
-
-    [Fact]
-    public void SetDefaultFileDownloadDirectory_ReturnOK()
-    {
-        var builder = new HttpRemoteBuilder();
-        builder.SetDefaultFileDownloadDirectory(@"C:\Workspaces");
-
-        Assert.Equal(@"C:\Workspaces", builder.DefaultFileDownloadDirectory);
     }
 
     [Fact]
@@ -311,32 +239,6 @@ public class HttpRemoteBuilderTests
     }
 
     [Fact]
-    public void EnsureLegalData_Invalid_Parameters()
-    {
-        var exception = Assert.Throws<ArgumentException>(() => HttpRemoteBuilder.EnsureLegalData("unknown"));
-        Assert.Equal("The provided default content type is not valid. (Parameter 'defaultContentType')",
-            exception.Message);
-    }
-
-    [Fact]
-    public void EnsureLegalData_ReturnOK()
-    {
-        HttpRemoteBuilder.EnsureLegalData(null);
-        HttpRemoteBuilder.EnsureLegalData("text/html");
-        HttpRemoteBuilder.EnsureLegalData("text/html; charset=unicode");
-    }
-
-    [Fact]
-    public void Build_Invalid_Parameters()
-    {
-        var builder = new HttpRemoteBuilder { DefaultContentType = "unknown" };
-
-        var exception = Assert.Throws<ArgumentException>(() => builder.Build(new ServiceCollection()));
-        Assert.Equal("The provided default content type is not valid. (Parameter 'defaultContentType')",
-            exception.Message);
-    }
-
-    [Fact]
     public void Build_Default_ReturnOK()
     {
         var services = new ServiceCollection();
@@ -349,7 +251,7 @@ public class HttpRemoteBuilderTests
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpRemoteService));
         Assert.True(services.First(u => u.ServiceType == typeof(IObjectContentConverterFactory)).ImplementationType ==
                     typeof(ObjectContentConverterFactory));
-        Assert.Equal(29, services.Count);
+        Assert.Equal(30, services.Count);
     }
 
     [Fact]
@@ -366,7 +268,7 @@ public class HttpRemoteBuilderTests
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpContentProcessorFactory));
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpContentConverterFactory));
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpRemoteService));
-        Assert.Equal(29, services.Count);
+        Assert.Equal(32, services.Count);
     }
 
     [Fact]
@@ -383,7 +285,7 @@ public class HttpRemoteBuilderTests
         Assert.Contains(services, u => u.ServiceType == typeof(IObjectContentConverterFactory));
         Assert.True(services.First(u => u.ServiceType == typeof(IObjectContentConverterFactory)).ImplementationType ==
                     typeof(CustomObjectContentConverterFactory));
-        Assert.Equal(29, services.Count);
+        Assert.Equal(30, services.Count);
     }
 
     [Fact]
@@ -400,7 +302,7 @@ public class HttpRemoteBuilderTests
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpContentConverterFactory));
         Assert.Contains(services, u => u.ServiceType == typeof(IHttpRemoteService));
         Assert.Contains(services, u => u.ServiceType == typeof(IObjectContentConverterFactory));
-        Assert.Equal(29, services.Count);
+        Assert.Equal(32, services.Count);
     }
 
     [Fact]
@@ -420,8 +322,14 @@ public class HttpRemoteBuilderTests
     public void Build_Resolve_ReturnOK()
     {
         var services = new ServiceCollection();
-        var builder = new HttpRemoteBuilder().SetDefaultContentType("application/json")
-            .SetDefaultFileDownloadDirectory(@"C:\Workspaces")
+
+        services.Configure<HttpRemoteOptions>(options =>
+        {
+            options.DefaultContentType = "application/json";
+            options.DefaultFileDownloadDirectory = @"C:\Workspaces";
+        });
+
+        var builder = new HttpRemoteBuilder()
             .AddHttpContentProcessors(() => [new CustomStringContentProcessor()])
             .AddHttpContentConverters(() => [new CustomStringContentConverter()])
             .AddHttpDeclarativeExtractors(() => [new BodyDeclarativeExtractor()])
@@ -430,9 +338,10 @@ public class HttpRemoteBuilderTests
         builder.Build(services);
 
         using var serviceProvider = services.BuildServiceProvider();
-        var httpRemoteService = serviceProvider.GetRequiredService<IHttpRemoteService>();
-        Assert.Equal("application/json", httpRemoteService.RemoteOptions.DefaultContentType);
-        Assert.Equal(@"C:\Workspaces", httpRemoteService.RemoteOptions.DefaultFileDownloadDirectory);
+        var remoteOptions = serviceProvider.GetRequiredService<IOptions<HttpRemoteOptions>>().Value;
+
+        Assert.Equal("application/json", remoteOptions.DefaultContentType);
+        Assert.Equal(@"C:\Workspaces", remoteOptions.DefaultFileDownloadDirectory);
 
         var httpContentProcessorFactory =
             (HttpContentProcessorFactory)serviceProvider.GetRequiredService(typeof(IHttpContentProcessorFactory));
@@ -464,7 +373,7 @@ public class HttpRemoteBuilderTests
         dynamic httpTestProxy = httpTest;
         Assert.NotNull(httpTestProxy.RemoteService);
 
-        Assert.NotNull(httpRemoteService.RemoteOptions.HttpDeclarativeExtractors);
-        Assert.Single(httpRemoteService.RemoteOptions.HttpDeclarativeExtractors);
+        Assert.NotNull(remoteOptions.HttpDeclarativeExtractors);
+        Assert.Single(remoteOptions.HttpDeclarativeExtractors);
     }
 }

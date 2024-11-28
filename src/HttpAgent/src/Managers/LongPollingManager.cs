@@ -49,7 +49,8 @@ internal sealed class LongPollingManager
             : null) as IHttpLongPollingEventHandler;
 
         // 构建 HttpRequestBuilder 实例
-        RequestBuilder = httpLongPollingBuilder.Build(_httpRemoteService.RemoteOptions, configure);
+        RequestBuilder = httpLongPollingBuilder.Build(httpRemoteService.ServiceProvider
+            .GetRequiredService<IOptions<HttpRemoteOptions>>().Value, configure);
     }
 
     /// <summary>

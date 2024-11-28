@@ -284,12 +284,15 @@ public class HttpRequestBuilderTests
     [Fact]
     public void BuildAndSetContent_ReturnOK()
     {
+        var services = new ServiceCollection();
+        services.AddOptions<HttpRemoteOptions>();
+        using var serviceProvider = services.BuildServiceProvider();
         var httpRemoteOptions = new HttpRemoteOptions();
 
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
         var finalRequestUri = httpRequestBuilder.BuildFinalRequestUri(null);
         var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.Method!, finalRequestUri);
-        var httpContentProcessorFactory = new HttpContentProcessorFactory([]);
+        var httpContentProcessorFactory = new HttpContentProcessorFactory(serviceProvider, []);
 
         httpRequestBuilder.BuildAndSetContent(httpRequestMessage, httpContentProcessorFactory,
             httpRemoteOptions);
@@ -379,7 +382,7 @@ public class HttpRequestBuilderTests
         Assert.Equal(MediaTypeNames.Text.Plain, httpRequestBuilder5.ContentType);
 
         var httpRequestBuilder6 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        httpRequestBuilder6.SetContent(new ByteArrayContent(Array.Empty<byte>()));
+        httpRequestBuilder6.SetContent(new ByteArrayContent([]));
         httpRequestBuilder6.SetDefaultContentType(MediaTypeNames.Text.Plain);
         Assert.Equal(MediaTypeNames.Application.Octet, httpRequestBuilder6.ContentType);
 
@@ -443,6 +446,9 @@ public class HttpRequestBuilderTests
     [Fact]
     public void Build_ReturnOK()
     {
+        var services = new ServiceCollection();
+        services.AddOptions<HttpRemoteOptions>();
+        using var serviceProvider = services.BuildServiceProvider();
         var httpRemoteOptions = new HttpRemoteOptions();
 
         var httpRequestMessage = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost/{id}/{name}"))
@@ -453,7 +459,7 @@ public class HttpRequestBuilderTests
             .WithHeaders(new { id = 10, name = "furion" })
             .RemoveHeaders("name")
             .Profiler(false)
-            .Build(httpRemoteOptions, new HttpContentProcessorFactory([]), null);
+            .Build(httpRemoteOptions, new HttpContentProcessorFactory(serviceProvider, []), null);
 
         Assert.NotNull(httpRequestMessage);
         Assert.NotNull(httpRequestMessage.RequestUri);
@@ -473,6 +479,9 @@ public class HttpRequestBuilderTests
     [Fact]
     public void Build_WithBaseUri_ReturnOK()
     {
+        var services = new ServiceCollection();
+        services.AddOptions<HttpRemoteOptions>();
+        using var serviceProvider = services.BuildServiceProvider();
         var httpRemoteOptions = new HttpRemoteOptions();
 
         var httpRequestMessage =
@@ -481,7 +490,8 @@ public class HttpRequestBuilderTests
                 .WithQueryParameters(new { id = 10, name = "furion" })
                 .WithPathParameters(new { id = 10, name = "furion" })
                 .WithCookies(new { id = 10, name = "furion" })
-                .Build(httpRemoteOptions, new HttpContentProcessorFactory([]), new Uri("http://localhost"));
+                .Build(httpRemoteOptions, new HttpContentProcessorFactory(serviceProvider, []),
+                    new Uri("http://localhost"));
 
         Assert.NotNull(httpRequestMessage);
         Assert.NotNull(httpRequestMessage.RequestUri);

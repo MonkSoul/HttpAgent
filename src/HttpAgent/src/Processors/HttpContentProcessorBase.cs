@@ -10,6 +10,9 @@ namespace HttpAgent;
 public abstract class HttpContentProcessorBase : IHttpContentProcessor
 {
     /// <inheritdoc />
+    public IServiceProvider? ServiceProvider { get; set; }
+
+    /// <inheritdoc />
     public abstract bool CanProcess(object? rawContent, string contentType);
 
     /// <inheritdoc />

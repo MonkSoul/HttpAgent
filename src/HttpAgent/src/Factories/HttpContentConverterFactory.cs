@@ -12,9 +12,6 @@ internal sealed class HttpContentConverterFactory : IHttpContentConverterFactory
     /// </summary>
     internal readonly Dictionary<Type, IHttpContentConverter> _converters;
 
-    /// <inheritdoc cref="IServiceProvider" />
-    internal readonly IServiceProvider _serviceProvider;
-
     /// <summary>
     ///     <inheritdoc cref="HttpContentConverterFactory" />
     /// </summary>
@@ -24,7 +21,7 @@ internal sealed class HttpContentConverterFactory : IHttpContentConverterFactory
     /// <param name="converters"><see cref="IHttpContentConverter{TResult}" /> 数组</param>
     public HttpContentConverterFactory(IServiceProvider serviceProvider, IHttpContentConverter[]? converters)
     {
-        _serviceProvider = serviceProvider;
+        ServiceProvider = serviceProvider;
 
         // 初始化响应内容转换器
         _converters = new Dictionary<Type, IHttpContentConverter>
@@ -39,6 +36,9 @@ internal sealed class HttpContentConverterFactory : IHttpContentConverterFactory
         // 添加自定义 IHttpContentConverter 数组
         _converters.TryAdd(converters, value => value.GetType());
     }
+
+    /// <inheritdoc />
+    public IServiceProvider ServiceProvider { get; }
 
     /// <inheritdoc />
     public TResult? Read<TResult>(HttpResponseMessage httpResponseMessage, IHttpContentConverter[]? converters = null,
@@ -74,17 +74,22 @@ internal sealed class HttpContentConverterFactory : IHttpContentConverterFactory
     internal IHttpContentConverter<TResult> GetConverter<TResult>(params IHttpContentConverter[]? converters)
     {
         // 初始化新的 IHttpContentConverter 字典集合
-        var unionProcessors = new Dictionary<Type, IHttpContentConverter>(_converters);
+        var unionConverters = new Dictionary<Type, IHttpContentConverter>(_converters);
 
         // 添加自定义 IHttpContentConverter 数组
-        unionProcessors.TryAdd(converters, value => value.GetType());
+        unionConverters.TryAdd(converters, value => value.GetType());
 
         // 查找可以处理目标类型的响应内容转换器
-        var typeConverter = unionProcessors.Values.OfType<IHttpContentConverter<TResult>>().LastOrDefault();
+        var typeConverter = unionConverters.Values.OfType<IHttpContentConverter<TResult>>().LastOrDefault();
 
         // 如果未找到，则调用 IObjectContentConverterFactory 实例的 GetConverter<TResult> 返回
-        return typeConverter ??
-               _serviceProvider.GetRequiredService<IObjectContentConverterFactory>().GetConverter<TResult>();
+        var converter = typeConverter ?? ServiceProvider.GetRequiredService<IObjectContentConverterFactory>()
+            .GetConverter<TResult>();
+
+        // 设置服务提供器
+        converter.ServiceProvider ??= ServiceProvider;
+
+        return converter;
     }
 
     /// <summary>
@@ -98,17 +103,22 @@ internal sealed class HttpContentConverterFactory : IHttpContentConverterFactory
     internal IHttpContentConverter GetConverter(Type resultType, params IHttpContentConverter[]? converters)
     {
         // 初始化新的 IHttpContentConverter 字典集合
-        var unionProcessors = new Dictionary<Type, IHttpContentConverter>(_converters);
+        var unionConverters = new Dictionary<Type, IHttpContentConverter>(_converters);
 
         // 添加自定义 IHttpContentConverter 数组
-        unionProcessors.TryAdd(converters, value => value.GetType());
+        unionConverters.TryAdd(converters, value => value.GetType());
 
         // 查找可以处理目标类型的响应内容转换器
-        var typeConverter = unionProcessors.Values.OfType(typeof(IHttpContentConverter<>).MakeGenericType(resultType))
+        var typeConverter = unionConverters.Values.OfType(typeof(IHttpContentConverter<>).MakeGenericType(resultType))
             .Cast<IHttpContentConverter>().LastOrDefault();
 
         // 如果未找到，则调用 IObjectContentConverterFactory 实例的 GetConverter 返回
-        return typeConverter ??
-               _serviceProvider.GetRequiredService<IObjectContentConverterFactory>().GetConverter(resultType);
+        var converter = typeConverter ?? ServiceProvider.GetRequiredService<IObjectContentConverterFactory>()
+            .GetConverter(resultType);
+
+        // 设置服务提供器
+        converter.ServiceProvider ??= ServiceProvider;
+
+        return converter;
     }
 }

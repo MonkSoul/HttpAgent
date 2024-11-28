@@ -94,5 +94,22 @@ public class StringContentProcessorTests
         Assert.Equal("furion", await httpContent7.ReadAsStringAsync());
         Assert.Equal("text/plain", httpContent7.Headers.ContentType?.MediaType);
         Assert.Equal("utf-8", httpContent7.Headers.ContentType?.CharSet);
+
+        var services = new ServiceCollection();
+        services.AddOptions<HttpRemoteOptions>();
+        await using var serviceProvider = services.BuildServiceProvider();
+        var processor2 = new StringContentProcessor { ServiceProvider = serviceProvider };
+        var httpContent8 = processor2.Process(new JsonModel { Id = 1, Name = "Furion" }, "application/json", null);
+        Assert.NotNull(httpContent8);
+        Assert.Equal(typeof(StringContent), httpContent8.GetType());
+        Assert.Equal("{\"id\":1,\"name\":\"Furion\"}", await httpContent8.ReadAsStringAsync());
+        Assert.Equal("application/json", httpContent8.Headers.ContentType?.MediaType);
+        Assert.Equal("utf-8", httpContent8.Headers.ContentType?.CharSet);
     }
+}
+
+file class JsonModel
+{
+    public int Id { get; set; }
+    public string? Name { get; set; }
 }

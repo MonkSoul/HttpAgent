@@ -491,17 +491,19 @@ public sealed partial class HttpRequestBuilder
     ///     <see cref="IEqualityComparer{T}" />
     /// </param>
     /// <param name="replace">是否替换已存在的查询参数。默认值为 <c>false</c>。</param>
+    /// <param name="ignoreNullValues">是否忽略空值。默认值为 <c>false</c>。</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
     public HttpRequestBuilder WithQueryParameter(string key, object? value, bool escape = false,
-        CultureInfo? culture = null, IEqualityComparer<string>? comparer = null, bool replace = false)
+        CultureInfo? culture = null, IEqualityComparer<string>? comparer = null, bool replace = false,
+        bool ignoreNullValues = false)
     {
         // 空检查
         ArgumentException.ThrowIfNullOrWhiteSpace(key);
 
         return WithQueryParameters(new Dictionary<string, object?> { { key, value } }, escape, culture, comparer,
-            replace);
+            replace, ignoreNullValues);
     }
 
     /// <summary>
@@ -517,11 +519,13 @@ public sealed partial class HttpRequestBuilder
     ///     <see cref="IEqualityComparer{T}" />
     /// </param>
     /// <param name="replace">是否替换已存在的查询参数。默认值为 <c>false</c>。</param>
+    /// <param name="ignoreNullValues">是否忽略空值。默认值为 <c>false</c>。</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
     public HttpRequestBuilder WithQueryParameters(IDictionary<string, object?> parameters, bool escape = false,
-        CultureInfo? culture = null, IEqualityComparer<string>? comparer = null, bool replace = false)
+        CultureInfo? culture = null, IEqualityComparer<string>? comparer = null, bool replace = false,
+        bool ignoreNullValues = false)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(parameters);
@@ -532,7 +536,8 @@ public sealed partial class HttpRequestBuilder
 
         // 存在则合并否则添加
         objectQueryParameters.AddOrUpdate(QueryParameters.ToDictionary(u => u.Key, object? (u) => u.Value), false);
-        objectQueryParameters.AddOrUpdate(parameters, false, replace);
+        objectQueryParameters.AddOrUpdate(parameters.WhereIf(ignoreNullValues, u => u.Value is not null).ToDictionary(),
+            false, replace);
 
         // 设置查询参数
         QueryParameters = objectQueryParameters.ToDictionary(kvp => kvp.Key,
@@ -557,11 +562,13 @@ public sealed partial class HttpRequestBuilder
     ///     <see cref="IEqualityComparer{T}" />
     /// </param>
     /// <param name="replace">是否替换已存在的查询参数。默认值为 <c>false</c>。</param>
+    /// <param name="ignoreNullValues">是否忽略空值。默认值为 <c>false</c>。</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
     public HttpRequestBuilder WithQueryParameters(object parameterSource, string? prefix = null, bool escape = false,
-        CultureInfo? culture = null, IEqualityComparer<string>? comparer = null, bool replace = false)
+        CultureInfo? culture = null, IEqualityComparer<string>? comparer = null, bool replace = false,
+        bool ignoreNullValues = false)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(parameterSource);
@@ -570,7 +577,7 @@ public sealed partial class HttpRequestBuilder
             parameterSource.ObjectToDictionary()!.ToDictionary(
                 u =>
                     $"{(string.IsNullOrWhiteSpace(prefix) ? null : $"{prefix}.")}{u.Key.ToCultureString(culture ?? CultureInfo.InvariantCulture)!}",
-                u => u.Value), escape, culture, comparer, replace);
+                u => u.Value), escape, culture, comparer, replace, ignoreNullValues);
     }
 
     /// <summary>

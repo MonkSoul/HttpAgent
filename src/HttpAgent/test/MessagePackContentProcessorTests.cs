@@ -9,8 +9,8 @@ public class MessagePackContentProcessorTests
     [Fact]
     public void New_ReturnOK()
     {
-        var messagePackContentProcessor = new MessagePackContentProcessor();
-        Assert.NotNull(messagePackContentProcessor);
+        var processor = new MessagePackContentProcessor();
+        Assert.NotNull(processor);
         Assert.True(typeof(IHttpContentProcessor).IsAssignableFrom(typeof(MessagePackContentProcessor)));
 
         Assert.NotNull(MessagePackContentProcessor._serializerCache);
@@ -25,47 +25,47 @@ public class MessagePackContentProcessorTests
     [Fact]
     public void CanProcess_ReturnOK()
     {
-        var messagePackContentProcessor = new MessagePackContentProcessor();
+        var processor = new MessagePackContentProcessor();
 
-        Assert.True(messagePackContentProcessor.CanProcess(null, "application/msgpack"));
-        Assert.True(messagePackContentProcessor.CanProcess(Array.Empty<byte>(), "application/msgpack"));
-        Assert.True(messagePackContentProcessor.CanProcess(Array.Empty<byte>(), "Application/Msgpack"));
-        Assert.True(messagePackContentProcessor.CanProcess(new MessagePackModel1(), "Application/Msgpack"));
+        Assert.True(processor.CanProcess(null, "application/msgpack"));
+        Assert.True(processor.CanProcess(Array.Empty<byte>(), "application/msgpack"));
+        Assert.True(processor.CanProcess(Array.Empty<byte>(), "Application/Msgpack"));
+        Assert.True(processor.CanProcess(new MessagePackModel1(), "Application/Msgpack"));
     }
 
     [Fact]
     public void Process_Invalid_Parameters()
     {
-        var messagePackContentProcessor = new MessagePackContentProcessor();
+        var processor = new MessagePackContentProcessor();
 
         Assert.Throws<TargetInvocationException>(() =>
-            messagePackContentProcessor.Process(new MessagePackModel0(), "application/msgpack", null));
+            processor.Process(new MessagePackModel0(), "application/msgpack", null));
     }
 
     [Fact]
     public void Process_ReturnOK()
     {
-        var messagePackContentProcessor = new MessagePackContentProcessor();
+        var processor = new MessagePackContentProcessor();
 
-        var messagePackContent1 = messagePackContentProcessor.Process(null, "application/msgpack", null);
+        var messagePackContent1 = processor.Process(null, "application/msgpack", null);
         Assert.Null(messagePackContent1);
 
         var messagePackContent2 =
-            messagePackContentProcessor.Process(Array.Empty<byte>(), "application/msgpack", null);
+            processor.Process(Array.Empty<byte>(), "application/msgpack", null);
         Assert.NotNull(messagePackContent2);
         Assert.NotNull(messagePackContent2.ReadAsStream());
         Assert.Equal("application/msgpack", messagePackContent2.Headers.ContentType?.MediaType);
         Assert.Equal("utf-8", messagePackContent2.Headers.ContentType?.CharSet);
 
         var messagePackContent3 =
-            messagePackContentProcessor.Process(Array.Empty<byte>(), "application/msgpack", Encoding.UTF32);
+            processor.Process(Array.Empty<byte>(), "application/msgpack", Encoding.UTF32);
         Assert.NotNull(messagePackContent3);
         Assert.NotNull(messagePackContent3.ReadAsStream());
         Assert.Equal("application/msgpack", messagePackContent3.Headers.ContentType?.MediaType);
         Assert.Equal("utf-32", messagePackContent3.Headers.ContentType?.CharSet);
 
         var messagePackContent4 =
-            messagePackContentProcessor.Process(new MessagePackModel1(), "application/msgpack",
+            processor.Process(new MessagePackModel1(), "application/msgpack",
                 null);
         Assert.NotNull(messagePackContent4);
         Assert.NotNull(messagePackContent4.ReadAsStream());

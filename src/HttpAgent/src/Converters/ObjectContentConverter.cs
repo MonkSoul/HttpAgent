@@ -10,14 +10,21 @@ namespace HttpAgent;
 public class ObjectContentConverter : IHttpContentConverter
 {
     /// <inheritdoc />
+    public IServiceProvider? ServiceProvider { get; set; }
+
+    /// <inheritdoc />
     public virtual object? Read(Type resultType, HttpResponseMessage httpResponseMessage,
         CancellationToken cancellationToken = default) =>
-        httpResponseMessage.Content.ReadFromJsonAsync(resultType, cancellationToken).GetAwaiter().GetResult();
+        httpResponseMessage.Content.ReadFromJsonAsync(resultType,
+            ServiceProvider?.GetRequiredService<IOptions<HttpRemoteOptions>>().Value.JsonSerializerOptions ??
+            HttpRemoteOptions.JsonSerializerOptionsDefault, cancellationToken).GetAwaiter().GetResult();
 
     /// <inheritdoc />
     public virtual async Task<object?> ReadAsync(Type resultType, HttpResponseMessage httpResponseMessage,
         CancellationToken cancellationToken = default) =>
-        await httpResponseMessage.Content.ReadFromJsonAsync(resultType, cancellationToken);
+        await httpResponseMessage.Content.ReadFromJsonAsync(resultType,
+            ServiceProvider?.GetRequiredService<IOptions<HttpRemoteOptions>>().Value.JsonSerializerOptions ??
+            HttpRemoteOptions.JsonSerializerOptionsDefault, cancellationToken);
 }
 
 /// <summary>
@@ -29,10 +36,14 @@ public class ObjectContentConverter<TResult> : ObjectContentConverter, IHttpCont
     /// <inheritdoc />
     public virtual TResult? Read(HttpResponseMessage httpResponseMessage,
         CancellationToken cancellationToken = default) =>
-        httpResponseMessage.Content.ReadFromJsonAsync<TResult>(cancellationToken).GetAwaiter().GetResult();
+        httpResponseMessage.Content.ReadFromJsonAsync<TResult>(
+            ServiceProvider?.GetRequiredService<IOptions<HttpRemoteOptions>>().Value.JsonSerializerOptions ??
+            HttpRemoteOptions.JsonSerializerOptionsDefault, cancellationToken).GetAwaiter().GetResult();
 
     /// <inheritdoc />
     public virtual async Task<TResult?> ReadAsync(HttpResponseMessage httpResponseMessage,
         CancellationToken cancellationToken = default) =>
-        await httpResponseMessage.Content.ReadFromJsonAsync<TResult>(cancellationToken);
+        await httpResponseMessage.Content.ReadFromJsonAsync<TResult>(
+            ServiceProvider?.GetRequiredService<IOptions<HttpRemoteOptions>>().Value.JsonSerializerOptions ??
+            HttpRemoteOptions.JsonSerializerOptionsDefault, cancellationToken);
 }

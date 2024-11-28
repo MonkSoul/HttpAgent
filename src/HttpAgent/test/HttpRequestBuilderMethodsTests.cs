@@ -677,6 +677,14 @@ public class HttpRequestBuilderMethodsTests
         Assert.Equal("furion2", httpRequestBuilder4.QueryParameters!["user.name"].First());
         Assert.Single(httpRequestBuilder4.QueryParameters!["name"]);
         Assert.Equal("furion", httpRequestBuilder4.QueryParameters!["name"].First());
+
+        httpRequestBuilder4.WithQueryParameters(new Dictionary<string, object?> { { "expired", null } },
+            ignoreNullValues: true);
+        Assert.DoesNotContain(httpRequestBuilder4.QueryParameters, p => p.Key == "expired");
+
+        httpRequestBuilder4.WithQueryParameters(new Dictionary<string, object?> { { "expired", null } },
+            ignoreNullValues: false);
+        Assert.Contains(httpRequestBuilder4.QueryParameters, p => p.Key == "expired");
     }
 
     [Fact]

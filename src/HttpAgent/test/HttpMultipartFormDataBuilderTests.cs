@@ -925,9 +925,12 @@ public class HttpMultipartFormDataBuilderTests
     [Fact]
     public void Build_ReturnOK()
     {
+        var services = new ServiceCollection();
+        services.AddOptions<HttpRemoteOptions>();
+        using var serviceProvider = services.BuildServiceProvider();
         var httpRemoteOptions = new HttpRemoteOptions();
         var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
-        var httpContentProcessorFactory = new HttpContentProcessorFactory([]);
+        var httpContentProcessorFactory = new HttpContentProcessorFactory(serviceProvider, []);
 
         var multipartFormDataContent = builder.Build(httpRemoteOptions, httpContentProcessorFactory, null);
         Assert.Null(multipartFormDataContent);
@@ -952,26 +955,33 @@ public class HttpMultipartFormDataBuilderTests
     [Fact]
     public void BuildHttpContent_Invalid_Parameters()
     {
+        var services = new ServiceCollection();
+        using var serviceProvider = services.BuildServiceProvider();
         Assert.Throws<ArgumentNullException>(() => HttpMultipartFormDataBuilder.BuildHttpContent(null!, null!, null));
         Assert.Throws<ArgumentNullException>(() =>
             HttpMultipartFormDataBuilder.BuildHttpContent(new MultipartFormDataItem("test"), null!, null));
         Assert.Throws<ArgumentNullException>(() =>
             HttpMultipartFormDataBuilder.BuildHttpContent(new MultipartFormDataItem("test"),
-                new HttpContentProcessorFactory([]), null));
+                new HttpContentProcessorFactory(serviceProvider, []), null));
         Assert.Throws<ArgumentException>(() =>
             HttpMultipartFormDataBuilder.BuildHttpContent(
-                new MultipartFormDataItem("test") { ContentType = string.Empty }, new HttpContentProcessorFactory([]),
+                new MultipartFormDataItem("test") { ContentType = string.Empty },
+                new HttpContentProcessorFactory(serviceProvider, []),
                 null));
         Assert.Throws<ArgumentException>(() =>
             HttpMultipartFormDataBuilder.BuildHttpContent(
-                new MultipartFormDataItem("test") { ContentType = " " }, new HttpContentProcessorFactory([]),
+                new MultipartFormDataItem("test") { ContentType = " " },
+                new HttpContentProcessorFactory(serviceProvider, []),
                 null));
     }
 
     [Fact]
     public void BuildHttpContent_ReturnOK()
     {
-        var httpContentProcessorFactory = new HttpContentProcessorFactory([]);
+        var services = new ServiceCollection();
+        services.AddOptions<HttpRemoteOptions>();
+        using var serviceProvider = services.BuildServiceProvider();
+        var httpContentProcessorFactory = new HttpContentProcessorFactory(serviceProvider, []);
 
         var httpContent1 =
             HttpMultipartFormDataBuilder.BuildHttpContent(

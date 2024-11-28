@@ -11,6 +11,11 @@ namespace HttpAgent;
 public interface IHttpContentProcessor
 {
     /// <summary>
+    ///     <inheritdoc cref="IServiceProvider" />
+    /// </summary>
+    IServiceProvider? ServiceProvider { get; set; }
+
+    /// <summary>
     ///     判断当前处理器是否可以处理指定的内容类型
     /// </summary>
     /// <param name="rawContent">原始请求内容</param>

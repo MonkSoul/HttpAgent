@@ -49,7 +49,8 @@ internal sealed class FileUploadManager
             : null) as IHttpFileTransferEventHandler;
 
         // 构建 HttpRequestBuilder 实例
-        RequestBuilder = httpFileUploadBuilder.Build(_httpRemoteService.RemoteOptions, _progressChannel, configure);
+        RequestBuilder = httpFileUploadBuilder.Build(httpRemoteService.ServiceProvider
+            .GetRequiredService<IOptions<HttpRemoteOptions>>().Value, _progressChannel, configure);
     }
 
     /// <summary>

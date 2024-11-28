@@ -53,7 +53,8 @@ internal sealed class ServerSentEventsManager
             : null) as IHttpServerSentEventsEventHandler;
 
         // 构建 HttpRequestBuilder 实例
-        RequestBuilder = httpServerSentEventsBuilder.Build(_httpRemoteService.RemoteOptions, configure);
+        RequestBuilder = httpServerSentEventsBuilder.Build(httpRemoteService.ServiceProvider
+            .GetRequiredService<IOptions<HttpRemoteOptions>>().Value, configure);
     }
 
     /// <summary>

@@ -91,6 +91,12 @@ public sealed class QueryAttribute : Attribute
     public bool Replace { get; set; }
 
     /// <summary>
+    ///     是否忽略空值
+    /// </summary>
+    /// <remarks>设置为 <c>true</c> 之后，当参数值为 <c>null</c> 时将被忽略。默认值为 <c>false</c>。</remarks>
+    public bool IgnoreNullValues { get; set; }
+
+    /// <summary>
     ///     是否设置了值
     /// </summary>
     internal bool HasSetValue { get; private set; }

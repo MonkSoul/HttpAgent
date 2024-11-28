@@ -15,9 +15,14 @@ internal sealed class HttpContentProcessorFactory : IHttpContentProcessorFactory
     /// <summary>
     ///     <inheritdoc cref="HttpContentProcessorFactory" />
     /// </summary>
+    /// <param name="serviceProvider">
+    ///     <see cref="IServiceProvider" />
+    /// </param>
     /// <param name="processors"><see cref="IHttpContentProcessor" /> 数组</param>
-    public HttpContentProcessorFactory(IHttpContentProcessor[]? processors)
+    public HttpContentProcessorFactory(IServiceProvider serviceProvider, IHttpContentProcessor[]? processors)
     {
+        ServiceProvider = serviceProvider;
+
         // 初始化请求内容处理器
         _processors = new Dictionary<Type, IHttpContentProcessor>
         {
@@ -32,6 +37,9 @@ internal sealed class HttpContentProcessorFactory : IHttpContentProcessorFactory
         // 添加自定义 IHttpContentProcessor 数组
         _processors.TryAdd(processors, value => value.GetType());
     }
+
+    /// <inheritdoc />
+    public IServiceProvider ServiceProvider { get; }
 
     /// <inheritdoc />
     public HttpContent? Build(object? rawContent, string contentType, Encoding? encoding = null,
@@ -63,9 +71,14 @@ internal sealed class HttpContentProcessorFactory : IHttpContentProcessorFactory
         unionProcessors.TryAdd(processors, value => value.GetType());
 
         // 查找可以处理指定内容类型或数据类型的 IHttpContentProcessor 实例
-        return unionProcessors.Values.LastOrDefault(u => u.CanProcess(rawContent, contentType)) ??
-               throw new InvalidOperationException(
-                   $"No processor found that can handle the content type `{contentType}` and the provided raw content of type `{rawContent?.GetType()}`. " +
-                   "Please ensure that the correct content type is specified and that a suitable processor is registered.");
+        var processor = unionProcessors.Values.LastOrDefault(u => u.CanProcess(rawContent, contentType)) ??
+                        throw new InvalidOperationException(
+                            $"No processor found that can handle the content type `{contentType}` and the provided raw content of type `{rawContent?.GetType()}`. " +
+                            "Please ensure that the correct content type is specified and that a suitable processor is registered.");
+
+        // 设置服务提供器
+        processor.ServiceProvider ??= ServiceProvider;
+
+        return processor;
     }
 }

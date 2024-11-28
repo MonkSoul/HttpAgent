@@ -256,6 +256,7 @@ public class DeclarativeAttributeTests
         Assert.False(attribute.HasSetValue);
         Assert.Null(attribute.Prefix);
         Assert.False(attribute.Replace);
+        Assert.False(attribute.IgnoreNullValues);
 
         var attribute2 = new QueryAttribute("name");
         Assert.Equal("name", attribute2.Name);

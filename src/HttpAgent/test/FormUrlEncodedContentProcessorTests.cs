@@ -9,23 +9,23 @@ public class FormUrlEncodedContentProcessorTests
     [Fact]
     public void New_ReturnOK()
     {
-        var formUrlEncodedContent = new FormUrlEncodedContentProcessor();
-        Assert.NotNull(formUrlEncodedContent);
+        var processor = new FormUrlEncodedContentProcessor();
+        Assert.NotNull(processor);
         Assert.True(typeof(IHttpContentProcessor).IsAssignableFrom(typeof(FormUrlEncodedContentProcessor)));
     }
 
     [Fact]
     public void CanProcess_ReturnOK()
     {
-        var formUrlEncodedContentProcessor = new FormUrlEncodedContentProcessor();
+        var processor = new FormUrlEncodedContentProcessor();
 
-        Assert.False(formUrlEncodedContentProcessor.CanProcess(null, "application/octet-stream"));
-        Assert.True(formUrlEncodedContentProcessor.CanProcess(null, "application/x-www-form-urlencoded"));
-        Assert.True(formUrlEncodedContentProcessor.CanProcess(null, "Application/X-www-form-urlencoded"));
-        Assert.False(formUrlEncodedContentProcessor.CanProcess(null, "application/json"));
+        Assert.False(processor.CanProcess(null, "application/octet-stream"));
+        Assert.True(processor.CanProcess(null, "application/x-www-form-urlencoded"));
+        Assert.True(processor.CanProcess(null, "Application/X-www-form-urlencoded"));
+        Assert.False(processor.CanProcess(null, "application/json"));
 
-        Assert.True(formUrlEncodedContentProcessor.CanProcess(new { }, "application/x-www-form-urlencoded"));
-        Assert.True(formUrlEncodedContentProcessor.CanProcess(new FormUrlEncodedContent([]),
+        Assert.True(processor.CanProcess(new { }, "application/x-www-form-urlencoded"));
+        Assert.True(processor.CanProcess(new FormUrlEncodedContent([]),
             "application/x-www-form-urlencoded"));
     }
 

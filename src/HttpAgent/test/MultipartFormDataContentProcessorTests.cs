@@ -9,23 +9,23 @@ public class MultipartFormDataContentProcessorTests
     [Fact]
     public void New_ReturnOK()
     {
-        var multipartFormDataContentProcessor = new MultipartFormDataContentProcessor();
-        Assert.NotNull(multipartFormDataContentProcessor);
+        var processor = new MultipartFormDataContentProcessor();
+        Assert.NotNull(processor);
         Assert.True(typeof(IHttpContentProcessor).IsAssignableFrom(typeof(MultipartFormDataContentProcessor)));
     }
 
     [Fact]
     public void CanProcess_ReturnOK()
     {
-        var multipartFormDataContentProcessor = new MultipartFormDataContentProcessor();
+        var processor = new MultipartFormDataContentProcessor();
 
-        Assert.False(multipartFormDataContentProcessor.CanProcess(null, "application/octet-stream"));
-        Assert.False(multipartFormDataContentProcessor.CanProcess(null, "application/x-www-form-urlencoded"));
-        Assert.True(multipartFormDataContentProcessor.CanProcess(null, "multipart/form-data"));
-        Assert.True(multipartFormDataContentProcessor.CanProcess(null, "Multipart/Form-data"));
+        Assert.False(processor.CanProcess(null, "application/octet-stream"));
+        Assert.False(processor.CanProcess(null, "application/x-www-form-urlencoded"));
+        Assert.True(processor.CanProcess(null, "multipart/form-data"));
+        Assert.True(processor.CanProcess(null, "Multipart/Form-data"));
 
-        Assert.True(multipartFormDataContentProcessor.CanProcess(new { }, "multipart/form-data"));
-        Assert.True(multipartFormDataContentProcessor.CanProcess(new MultipartContent(),
+        Assert.True(processor.CanProcess(new { }, "multipart/form-data"));
+        Assert.True(processor.CanProcess(new MultipartContent(),
             "multipart/form-data"));
     }
 

@@ -9,7 +9,9 @@ public class HttpContentProcessorFactoryTests
     [Fact]
     public void New_ReturnOK()
     {
-        var httpContentProcessorFactory1 = new HttpContentProcessorFactory(null);
+        using var serviceProvider = new ServiceCollection().BuildServiceProvider();
+        var httpContentProcessorFactory1 = new HttpContentProcessorFactory(serviceProvider, null);
+        Assert.NotNull(httpContentProcessorFactory1.ServiceProvider);
         Assert.NotNull(httpContentProcessorFactory1._processors);
         Assert.Equal(6, httpContentProcessorFactory1._processors.Count);
         Assert.Equal(
@@ -20,7 +22,8 @@ public class HttpContentProcessorFactoryTests
             ],
             httpContentProcessorFactory1._processors.Select(u => u.Key));
 
-        var httpContentProcessorFactory2 = new HttpContentProcessorFactory([new CustomStringContentProcessor()]);
+        var httpContentProcessorFactory2 =
+            new HttpContentProcessorFactory(serviceProvider, [new CustomStringContentProcessor()]);
         Assert.NotNull(httpContentProcessorFactory2._processors);
         Assert.Equal(7, httpContentProcessorFactory2._processors.Count);
         Assert.Equal(
@@ -33,7 +36,8 @@ public class HttpContentProcessorFactoryTests
             httpContentProcessorFactory2._processors.Select(u => u.Key));
 
         var httpContentProcessorFactory3 =
-            new HttpContentProcessorFactory([new StringContentProcessor(), new FormUrlEncodedContentProcessor()]);
+            new HttpContentProcessorFactory(serviceProvider,
+                [new StringContentProcessor(), new FormUrlEncodedContentProcessor()]);
         Assert.NotNull(httpContentProcessorFactory3._processors);
         Assert.Equal(6, httpContentProcessorFactory3._processors.Count);
         Assert.Equal(
@@ -48,7 +52,9 @@ public class HttpContentProcessorFactoryTests
     [Fact]
     public void GetProcessor_Invalid_Parameters()
     {
-        var httpContentProcessorFactory1 = new HttpContentProcessorFactory(null);
+        var services = new ServiceCollection();
+        using var serviceProvider = services.BuildServiceProvider();
+        var httpContentProcessorFactory1 = new HttpContentProcessorFactory(serviceProvider, null);
 
         var exception = Assert.Throws<InvalidOperationException>(() =>
         {
@@ -72,7 +78,9 @@ public class HttpContentProcessorFactoryTests
     [InlineData("multipart/form-data", typeof(MultipartFormDataContentProcessor))]
     public void GetProcessor_From_ContentType_ReturnOK(string contentType, Type type)
     {
-        var httpContentProcessorFactory1 = new HttpContentProcessorFactory(null);
+        var services = new ServiceCollection();
+        using var serviceProvider = services.BuildServiceProvider();
+        var httpContentProcessorFactory1 = new HttpContentProcessorFactory(serviceProvider, null);
 
         var processor1 = httpContentProcessorFactory1.GetProcessor(null, contentType);
         Assert.Equal(type, processor1.GetType());
@@ -81,7 +89,9 @@ public class HttpContentProcessorFactoryTests
     [Fact]
     public void GetProcessor_From_RawContent_ReturnOK()
     {
-        var httpContentProcessorFactory1 = new HttpContentProcessorFactory(null);
+        var services = new ServiceCollection();
+        using var serviceProvider = services.BuildServiceProvider();
+        var httpContentProcessorFactory1 = new HttpContentProcessorFactory(serviceProvider, null);
 
         var processor1 = httpContentProcessorFactory1.GetProcessor(new StringContent(""), "application/json");
         Assert.Equal(typeof(StringContentProcessor), processor1.GetType());
@@ -129,7 +139,10 @@ public class HttpContentProcessorFactoryTests
     [Fact]
     public void GetProcessor_WithCustomize_ReturnOK()
     {
-        var httpContentProcessorFactory1 = new HttpContentProcessorFactory([new CustomStringContentProcessor()]);
+        var services = new ServiceCollection();
+        using var serviceProvider = services.BuildServiceProvider();
+        var httpContentProcessorFactory1 =
+            new HttpContentProcessorFactory(serviceProvider, [new CustomStringContentProcessor()]);
         var processor1 = httpContentProcessorFactory1.GetProcessor(new StringContent(""), "application/json");
         Assert.Equal(typeof(CustomStringContentProcessor), processor1.GetType());
 
@@ -141,7 +154,9 @@ public class HttpContentProcessorFactoryTests
     [Fact]
     public void Build_ReturnOK()
     {
-        var httpContentProcessorFactory1 = new HttpContentProcessorFactory(null);
+        var services = new ServiceCollection();
+        using var serviceProvider = services.BuildServiceProvider();
+        var httpContentProcessorFactory1 = new HttpContentProcessorFactory(serviceProvider, null);
 
         var httpContent1 = httpContentProcessorFactory1.Build("", "application/json");
         Assert.NotNull(httpContent1);

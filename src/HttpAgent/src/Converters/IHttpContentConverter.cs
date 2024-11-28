@@ -10,6 +10,11 @@ namespace HttpAgent;
 public interface IHttpContentConverter
 {
     /// <summary>
+    ///     <inheritdoc cref="IServiceProvider" />
+    /// </summary>
+    IServiceProvider? ServiceProvider { get; set; }
+
+    /// <summary>
     ///     从 <see cref="HttpResponseMessage" /> 中同步读取数据并转换为 <see cref="object" /> 实例
     /// </summary>
     /// <param name="resultType">转换的目标类型</param>

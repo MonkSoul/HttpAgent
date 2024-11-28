@@ -10,18 +10,34 @@ namespace HttpAgent;
 public sealed class HttpRemoteOptions
 {
     /// <summary>
+    ///     默认 JSON 序列化配置
+    /// </summary>
+    /// <remarks>参考文献：https://learn.microsoft.com/zh-cn/dotnet/standard/serialization/system-text-json/configure-options。</remarks>
+    public static readonly JsonSerializerOptions JsonSerializerOptionsDefault = new(JsonSerializerOptions.Default)
+    {
+        PropertyNameCaseInsensitive = true,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        NumberHandling = JsonNumberHandling.AllowReadingFromString
+    };
+
+    /// <summary>
     ///     默认请求内容类型
     /// </summary>
-    public string? DefaultContentType { get; internal init; } = Constants.DEFAULT_CONTENT_TYPE;
+    public string? DefaultContentType { get; set; } = Constants.DEFAULT_CONTENT_TYPE;
 
     /// <summary>
     ///     默认文件下载保存目录
     /// </summary>
-    public string? DefaultFileDownloadDirectory { get; internal init; }
+    public string? DefaultFileDownloadDirectory { get; set; }
 
     /// <summary>
     ///     自定义 HTTP 声明式 <see cref="IHttpDeclarativeExtractor" /> 集合提供器
     /// </summary>
     /// <value>返回多个包含实现 <see cref="IHttpDeclarativeExtractor" /> 集合的集合。</value>
-    public IReadOnlyList<Func<IEnumerable<IHttpDeclarativeExtractor>>>? HttpDeclarativeExtractors { get; init; }
+    public IReadOnlyList<Func<IEnumerable<IHttpDeclarativeExtractor>>>? HttpDeclarativeExtractors { get; set; }
+
+    /// <summary>
+    ///     JSON 序列化配置
+    /// </summary>
+    public JsonSerializerOptions JsonSerializerOptions { get; set; } = JsonSerializerOptionsDefault;
 }

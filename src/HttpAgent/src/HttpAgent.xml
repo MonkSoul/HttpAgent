@@ -898,34 +898,6 @@
                 <see cref="T:HttpAgent.IObjectContentConverterFactory" /> 实现类型
             </summary>
         </member>
-        <member name="P:HttpAgent.HttpRemoteBuilder.DefaultContentType">
-            <summary>
-                默认请求内容类型
-            </summary>
-        </member>
-        <member name="P:HttpAgent.HttpRemoteBuilder.DefaultFileDownloadDirectory">
-            <summary>
-                默认文件下载保存目录
-            </summary>
-        </member>
-        <member name="M:HttpAgent.HttpRemoteBuilder.SetDefaultContentType(System.String)">
-            <summary>
-                设置默认请求内容类型
-            </summary>
-            <param name="contentType">内容类型</param>
-            <returns>
-                <see cref="T:HttpAgent.HttpRemoteBuilder" />
-            </returns>
-        </member>
-        <member name="M:HttpAgent.HttpRemoteBuilder.SetDefaultFileDownloadDirectory(System.String)">
-            <summary>
-                设置默认文件下载保存目录
-            </summary>
-            <param name="fileDownloadDirectory">文件下载保存目录</param>
-            <returns>
-                <see cref="T:HttpAgent.HttpRemoteBuilder" />
-            </returns>
-        </member>
         <member name="M:HttpAgent.HttpRemoteBuilder.AddHttpContentProcessors(System.Func{System.Collections.Generic.IEnumerable{HttpAgent.IHttpContentProcessor}})">
             <summary>
                 添加 <see cref="T:HttpAgent.IHttpContentProcessor" /> 请求内容处理器
@@ -1048,13 +1020,6 @@
             <param name="services">
                 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
             </param>
-        </member>
-        <member name="M:HttpAgent.HttpRemoteBuilder.EnsureLegalData(System.String)">
-            <summary>
-                检查默认请求内容类型合法性
-            </summary>
-            <param name="defaultContentType">内容类型</param>
-            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="T:HttpAgent.HttpRequestBuilder">
             <summary>
@@ -1438,7 +1403,7 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.WithQueryParameter(System.String,System.Object,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String},System.Boolean)">
+        <member name="M:HttpAgent.HttpRequestBuilder.WithQueryParameter(System.String,System.Object,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String},System.Boolean,System.Boolean)">
             <summary>
                 设置查询参数
             </summary>
@@ -1453,11 +1418,12 @@
                 <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
             </param>
             <param name="replace">是否替换已存在的查询参数。默认值为 <c>false</c>。</param>
+            <param name="ignoreNullValues">是否忽略空值。默认值为 <c>false</c>。</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.WithQueryParameters(System.Collections.Generic.IDictionary{System.String,System.Object},System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String},System.Boolean)">
+        <member name="M:HttpAgent.HttpRequestBuilder.WithQueryParameters(System.Collections.Generic.IDictionary{System.String,System.Object},System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String},System.Boolean,System.Boolean)">
             <summary>
                 设置查询参数
             </summary>
@@ -1471,11 +1437,12 @@
                 <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
             </param>
             <param name="replace">是否替换已存在的查询参数。默认值为 <c>false</c>。</param>
+            <param name="ignoreNullValues">是否忽略空值。默认值为 <c>false</c>。</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.WithQueryParameters(System.Object,System.String,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String},System.Boolean)">
+        <member name="M:HttpAgent.HttpRequestBuilder.WithQueryParameters(System.Object,System.String,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String},System.Boolean,System.Boolean)">
             <summary>
                 设置查询参数
             </summary>
@@ -1490,6 +1457,7 @@
                 <see cref="T:System.Collections.Generic.IEqualityComparer`1" />
             </param>
             <param name="replace">是否替换已存在的查询参数。默认值为 <c>false</c>。</param>
+            <param name="ignoreNullValues">是否忽略空值。默认值为 <c>false</c>。</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -2783,6 +2751,44 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
+        <member name="T:HttpAgent.IHttpRemoteBuilder">
+            <summary>
+                HTTP 远程请求服务构建器
+            </summary>
+        </member>
+        <member name="P:HttpAgent.IHttpRemoteBuilder.Services">
+            <summary>
+                <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
+            </summary>
+        </member>
+        <member name="M:HttpAgent.IHttpRemoteBuilder.ConfigureOptions(System.Action{HttpAgent.HttpRemoteOptions})">
+            <summary>
+                配置 <see cref="T:HttpAgent.HttpRemoteOptions" /> 实例
+            </summary>
+            <param name="configure">自定义配置委托</param>
+            <returns>
+                <see cref="T:HttpAgent.IHttpRemoteBuilder" />
+            </returns>
+        </member>
+        <member name="T:HttpAgent.DefaultHttpRemoteBuilder">
+            <summary>
+                <see cref="T:HttpAgent.IHttpRemoteBuilder" /> 默认实现
+            </summary>
+        </member>
+        <member name="M:HttpAgent.DefaultHttpRemoteBuilder.#ctor(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.DefaultHttpRemoteBuilder" />
+            </summary>
+            <param name="services">
+                <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
+            </param>
+        </member>
+        <member name="P:HttpAgent.DefaultHttpRemoteBuilder.Services">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.DefaultHttpRemoteBuilder.ConfigureOptions(System.Action{HttpAgent.HttpRemoteOptions})">
+            <inheritdoc />
+        </member>
         <member name="T:HttpAgent.Constants">
             <summary>
                 HTTP 远程请求模块常量配置
@@ -2945,6 +2951,9 @@
             </summary>
             <typeparam name="TResult">转换的目标类型</typeparam>
         </member>
+        <member name="P:HttpAgent.HttpContentConverterBase`1.ServiceProvider">
+            <inheritdoc />
+        </member>
         <member name="M:HttpAgent.HttpContentConverterBase`1.Read(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
@@ -2971,6 +2980,11 @@
         <member name="T:HttpAgent.IHttpContentConverter">
             <summary>
                 <see cref="T:System.Net.Http.HttpResponseMessage" /> 响应内容转换器默认实现接口
+            </summary>
+        </member>
+        <member name="P:HttpAgent.IHttpContentConverter.ServiceProvider">
+            <summary>
+                <inheritdoc cref="T:System.IServiceProvider" />
             </summary>
         </member>
         <member name="M:HttpAgent.IHttpContentConverter.Read(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
@@ -3041,6 +3055,9 @@
             <summary>
                 <see cref="T:HttpAgent.ObjectContentConverter`1" /> 默认基类
             </summary>
+        </member>
+        <member name="P:HttpAgent.ObjectContentConverter.ServiceProvider">
+            <inheritdoc />
         </member>
         <member name="M:HttpAgent.ObjectContentConverter.Read(System.Type,System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <inheritdoc />
@@ -3595,6 +3612,28 @@
                 <see cref="T:System.Boolean" />
             </returns>
         </member>
+        <member name="M:HttpAgent.Core.Extensions.TypeExtensions.IsBasicType(System.Type)">
+            <summary>
+                检查类型是否是基本类型
+            </summary>
+            <param name="type">
+                <see cref="T:System.Type" />
+            </param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Core.Extensions.TypeExtensions.IsBaseTypeOrEnumOrCollection(System.Type)">
+            <summary>
+                检查类型是否是基本类型或枚举类型或由它们组成的数组或集合类型
+            </summary>
+            <param name="type">
+                <see cref="T:System.Type" />
+            </param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.Core.Extensions.TypeExtensions.IsStatic(System.Type)">
             <summary>
                 检查类型是否是静态类型
@@ -3622,28 +3661,6 @@
                 检查类型是否定义了公开无参构造函数
             </summary>
             <remarks>用于 <see cref="M:System.Activator.CreateInstance(System.Type)" /> 实例化</remarks>
-            <param name="type">
-                <see cref="T:System.Type" />
-            </param>
-            <returns>
-                <see cref="T:System.Boolean" />
-            </returns>
-        </member>
-        <member name="M:HttpAgent.Core.Extensions.TypeExtensions.IsBasicType(System.Type)">
-            <summary>
-                检查类型是否是基本类型
-            </summary>
-            <param name="type">
-                <see cref="T:System.Type" />
-            </param>
-            <returns>
-                <see cref="T:System.Boolean" />
-            </returns>
-        </member>
-        <member name="M:HttpAgent.Core.Extensions.TypeExtensions.IsBaseTypeOrEnumOrCollection(System.Type)">
-            <summary>
-                检查类型是否是基本类型或枚举类型或由它们组成的数组或集合类型
-            </summary>
             <param name="type">
                 <see cref="T:System.Type" />
             </param>
@@ -4490,6 +4507,12 @@
                 是否替换已存在的查询参数。默认值为 <c>false</c>
             </summary>
         </member>
+        <member name="P:HttpAgent.QueryAttribute.IgnoreNullValues">
+            <summary>
+                是否忽略空值
+            </summary>
+            <remarks>设置为 <c>true</c> 之后，当参数值为 <c>null</c> 时将被忽略。默认值为 <c>false</c>。</remarks>
+        </member>
         <member name="P:HttpAgent.QueryAttribute.HasSetValue">
             <summary>
                 是否设置了值
@@ -5137,9 +5160,6 @@
                 <see cref="T:HttpAgent.IHttpContentConverter`1" /> 字典集合
             </summary>
         </member>
-        <member name="F:HttpAgent.HttpContentConverterFactory._serviceProvider">
-            <inheritdoc cref="T:System.IServiceProvider" />
-        </member>
         <member name="M:HttpAgent.HttpContentConverterFactory.#ctor(System.IServiceProvider,HttpAgent.IHttpContentConverter[])">
             <summary>
                 <inheritdoc cref="T:HttpAgent.HttpContentConverterFactory" />
@@ -5148,6 +5168,9 @@
                 <see cref="T:System.IServiceProvider" />
             </param>
             <param name="converters"><see cref="T:HttpAgent.IHttpContentConverter`1" /> 数组</param>
+        </member>
+        <member name="P:HttpAgent.HttpContentConverterFactory.ServiceProvider">
+            <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpContentConverterFactory.Read``1(System.Net.Http.HttpResponseMessage,HttpAgent.IHttpContentConverter[],System.Threading.CancellationToken)">
             <inheritdoc />
@@ -5189,11 +5212,17 @@
                 <see cref="T:HttpAgent.IHttpContentProcessor" /> 字典集合
             </summary>
         </member>
-        <member name="M:HttpAgent.HttpContentProcessorFactory.#ctor(HttpAgent.IHttpContentProcessor[])">
+        <member name="M:HttpAgent.HttpContentProcessorFactory.#ctor(System.IServiceProvider,HttpAgent.IHttpContentProcessor[])">
             <summary>
                 <inheritdoc cref="T:HttpAgent.HttpContentProcessorFactory" />
             </summary>
+            <param name="serviceProvider">
+                <see cref="T:System.IServiceProvider" />
+            </param>
             <param name="processors"><see cref="T:HttpAgent.IHttpContentProcessor" /> 数组</param>
+        </member>
+        <member name="P:HttpAgent.HttpContentProcessorFactory.ServiceProvider">
+            <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpContentProcessorFactory.Build(System.Object,System.String,System.Text.Encoding,HttpAgent.IHttpContentProcessor[])">
             <inheritdoc />
@@ -5212,6 +5241,11 @@
         <member name="T:HttpAgent.IHttpContentConverterFactory">
             <summary>
                 <see cref="T:HttpAgent.IHttpContentConverter`1" /> 工厂
+            </summary>
+        </member>
+        <member name="P:HttpAgent.IHttpContentConverterFactory.ServiceProvider">
+            <summary>
+                <inheritdoc cref="T:System.IServiceProvider" />
             </summary>
         </member>
         <member name="M:HttpAgent.IHttpContentConverterFactory.Read``1(System.Net.Http.HttpResponseMessage,HttpAgent.IHttpContentConverter[],System.Threading.CancellationToken)">
@@ -5285,6 +5319,11 @@
         <member name="T:HttpAgent.IHttpContentProcessorFactory">
             <summary>
                 <see cref="T:HttpAgent.IHttpContentProcessor" /> 工厂
+            </summary>
+        </member>
+        <member name="P:HttpAgent.IHttpContentProcessorFactory.ServiceProvider">
+            <summary>
+                <inheritdoc cref="T:System.IServiceProvider" />
             </summary>
         </member>
         <member name="M:HttpAgent.IHttpContentProcessorFactory.Build(System.Object,System.String,System.Text.Encoding,HttpAgent.IHttpContentProcessor[])">
@@ -6750,6 +6789,12 @@
                 HTTP 远程请求选项
             </summary>
         </member>
+        <member name="F:HttpAgent.HttpRemoteOptions.JsonSerializerOptionsDefault">
+            <summary>
+                默认 JSON 序列化配置
+            </summary>
+            <remarks>参考文献：https://learn.microsoft.com/zh-cn/dotnet/standard/serialization/system-text-json/configure-options。</remarks>
+        </member>
         <member name="P:HttpAgent.HttpRemoteOptions.DefaultContentType">
             <summary>
                 默认请求内容类型
@@ -6765,6 +6810,11 @@
                 自定义 HTTP 声明式 <see cref="T:HttpAgent.IHttpDeclarativeExtractor" /> 集合提供器
             </summary>
             <value>返回多个包含实现 <see cref="T:HttpAgent.IHttpDeclarativeExtractor" /> 集合的集合。</value>
+        </member>
+        <member name="P:HttpAgent.HttpRemoteOptions.JsonSerializerOptions">
+            <summary>
+                JSON 序列化配置
+            </summary>
         </member>
         <member name="T:HttpAgent.ByteArrayContentProcessor">
             <summary>
@@ -6793,6 +6843,9 @@
                 <see cref="T:HttpAgent.IHttpContentProcessor" /> 内容处理器基类
             </summary>
         </member>
+        <member name="P:HttpAgent.HttpContentProcessorBase.ServiceProvider">
+            <inheritdoc />
+        </member>
         <member name="M:HttpAgent.HttpContentProcessorBase.CanProcess(System.Object,System.String)">
             <inheritdoc />
         </member>
@@ -6818,6 +6871,11 @@
                 <see cref="T:System.Net.Http.HttpContent" /> 请求内容处理器
             </summary>
             <remarks>用于将原始请求内容转换成 <see cref="T:System.Net.Http.HttpContent" /> 实例</remarks>
+        </member>
+        <member name="P:HttpAgent.IHttpContentProcessor.ServiceProvider">
+            <summary>
+                <inheritdoc cref="T:System.IServiceProvider" />
+            </summary>
         </member>
         <member name="M:HttpAgent.IHttpContentProcessor.CanProcess(System.Object,System.String)">
             <summary>
@@ -6972,10 +7030,13 @@
         <member name="F:HttpAgent.HttpRemoteService._httpContentProcessorFactory">
             <inheritdoc cref="T:HttpAgent.IHttpContentProcessorFactory" />
         </member>
+        <member name="F:HttpAgent.HttpRemoteService._httpRemoteOptions">
+            <inheritdoc cref="T:HttpAgent.HttpRemoteOptions" />
+        </member>
         <member name="F:HttpAgent.HttpRemoteService._logger">
             <inheritdoc cref="T:Microsoft.Extensions.Logging.ILogger`1" />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.#ctor(System.IServiceProvider,Microsoft.Extensions.Logging.ILogger{HttpAgent.Logging},System.Net.Http.IHttpClientFactory,HttpAgent.IHttpContentProcessorFactory,HttpAgent.IHttpContentConverterFactory,HttpAgent.HttpRemoteOptions)">
+        <member name="M:HttpAgent.HttpRemoteService.#ctor(System.IServiceProvider,Microsoft.Extensions.Logging.ILogger{HttpAgent.Logging},System.Net.Http.IHttpClientFactory,HttpAgent.IHttpContentProcessorFactory,HttpAgent.IHttpContentConverterFactory,Microsoft.Extensions.Options.IOptions{HttpAgent.HttpRemoteOptions})">
             <summary>
                 <inheritdoc cref="T:HttpAgent.HttpRemoteService" />
             </summary>
@@ -6995,11 +7056,8 @@
                 <see cref="T:HttpAgent.IHttpContentConverterFactory" />
             </param>
             <param name="httpRemoteOptions">
-                <see cref="T:HttpAgent.HttpRemoteOptions" />
+                <see cref="T:Microsoft.Extensions.Options.IOptions`1" />
             </param>
-        </member>
-        <member name="P:HttpAgent.HttpRemoteService.RemoteOptions">
-            <inheritdoc />
         </member>
         <member name="P:HttpAgent.HttpRemoteService.ServiceProvider">
             <inheritdoc />
@@ -7938,11 +7996,6 @@
             </summary>
             <summary>
                 HTTP 远程请求服务
-            </summary>
-        </member>
-        <member name="P:HttpAgent.IHttpRemoteService.RemoteOptions">
-            <summary>
-                <inheritdoc cref="T:HttpAgent.HttpRemoteOptions" />
             </summary>
         </member>
         <member name="P:HttpAgent.IHttpRemoteService.ServiceProvider">
@@ -12289,7 +12342,7 @@
             </param>
             <param name="configure">自定义配置委托</param>
             <returns>
-                <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
+                <see cref="T:HttpAgent.IHttpRemoteBuilder" />
             </returns>
         </member>
         <member name="M:Microsoft.Extensions.DependencyInjection.HttpRemoteServiceCollectionExtensions.AddHttpRemote(Microsoft.Extensions.DependencyInjection.IServiceCollection,HttpAgent.HttpRemoteBuilder)">
@@ -12303,7 +12356,7 @@
                 <see cref="T:HttpAgent.HttpRemoteBuilder" />
             </param>
             <returns>
-                <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
+                <see cref="T:HttpAgent.IHttpRemoteBuilder" />
             </returns>
         </member>
     </members>

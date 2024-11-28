@@ -10,11 +10,6 @@ namespace HttpAgent;
 public partial interface IHttpRemoteService
 {
     /// <summary>
-    ///     <inheritdoc cref="HttpRemoteOptions" />
-    /// </summary>
-    HttpRemoteOptions RemoteOptions { get; }
-
-    /// <summary>
     ///     <inheritdoc cref="IServiceProvider" />
     /// </summary>
     IServiceProvider ServiceProvider { get; }

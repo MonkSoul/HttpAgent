@@ -9,9 +9,17 @@ public class HttpRemoteOptionsTests
     [Fact]
     public void New_ReturnOK()
     {
-        var options = new HttpRemoteOptions();
-        Assert.Equal("text/plain", options.DefaultContentType);
-        Assert.Null(options.DefaultFileDownloadDirectory);
-        Assert.Null(options.HttpDeclarativeExtractors);
+        var httpRemoteOptions = new HttpRemoteOptions();
+        Assert.Equal("text/plain", httpRemoteOptions.DefaultContentType);
+        Assert.Null(httpRemoteOptions.DefaultFileDownloadDirectory);
+        Assert.Null(httpRemoteOptions.HttpDeclarativeExtractors);
+
+        Assert.True(HttpRemoteOptions.JsonSerializerOptionsDefault.PropertyNameCaseInsensitive);
+        Assert.Equal(JsonNamingPolicy.CamelCase, HttpRemoteOptions.JsonSerializerOptionsDefault.PropertyNamingPolicy);
+        Assert.Equal(JsonNumberHandling.AllowReadingFromString,
+            HttpRemoteOptions.JsonSerializerOptionsDefault.NumberHandling);
+
+        Assert.NotNull(httpRemoteOptions.JsonSerializerOptions);
+        Assert.Equal(HttpRemoteOptions.JsonSerializerOptionsDefault, httpRemoteOptions.JsonSerializerOptions);
     }
 }

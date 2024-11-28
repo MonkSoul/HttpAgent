@@ -19,6 +19,8 @@ public class Helpers
             client.BaseAddress = new Uri("http://localhost/test/");
         });
 
+        services.AddOptions<HttpRemoteOptions>();
+
         if (requestEventHandler is not null)
         {
             services.AddTransient(sp => requestEventHandler);
@@ -40,13 +42,14 @@ public class Helpers
         }
 
         var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HttpRemoteOptions>>();
         var logger = serviceProvider.GetRequiredService<ILogger<Logging>>();
         var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
 
-        var httpContentProcessorFactory = new HttpContentProcessorFactory(null);
+        var httpContentProcessorFactory = new HttpContentProcessorFactory(serviceProvider, null);
         var httpRemoteService = new HttpRemoteService(serviceProvider, logger, httpClientFactory,
             httpContentProcessorFactory,
-            new HttpContentConverterFactory(serviceProvider, null), new HttpRemoteOptions());
+            new HttpContentConverterFactory(serviceProvider, null), options);
 
         return (httpRemoteService, serviceProvider);
     }

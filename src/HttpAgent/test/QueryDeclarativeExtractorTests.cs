@@ -94,6 +94,16 @@ public class QueryDeclarativeExtractorTests
         Assert.Equal(4, httpRequestBuilder6.QueryParameters.Count);
         Assert.Equal("10", httpRequestBuilder6.QueryParameters["user.id"].First());
         Assert.Equal("furion", httpRequestBuilder6.QueryParameters["user.name"].First());
+
+        var method6 = typeof(IQueryDeclarativeTest).GetMethod(nameof(IQueryDeclarativeTest.Test6))!;
+        var context7 = new HttpDeclarativeExtractorContext(method6, [null, "abc"]);
+        var httpRequestBuilder7 = HttpRequestBuilder.Get("http://localhost");
+        new QueryDeclarativeExtractor().Extract(httpRequestBuilder7, context7);
+
+        Assert.NotNull(httpRequestBuilder7.QueryParameters);
+        Assert.Equal(3, httpRequestBuilder7.QueryParameters.Count);
+        Assert.DoesNotContain(httpRequestBuilder7.QueryParameters, x => x.Key == "str1");
+        Assert.Contains(httpRequestBuilder7.QueryParameters, x => x.Key == "str2");
     }
 }
 
@@ -122,4 +132,7 @@ public interface IQueryDeclarativeTest : IHttpDeclarative
 
     [Get("http://localhost:5000")]
     Task Test5([Query(Prefix = "user")] object obj);
+
+    [Get("http://localhost:5000")]
+    Task Test6([Query(IgnoreNullValues = true)] string str1, [Query] string str2);
 }

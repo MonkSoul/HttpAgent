@@ -11,7 +11,7 @@ public class HttpContentConverterFactoryTests
     {
         using var serviceProvider = new ServiceCollection().BuildServiceProvider();
         var httpContentConverterFactory1 = new HttpContentConverterFactory(serviceProvider, null);
-        Assert.NotNull(httpContentConverterFactory1._serviceProvider);
+        Assert.NotNull(httpContentConverterFactory1.ServiceProvider);
         Assert.NotNull(httpContentConverterFactory1._converters);
         Assert.Equal(5, httpContentConverterFactory1._converters.Count);
         Assert.Equal(

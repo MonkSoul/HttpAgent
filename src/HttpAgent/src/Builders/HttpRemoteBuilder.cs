@@ -35,53 +35,6 @@ public sealed class HttpRemoteBuilder
     internal Type? _objectContentConverterFactoryType;
 
     /// <summary>
-    ///     默认请求内容类型
-    /// </summary>
-    public string? DefaultContentType { get; set; }
-
-    /// <summary>
-    ///     默认文件下载保存目录
-    /// </summary>
-    public string? DefaultFileDownloadDirectory { get; set; }
-
-    /// <summary>
-    ///     设置默认请求内容类型
-    /// </summary>
-    /// <param name="contentType">内容类型</param>
-    /// <returns>
-    ///     <see cref="HttpRemoteBuilder" />
-    /// </returns>
-    public HttpRemoteBuilder SetDefaultContentType(string contentType)
-    {
-        // 空检查
-        ArgumentException.ThrowIfNullOrWhiteSpace(contentType);
-
-        // 解析内容类型字符串
-        var mediaTypeHeaderValue = MediaTypeHeaderValue.Parse(contentType);
-
-        DefaultContentType = mediaTypeHeaderValue.MediaType;
-
-        return this;
-    }
-
-    /// <summary>
-    ///     设置默认文件下载保存目录
-    /// </summary>
-    /// <param name="fileDownloadDirectory">文件下载保存目录</param>
-    /// <returns>
-    ///     <see cref="HttpRemoteBuilder" />
-    /// </returns>
-    public HttpRemoteBuilder SetDefaultFileDownloadDirectory(string fileDownloadDirectory)
-    {
-        // 空检查
-        ArgumentException.ThrowIfNullOrWhiteSpace(fileDownloadDirectory);
-
-        DefaultFileDownloadDirectory = fileDownloadDirectory;
-
-        return this;
-    }
-
-    /// <summary>
     ///     添加 <see cref="IHttpContentProcessor" /> 请求内容处理器
     /// </summary>
     /// <remarks>支持多次调用。</remarks>
@@ -294,9 +247,6 @@ public sealed class HttpRemoteBuilder
     /// </param>
     internal void Build(IServiceCollection services)
     {
-        // 检查默认请求内容类型合法性
-        EnsureLegalData(DefaultContentType);
-
         // 注册 CodePagesEncodingProvider，使得程序能够识别并使用 Windows 代码页中的各种编码
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
@@ -309,9 +259,14 @@ public sealed class HttpRemoteBuilder
             services.AddHttpClient();
         }
 
+        // 注册并配置 HttpRemoteOptions 选项服务
+        services.Configure<HttpRemoteOptions>(options =>
+            options.HttpDeclarativeExtractors = _httpDeclarativeExtractors?.AsReadOnly());
+
         // 注册 HttpContent 内容处理器工厂
-        services.TryAddSingleton<IHttpContentProcessorFactory>(_ =>
-            new HttpContentProcessorFactory(_httpContentProcessorProviders?.SelectMany(u => u.Invoke()).ToArray()));
+        services.TryAddSingleton<IHttpContentProcessorFactory>(provider =>
+            new HttpContentProcessorFactory(provider,
+                _httpContentProcessorProviders?.SelectMany(u => u.Invoke()).ToArray()));
 
         // 注册 HttpContent 内容转换器工厂
         services.TryAddSingleton<IHttpContentConverterFactory>(provider =>
@@ -322,14 +277,7 @@ public sealed class HttpRemoteBuilder
         services.TryAddSingleton<IObjectContentConverterFactory, ObjectContentConverterFactory>();
 
         // 注册 HTTP 远程请求服务
-        services.TryAddSingleton<IHttpRemoteService>(provider =>
-            ActivatorUtilities.CreateInstance<HttpRemoteService>(provider,
-                new HttpRemoteOptions
-                {
-                    DefaultContentType = DefaultContentType ?? Constants.DEFAULT_CONTENT_TYPE,
-                    DefaultFileDownloadDirectory = DefaultFileDownloadDirectory,
-                    HttpDeclarativeExtractors = _httpDeclarativeExtractors?.AsReadOnly()
-                }));
+        services.TryAddSingleton<IHttpRemoteService, HttpRemoteService>();
 
         // 检查是否自定义了对象内容转换器工厂，如果存在则替换
         if (_objectContentConverterFactoryType is not null &&
@@ -378,26 +326,6 @@ public sealed class HttpRemoteBuilder
 
                 return httpDeclarative;
             });
-        }
-    }
-
-    /// <summary>
-    ///     检查默认请求内容类型合法性
-    /// </summary>
-    /// <param name="defaultContentType">内容类型</param>
-    /// <exception cref="ArgumentException"></exception>
-    internal static void EnsureLegalData(string? defaultContentType)
-    {
-        // 跳过空检查
-        if (defaultContentType is null)
-        {
-            return;
-        }
-
-        // 尝试解析内容类型字符串
-        if (!MediaTypeHeaderValue.TryParse(defaultContentType, out _))
-        {
-            throw new ArgumentException("The provided default content type is not valid.", nameof(defaultContentType));
         }
     }
 }

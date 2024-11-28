@@ -34,7 +34,8 @@ internal sealed class DeclarativeManager
         _httpDeclarativeBuilder = httpDeclarativeBuilder;
 
         // 构建 HttpRequestBuilder 实例
-        RequestBuilder = httpDeclarativeBuilder.Build(httpRemoteService.RemoteOptions);
+        RequestBuilder = httpDeclarativeBuilder.Build(httpRemoteService.ServiceProvider
+            .GetRequiredService<IOptions<HttpRemoteOptions>>().Value);
     }
 
     /// <summary>
