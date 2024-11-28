@@ -4999,14 +4999,20 @@
             <param name="logger">
                 <see cref="T:Microsoft.Extensions.Logging.Logger`1" />
             </param>
+            <param name="httpRemoteOptions">
+                <see cref="T:Microsoft.Extensions.Options.IOptions`1" />
+            </param>
         </member>
-        <member name="M:HttpAgent.ProfilerDelegatingHandler.#ctor(Microsoft.Extensions.Logging.ILogger{HttpAgent.Logging})">
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.#ctor(Microsoft.Extensions.Logging.ILogger{HttpAgent.Logging},Microsoft.Extensions.Options.IOptions{HttpAgent.HttpRemoteOptions})">
             <summary>
                 HTTP 远程请求分析工具处理委托
             </summary>
             <remarks>参考文献：https://learn.microsoft.com/zh-cn/aspnet/core/fundamentals/http-requests?view=aspnetcore-8.0#outgoing-request-middleware</remarks>
             <param name="logger">
                 <see cref="T:Microsoft.Extensions.Logging.Logger`1" />
+            </param>
+            <param name="httpRemoteOptions">
+                <see cref="T:Microsoft.Extensions.Options.IOptions`1" />
             </param>
         </member>
         <member name="M:HttpAgent.ProfilerDelegatingHandler.IsEnabled(System.Net.Http.HttpRequestMessage)">
@@ -5026,36 +5032,39 @@
         <member name="M:HttpAgent.ProfilerDelegatingHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogRequestHeaders(Microsoft.Extensions.Logging.ILogger,System.Net.Http.HttpRequestMessage)">
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogRequestHeaders(Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel,System.Net.Http.HttpRequestMessage)">
             <summary>
                 记录请求标头
             </summary>
             <param name="logger">
                 <see cref="T:Microsoft.Extensions.Logging.ILogger" />
             </param>
+            <param name="logLevel">日志级别</param>
             <param name="request">
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
             </param>
         </member>
-        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogResponseHeadersAndSummary(Microsoft.Extensions.Logging.ILogger,System.Net.Http.HttpResponseMessage,System.Int64)">
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogResponseHeadersAndSummary(Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel,System.Net.Http.HttpResponseMessage,System.Int64)">
             <summary>
                 记录常规和响应标头
             </summary>
             <param name="logger">
                 <see cref="T:Microsoft.Extensions.Logging.ILogger" />
             </param>
+            <param name="logLevel">日志级别</param>
             <param name="httpResponseMessage">
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </param>
             <param name="requestDuration">请求耗时（毫秒）</param>
         </member>
-        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogCookieContainer(Microsoft.Extensions.Logging.ILogger,System.Net.Http.HttpRequestMessage,System.Net.CookieContainer)">
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogCookieContainer(Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel,System.Net.Http.HttpRequestMessage,System.Net.CookieContainer)">
             <summary>
                 打印 <see cref="T:System.Net.CookieContainer" /> 内容
             </summary>
             <param name="logger">
                 <see cref="T:Microsoft.Extensions.Logging.ILogger" />
             </param>
+            <param name="logLevel">日志级别</param>
             <param name="request">
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
             </param>
@@ -5063,13 +5072,14 @@
                 <see cref="T:System.Net.CookieContainer" />
             </param>
         </member>
-        <member name="M:HttpAgent.ProfilerDelegatingHandler.Log(Microsoft.Extensions.Logging.ILogger,System.String)">
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.Log(Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel,System.String)">
             <summary>
                 打印日志
             </summary>
             <param name="logger">
                 <see cref="T:Microsoft.Extensions.Logging.ILogger" />
             </param>
+            <param name="logLevel">日志级别</param>
             <param name="message">日志消息</param>
         </member>
         <member name="M:HttpAgent.ProfilerDelegatingHandler.ExtractCookieContainer">
@@ -6589,6 +6599,80 @@
             </summary>
             <param name="increment">增加的数据量</param>
         </member>
+        <member name="T:HttpAgent.RateLimitedStream">
+            <summary>
+                带应用速率限制的流
+            </summary>
+        </member>
+        <member name="F:HttpAgent.RateLimitedStream._bytesPerSecond">
+            <summary>
+                每秒允许的最大字节数
+            </summary>
+        </member>
+        <member name="F:HttpAgent.RateLimitedStream._innerStream">
+            <inheritdoc cref="T:System.IO.Stream" />
+        </member>
+        <member name="F:HttpAgent.RateLimitedStream._startTime">
+            <summary>
+                流开始读取的时间点
+            </summary>
+        </member>
+        <member name="F:HttpAgent.RateLimitedStream._totalBytesRead">
+            <summary>
+                到目前为止已读取的总字节数
+            </summary>
+        </member>
+        <member name="M:HttpAgent.RateLimitedStream.#ctor(System.IO.Stream,System.Int32)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.RateLimitedStream" />
+            </summary>
+            <param name="innerStream">
+                <see cref="T:System.IO.Stream" />
+            </param>
+            <param name="bytesPerSecond">每秒允许的最大字节数</param>
+        </member>
+        <member name="P:HttpAgent.RateLimitedStream.CanRead">
+            <inheritdoc />
+        </member>
+        <member name="P:HttpAgent.RateLimitedStream.CanSeek">
+            <inheritdoc />
+        </member>
+        <member name="P:HttpAgent.RateLimitedStream.CanWrite">
+            <inheritdoc />
+        </member>
+        <member name="P:HttpAgent.RateLimitedStream.CanTimeout">
+            <inheritdoc />
+        </member>
+        <member name="P:HttpAgent.RateLimitedStream.Length">
+            <inheritdoc />
+        </member>
+        <member name="P:HttpAgent.RateLimitedStream.Position">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.RateLimitedStream.Flush">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.RateLimitedStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.RateLimitedStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.RateLimitedStream.SetLength(System.Int64)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.RateLimitedStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.RateLimitedStream.Dispose(System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.RateLimitedStream.ApplyRateLimitAsync(System.Int32)">
+            <summary>
+                根据设定的速率限制调整读写操作的速度
+            </summary>
+            <param name="bytesToRead">本次操作将处理的字节数。</param>
+        </member>
         <member name="T:HttpAgent.ServerSentEventsData">
             <summary>
                 Server-Sent Events 事件流格式
@@ -6797,6 +6881,12 @@
             <summary>
                 默认文件下载保存目录
             </summary>
+        </member>
+        <member name="P:HttpAgent.HttpRemoteOptions.ProfilerLogLevel">
+            <summary>
+                请求分析工具日志级别
+            </summary>
+            <remarks>默认值为 <see cref="F:Microsoft.Extensions.Logging.LogLevel.Warning" /></remarks>
         </member>
         <member name="P:HttpAgent.HttpRemoteOptions.JsonSerializerOptions">
             <summary>

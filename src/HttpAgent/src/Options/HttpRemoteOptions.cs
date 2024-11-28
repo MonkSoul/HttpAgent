@@ -33,6 +33,7 @@ public sealed class HttpRemoteOptions
     /// <summary>
     ///     请求分析工具日志级别
     /// </summary>
+    /// <remarks>默认值为 <see cref="LogLevel.Warning" /></remarks>
     public LogLevel ProfilerLogLevel { get; set; } = LogLevel.Warning;
 
     /// <summary>
