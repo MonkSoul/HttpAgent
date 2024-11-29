@@ -24,8 +24,8 @@ public class ConstantsTests
         Assert.Equal("Bearer", Constants.JWT_BEARER_AUTHENTICATION_SCHEME);
 
     [Fact]
-    public void DEFAULT_CONTENT_TYPE() =>
-        Assert.Equal("text/plain", Constants.DEFAULT_CONTENT_TYPE);
+    public void TEXT_PLAIN_MIME_TYPE() =>
+        Assert.Equal("text/plain", Constants.TEXT_PLAIN_MIME_TYPE);
 
     [Fact]
     public void X_END_OF_STREAM_HEADER() =>

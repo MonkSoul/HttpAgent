@@ -394,7 +394,7 @@ public sealed partial class HttpRequestBuilder
                 and not StringContent => MediaTypeNames.Application
                     .Octet,
             MultipartContent => MediaTypeNames.Multipart.FormData,
-            _ => defaultContentType ?? Constants.DEFAULT_CONTENT_TYPE
+            _ => defaultContentType ?? Constants.TEXT_PLAIN_MIME_TYPE
         };
     }
 }

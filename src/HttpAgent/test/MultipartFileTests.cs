@@ -24,7 +24,7 @@ public class MultipartFileTests
         var multipartFile = MultipartFile.CreateFromByteArray([]);
         Assert.Equal("file", multipartFile.Name);
         Assert.Null(multipartFile.FileName);
-        Assert.Equal("application/octet-stream", multipartFile.ContentType);
+        Assert.Null(multipartFile.ContentType);
         Assert.Null(multipartFile.ContentEncoding);
         Assert.NotNull(multipartFile.Source);
         Assert.True(multipartFile.Source is byte[]);
@@ -38,7 +38,7 @@ public class MultipartFileTests
         var multipartFile = MultipartFile.CreateFromStream(stream);
         Assert.Equal("file", multipartFile.Name);
         Assert.Null(multipartFile.FileName);
-        Assert.Equal("application/octet-stream", multipartFile.ContentType);
+        Assert.Null(multipartFile.ContentType);
         Assert.Null(multipartFile.ContentEncoding);
         Assert.NotNull(multipartFile.Source);
         Assert.True(multipartFile.Source is Stream);
@@ -51,7 +51,7 @@ public class MultipartFileTests
         var multipartFile = MultipartFile.CreateFromPath(@"C:\Workspaces\httptest.jpg");
         Assert.Equal("file", multipartFile.Name);
         Assert.Null(multipartFile.FileName);
-        Assert.Equal("application/octet-stream", multipartFile.ContentType);
+        Assert.Null(multipartFile.ContentType);
         Assert.Null(multipartFile.ContentEncoding);
         Assert.NotNull(multipartFile.Source);
         Assert.True(multipartFile.Source is string);
@@ -67,7 +67,7 @@ public class MultipartFileTests
         var multipartFile = MultipartFile.CreateFromBase64String(base64String);
         Assert.Equal("file", multipartFile.Name);
         Assert.Null(multipartFile.FileName);
-        Assert.Equal("application/octet-stream", multipartFile.ContentType);
+        Assert.Null(multipartFile.ContentType);
         Assert.Null(multipartFile.ContentEncoding);
         Assert.NotNull(multipartFile.Source);
         Assert.True(multipartFile.Source is string);
@@ -80,7 +80,7 @@ public class MultipartFileTests
         var multipartFile = MultipartFile.CreateFromRemote("https://furion.net/img/furionlogo.png");
         Assert.Equal("file", multipartFile.Name);
         Assert.Null(multipartFile.FileName);
-        Assert.Equal("application/octet-stream", multipartFile.ContentType);
+        Assert.Null(multipartFile.ContentType);
         Assert.Null(multipartFile.ContentEncoding);
         Assert.NotNull(multipartFile.Source);
         Assert.True(multipartFile.Source is string);

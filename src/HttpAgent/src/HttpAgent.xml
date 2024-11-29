@@ -2818,9 +2818,9 @@
                 JWT (JSON Web Token) 授权标识
             </summary>
         </member>
-        <member name="F:HttpAgent.Constants.DEFAULT_CONTENT_TYPE">
+        <member name="F:HttpAgent.Constants.TEXT_PLAIN_MIME_TYPE">
             <summary>
-                默认请求内容类型
+                <c>text/plain</c> 内容类型
             </summary>
         </member>
         <member name="F:HttpAgent.Constants.X_END_OF_STREAM_HEADER">
@@ -6222,6 +6222,56 @@
             </summary>
             <returns>
                 <see cref="T:System.TimeSpan" />
+            </returns>
+        </member>
+        <member name="T:HttpAgent.FileTypeMapper">
+            <summary>
+                据文件扩展名提供内容类型
+            </summary>
+        </member>
+        <member name="M:HttpAgent.FileTypeMapper.#ctor">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.FileTypeMapper" />
+            </summary>
+        </member>
+        <member name="M:HttpAgent.FileTypeMapper.#ctor(System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.FileTypeMapper" />
+            </summary>
+            <param name="mapping">文件拓展名及其对应内容类型映射字典</param>
+        </member>
+        <member name="P:HttpAgent.FileTypeMapper.Mappings">
+            <summary>
+                文件拓展名及其对应内容类型映射字典
+            </summary>
+        </member>
+        <member name="M:HttpAgent.FileTypeMapper.TryGetContentType(System.String,System.String@)">
+            <summary>
+                尝试根据文件路径获取拓展名
+            </summary>
+            <param name="subpath">文件路径</param>
+            <param name="contentType">内容类型</param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.FileTypeMapper.GetContentType(System.String,System.String)">
+            <summary>
+                根据文件路径获取拓展名
+            </summary>
+            <param name="subpath">文件路径</param>
+            <param name="defaultContentType">默认内容类型</param>
+            <returns>
+                <see cref="T:System.String" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.FileTypeMapper.GetExtension(System.String)">
+            <summary>
+                根据文件路径获取拓展名
+            </summary>
+            <param name="path">文件路径</param>
+            <returns>
+                <see cref="T:System.String" />
             </returns>
         </member>
         <member name="T:HttpAgent.HttpClientPooling">

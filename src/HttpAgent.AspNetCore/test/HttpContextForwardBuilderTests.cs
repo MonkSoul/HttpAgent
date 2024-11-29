@@ -479,7 +479,7 @@ public class HttpContextForwardBuilderTests
             Assert.True(httpMultipartFormDataBuilder._partContents[2].RawContent is Stream);
             Assert.Equal("File", httpMultipartFormDataBuilder._partContents[2].Name);
             Assert.Equal("test.txt", httpMultipartFormDataBuilder._partContents[2].FileName);
-            Assert.Equal("application/octet-stream", httpMultipartFormDataBuilder._partContents[2].ContentType);
+            Assert.Equal("text/plain", httpMultipartFormDataBuilder._partContents[2].ContentType);
             Assert.NotNull(httpRequestBuilder.Disposables);
             Assert.Single(httpRequestBuilder.Disposables);
             Assert.Equal(httpMultipartFormDataBuilder._partContents[2].RawContent,
@@ -567,7 +567,7 @@ public class HttpContextForwardBuilderTests
             Assert.True(httpMultipartFormDataBuilder._partContents[2].RawContent is Stream);
             Assert.Equal("File", httpMultipartFormDataBuilder._partContents[2].Name);
             Assert.Equal("test.txt", httpMultipartFormDataBuilder._partContents[2].FileName);
-            Assert.Equal("application/octet-stream", httpMultipartFormDataBuilder._partContents[2].ContentType);
+            Assert.Equal("text/plain", httpMultipartFormDataBuilder._partContents[2].ContentType);
             Assert.NotNull(httpRequestBuilder.Disposables);
             Assert.Single(httpRequestBuilder.Disposables);
             Assert.Equal(httpMultipartFormDataBuilder._partContents[2].RawContent,
@@ -758,7 +758,7 @@ public class HttpContextForwardBuilderTests
             Assert.True(httpMultipartFormDataBuilder._partContents[2].RawContent is Stream);
             Assert.Equal("File", httpMultipartFormDataBuilder._partContents[2].Name);
             Assert.Equal("test.txt", httpMultipartFormDataBuilder._partContents[2].FileName);
-            Assert.Equal("application/octet-stream", httpMultipartFormDataBuilder._partContents[2].ContentType);
+            Assert.Equal("text/plain", httpMultipartFormDataBuilder._partContents[2].ContentType);
             Assert.NotNull(httpRequestBuilder.Disposables);
             Assert.Equal(2, httpRequestBuilder.Disposables.Count);
             Assert.Equal(httpMultipartFormDataBuilder._partContents[2].RawContent,
@@ -957,7 +957,7 @@ public class HttpContextForwardBuilderTests
             Assert.True(httpMultipartFormDataBuilder._partContents[2].RawContent is Stream);
             Assert.Equal("File", httpMultipartFormDataBuilder._partContents[2].Name);
             Assert.Equal("test.txt", httpMultipartFormDataBuilder._partContents[2].FileName);
-            Assert.Equal("application/octet-stream", httpMultipartFormDataBuilder._partContents[2].ContentType);
+            Assert.Equal("text/plain", httpMultipartFormDataBuilder._partContents[2].ContentType);
             Assert.NotNull(httpRequestBuilder.Disposables);
             Assert.Equal(2, httpRequestBuilder.Disposables.Count);
             Assert.Equal(httpMultipartFormDataBuilder._partContents[2].RawContent,
@@ -1167,7 +1167,7 @@ public class HttpContextForwardBuilderTests
             Assert.True(httpMultipartFormDataBuilder._partContents[2].RawContent is Stream);
             Assert.Equal("File", httpMultipartFormDataBuilder._partContents[2].Name);
             Assert.Equal("test.txt", httpMultipartFormDataBuilder._partContents[2].FileName);
-            Assert.Equal("application/octet-stream", httpMultipartFormDataBuilder._partContents[2].ContentType);
+            Assert.Equal("text/plain", httpMultipartFormDataBuilder._partContents[2].ContentType);
             Assert.NotNull(httpRequestBuilder.Disposables);
             Assert.Equal(2, httpRequestBuilder.Disposables.Count);
             Assert.Equal(httpMultipartFormDataBuilder._partContents[2].RawContent,

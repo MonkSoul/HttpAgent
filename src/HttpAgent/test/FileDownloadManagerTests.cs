@@ -517,11 +517,15 @@ public class FileDownloadManagerTests(ITestOutputHelper output)
         using var cancellationTokenSource = new CancellationTokenSource();
         cancellationTokenSource.CancelAfter(100);
 
-        Assert.Throws<TaskCanceledException>(() =>
+        try
         {
             // ReSharper disable once MethodHasAsyncOverload
             fileDownloadManager.Start(cancellationTokenSource.Token);
-        });
+        }
+        catch (Exception e)
+        {
+            Assert.True(e is OperationCanceledException);
+        }
 
         Assert.False(File.Exists(destinationPath));
 

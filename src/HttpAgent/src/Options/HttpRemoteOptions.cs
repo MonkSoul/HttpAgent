@@ -23,7 +23,7 @@ public sealed class HttpRemoteOptions
     /// <summary>
     ///     默认请求内容类型
     /// </summary>
-    public string? DefaultContentType { get; set; } = Constants.DEFAULT_CONTENT_TYPE;
+    public string? DefaultContentType { get; set; } = Constants.TEXT_PLAIN_MIME_TYPE;
 
     /// <summary>
     ///     默认文件下载保存目录

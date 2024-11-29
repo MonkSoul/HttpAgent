@@ -35,9 +35,9 @@ internal static class Constants
     internal const string JWT_BEARER_AUTHENTICATION_SCHEME = "Bearer";
 
     /// <summary>
-    ///     默认请求内容类型
+    ///     <c>text/plain</c> 内容类型
     /// </summary>
-    internal const string DEFAULT_CONTENT_TYPE = MediaTypeNames.Text.Plain;
+    internal const string TEXT_PLAIN_MIME_TYPE = "text/plain";
 
     /// <summary>
     ///     响应结束符标头
