@@ -43,15 +43,62 @@ public static class HttpRemoteExtensions
     /// <param name="httpRequestMessage">
     ///     <see cref="HttpRequestMessage" />
     /// </param>
-    /// <param name="summary">摘要</param>
+    /// <param name="requestSummary">请求标头摘要</param>
+    /// <param name="contentSummary">请求内容标头摘要</param>
     /// <returns>
     ///     <see cref="string" />
     /// </returns>
     public static string? ProfilerHeaders(this HttpRequestMessage httpRequestMessage,
-        string? summary = "Request Headers") =>
-        StringUtility.FormatKeyValuesSummary(
-            httpRequestMessage.Headers.ConcatIgnoreNull(httpRequestMessage.Content?.Headers),
-            summary);
+        string? requestSummary = "Request Headers", string? contentSummary = "Content Headers")
+    {
+        // 格式化请求条目
+        var requestEntry = StringUtility.FormatKeyValuesSummary(httpRequestMessage.Headers, requestSummary);
+
+        // 获取 HttpContent 实例
+        var httpContent = httpRequestMessage.Content;
+
+        // 空检查
+        if (httpContent is null)
+        {
+            return requestEntry;
+        }
+
+        // 获取请求内容集合
+        var httpContentCollection = httpContent as MultipartContent ?? [httpContent];
+
+        // 初始化 StringBuilder 实例用于构建请求内容标头条目
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine($"{contentSummary} ({httpContent?.GetType().Name}): ");
+
+        var count = httpContentCollection.Count();
+        for (var i = 0; i < count; i++)
+        {
+            // 获取当前请求内容
+            var content = httpContentCollection.ElementAt(i);
+
+            // 获取内容（表单名）摘要
+            var nameSummary = string.IsNullOrWhiteSpace(content.Headers.ContentDisposition?.Name)
+                ? null
+                : $"\t[{content.Headers.ContentDisposition?.Name}]";
+
+            // 格式化请求内容标头条目
+            var contentHeaderEntry =
+                StringUtility.FormatKeyValuesSummary(content.Headers.ToDictionary(u => $"  {u.Key}", u => u.Value),
+                    nameSummary);
+
+            // 处理最后一行换行问题
+            if (i == count - 1)
+            {
+                stringBuilder.Append(contentHeaderEntry);
+            }
+            else
+            {
+                stringBuilder.AppendLine(contentHeaderEntry);
+            }
+        }
+
+        return $"{requestEntry}\r\n{stringBuilder}";
+    }
 
     /// <summary>
     ///     分析 <see cref="HttpResponseMessage" /> 标头

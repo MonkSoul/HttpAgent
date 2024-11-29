@@ -48,6 +48,22 @@ public class HttpRemoteExtensionsTests
     }
 
     [Fact]
+    public void ProfilerHeaders_HttpRequestMessage_WithContent_ReturnOK()
+    {
+        var httpRequestMessage = new HttpRequestMessage();
+        httpRequestMessage.Content = new StringContent("Furion", Encoding.UTF8, "application/json");
+        httpRequestMessage.Headers.TryAddWithoutValidation("Accept", "application/json");
+        httpRequestMessage.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
+
+        Assert.Equal(
+            "Request Headers: \r\n\tAccept:              application/json\r\n\tAccept-Encoding:     gzip, deflate\r\nContent Headers (StringContent): \r\n  Content-Type:     application/json; charset=utf-8",
+            httpRequestMessage.ProfilerHeaders());
+        Assert.Equal(
+            "Accept:              application/json\r\nAccept-Encoding:     gzip, deflate\r\nContent Headers (StringContent): \r\n  Content-Type:     application/json; charset=utf-8",
+            httpRequestMessage.ProfilerHeaders(null));
+    }
+
+    [Fact]
     public void ProfilerHeaders_HttpResponseMessage_ReturnOK()
     {
         var httpResponseMessage = new HttpResponseMessage();

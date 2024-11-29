@@ -5107,14 +5107,15 @@
                 <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.ProfilerHeaders(System.Net.Http.HttpRequestMessage,System.String)">
+        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.ProfilerHeaders(System.Net.Http.HttpRequestMessage,System.String,System.String)">
             <summary>
                 分析 <see cref="T:System.Net.Http.HttpRequestMessage" /> 标头
             </summary>
             <param name="httpRequestMessage">
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
             </param>
-            <param name="summary">摘要</param>
+            <param name="requestSummary">请求标头摘要</param>
+            <param name="contentSummary">请求内容标头摘要</param>
             <returns>
                 <see cref="T:System.String" />
             </returns>

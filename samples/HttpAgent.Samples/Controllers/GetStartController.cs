@@ -524,4 +524,19 @@ public class GetStartController(
         var str = await authService.GetDataAsync();
         var result = await authService.LoginAsync("admin", "admin");
     }
+    
+    [HttpGet]
+    public async Task<string?> Test()
+    {
+        var result = await httpRemoteService.PostAsAsync<string>(
+            "https://wszm-qa.sims.vatgl.com/ah/api/app/TaxPayment/decode",
+            builder => builder
+                .SetMultipartContent(multipart =>
+                {
+                    multipart.AddFileAsStream(@"C:\Workspaces\1357eb60-4af6-488f-8b5b-2bf2c49a8545.jpg", "file",
+                        contentType: "image/jpeg");
+                }).AddJwtBearerAuthentication(
+                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJKUi5TZXJ2aWNlU3RvcmUiLCJpc3MiOiJKUi5TZXJ2aWNlU3RvcmUiLCJuYW1laWQiOiIzYTE2M2FjYS1hNTgxLTU3OGYtNTY3Ni1mZWU1Y2ZiMWJiYTAiLCJnaXZlbl9uYW1lIjoi57uP5rWO5Zut5Yy6IiwidW5pcXVlX25hbWUiOiJqanlxIiwiZW1haWwiOiJqanlxQGppbnJlbi5uZXQiLCJ0ZW5hbnRpZCI6IiIsInJvbGUiOiJOb3JtYWxVc2VycyIsIm5iZiI6MTczMjc3OTYzMSwiZXhwIjoxNzMyNzg2ODMxLCJpYXQiOjE3MzI3Nzk2MzF9.yLkCC-flRhvxM7h4STzPZAKaEQXND_ZoRgOjfDoQkaM"));
+        return result;
+    }
 }
