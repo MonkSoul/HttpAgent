@@ -15,7 +15,7 @@ public class HelpersTests
 
         var exception =
             Assert.Throws<ArgumentException>(() => HttpAgent.Helpers.GetStreamFromRemote(@"C:\Temp\text.txt"));
-        Assert.Equal(@"Invalid internet address: `C:\Temp\text.txt`. (Parameter 'url')", exception.Message);
+        Assert.Equal(@"Invalid internet address: `C:\Temp\text.txt`. (Parameter 'requestUri')", exception.Message);
     }
 
     [Fact]

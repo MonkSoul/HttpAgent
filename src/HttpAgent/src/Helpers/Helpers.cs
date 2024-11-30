@@ -14,22 +14,23 @@ internal static partial class Helpers
     /// <summary>
     ///     从互联网 URL 地址中加载流
     /// </summary>
-    /// <param name="url">互联网 URL 地址</param>
+    /// <param name="requestUri">互联网 URL 地址</param>
     /// <param name="maxResponseContentBufferSize">响应内容的最大缓存大小。默认值为：<c>100MB</c>。</param>
     /// <returns>
     ///     <see cref="Tuple{T1, T2}" />
     /// </returns>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="InvalidOperationException"></exception>
-    internal static Tuple<Stream, long> GetStreamFromRemote(string url, long maxResponseContentBufferSize = 104857600L)
+    internal static Tuple<Stream, long> GetStreamFromRemote(string requestUri,
+        long maxResponseContentBufferSize = 104857600L)
     {
         // 空检查
-        ArgumentException.ThrowIfNullOrWhiteSpace(url);
+        ArgumentException.ThrowIfNullOrWhiteSpace(requestUri);
 
         // 检查 URL 地址是否是互联网地址
-        if (!NetworkUtility.IsWebUrl(url))
+        if (!NetworkUtility.IsWebUrl(requestUri))
         {
-            throw new ArgumentException($"Invalid internet address: `{url}`.", nameof(url));
+            throw new ArgumentException($"Invalid internet address: `{requestUri}`.", nameof(requestUri));
         }
 
         // 初始化 HttpClient 实例
@@ -45,7 +46,7 @@ internal static partial class Helpers
         try
         {
             // 发送 HTTP 远程请求
-            var httpResponseMessage = httpClient.Send(new HttpRequestMessage(HttpMethod.Get, url),
+            var httpResponseMessage = httpClient.Send(new HttpRequestMessage(HttpMethod.Get, requestUri),
                 HttpCompletionOption.ResponseHeadersRead);
 
             // 确保请求成功
@@ -59,7 +60,7 @@ internal static partial class Helpers
         }
         catch (Exception e)
         {
-            throw new InvalidOperationException($"Failed to load stream from internet address: `{url}`.", e);
+            throw new InvalidOperationException($"Failed to load stream from internet address: `{requestUri}`.", e);
         }
     }
 

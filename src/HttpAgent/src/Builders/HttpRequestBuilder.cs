@@ -203,11 +203,8 @@ public sealed partial class HttpRequestBuilder
             httpRequestMessage.Headers.TryAddWithoutValidation(Constants.X_TRACE_ID_HEADER, TraceIdentifier);
         }
 
-        // 设置身份验证凭据请求授权标头
-        if (AuthenticationHeader is not null)
-        {
-            httpRequestMessage.Headers.Authorization = AuthenticationHeader;
-        }
+        // 添加身份认证
+        AppendAuthentication(httpRequestMessage);
 
         // 设置禁用 HTTP 缓存
         if (DisableCacheEnabled)
@@ -229,6 +226,48 @@ public sealed partial class HttpRequestBuilder
         {
             httpRequestMessage.Headers.TryAddWithoutValidation(key, values);
         }
+    }
+
+    /// <summary>
+    ///     添加身份认证
+    /// </summary>
+    /// <param name="httpRequestMessage">
+    ///     <see cref="HttpRequestMessage" />
+    /// </param>
+    internal void AppendAuthentication(HttpRequestMessage httpRequestMessage)
+    {
+        // 空检查
+        if (AuthenticationHeader is null)
+        {
+            return;
+        }
+
+        // 检查是否是 Digest 摘要认证
+        if (AuthenticationHeader.Scheme != Constants.DIGEST_AUTHENTICATION_SCHEME)
+        {
+            httpRequestMessage.Headers.Authorization = AuthenticationHeader;
+
+            return;
+        }
+
+        // 检查参数是否包含预设的 Digest 授权凭证
+        const string separator = "|:|";
+        if (AuthenticationHeader.Parameter?.Contains(separator) != true)
+        {
+            return;
+        }
+
+        // 分割预设的用户名和密码
+        var parts = AuthenticationHeader.Parameter.Split(separator);
+
+        // 获取 Digest 摘要认证授权凭证
+        var digestCredentials =
+            DigestCredentials.GetDigestCredentials(httpRequestMessage.RequestUri?.OriginalString, parts[0], parts[1],
+                Method!);
+
+        // 设置身份验证凭据请求授权标头
+        httpRequestMessage.Headers.Authorization =
+            new AuthenticationHeaderValue(Constants.DIGEST_AUTHENTICATION_SCHEME, digestCredentials);
     }
 
     /// <summary>

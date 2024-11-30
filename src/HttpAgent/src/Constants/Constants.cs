@@ -35,6 +35,11 @@ internal static class Constants
     internal const string JWT_BEARER_AUTHENTICATION_SCHEME = "Bearer";
 
     /// <summary>
+    ///     Digest 授权标识
+    /// </summary>
+    internal const string DIGEST_AUTHENTICATION_SCHEME = "Digest";
+
+    /// <summary>
     ///     <c>text/plain</c> 内容类型
     /// </summary>
     internal const string TEXT_PLAIN_MIME_TYPE = "text/plain";

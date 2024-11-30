@@ -1257,6 +1257,31 @@ public class HttpRequestBuilderMethodsTests
     }
 
     [Fact]
+    public void AddDigestAuthentication_Invalid_Parameters()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+
+        Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.AddDigestAuthentication(null!, null!));
+        Assert.Throws<ArgumentException>(() => httpRequestBuilder.AddDigestAuthentication(string.Empty, null!));
+        Assert.Throws<ArgumentException>(() => httpRequestBuilder.AddDigestAuthentication(" ", null!));
+
+        Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.AddDigestAuthentication("furion", null!));
+        Assert.Throws<ArgumentException>(() => httpRequestBuilder.AddDigestAuthentication("furion", string.Empty));
+        Assert.Throws<ArgumentException>(() => httpRequestBuilder.AddDigestAuthentication("furion", " "));
+    }
+
+    [Fact]
+    public void AddDigestAuthentication_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder.AddDigestAuthentication("furion", "q1w2e3");
+
+        Assert.NotNull(httpRequestBuilder.AuthenticationHeader);
+        Assert.Equal("Digest furion|:|q1w2e3", httpRequestBuilder.AuthenticationHeader.ToString());
+        Assert.Equal("Digest", httpRequestBuilder.AuthenticationHeader.Scheme);
+    }
+
+    [Fact]
     public void AddAuthentication_Invalid_Parameters()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));

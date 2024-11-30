@@ -24,6 +24,10 @@ public class ConstantsTests
         Assert.Equal("Bearer", Constants.JWT_BEARER_AUTHENTICATION_SCHEME);
 
     [Fact]
+    public void DIGEST_AUTHENTICATION_SCHEME() =>
+        Assert.Equal("Digest", Constants.DIGEST_AUTHENTICATION_SCHEME);
+
+    [Fact]
     public void TEXT_PLAIN_MIME_TYPE() =>
         Assert.Equal("text/plain", Constants.TEXT_PLAIN_MIME_TYPE);
 

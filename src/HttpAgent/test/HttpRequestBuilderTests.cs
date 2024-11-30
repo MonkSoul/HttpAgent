@@ -226,6 +226,54 @@ public class HttpRequestBuilderTests
     }
 
     [Fact]
+    public void AppendAuthentication_ReturnOK()
+    {
+        var httpRequestBuilder =
+            new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost/")).AddBasicAuthentication(
+                "admin", "a123456789");
+        var finalRequestUri = httpRequestBuilder.BuildFinalRequestUri(null);
+        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.Method!, finalRequestUri);
+
+        httpRequestBuilder.AppendAuthentication(httpRequestMessage);
+        Assert.Equal("Basic YWRtaW46YTEyMzQ1Njc4OQ==",
+            httpRequestMessage.Headers.GetValues("Authorization").FirstOrDefault());
+    }
+
+    [Fact]
+    public async Task AppendAuthentication_WithDigest_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+        await using var app = builder.Build();
+
+        app.MapGet("/test", async context =>
+        {
+            context.Response.StatusCode = 401;
+            context.Response.Headers.WWWAuthenticate =
+                "Digest qop=\"auth\", realm=\"IP Camera(K7151)\", nonce=\"613134303a38303236313662363ae1b0b8bde54893eab8c0846d38665ab9\", stale=\"FALSE\"";
+
+            await context.Response.CompleteAsync();
+        });
+
+        await app.StartAsync();
+
+        var httpRequestBuilder =
+            new HttpRequestBuilder(HttpMethod.Get, new Uri($"http://localhost:{port}/test")).AddDigestAuthentication(
+                "admin", "a123456789");
+        var finalRequestUri = httpRequestBuilder.BuildFinalRequestUri(null);
+        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.Method!, finalRequestUri);
+
+        httpRequestBuilder.AppendAuthentication(httpRequestMessage);
+
+        Assert.Contains(
+            "Digest username=\"admin\", realm=\"IP Camera(K7151)\", nonce=\"613134303a38303236313662363ae1b0b8bde54893eab8c0846d38665ab9\", uri=\"/test\", algorithm=MD5, qop=auth, nc=00000001",
+            httpRequestMessage.Headers.GetValues("Authorization").FirstOrDefault());
+
+        await app.StopAsync();
+    }
+
+    [Fact]
     public void AppendCookies_ReturnOK()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));

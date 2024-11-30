@@ -1074,6 +1074,27 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
+    ///     设置 Digest 摘要身份验证凭据请求授权标头
+    /// </summary>
+    /// <param name="username">用户名</param>
+    /// <param name="password">密码</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder AddDigestAuthentication(string username, string password)
+    {
+        // 空检查
+        ArgumentException.ThrowIfNullOrWhiteSpace(username);
+        ArgumentException.ThrowIfNullOrWhiteSpace(password);
+
+        // 设置预设授权凭证
+        AddAuthentication(new AuthenticationHeaderValue(Constants.DIGEST_AUTHENTICATION_SCHEME,
+            $"{username}|:|{password}"));
+
+        return this;
+    }
+
+    /// <summary>
     ///     设置身份验证凭据请求授权标头
     /// </summary>
     /// <param name="authenticationHeader">

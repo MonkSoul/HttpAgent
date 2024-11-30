@@ -1104,6 +1104,14 @@
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
             </param>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.AppendAuthentication(System.Net.Http.HttpRequestMessage)">
+            <summary>
+                添加身份认证
+            </summary>
+            <param name="httpRequestMessage">
+                <see cref="T:System.Net.Http.HttpRequestMessage" />
+            </param>
+        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.RemoveHeaders(System.Net.Http.HttpRequestMessage)">
             <summary>
                 移除请求标头
@@ -1704,6 +1712,16 @@
                 设置 JWT (JSON Web Token) 身份验证凭据请求授权标头
             </summary>
             <param name="jwtToken">JWT 字符串</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.AddDigestAuthentication(System.String,System.String)">
+            <summary>
+                设置 Digest 摘要身份验证凭据请求授权标头
+            </summary>
+            <param name="username">用户名</param>
+            <param name="password">密码</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -2816,6 +2834,11 @@
         <member name="F:HttpAgent.Constants.JWT_BEARER_AUTHENTICATION_SCHEME">
             <summary>
                 JWT (JSON Web Token) 授权标识
+            </summary>
+        </member>
+        <member name="F:HttpAgent.Constants.DIGEST_AUTHENTICATION_SCHEME">
+            <summary>
+                Digest 授权标识
             </summary>
         </member>
         <member name="F:HttpAgent.Constants.TEXT_PLAIN_MIME_TYPE">
@@ -5518,7 +5541,7 @@
             <summary>
                 从互联网 URL 地址中加载流
             </summary>
-            <param name="url">互联网 URL 地址</param>
+            <param name="requestUri">互联网 URL 地址</param>
             <param name="maxResponseContentBufferSize">响应内容的最大缓存大小。默认值为：<c>100MB</c>。</param>
             <returns>
                 <see cref="T:System.Tuple`2" />
@@ -6135,6 +6158,112 @@
             </param>
             <returns>
                 <see cref="T:HttpAgent.StressTestHarnessResult" />
+            </returns>
+        </member>
+        <member name="T:HttpAgent.DigestCredentials">
+            <summary>
+                摘要认证
+            </summary>
+        </member>
+        <member name="P:HttpAgent.DigestCredentials.Username">
+            <summary>
+                用户名
+            </summary>
+        </member>
+        <member name="P:HttpAgent.DigestCredentials.Password">
+            <summary>
+                密码
+            </summary>
+        </member>
+        <member name="P:HttpAgent.DigestCredentials.Realm">
+            <summary>
+                服务器提供的认证领域
+            </summary>
+            <remarks>服务器通过 <c>WWW-Authenticate</c> 响应标头返回。</remarks>
+        </member>
+        <member name="P:HttpAgent.DigestCredentials.Nonce">
+            <summary>
+                服务器提供的随机数
+            </summary>
+            <remarks>服务器通过 <c>WWW-Authenticate</c> 响应标头返回。</remarks>
+        </member>
+        <member name="P:HttpAgent.DigestCredentials.Qop">
+            <summary>
+                保护质量
+            </summary>
+            <remarks>服务器通过 <c>WWW-Authenticate</c> 响应标头返回。</remarks>
+        </member>
+        <member name="P:HttpAgent.DigestCredentials.Nc">
+            <summary>
+                非一次性计数器
+            </summary>
+        </member>
+        <member name="P:HttpAgent.DigestCredentials.CNonce">
+            <summary>
+                客户端提供的随机数
+            </summary>
+        </member>
+        <member name="P:HttpAgent.DigestCredentials.Opaque">
+            <summary>
+                服务器提供的不透明数据
+            </summary>
+            <remarks>服务器通过 <c>WWW-Authenticate</c> 响应标头返回，客户端需原样回去。</remarks>
+        </member>
+        <member name="M:HttpAgent.DigestCredentials.GetDigestCredentials(System.String,System.String,System.String,System.Net.Http.HttpMethod)">
+            <summary>
+                获取 Digest 摘要认证授权凭证
+            </summary>
+            <param name="requestUri">请求地址</param>
+            <param name="username">用户名</param>
+            <param name="password">密码</param>
+            <param name="httpMethod">
+                <see cref="T:System.Net.Http.HttpMethod" />
+            </param>
+            <returns>
+                <see cref="T:System.String" />
+            </returns>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:HttpAgent.DigestCredentials.Create(System.String,System.String,System.String)">
+            <summary>
+                创建 <see cref="T:HttpAgent.DigestCredentials" /> 实例
+            </summary>
+            <param name="username">用户名</param>
+            <param name="password">密码</param>
+            <param name="wwwAuthenticateValue">服务器响应标头 <c>WWW-Authenticate</c> 的值</param>
+            <returns>
+                <see cref="T:HttpAgent.DigestCredentials" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.DigestCredentials.GenerateCredentials(System.String,System.Net.Http.HttpMethod)">
+            <summary>
+                生成摘要认证授权凭证
+            </summary>
+            <param name="digestUri">请求地址，不含主机地址的相对地址</param>
+            <param name="method">
+                <see cref="T:System.Net.Http.HttpMethod" />
+            </param>
+            <returns>
+                <see cref="T:System.String" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.DigestCredentials.ExtractParameterValueFromHeader(System.String,System.String)">
+            <summary>
+                从服务器响应标头 <c>WWW-Authenticate</c> 的值中提取参数值
+            </summary>
+            <param name="name">参数名</param>
+            <param name="wwwAuthenticateValue">服务器响应标头 <c>WWW-Authenticate</c> 的值</param>
+            <returns>
+                <see cref="T:System.String" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.DigestCredentials.GenerateMd5Hash(System.String)">
+            <summary>
+                生成 MD5 哈希
+            </summary>
+            <param name="input">值</param>
+            <returns>
+                <see cref="T:System.String" />
             </returns>
         </member>
         <member name="T:HttpAgent.FileTransferProgress">
