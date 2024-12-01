@@ -4,6 +4,7 @@
 
 using Microsoft.Net.Http.Headers;
 using CacheControlHeaderValue = System.Net.Http.Headers.CacheControlHeaderValue;
+using StringWithQualityHeaderValue = System.Net.Http.Headers.StringWithQualityHeaderValue;
 
 namespace HttpAgent;
 
@@ -59,6 +60,9 @@ public sealed partial class HttpRequestBuilder
 
         // 初始化 HttpRequestMessage 实例
         var httpRequestMessage = new HttpRequestMessage(Method, finalRequestUri);
+
+        // 启用性能优化
+        EnablePerformanceOptimization(httpRequestMessage);
 
         // 追加请求标头
         AppendHeaders(httpRequestMessage);
@@ -197,6 +201,13 @@ public sealed partial class HttpRequestBuilder
     /// </param>
     internal void AppendHeaders(HttpRequestMessage httpRequestMessage)
     {
+        // 添加 Host 标头
+        if (AutoSetHostHeaderEnabled)
+        {
+            httpRequestMessage.Headers.Host =
+                $"{httpRequestMessage.RequestUri?.Host}{(string.IsNullOrWhiteSpace(httpRequestMessage.RequestUri?.Port.ToString()) ? string.Empty : $":{httpRequestMessage.RequestUri.Port}")}";
+        }
+
         // 添加跟踪标识
         if (!string.IsNullOrWhiteSpace(TraceIdentifier))
         {
@@ -289,6 +300,32 @@ public sealed partial class HttpRequestBuilder
         {
             httpRequestMessage.Headers.Remove(headerName);
         }
+    }
+
+    /// <summary>
+    ///     启用性能优化
+    /// </summary>
+    /// <param name="httpRequestMessage">
+    ///     <see cref="HttpRequestBuilder" />
+    /// </param>
+    internal void EnablePerformanceOptimization(HttpRequestMessage httpRequestMessage)
+    {
+        if (!PerformanceOptimizationEnabled)
+        {
+            return;
+        }
+
+        // 设置 Accept 头，表示可以接受任何类型的内容
+        httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
+
+        // 添加 Accept-Encoding 头，支持 gzip、deflate 以及 Brotli 压缩算法
+        // 这样服务器可以根据情况选择最合适的压缩方式发送响应，从而减少传输的数据量
+        httpRequestMessage.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+        httpRequestMessage.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
+        httpRequestMessage.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("br"));
+
+        // 设置 Connection 头为 keep-alive，允许重用 TCP 连接，避免每次请求都重新建立连接带来的开销
+        httpRequestMessage.Headers.ConnectionClose = false;
     }
 
     /// <summary>

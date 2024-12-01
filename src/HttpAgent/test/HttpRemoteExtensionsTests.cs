@@ -34,6 +34,22 @@ public class HttpRemoteExtensionsTests
     }
 
     [Fact]
+    public void PerformanceOptimization_Invalid_Parameters() =>
+        Assert.Throws<ArgumentNullException>(() => HttpRemoteExtensions.PerformanceOptimization(null!));
+
+    [Fact]
+    public void PerformanceOptimization_ReturnOK()
+    {
+        using var httpClient = new HttpClient();
+        httpClient.PerformanceOptimization();
+
+        Assert.NotEmpty(httpClient.DefaultRequestHeaders);
+        Assert.Equal("*/*", httpClient.DefaultRequestHeaders.Accept.ToString());
+        Assert.Equal("gzip, deflate, br", httpClient.DefaultRequestHeaders.AcceptEncoding.ToString());
+        Assert.False(httpClient.DefaultRequestHeaders.ConnectionClose);
+    }
+
+    [Fact]
     public void ProfilerHeaders_HttpRequestMessage_ReturnOK()
     {
         var httpRequestMessage = new HttpRequestMessage();

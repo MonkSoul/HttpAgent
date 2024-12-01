@@ -28,6 +28,11 @@ public class HttpDeclarativeBuilderTests
         Dictionary<Type, IHttpDeclarativeExtractor> extractors = new()
         {
             { typeof(ValidationDeclarativeExtractor), new ValidationDeclarativeExtractor() },
+            {
+                typeof(PerformanceOptimizationDeclarativeExtractor),
+                new PerformanceOptimizationDeclarativeExtractor()
+            },
+            { typeof(AutoSetHostHeaderDeclarativeExtractor), new AutoSetHostHeaderDeclarativeExtractor() },
             { typeof(HttpClientNameDeclarativeExtractor), new HttpClientNameDeclarativeExtractor() },
             { typeof(TraceIdentifierDeclarativeExtractor), new TraceIdentifierDeclarativeExtractor() },
             { typeof(ProfilerDeclarativeExtractor), new ProfilerDeclarativeExtractor() },
@@ -108,6 +113,11 @@ public class HttpDeclarativeBuilderTests
         Dictionary<Type, IHttpDeclarativeExtractor> extractors = new()
         {
             { typeof(ValidationDeclarativeExtractor), new ValidationDeclarativeExtractor() },
+            {
+                typeof(PerformanceOptimizationDeclarativeExtractor),
+                new PerformanceOptimizationDeclarativeExtractor()
+            },
+            { typeof(AutoSetHostHeaderDeclarativeExtractor), new AutoSetHostHeaderDeclarativeExtractor() },
             { typeof(HttpClientNameDeclarativeExtractor), new HttpClientNameDeclarativeExtractor() },
             { typeof(TraceIdentifierDeclarativeExtractor), new TraceIdentifierDeclarativeExtractor() },
             { typeof(ProfilerDeclarativeExtractor), new ProfilerDeclarativeExtractor() },

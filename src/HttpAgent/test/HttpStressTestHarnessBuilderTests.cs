@@ -106,6 +106,7 @@ public class HttpStressTestHarnessBuilderTests
         Assert.Equal("Harness", httpRequestBuilder.Headers["X-Stress-Test"].First());
         Assert.False(httpRequestBuilder.ProfilerEnabled);
         Assert.True(httpRequestBuilder.__Disabled_Profiler__);
+        Assert.True(httpRequestBuilder.PerformanceOptimizationEnabled);
 
         var builder2 = new HttpStressTestHarnessBuilder(HttpMethod.Post, new Uri("http://localhost"));
         var httpRequestBuilder2 = builder2.Build(httpRemoteOptions, options => options.EnsureSuccessStatusCode());

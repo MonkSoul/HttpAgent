@@ -39,6 +39,9 @@ internal static partial class Helpers
         // 限制流大小
         httpClient.MaxResponseContentBufferSize = maxResponseContentBufferSize;
 
+        // 启用性能优化（返回 Stream 内容时，请勿启用此配置，否则流将因压缩而变得不可读。）
+        // httpClient.PerformanceOptimization();
+
         // 设置默认 User-Agent
         httpClient.DefaultRequestHeaders.TryAddWithoutValidation(HeaderNames.UserAgent,
             Constants.USER_AGENT_OF_BROWSER);

@@ -215,6 +215,16 @@ public sealed partial class HttpRequestBuilder
     internal bool ProfilerEnabled { get; private set; }
 
     /// <summary>
+    ///     是否启用性能优化
+    /// </summary>
+    internal bool PerformanceOptimizationEnabled { get; private set; }
+
+    /// <summary>
+    ///     是否自动设置 <c>Host</c> 标头
+    /// </summary>
+    internal bool AutoSetHostHeaderEnabled { get; private set; }
+
+    /// <summary>
     ///     表示禁用请求分析工具标识
     /// </summary>
     /// <remarks>用于禁用全局请求分析工具。</remarks>

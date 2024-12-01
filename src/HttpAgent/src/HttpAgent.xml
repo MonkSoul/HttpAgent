@@ -1120,6 +1120,14 @@
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
             </param>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.EnablePerformanceOptimization(System.Net.Http.HttpRequestMessage)">
+            <summary>
+                启用性能优化
+            </summary>
+            <param name="httpRequestMessage">
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.AppendCookies(System.Net.Http.HttpRequestMessage)">
             <summary>
                 追加 Cookies
@@ -1905,6 +1913,42 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.PerformanceOptimization">
+            <summary>
+                设置是否启用性能优化
+            </summary>
+            <remarks>当需要返回 <see cref="T:System.IO.Stream" /> 内容或进行 <c>HttpContext</c> 网页转发时，请勿启用此配置，因为流会因压缩而变得不可读，同时该配置也不适用于网页转发的场景。</remarks>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.PerformanceOptimization(System.Boolean)">
+            <summary>
+                设置是否启用性能优化
+            </summary>
+            <remarks>当需要返回 <see cref="T:System.IO.Stream" /> 内容或进行 <c>HttpContext</c> 网页转发时，请勿启用此配置，因为流会因压缩而变得不可读，同时该配置也不适用于网页转发的场景。</remarks>
+            <param name="enabled">是否启用</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.AutoSetHostHeader">
+            <summary>
+                设置是否自动设置 <c>Host</c> 标头
+            </summary>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.AutoSetHostHeader(System.Boolean)">
+            <summary>
+                设置是否自动设置 <c>Host</c> 标头
+            </summary>
+            <param name="enabled">是否启用</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.ReleaseDisposables">
             <summary>
                 释放可释放的对象集合
@@ -2118,6 +2162,16 @@
         <member name="P:HttpAgent.HttpRequestBuilder.ProfilerEnabled">
             <summary>
                 是否启用请求分析工具
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HttpRequestBuilder.PerformanceOptimizationEnabled">
+            <summary>
+                是否启用性能优化
+            </summary>
+        </member>
+        <member name="P:HttpAgent.HttpRequestBuilder.AutoSetHostHeaderEnabled">
+            <summary>
+                是否自动设置 <c>Host</c> 标头
             </summary>
         </member>
         <member name="P:HttpAgent.HttpRequestBuilder.__Disabled_Profiler__">
@@ -3994,6 +4048,27 @@
                 客户端偏好的语言和区域
             </summary>
         </member>
+        <member name="T:HttpAgent.AutoSetHostHeaderAttribute">
+            <summary>
+                HTTP 声明式设置自动 <c>Host</c> 标头特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.AutoSetHostHeaderAttribute.#ctor">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.AutoSetHostHeaderAttribute" />
+            </summary>
+        </member>
+        <member name="M:HttpAgent.AutoSetHostHeaderAttribute.#ctor(System.Boolean)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.AutoSetHostHeaderAttribute" />
+            </summary>
+            <param name="enabled">是否启用</param>
+        </member>
+        <member name="P:HttpAgent.AutoSetHostHeaderAttribute.Enabled">
+            <summary>
+                是否启用
+            </summary>
+        </member>
         <member name="T:HttpAgent.BodyAttribute">
             <summary>
                 HTTP 声明式请求内容特性
@@ -4437,6 +4512,30 @@
                 路径参数的值
             </summary>
         </member>
+        <member name="T:HttpAgent.PerformanceOptimizationAttribute">
+            <summary>
+                HTTP 声明式启用性能优化特性
+            </summary>
+            <remarks>当需要返回 <see cref="T:System.IO.Stream" /> 内容或进行 <c>HttpContext</c> 网页转发时，请勿启用此配置，因为流会因压缩而变得不可读，同时该配置也不适用于网页转发的场景。</remarks>
+        </member>
+        <member name="M:HttpAgent.PerformanceOptimizationAttribute.#ctor">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.PerformanceOptimizationAttribute" />
+            </summary>
+            <remarks>当需要返回 <see cref="T:System.IO.Stream" /> 内容或进行 <c>HttpContext</c> 网页转发时，请勿启用此配置，因为流会因压缩而变得不可读，同时该配置也不适用于网页转发的场景。</remarks>
+        </member>
+        <member name="M:HttpAgent.PerformanceOptimizationAttribute.#ctor(System.Boolean)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.PerformanceOptimizationAttribute" />
+            </summary>
+            <remarks>当需要返回 <see cref="T:System.IO.Stream" /> 内容或进行 <c>HttpContext</c> 网页转发时，请勿启用此配置，因为流会因压缩而变得不可读，同时该配置也不适用于网页转发的场景。</remarks>
+            <param name="enabled">是否启用</param>
+        </member>
+        <member name="P:HttpAgent.PerformanceOptimizationAttribute.Enabled">
+            <summary>
+                是否启用
+            </summary>
+        </member>
         <member name="T:HttpAgent.ProfilerAttribute">
             <summary>
                 HTTP 声明式启用请求分析工具特性
@@ -4689,6 +4788,14 @@
         <member name="M:HttpAgent.AcceptLanguageDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
             <inheritdoc />
         </member>
+        <member name="T:HttpAgent.AutoSetHostHeaderDeclarativeExtractor">
+            <summary>
+                HTTP 声明式 <see cref="T:HttpAgent.AutoSetHostHeaderAttribute" /> 特性提取器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.AutoSetHostHeaderDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <inheritdoc />
+        </member>
         <member name="T:HttpAgent.BodyDeclarativeExtractor">
             <summary>
                 HTTP 声明式 <see cref="T:HttpAgent.BodyAttribute" /> 特性提取器
@@ -4854,6 +4961,14 @@
             </summary>
         </member>
         <member name="M:HttpAgent.PathDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <inheritdoc />
+        </member>
+        <member name="T:HttpAgent.PerformanceOptimizationDeclarativeExtractor">
+            <summary>
+                HTTP 声明式 <see cref="T:HttpAgent.PerformanceOptimizationAttribute" /> 特性提取器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.PerformanceOptimizationDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
             <inheritdoc />
         </member>
         <member name="T:HttpAgent.ProfilerDeclarativeExtractor">
@@ -5129,6 +5244,14 @@
             <returns>
                 <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />
             </returns>
+        </member>
+        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.PerformanceOptimization(System.Net.Http.HttpClient)">
+            <summary>
+                为 <see cref="T:System.Net.Http.HttpClient" /> 启用性能优化
+            </summary>
+            <param name="httpClient">
+                <see cref="T:System.Net.Http.HttpClient" />
+            </param>
         </member>
         <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.ProfilerHeaders(System.Net.Http.HttpRequestMessage,System.String,System.String)">
             <summary>
@@ -6239,7 +6362,7 @@
             <summary>
                 生成摘要认证授权凭证
             </summary>
-            <param name="digestUri">请求地址，不含主机地址的相对地址</param>
+            <param name="digestUri">请求相对地址（不包含主机地址）</param>
             <param name="method">
                 <see cref="T:System.Net.Http.HttpMethod" />
             </param>

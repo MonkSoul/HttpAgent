@@ -1574,6 +1574,30 @@ public class HttpRequestBuilderMethodsTests
     }
 
     [Fact]
+    public void PerformanceOptimization_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder.PerformanceOptimization();
+
+        Assert.True(httpRequestBuilder.PerformanceOptimizationEnabled);
+
+        httpRequestBuilder.PerformanceOptimization(false);
+        Assert.False(httpRequestBuilder.PerformanceOptimizationEnabled);
+    }
+
+    [Fact]
+    public void AutoSetHostHeader_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder.AutoSetHostHeader();
+
+        Assert.True(httpRequestBuilder.AutoSetHostHeaderEnabled);
+
+        httpRequestBuilder.AutoSetHostHeader(false);
+        Assert.False(httpRequestBuilder.AutoSetHostHeaderEnabled);
+    }
+
+    [Fact]
     public void AddStringContentForFormUrlEncodedContentProcessor_ReturnOK()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));

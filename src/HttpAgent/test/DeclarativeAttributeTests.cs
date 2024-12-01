@@ -229,6 +229,36 @@ public class DeclarativeAttributeTests
     }
 
     [Fact]
+    public void PerformanceOptimizationAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(PerformanceOptimizationAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface, attributeUsage.ValidOn);
+        Assert.False(attributeUsage.AllowMultiple);
+
+        var attribute = new PerformanceOptimizationAttribute();
+        Assert.True(attribute.Enabled);
+
+        var attribute2 = new PerformanceOptimizationAttribute(false);
+        Assert.False(attribute2.Enabled);
+    }
+
+    [Fact]
+    public void AutoSetHostHeaderAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(AutoSetHostHeaderAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface, attributeUsage.ValidOn);
+        Assert.False(attributeUsage.AllowMultiple);
+
+        var attribute = new AutoSetHostHeaderAttribute();
+        Assert.True(attribute.Enabled);
+
+        var attribute2 = new AutoSetHostHeaderAttribute(false);
+        Assert.False(attribute2.Enabled);
+    }
+
+    [Fact]
     public void QueryAttribute_Invalid_Parameters()
     {
         Assert.Throws<ArgumentNullException>(() => new QueryAttribute(null!));

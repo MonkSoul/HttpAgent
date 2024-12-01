@@ -60,5 +60,7 @@ public class HttpRequestBuilderPropertiesTests
         Assert.False(httpRequestBuilder2.__Disabled_Profiler__);
         Assert.NotNull(httpRequestBuilder2.Properties);
         Assert.Empty(httpRequestBuilder2.Properties);
+        Assert.False(httpRequestBuilder2.PerformanceOptimizationEnabled);
+        Assert.False(httpRequestBuilder2.AutoSetHostHeaderEnabled);
     }
 }

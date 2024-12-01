@@ -1387,6 +1387,52 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
+    ///     设置是否启用性能优化
+    /// </summary>
+    /// <remarks>当需要返回 <see cref="Stream" /> 内容或进行 <c>HttpContext</c> 网页转发时，请勿启用此配置，因为流会因压缩而变得不可读，同时该配置也不适用于网页转发的场景。</remarks>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder PerformanceOptimization() => PerformanceOptimization(true);
+
+    /// <summary>
+    ///     设置是否启用性能优化
+    /// </summary>
+    /// <remarks>当需要返回 <see cref="Stream" /> 内容或进行 <c>HttpContext</c> 网页转发时，请勿启用此配置，因为流会因压缩而变得不可读，同时该配置也不适用于网页转发的场景。</remarks>
+    /// <param name="enabled">是否启用</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder PerformanceOptimization(bool enabled)
+    {
+        PerformanceOptimizationEnabled = enabled;
+
+        return this;
+    }
+
+    /// <summary>
+    ///     设置是否自动设置 <c>Host</c> 标头
+    /// </summary>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder AutoSetHostHeader() => AutoSetHostHeader(true);
+
+    /// <summary>
+    ///     设置是否自动设置 <c>Host</c> 标头
+    /// </summary>
+    /// <param name="enabled">是否启用</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder AutoSetHostHeader(bool enabled)
+    {
+        AutoSetHostHeaderEnabled = enabled;
+
+        return this;
+    }
+
+    /// <summary>
     ///     释放可释放的对象集合
     /// </summary>
     internal void ReleaseDisposables()

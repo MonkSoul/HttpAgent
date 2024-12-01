@@ -17,6 +17,8 @@ public sealed class HttpDeclarativeBuilder
     /// </summary>
     internal static readonly ConcurrentDictionary<Type, IHttpDeclarativeExtractor> _extractors = new([
         new(typeof(ValidationDeclarativeExtractor), new ValidationDeclarativeExtractor()),
+        new(typeof(AutoSetHostHeaderDeclarativeExtractor), new AutoSetHostHeaderDeclarativeExtractor()),
+        new(typeof(PerformanceOptimizationDeclarativeExtractor), new PerformanceOptimizationDeclarativeExtractor()),
         new(typeof(HttpClientNameDeclarativeExtractor), new HttpClientNameDeclarativeExtractor()),
         new(typeof(TraceIdentifierDeclarativeExtractor), new TraceIdentifierDeclarativeExtractor()),
         new(typeof(ProfilerDeclarativeExtractor), new ProfilerDeclarativeExtractor()),

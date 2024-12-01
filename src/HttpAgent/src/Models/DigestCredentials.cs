@@ -68,7 +68,7 @@ public sealed class DigestCredentials
     ///     <see cref="string" />
     /// </returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public static string? GetDigestCredentials(string? requestUri, string username, string password,
+    public static string GetDigestCredentials(string? requestUri, string username, string password,
         HttpMethod httpMethod)
     {
         // 空检查
@@ -83,6 +83,9 @@ public sealed class DigestCredentials
         // 设置默认 User-Agent
         httpClient.DefaultRequestHeaders.TryAddWithoutValidation(HeaderNames.UserAgent,
             Constants.USER_AGENT_OF_BROWSER);
+
+        // 启用性能优化
+        httpClient.PerformanceOptimization();
 
         try
         {
@@ -151,7 +154,7 @@ public sealed class DigestCredentials
     /// <summary>
     ///     生成摘要认证授权凭证
     /// </summary>
-    /// <param name="digestUri">请求地址，不含主机地址的相对地址</param>
+    /// <param name="digestUri">请求相对地址（不包含主机地址）</param>
     /// <param name="method">
     ///     <see cref="HttpMethod" />
     /// </param>

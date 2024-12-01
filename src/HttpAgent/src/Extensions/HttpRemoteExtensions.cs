@@ -38,6 +38,30 @@ public static class HttpRemoteExtensions
     }
 
     /// <summary>
+    ///     为 <see cref="HttpClient" /> 启用性能优化
+    /// </summary>
+    /// <param name="httpClient">
+    ///     <see cref="HttpClient" />
+    /// </param>
+    public static void PerformanceOptimization(this HttpClient httpClient)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(httpClient);
+
+        // 设置 Accept 头，表示可以接受任何类型的内容
+        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
+
+        // 添加 Accept-Encoding 头，支持 gzip、deflate 以及 Brotli 压缩算法
+        // 这样服务器可以根据情况选择最合适的压缩方式发送响应，从而减少传输的数据量
+        httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+        httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
+        httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("br"));
+
+        // 设置 Connection 头为 keep-alive，允许重用 TCP 连接，避免每次请求都重新建立连接带来的开销
+        httpClient.DefaultRequestHeaders.ConnectionClose = false;
+    }
+
+    /// <summary>
     ///     分析 <see cref="HttpRequestMessage" /> 标头
     /// </summary>
     /// <param name="httpRequestMessage">

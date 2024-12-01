@@ -223,6 +223,10 @@ public class HttpRequestBuilderTests
         httpRequestBuilder.WithHeader("null", null);
         httpRequestBuilder.AppendHeaders(httpRequestMessage);
         Assert.Equal([""], httpRequestMessage.Headers.GetValues("null"));
+
+        httpRequestBuilder.AutoSetHostHeader();
+        httpRequestBuilder.AppendHeaders(httpRequestMessage);
+        Assert.Equal("localhost:80", httpRequestMessage.Headers.Host);
     }
 
     [Fact]
@@ -550,5 +554,24 @@ public class HttpRequestBuilderTests
         Assert.Equal(typeof(StringContent), httpRequestMessage.Content.GetType());
         Assert.Equal("text/plain", httpRequestMessage.Content.Headers.ContentType!.MediaType);
         Assert.Null(httpRequestMessage.Content.Headers.ContentType!.CharSet);
+    }
+
+    [Fact]
+    public void EnablePerformanceOptimization_ReturnOK()
+    {
+        var httpRequestBuilder =
+            new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost/"));
+        var finalRequestUri = httpRequestBuilder.BuildFinalRequestUri(null);
+        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.Method!, finalRequestUri);
+
+        httpRequestBuilder.EnablePerformanceOptimization(httpRequestMessage);
+        Assert.Empty(httpRequestMessage.Headers);
+
+        httpRequestBuilder.PerformanceOptimization();
+        httpRequestBuilder.EnablePerformanceOptimization(httpRequestMessage);
+        Assert.NotEmpty(httpRequestMessage.Headers);
+        Assert.Equal("*/*", httpRequestMessage.Headers.Accept.ToString());
+        Assert.Equal("gzip, deflate, br", httpRequestMessage.Headers.AcceptEncoding.ToString());
+        Assert.False(httpRequestMessage.Headers.ConnectionClose);
     }
 }

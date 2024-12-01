@@ -19,7 +19,7 @@ var cookieContainer = new CookieContainer();
 cookieContainer.Add(new Uri("https://furion.net"), new Cookie("cookieName", "cookieValue"));
 
 // 为默认客户端启用
-builder.Services.AddHttpClient(string.Empty, options => { })
+builder.Services.AddHttpClient(string.Empty, client => { })
     .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
     {
         CookieContainer = cookieContainer,
