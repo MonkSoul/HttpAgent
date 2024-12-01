@@ -1125,7 +1125,7 @@
                 启用性能优化
             </summary>
             <param name="httpRequestMessage">
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
+                <see cref="T:System.Net.Http.HttpRequestMessage" />
             </param>
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.AppendCookies(System.Net.Http.HttpRequestMessage)">

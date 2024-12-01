@@ -306,7 +306,7 @@ public sealed partial class HttpRequestBuilder
     ///     启用性能优化
     /// </summary>
     /// <param name="httpRequestMessage">
-    ///     <see cref="HttpRequestBuilder" />
+    ///     <see cref="HttpRequestMessage" />
     /// </param>
     internal void EnablePerformanceOptimization(HttpRequestMessage httpRequestMessage)
     {
