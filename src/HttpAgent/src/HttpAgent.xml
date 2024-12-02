@@ -7819,37 +7819,37 @@
         <member name="M:HttpAgent.HttpRemoteService.Get(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.Get(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.Get(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.GetAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.GetAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.GetAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.GetAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.GetAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.GetAs``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.GetAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.GetAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.GetAsAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.Get``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.Get``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.Get``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.GetAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.GetAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.GetAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.GetAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -7861,13 +7861,13 @@
         <member name="M:HttpAgent.HttpRemoteService.GetAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.GetAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.GetAsString(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.GetAsStream(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.GetAsStream(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.GetAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.GetAsByteArray(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.GetAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -7879,49 +7879,49 @@
         <member name="M:HttpAgent.HttpRemoteService.GetAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.GetAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.GetAsStringAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.GetAsStreamAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.GetAsStreamAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.GetAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.GetAsByteArrayAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.Put(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.Put(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.Put(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.PutAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PutAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PutAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.PutAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PutAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PutAs``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.PutAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PutAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PutAsAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.Put``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.Put``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.Put``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.PutAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PutAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PutAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.PutAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -7933,13 +7933,13 @@
         <member name="M:HttpAgent.HttpRemoteService.PutAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PutAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PutAsString(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PutAsStream(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PutAsStream(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PutAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PutAsByteArray(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.PutAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -7951,49 +7951,49 @@
         <member name="M:HttpAgent.HttpRemoteService.PutAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PutAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PutAsStringAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PutAsStreamAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PutAsStreamAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PutAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PutAsByteArrayAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.Post(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.Post(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.Post(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.PostAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PostAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PostAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.PostAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PostAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PostAs``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.PostAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PostAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PostAsAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.Post``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.Post``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.Post``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.PostAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PostAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PostAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.PostAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -8005,13 +8005,13 @@
         <member name="M:HttpAgent.HttpRemoteService.PostAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PostAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PostAsString(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PostAsStream(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PostAsStream(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PostAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PostAsByteArray(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.PostAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -8023,49 +8023,49 @@
         <member name="M:HttpAgent.HttpRemoteService.PostAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PostAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PostAsStringAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PostAsStreamAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PostAsStreamAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PostAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PostAsByteArrayAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.Delete(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.Delete(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.Delete(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.DeleteAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.DeleteAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.DeleteAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.DeleteAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.DeleteAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.DeleteAs``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.DeleteAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.DeleteAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.DeleteAsAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.Delete``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.Delete``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.Delete``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.DeleteAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.DeleteAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.DeleteAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.DeleteAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -8077,13 +8077,13 @@
         <member name="M:HttpAgent.HttpRemoteService.DeleteAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.DeleteAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.DeleteAsString(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.DeleteAsStream(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.DeleteAsStream(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.DeleteAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.DeleteAsByteArray(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.DeleteAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -8095,49 +8095,49 @@
         <member name="M:HttpAgent.HttpRemoteService.DeleteAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.DeleteAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.DeleteAsStringAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.DeleteAsStreamAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.DeleteAsStreamAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.DeleteAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.DeleteAsByteArrayAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.Head(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.Head(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.Head(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.HeadAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.HeadAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.HeadAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.HeadAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.HeadAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.HeadAs``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.HeadAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.HeadAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.HeadAsAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.Head``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.Head``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.Head``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.HeadAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.HeadAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.HeadAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.HeadAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -8149,13 +8149,13 @@
         <member name="M:HttpAgent.HttpRemoteService.HeadAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.HeadAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.HeadAsString(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.HeadAsStream(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.HeadAsStream(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.HeadAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.HeadAsByteArray(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.HeadAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -8167,49 +8167,49 @@
         <member name="M:HttpAgent.HttpRemoteService.HeadAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.HeadAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.HeadAsStringAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.HeadAsStreamAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.HeadAsStreamAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.HeadAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.HeadAsByteArrayAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.Options(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.Options(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.Options(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.OptionsAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.OptionsAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.OptionsAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.OptionsAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.OptionsAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.OptionsAs``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.OptionsAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.OptionsAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.OptionsAsAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.Options``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.Options``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.Options``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.OptionsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.OptionsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.OptionsAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.OptionsAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -8221,13 +8221,13 @@
         <member name="M:HttpAgent.HttpRemoteService.OptionsAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.OptionsAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.OptionsAsString(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.OptionsAsStream(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.OptionsAsStream(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.OptionsAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.OptionsAsByteArray(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.OptionsAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -8239,49 +8239,49 @@
         <member name="M:HttpAgent.HttpRemoteService.OptionsAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.OptionsAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.OptionsAsStringAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.OptionsAsStreamAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.OptionsAsStreamAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.OptionsAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.OptionsAsByteArrayAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.Trace(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.Trace(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.Trace(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.TraceAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.TraceAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.TraceAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.TraceAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.TraceAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.TraceAs``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.TraceAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.TraceAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.TraceAsAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.Trace``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.Trace``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.Trace``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.TraceAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.TraceAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.TraceAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.TraceAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -8293,13 +8293,13 @@
         <member name="M:HttpAgent.HttpRemoteService.TraceAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.TraceAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.TraceAsString(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.TraceAsStream(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.TraceAsStream(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.TraceAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.TraceAsByteArray(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.TraceAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -8311,49 +8311,49 @@
         <member name="M:HttpAgent.HttpRemoteService.TraceAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.TraceAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.TraceAsStringAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.TraceAsStreamAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.TraceAsStreamAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.TraceAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.TraceAsByteArrayAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.Patch(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.Patch(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.Patch(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.PatchAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PatchAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PatchAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.PatchAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PatchAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PatchAs``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.PatchAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PatchAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PatchAsAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.Patch``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.Patch``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.Patch``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.PatchAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PatchAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PatchAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.PatchAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -8365,13 +8365,13 @@
         <member name="M:HttpAgent.HttpRemoteService.PatchAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PatchAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PatchAsString(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PatchAsStream(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PatchAsStream(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PatchAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PatchAsByteArray(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.PatchAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -8383,13 +8383,13 @@
         <member name="M:HttpAgent.HttpRemoteService.PatchAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PatchAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PatchAsStringAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PatchAsStreamAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PatchAsStreamAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.PatchAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.PatchAsByteArrayAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="T:HttpAgent.IHttpRemoteService">
@@ -9223,15 +9223,15 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.Get(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.Get(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP GET 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9252,15 +9252,15 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.GetAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.GetAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP GET 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9282,15 +9282,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.GetAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.GetAs``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP GET 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9313,15 +9313,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.GetAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.GetAsAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP GET 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9344,15 +9344,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.Get``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.Get``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP GET 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9375,15 +9375,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.GetAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.GetAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP GET 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9431,15 +9431,15 @@
                 <c>byte[]</c>
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.GetAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.GetAsString(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP GET 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9447,15 +9447,15 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.GetAsStream(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.GetAsStream(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP GET 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9463,15 +9463,15 @@
                 <see cref="T:System.IO.Stream" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.GetAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.GetAsByteArray(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP GET 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9518,15 +9518,15 @@
                 <c>byte[]</c>
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.GetAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.GetAsStringAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP GET 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9534,15 +9534,15 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.GetAsStreamAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.GetAsStreamAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP GET 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9550,15 +9550,15 @@
                 <see cref="T:System.IO.Stream" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.GetAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.GetAsByteArrayAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP GET 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9579,15 +9579,15 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.Put(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.Put(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PUT 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9608,15 +9608,15 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PutAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PutAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PUT 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9638,15 +9638,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PutAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PutAs``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PUT 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9669,15 +9669,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PutAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PutAsAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PUT 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9700,15 +9700,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.Put``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.Put``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PUT 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9731,15 +9731,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PutAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PutAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PUT 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9787,15 +9787,15 @@
                 <c>byte[]</c>
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PutAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PutAsString(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PUT 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9803,15 +9803,15 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PutAsStream(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PutAsStream(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PUT 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9819,15 +9819,15 @@
                 <see cref="T:System.IO.Stream" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PutAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PutAsByteArray(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PUT 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9874,15 +9874,15 @@
                 <c>byte[]</c>
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PutAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PutAsStringAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PUT 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9890,15 +9890,15 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PutAsStreamAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PutAsStreamAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PUT 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9906,15 +9906,15 @@
                 <see cref="T:System.IO.Stream" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PutAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PutAsByteArrayAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PUT 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9935,15 +9935,15 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.Post(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.Post(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP POST 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9964,15 +9964,15 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PostAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PostAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP POST 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -9994,15 +9994,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PostAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PostAs``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP POST 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10025,15 +10025,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PostAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PostAsAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP POST 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10056,15 +10056,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.Post``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.Post``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP POST 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10087,15 +10087,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PostAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PostAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP POST 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10143,15 +10143,15 @@
                 <c>byte[]</c>
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PostAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PostAsString(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP POST 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10159,15 +10159,15 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PostAsStream(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PostAsStream(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP POST 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10175,15 +10175,15 @@
                 <see cref="T:System.IO.Stream" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PostAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PostAsByteArray(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP POST 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10230,15 +10230,15 @@
                 <c>byte[]</c>
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PostAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PostAsStringAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP POST 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10246,15 +10246,15 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PostAsStreamAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PostAsStreamAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP POST 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10262,15 +10262,15 @@
                 <see cref="T:System.IO.Stream" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PostAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PostAsByteArrayAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP POST 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10291,15 +10291,15 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.Delete(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.Delete(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP DELETE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10320,15 +10320,15 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.DeleteAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.DeleteAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP DELETE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10350,15 +10350,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.DeleteAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.DeleteAs``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP DELETE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10381,15 +10381,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.DeleteAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.DeleteAsAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP DELETE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10412,15 +10412,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.Delete``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.Delete``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP DELETE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10443,15 +10443,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.DeleteAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.DeleteAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP DELETE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10499,15 +10499,15 @@
                 <c>byte[]</c>
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.DeleteAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.DeleteAsString(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP DELETE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10515,15 +10515,15 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.DeleteAsStream(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.DeleteAsStream(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP DELETE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10531,15 +10531,15 @@
                 <see cref="T:System.IO.Stream" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.DeleteAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.DeleteAsByteArray(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP DELETE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10586,15 +10586,15 @@
                 <c>byte[]</c>
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.DeleteAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.DeleteAsStringAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP DELETE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10602,15 +10602,15 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.DeleteAsStreamAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.DeleteAsStreamAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP DELETE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10618,15 +10618,15 @@
                 <see cref="T:System.IO.Stream" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.DeleteAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.DeleteAsByteArrayAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP DELETE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10647,15 +10647,15 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.Head(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.Head(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP HEAD 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10676,15 +10676,15 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.HeadAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.HeadAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP HEAD 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10706,15 +10706,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.HeadAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.HeadAs``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP HEAD 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10737,15 +10737,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.HeadAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.HeadAsAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP HEAD 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10768,15 +10768,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.Head``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.Head``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP HEAD 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10799,15 +10799,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.HeadAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.HeadAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP HEAD 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10855,15 +10855,15 @@
                 <c>byte[]</c>
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.HeadAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.HeadAsString(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP HEAD 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10871,15 +10871,15 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.HeadAsStream(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.HeadAsStream(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP HEAD 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10887,15 +10887,15 @@
                 <see cref="T:System.IO.Stream" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.HeadAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.HeadAsByteArray(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP HEAD 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10942,15 +10942,15 @@
                 <c>byte[]</c>
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.HeadAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.HeadAsStringAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP HEAD 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10958,15 +10958,15 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.HeadAsStreamAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.HeadAsStreamAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP HEAD 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -10974,15 +10974,15 @@
                 <see cref="T:System.IO.Stream" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.HeadAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.HeadAsByteArrayAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP HEAD 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11003,15 +11003,15 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.Options(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.Options(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP OPTIONS 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11032,15 +11032,15 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.OptionsAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.OptionsAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP OPTIONS 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11062,15 +11062,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.OptionsAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.OptionsAs``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP OPTIONS 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11093,15 +11093,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.OptionsAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.OptionsAsAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP OPTIONS 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11124,15 +11124,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.Options``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.Options``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP OPTIONS 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11155,15 +11155,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.OptionsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.OptionsAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP OPTIONS 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11211,15 +11211,15 @@
                 <c>byte[]</c>
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.OptionsAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.OptionsAsString(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP OPTIONS 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11227,15 +11227,15 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.OptionsAsStream(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.OptionsAsStream(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP OPTIONS 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11243,15 +11243,15 @@
                 <see cref="T:System.IO.Stream" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.OptionsAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.OptionsAsByteArray(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP OPTIONS 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11298,15 +11298,15 @@
                 <c>byte[]</c>
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.OptionsAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.OptionsAsStringAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP OPTIONS 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11314,15 +11314,15 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.OptionsAsStreamAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.OptionsAsStreamAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP OPTIONS 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11330,15 +11330,15 @@
                 <see cref="T:System.IO.Stream" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.OptionsAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.OptionsAsByteArrayAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP OPTIONS 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11359,15 +11359,15 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.Trace(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.Trace(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP TRACE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11388,15 +11388,15 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.TraceAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.TraceAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP TRACE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11418,15 +11418,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.TraceAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.TraceAs``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP TRACE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11449,15 +11449,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.TraceAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.TraceAsAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP TRACE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11480,15 +11480,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.Trace``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.Trace``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP TRACE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11511,15 +11511,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.TraceAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.TraceAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP TRACE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11567,15 +11567,15 @@
                 <c>byte[]</c>
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.TraceAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.TraceAsString(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP TRACE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11583,15 +11583,15 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.TraceAsStream(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.TraceAsStream(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP TRACE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11599,15 +11599,15 @@
                 <see cref="T:System.IO.Stream" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.TraceAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.TraceAsByteArray(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP TRACE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11654,15 +11654,15 @@
                 <c>byte[]</c>
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.TraceAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.TraceAsStringAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP TRACE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11670,15 +11670,15 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.TraceAsStreamAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.TraceAsStreamAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP TRACE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11686,15 +11686,15 @@
                 <see cref="T:System.IO.Stream" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.TraceAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.TraceAsByteArrayAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP TRACE 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11715,15 +11715,15 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.Patch(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.Patch(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PATCH 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11744,15 +11744,15 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PatchAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PatchAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PATCH 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11774,15 +11774,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PatchAs``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PatchAs``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PATCH 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11805,15 +11805,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PatchAsAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PatchAsAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PATCH 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11836,15 +11836,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.Patch``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.Patch``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PATCH 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11867,15 +11867,15 @@
                 <see cref="T:HttpAgent.HttpRemoteResult`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PatchAsync``1(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PatchAsync``1(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PATCH 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11923,15 +11923,15 @@
                 <c>byte[]</c>
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PatchAsString(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PatchAsString(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PATCH 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11939,15 +11939,15 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PatchAsStream(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PatchAsStream(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PATCH 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -11955,15 +11955,15 @@
                 <see cref="T:System.IO.Stream" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PatchAsByteArray(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PatchAsByteArray(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PATCH 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -12010,15 +12010,15 @@
                 <c>byte[]</c>
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PatchAsStringAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PatchAsStringAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PATCH 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -12026,15 +12026,15 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PatchAsStreamAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PatchAsStreamAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PATCH 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -12042,15 +12042,15 @@
                 <see cref="T:System.IO.Stream" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.PatchAsByteArrayAsync(System.String,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.PatchAsByteArrayAsync(System.String,System.Net.Http.HttpCompletionOption,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 HTTP PATCH 远程请求
             </summary>
             <param name="requestUri">请求地址</param>
-            <param name="configure">自定义配置委托</param>
             <param name="completionOption">
                 <see cref="T:System.Net.Http.HttpCompletionOption" />
             </param>
+            <param name="configure">自定义配置委托</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>

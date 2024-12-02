@@ -149,7 +149,7 @@ public class HttpRemoteExtensionsTests
             await formUrlEncodedContent.ProfilerAsync());
 
         var streamStream = new StreamContent(File.OpenRead(Path.Combine(AppContext.BaseDirectory, "test.txt")));
-        Assert.Equal("Request Body (StreamContent): \r\n\t测试文件内容", await streamStream.ProfilerAsync());
+        Assert.Equal("Request Body (StreamContent): \r\n\t﻿测试文件内容", await streamStream.ProfilerAsync());
 
         var readOnlyMemoryContent = new ReadOnlyMemoryContent(new ReadOnlyMemory<byte>("Hello World"u8.ToArray()));
         Assert.Equal("Request Body (ReadOnlyMemoryContent): \r\n\tHello World",

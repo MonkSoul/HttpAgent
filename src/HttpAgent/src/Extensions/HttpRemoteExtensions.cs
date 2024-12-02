@@ -164,10 +164,21 @@ public static class HttpRemoteExtensions
             return null;
         }
 
+        // 默认只读取 10KB 的内容
+        const int maxBytesToDisplay = 10240;
+
+        // 读取内容为字节数组
+        var buffer = await httpContent.ReadAsByteArrayAsync(cancellationToken);
+
+        // 计算要显示的部分
+        var bytesToShow = Math.Min(buffer.Length, maxBytesToDisplay);
+        var partialContent = Encoding.UTF8.GetString(buffer, 0, bytesToShow);
+
+        // 如果实际读取的数据小于最大显示大小，则直接返回；否则，添加省略号表示内容被截断
+        var bodyString = buffer.Length <= maxBytesToDisplay ? partialContent : partialContent + " ... [truncated]";
+
         return StringUtility.FormatKeyValuesSummary(
-            [
-                new KeyValuePair<string, IEnumerable<string>>(string.Empty,
-                    [await httpContent.ReadAsStringAsync(cancellationToken)])
-            ], $"{summary} ({httpContent.GetType().Name})");
+            [new KeyValuePair<string, IEnumerable<string>>(string.Empty, [bodyString])],
+            $"{summary} ({httpContent.GetType().Name})");
     }
 }

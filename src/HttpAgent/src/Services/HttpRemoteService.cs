@@ -95,8 +95,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
 
     /// <inheritdoc />
     public async Task<HttpResponseMessage> SendAsync(HttpRequestBuilder httpRequestBuilder,
-        HttpCompletionOption completionOption,
-        CancellationToken cancellationToken = default)
+        HttpCompletionOption completionOption, CancellationToken cancellationToken = default)
     {
         // 发送 HTTP 远程请求
         var (httpResponseMessage, _) = await SendCoreAsync(httpRequestBuilder, completionOption,
@@ -152,8 +151,8 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         SendAs<string>(httpRequestBuilder, completionOption, cancellationToken);
 
     /// <inheritdoc />
-    public byte[]?
-        SendAsByteArray(HttpRequestBuilder httpRequestBuilder, CancellationToken cancellationToken = default) =>
+    public byte[]? SendAsByteArray(HttpRequestBuilder httpRequestBuilder,
+        CancellationToken cancellationToken = default) =>
         SendAs<byte[]>(httpRequestBuilder, cancellationToken);
 
     /// <inheritdoc />
@@ -177,8 +176,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
 
     /// <inheritdoc />
     public async Task<TResult?> SendAsAsync<TResult>(HttpRequestBuilder httpRequestBuilder,
-        HttpCompletionOption completionOption,
-        CancellationToken cancellationToken = default)
+        HttpCompletionOption completionOption, CancellationToken cancellationToken = default)
     {
         // 发送 HTTP 远程请求
         var (httpResponseMessage, requestDuration) = await SendCoreAsync(httpRequestBuilder, completionOption,
@@ -224,8 +222,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
 
     /// <inheritdoc />
     public Task<byte[]?> SendAsByteArrayAsync(HttpRequestBuilder httpRequestBuilder,
-        HttpCompletionOption completionOption,
-        CancellationToken cancellationToken = default) =>
+        HttpCompletionOption completionOption, CancellationToken cancellationToken = default) =>
         SendAsAsync<byte[]>(httpRequestBuilder, completionOption, cancellationToken);
 
     /// <inheritdoc />
@@ -278,8 +275,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
 
     /// <inheritdoc />
     public async Task<object?> SendAsAsync(Type resultType, HttpRequestBuilder httpRequestBuilder,
-        HttpCompletionOption completionOption,
-        CancellationToken cancellationToken = default)
+        HttpCompletionOption completionOption, CancellationToken cancellationToken = default)
     {
         // 发送 HTTP 远程请求
         var (httpResponseMessage, requestDuration) = await SendCoreAsync(httpRequestBuilder, completionOption,
@@ -339,8 +335,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
 
     /// <inheritdoc />
     public async Task<HttpRemoteResult<TResult>> SendAsync<TResult>(HttpRequestBuilder httpRequestBuilder,
-        HttpCompletionOption completionOption,
-        CancellationToken cancellationToken = default)
+        HttpCompletionOption completionOption, CancellationToken cancellationToken = default)
     {
         // 发送 HTTP 远程请求
         var (httpResponseMessage, requestDuration) = await SendCoreAsync(httpRequestBuilder, completionOption,

@@ -62,7 +62,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Get($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
+            _ = httpRemoteService.Get($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
         await app.StopAsync();
@@ -90,7 +90,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpResponseMessage =
-            httpRemoteService.Get($"http://localhost:{port}/test", null, HttpCompletionOption.ResponseContentRead);
+            httpRemoteService.Get($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpResponseMessage);
         Assert.True(httpResponseMessage.IsSuccessStatusCode);
@@ -126,9 +126,8 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Get($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
-                cancellationTokenSource.Token);
+            _ = httpRemoteService.Get($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead,
+                null, cancellationTokenSource.Token);
         });
 
         await app.StopAsync();
@@ -189,7 +188,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ =
+            _ =
                 await httpRemoteService.GetAsync($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
@@ -217,8 +216,7 @@ public class HttpRemoteServiceHttpMethodsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpResponseMessage =
-            await httpRemoteService.GetAsync($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead);
+            await httpRemoteService.GetAsync($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpResponseMessage);
         Assert.True(httpResponseMessage.IsSuccessStatusCode);
@@ -253,9 +251,8 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.GetAsync($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
-                cancellationTokenSource.Token);
+            _ = await httpRemoteService.GetAsync($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null, cancellationTokenSource.Token);
         });
 
         await app.StopAsync();
@@ -325,7 +322,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ =
+            _ =
                 httpRemoteService.Get<string>($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
@@ -354,8 +351,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpRemoteResult =
-            httpRemoteService.Get<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead);
+            httpRemoteService.Get<string>($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpRemoteResult);
         Assert.NotNull(httpRemoteResult.ResponseMessage);
@@ -398,9 +394,8 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Get<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
-                cancellationTokenSource.Token);
+            _ = httpRemoteService.Get<string>($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead,
+                null, cancellationTokenSource.Token);
         });
 
         await app.StopAsync();
@@ -469,7 +464,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.GetAsync<string>($"http://localhost:{port}/test", null,
+            _ = await httpRemoteService.GetAsync<string>($"http://localhost:{port}/test", null,
                 cancellationTokenSource.Token);
         });
 
@@ -498,7 +493,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpRemoteResult =
-            await httpRemoteService.GetAsync<string>($"http://localhost:{port}/test", null,
+            await httpRemoteService.GetAsync<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpRemoteResult);
@@ -542,9 +537,8 @@ public class HttpRemoteServiceHttpMethodsTests
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = await httpRemoteService.GetAsync<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
-                cancellationTokenSource.Token);
+            _ = await httpRemoteService.GetAsync<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null, cancellationTokenSource.Token);
         });
 
         await app.StopAsync();
@@ -605,8 +599,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ =
-                httpRemoteService.GetAs<string>($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
+            _ = httpRemoteService.GetAs<string>($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
         await app.StopAsync();
@@ -634,8 +627,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var result =
-            httpRemoteService.GetAs<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead);
+            httpRemoteService.GetAs<string>($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(result);
         Assert.Equal("Hello World!", result);
@@ -669,9 +661,8 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.GetAs<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
-                cancellationTokenSource.Token);
+            _ = httpRemoteService.GetAs<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null, cancellationTokenSource.Token);
         });
 
         await app.StopAsync();
@@ -730,7 +721,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.GetAsAsync<string>($"http://localhost:{port}/test", null,
+            _ = await httpRemoteService.GetAsAsync<string>($"http://localhost:{port}/test", null,
                 cancellationTokenSource.Token);
         });
 
@@ -759,7 +750,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var result =
-            await httpRemoteService.GetAsAsync<string>($"http://localhost:{port}/test", null,
+            await httpRemoteService.GetAsAsync<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(result);
@@ -794,8 +785,8 @@ public class HttpRemoteServiceHttpMethodsTests
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = await httpRemoteService.GetAsAsync<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.GetAsAsync<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -859,7 +850,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Put($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
+            _ = httpRemoteService.Put($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
         await app.StopAsync();
@@ -887,7 +878,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpResponseMessage =
-            httpRemoteService.Put($"http://localhost:{port}/test", null, HttpCompletionOption.ResponseContentRead);
+            httpRemoteService.Put($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpResponseMessage);
         Assert.True(httpResponseMessage.IsSuccessStatusCode);
@@ -923,8 +914,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Put($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.Put($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -986,7 +976,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ =
+            _ =
                 await httpRemoteService.PutAsync($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
@@ -1014,8 +1004,7 @@ public class HttpRemoteServiceHttpMethodsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpResponseMessage =
-            await httpRemoteService.PutAsync($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead);
+            await httpRemoteService.PutAsync($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpResponseMessage);
         Assert.True(httpResponseMessage.IsSuccessStatusCode);
@@ -1050,8 +1039,8 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.PutAsync($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.PutAsync($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -1122,7 +1111,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ =
+            _ =
                 httpRemoteService.Put<string>($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
@@ -1151,8 +1140,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpRemoteResult =
-            httpRemoteService.Put<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead);
+            httpRemoteService.Put<string>($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpRemoteResult);
         Assert.NotNull(httpRemoteResult.ResponseMessage);
@@ -1196,8 +1184,8 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Put<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.Put<string>($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead,
+                null,
                 cancellationTokenSource.Token);
         });
 
@@ -1266,7 +1254,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.PutAsync<string>($"http://localhost:{port}/test", null,
+            _ = await httpRemoteService.PutAsync<string>($"http://localhost:{port}/test", null,
                 cancellationTokenSource.Token);
         });
 
@@ -1295,7 +1283,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpRemoteResult =
-            await httpRemoteService.PutAsync<string>($"http://localhost:{port}/test", null,
+            await httpRemoteService.PutAsync<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpRemoteResult);
@@ -1339,8 +1327,8 @@ public class HttpRemoteServiceHttpMethodsTests
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = await httpRemoteService.PutAsync<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.PutAsync<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -1402,7 +1390,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ =
+            _ =
                 httpRemoteService.PutAs<string>($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
@@ -1431,8 +1419,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var result =
-            httpRemoteService.PutAs<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead);
+            httpRemoteService.PutAs<string>($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(result);
         Assert.Equal("Hello World!", result);
@@ -1466,8 +1453,8 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.PutAs<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.PutAs<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -1527,7 +1514,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.PutAsAsync<string>($"http://localhost:{port}/test", null,
+            _ = await httpRemoteService.PutAsAsync<string>($"http://localhost:{port}/test", null,
                 cancellationTokenSource.Token);
         });
 
@@ -1556,7 +1543,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var result =
-            await httpRemoteService.PutAsAsync<string>($"http://localhost:{port}/test", null,
+            await httpRemoteService.PutAsAsync<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(result);
@@ -1591,8 +1578,8 @@ public class HttpRemoteServiceHttpMethodsTests
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = await httpRemoteService.PutAsAsync<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.PutAsAsync<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -1656,7 +1643,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Post($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
+            _ = httpRemoteService.Post($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
         await app.StopAsync();
@@ -1684,7 +1671,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpResponseMessage =
-            httpRemoteService.Post($"http://localhost:{port}/test", null, HttpCompletionOption.ResponseContentRead);
+            httpRemoteService.Post($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpResponseMessage);
         Assert.True(httpResponseMessage.IsSuccessStatusCode);
@@ -1720,8 +1707,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Post($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.Post($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -1783,7 +1769,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ =
+            _ =
                 await httpRemoteService.PostAsync($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
@@ -1811,7 +1797,7 @@ public class HttpRemoteServiceHttpMethodsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpResponseMessage =
-            await httpRemoteService.PostAsync($"http://localhost:{port}/test", null,
+            await httpRemoteService.PostAsync($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpResponseMessage);
@@ -1847,8 +1833,8 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.PostAsync($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.PostAsync($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -1920,7 +1906,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ =
+            _ =
                 httpRemoteService.Post<string>($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
@@ -1949,8 +1935,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpRemoteResult =
-            httpRemoteService.Post<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead);
+            httpRemoteService.Post<string>($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpRemoteResult);
         Assert.NotNull(httpRemoteResult.ResponseMessage);
@@ -1994,8 +1979,8 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Post<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.Post<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -2065,7 +2050,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.PostAsync<string>($"http://localhost:{port}/test", null,
+            _ = await httpRemoteService.PostAsync<string>($"http://localhost:{port}/test", null,
                 cancellationTokenSource.Token);
         });
 
@@ -2094,7 +2079,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpRemoteResult =
-            await httpRemoteService.PostAsync<string>($"http://localhost:{port}/test", null,
+            await httpRemoteService.PostAsync<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpRemoteResult);
@@ -2139,8 +2124,8 @@ public class HttpRemoteServiceHttpMethodsTests
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = await httpRemoteService.PostAsync<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.PostAsync<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -2202,7 +2187,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ =
+            _ =
                 httpRemoteService.PostAs<string>($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
@@ -2231,8 +2216,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var result =
-            httpRemoteService.PostAs<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead);
+            httpRemoteService.PostAs<string>($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(result);
         Assert.Equal("Hello World!", result);
@@ -2266,8 +2250,8 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.PostAs<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.PostAs<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -2327,7 +2311,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.PostAsAsync<string>($"http://localhost:{port}/test", null,
+            _ = await httpRemoteService.PostAsAsync<string>($"http://localhost:{port}/test", null,
                 cancellationTokenSource.Token);
         });
 
@@ -2356,7 +2340,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var result =
-            await httpRemoteService.PostAsAsync<string>($"http://localhost:{port}/test", null,
+            await httpRemoteService.PostAsAsync<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(result);
@@ -2391,8 +2375,8 @@ public class HttpRemoteServiceHttpMethodsTests
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = await httpRemoteService.PostAsAsync<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.PostAsAsync<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -2456,7 +2440,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ =
+            _ =
                 httpRemoteService.Delete($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
@@ -2485,7 +2469,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpResponseMessage =
-            httpRemoteService.Delete($"http://localhost:{port}/test", null, HttpCompletionOption.ResponseContentRead);
+            httpRemoteService.Delete($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpResponseMessage);
         Assert.True(httpResponseMessage.IsSuccessStatusCode);
@@ -2521,8 +2505,8 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Delete($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.Delete($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead,
+                null,
                 cancellationTokenSource.Token);
         });
 
@@ -2584,7 +2568,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ =
+            _ =
                 await httpRemoteService.DeleteAsync($"http://localhost:{port}/test", null,
                     cancellationTokenSource.Token);
         });
@@ -2613,7 +2597,7 @@ public class HttpRemoteServiceHttpMethodsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpResponseMessage =
-            await httpRemoteService.DeleteAsync($"http://localhost:{port}/test", null,
+            await httpRemoteService.DeleteAsync($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpResponseMessage);
@@ -2649,8 +2633,8 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.DeleteAsync($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.DeleteAsync($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -2722,7 +2706,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ =
+            _ =
                 httpRemoteService.Delete<string>($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
@@ -2751,8 +2735,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpRemoteResult =
-            httpRemoteService.Delete<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead);
+            httpRemoteService.Delete<string>($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpRemoteResult);
         Assert.NotNull(httpRemoteResult.ResponseMessage);
@@ -2796,8 +2779,8 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Delete<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.Delete<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -2867,7 +2850,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.DeleteAsync<string>($"http://localhost:{port}/test", null,
+            _ = await httpRemoteService.DeleteAsync<string>($"http://localhost:{port}/test", null,
                 cancellationTokenSource.Token);
         });
 
@@ -2896,7 +2879,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpRemoteResult =
-            await httpRemoteService.DeleteAsync<string>($"http://localhost:{port}/test", null,
+            await httpRemoteService.DeleteAsync<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpRemoteResult);
@@ -2941,8 +2924,8 @@ public class HttpRemoteServiceHttpMethodsTests
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = await httpRemoteService.DeleteAsync<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.DeleteAsync<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -3004,7 +2987,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ =
+            _ =
                 httpRemoteService.DeleteAs<string>($"http://localhost:{port}/test", null,
                     cancellationTokenSource.Token);
         });
@@ -3034,7 +3017,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var result =
-            httpRemoteService.DeleteAs<string>($"http://localhost:{port}/test", null,
+            httpRemoteService.DeleteAs<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(result);
@@ -3069,8 +3052,8 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.DeleteAs<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.DeleteAs<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -3130,7 +3113,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.DeleteAsAsync<string>($"http://localhost:{port}/test", null,
+            _ = await httpRemoteService.DeleteAsAsync<string>($"http://localhost:{port}/test", null,
                 cancellationTokenSource.Token);
         });
 
@@ -3159,7 +3142,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var result =
-            await httpRemoteService.DeleteAsAsync<string>($"http://localhost:{port}/test", null,
+            await httpRemoteService.DeleteAsAsync<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(result);
@@ -3194,8 +3177,8 @@ public class HttpRemoteServiceHttpMethodsTests
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = await httpRemoteService.DeleteAsAsync<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.DeleteAsAsync<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -3259,7 +3242,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Head($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
+            _ = httpRemoteService.Head($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
         await app.StopAsync();
@@ -3287,7 +3270,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpResponseMessage =
-            httpRemoteService.Head($"http://localhost:{port}/test", null, HttpCompletionOption.ResponseContentRead);
+            httpRemoteService.Head($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpResponseMessage);
         Assert.True(httpResponseMessage.IsSuccessStatusCode);
@@ -3323,8 +3306,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Head($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.Head($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -3386,7 +3368,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ =
+            _ =
                 await httpRemoteService.HeadAsync($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
@@ -3414,7 +3396,7 @@ public class HttpRemoteServiceHttpMethodsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpResponseMessage =
-            await httpRemoteService.HeadAsync($"http://localhost:{port}/test", null,
+            await httpRemoteService.HeadAsync($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpResponseMessage);
@@ -3450,8 +3432,8 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.HeadAsync($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.HeadAsync($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -3524,7 +3506,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ =
+            _ =
                 httpRemoteService.Head<string>($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
@@ -3553,8 +3535,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpRemoteResult =
-            httpRemoteService.Head<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead);
+            httpRemoteService.Head<string>($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpRemoteResult);
         Assert.NotNull(httpRemoteResult.ResponseMessage);
@@ -3599,8 +3580,8 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Head<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.Head<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -3671,7 +3652,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.HeadAsync<string>($"http://localhost:{port}/test", null,
+            _ = await httpRemoteService.HeadAsync<string>($"http://localhost:{port}/test", null,
                 cancellationTokenSource.Token);
         });
 
@@ -3700,7 +3681,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpRemoteResult =
-            await httpRemoteService.HeadAsync<string>($"http://localhost:{port}/test", null,
+            await httpRemoteService.HeadAsync<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpRemoteResult);
@@ -3746,8 +3727,8 @@ public class HttpRemoteServiceHttpMethodsTests
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = await httpRemoteService.HeadAsync<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.HeadAsync<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -3809,7 +3790,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ =
+            _ =
                 httpRemoteService.HeadAs<string>($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
@@ -3838,8 +3819,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var result =
-            httpRemoteService.HeadAs<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead);
+            httpRemoteService.HeadAs<string>($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(result);
         Assert.Empty(result);
@@ -3873,8 +3853,8 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.HeadAs<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.HeadAs<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -3933,7 +3913,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.HeadAsAsync<string>($"http://localhost:{port}/test", null,
+            _ = await httpRemoteService.HeadAsAsync<string>($"http://localhost:{port}/test", null,
                 cancellationTokenSource.Token);
         });
 
@@ -3962,7 +3942,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var result =
-            await httpRemoteService.HeadAsAsync<string>($"http://localhost:{port}/test", null,
+            await httpRemoteService.HeadAsAsync<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(result);
@@ -3997,8 +3977,8 @@ public class HttpRemoteServiceHttpMethodsTests
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = await httpRemoteService.HeadAsAsync<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.HeadAsAsync<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -4062,7 +4042,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ =
+            _ =
                 httpRemoteService.Options($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
@@ -4091,7 +4071,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpResponseMessage =
-            httpRemoteService.Options($"http://localhost:{port}/test", null, HttpCompletionOption.ResponseContentRead);
+            httpRemoteService.Options($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpResponseMessage);
         Assert.True(httpResponseMessage.IsSuccessStatusCode);
@@ -4127,8 +4107,8 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Options($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.Options($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead,
+                null,
                 cancellationTokenSource.Token);
         });
 
@@ -4190,7 +4170,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ =
+            _ =
                 await httpRemoteService.OptionsAsync($"http://localhost:{port}/test", null,
                     cancellationTokenSource.Token);
         });
@@ -4219,7 +4199,7 @@ public class HttpRemoteServiceHttpMethodsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpResponseMessage =
-            await httpRemoteService.OptionsAsync($"http://localhost:{port}/test", null,
+            await httpRemoteService.OptionsAsync($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpResponseMessage);
@@ -4255,8 +4235,8 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.OptionsAsync($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.OptionsAsync($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -4328,7 +4308,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ =
+            _ =
                 httpRemoteService.Options<string>($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
@@ -4357,7 +4337,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpRemoteResult =
-            httpRemoteService.Options<string>($"http://localhost:{port}/test", null,
+            httpRemoteService.Options<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpRemoteResult);
@@ -4402,8 +4382,8 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Options<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.Options<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -4473,7 +4453,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.OptionsAsync<string>($"http://localhost:{port}/test", null,
+            _ = await httpRemoteService.OptionsAsync<string>($"http://localhost:{port}/test", null,
                 cancellationTokenSource.Token);
         });
 
@@ -4502,7 +4482,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpRemoteResult =
-            await httpRemoteService.OptionsAsync<string>($"http://localhost:{port}/test", null,
+            await httpRemoteService.OptionsAsync<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpRemoteResult);
@@ -4547,8 +4527,8 @@ public class HttpRemoteServiceHttpMethodsTests
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = await httpRemoteService.OptionsAsync<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.OptionsAsync<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -4610,7 +4590,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ =
+            _ =
                 httpRemoteService.OptionsAs<string>($"http://localhost:{port}/test", null,
                     cancellationTokenSource.Token);
         });
@@ -4640,7 +4620,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var result =
-            httpRemoteService.OptionsAs<string>($"http://localhost:{port}/test", null,
+            httpRemoteService.OptionsAs<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(result);
@@ -4675,8 +4655,8 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.OptionsAs<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.OptionsAs<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -4736,7 +4716,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.OptionsAsAsync<string>($"http://localhost:{port}/test", null,
+            _ = await httpRemoteService.OptionsAsAsync<string>($"http://localhost:{port}/test", null,
                 cancellationTokenSource.Token);
         });
 
@@ -4765,7 +4745,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var result =
-            await httpRemoteService.OptionsAsAsync<string>($"http://localhost:{port}/test", null,
+            await httpRemoteService.OptionsAsAsync<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(result);
@@ -4800,8 +4780,8 @@ public class HttpRemoteServiceHttpMethodsTests
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = await httpRemoteService.OptionsAsAsync<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.OptionsAsAsync<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -4865,7 +4845,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ =
+            _ =
                 httpRemoteService.Trace($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
@@ -4894,7 +4874,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpResponseMessage =
-            httpRemoteService.Trace($"http://localhost:{port}/test", null, HttpCompletionOption.ResponseContentRead);
+            httpRemoteService.Trace($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpResponseMessage);
         Assert.True(httpResponseMessage.IsSuccessStatusCode);
@@ -4930,8 +4910,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Trace($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.Trace($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -4993,7 +4972,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ =
+            _ =
                 await httpRemoteService.TraceAsync($"http://localhost:{port}/test", null,
                     cancellationTokenSource.Token);
         });
@@ -5022,7 +5001,7 @@ public class HttpRemoteServiceHttpMethodsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpResponseMessage =
-            await httpRemoteService.TraceAsync($"http://localhost:{port}/test", null,
+            await httpRemoteService.TraceAsync($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpResponseMessage);
@@ -5058,8 +5037,8 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.TraceAsync($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.TraceAsync($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -5130,7 +5109,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ =
+            _ =
                 httpRemoteService.Trace<string>($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
@@ -5159,8 +5138,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpRemoteResult =
-            httpRemoteService.Trace<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead);
+            httpRemoteService.Trace<string>($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpRemoteResult);
         Assert.NotNull(httpRemoteResult.ResponseMessage);
@@ -5203,8 +5181,8 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Trace<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.Trace<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -5273,7 +5251,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.TraceAsync<string>($"http://localhost:{port}/test", null,
+            _ = await httpRemoteService.TraceAsync<string>($"http://localhost:{port}/test", null,
                 cancellationTokenSource.Token);
         });
 
@@ -5302,7 +5280,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpRemoteResult =
-            await httpRemoteService.TraceAsync<string>($"http://localhost:{port}/test", null,
+            await httpRemoteService.TraceAsync<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpRemoteResult);
@@ -5347,8 +5325,8 @@ public class HttpRemoteServiceHttpMethodsTests
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = await httpRemoteService.TraceAsync<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.TraceAsync<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -5410,7 +5388,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ =
+            _ =
                 httpRemoteService.TraceAs<string>($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
@@ -5439,7 +5417,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var result =
-            httpRemoteService.TraceAs<string>($"http://localhost:{port}/test", null,
+            httpRemoteService.TraceAs<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(result);
@@ -5474,8 +5452,8 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.TraceAs<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.TraceAs<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -5535,7 +5513,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.TraceAsAsync<string>($"http://localhost:{port}/test", null,
+            _ = await httpRemoteService.TraceAsAsync<string>($"http://localhost:{port}/test", null,
                 cancellationTokenSource.Token);
         });
 
@@ -5564,7 +5542,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var result =
-            await httpRemoteService.TraceAsAsync<string>($"http://localhost:{port}/test", null,
+            await httpRemoteService.TraceAsAsync<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(result);
@@ -5599,8 +5577,8 @@ public class HttpRemoteServiceHttpMethodsTests
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = await httpRemoteService.TraceAsAsync<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.TraceAsAsync<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -5664,7 +5642,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Patch($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
+            _ = httpRemoteService.Patch($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
         await app.StopAsync();
@@ -5692,7 +5670,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpResponseMessage =
-            httpRemoteService.Patch($"http://localhost:{port}/test", null, HttpCompletionOption.ResponseContentRead);
+            httpRemoteService.Patch($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpResponseMessage);
         Assert.True(httpResponseMessage.IsSuccessStatusCode);
@@ -5728,8 +5706,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Patch($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.Patch($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -5791,7 +5768,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ =
+            _ =
                 await httpRemoteService.PatchAsync($"http://localhost:{port}/test", null,
                     cancellationTokenSource.Token);
         });
@@ -5820,7 +5797,7 @@ public class HttpRemoteServiceHttpMethodsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpResponseMessage =
-            await httpRemoteService.PatchAsync($"http://localhost:{port}/test", null,
+            await httpRemoteService.PatchAsync($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpResponseMessage);
@@ -5856,8 +5833,8 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.PatchAsync($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.PatchAsync($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -5928,7 +5905,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ =
+            _ =
                 httpRemoteService.Patch<string>($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
@@ -5957,8 +5934,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpRemoteResult =
-            httpRemoteService.Patch<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead);
+            httpRemoteService.Patch<string>($"http://localhost:{port}/test", HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpRemoteResult);
         Assert.NotNull(httpRemoteResult.ResponseMessage);
@@ -6002,8 +5978,8 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.Patch<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.Patch<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -6072,7 +6048,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.PatchAsync<string>($"http://localhost:{port}/test", null,
+            _ = await httpRemoteService.PatchAsync<string>($"http://localhost:{port}/test", null,
                 cancellationTokenSource.Token);
         });
 
@@ -6101,7 +6077,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpRemoteResult =
-            await httpRemoteService.PatchAsync<string>($"http://localhost:{port}/test", null,
+            await httpRemoteService.PatchAsync<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(httpRemoteResult);
@@ -6145,8 +6121,8 @@ public class HttpRemoteServiceHttpMethodsTests
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = await httpRemoteService.PatchAsync<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.PatchAsync<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -6208,7 +6184,7 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ =
+            _ =
                 httpRemoteService.PatchAs<string>($"http://localhost:{port}/test", null, cancellationTokenSource.Token);
         });
 
@@ -6237,7 +6213,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var result =
-            httpRemoteService.PatchAs<string>($"http://localhost:{port}/test", null,
+            httpRemoteService.PatchAs<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(result);
@@ -6272,8 +6248,8 @@ public class HttpRemoteServiceHttpMethodsTests
         Assert.Throws<TaskCanceledException>(() =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = httpRemoteService.PatchAs<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = httpRemoteService.PatchAs<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 
@@ -6333,7 +6309,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var _ = await httpRemoteService.PatchAsAsync<string>($"http://localhost:{port}/test", null,
+            _ = await httpRemoteService.PatchAsAsync<string>($"http://localhost:{port}/test", null,
                 cancellationTokenSource.Token);
         });
 
@@ -6362,7 +6338,7 @@ public class HttpRemoteServiceHttpMethodsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var result =
-            await httpRemoteService.PatchAsAsync<string>($"http://localhost:{port}/test", null,
+            await httpRemoteService.PatchAsAsync<string>($"http://localhost:{port}/test",
                 HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(result);
@@ -6397,8 +6373,8 @@ public class HttpRemoteServiceHttpMethodsTests
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
             // ReSharper disable once MethodHasAsyncOverload
-            var _ = await httpRemoteService.PatchAsAsync<string>($"http://localhost:{port}/test", null,
-                HttpCompletionOption.ResponseContentRead,
+            _ = await httpRemoteService.PatchAsAsync<string>($"http://localhost:{port}/test",
+                HttpCompletionOption.ResponseContentRead, null,
                 cancellationTokenSource.Token);
         });
 

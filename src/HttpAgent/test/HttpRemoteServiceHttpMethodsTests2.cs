@@ -29,7 +29,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var str = httpRemoteService.GetAsString($"http://localhost:{port}/test");
 
         // ReSharper disable once MethodHasAsyncOverload
-        var str2 = httpRemoteService.GetAsString($"http://localhost:{port}/test", null,
+        var str2 = httpRemoteService.GetAsString($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", str);
@@ -63,7 +63,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         using var streamReader = new StreamReader(stream!);
 
         // ReSharper disable once MethodHasAsyncOverload
-        await using var stream2 = httpRemoteService.GetAsStream($"http://localhost:{port}/test", null,
+        await using var stream2 = httpRemoteService.GetAsStream($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
         using var streamReader2 = new StreamReader(stream2!);
 
@@ -97,7 +97,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var bytes = httpRemoteService.GetAsByteArray($"http://localhost:{port}/test");
 
         // ReSharper disable once MethodHasAsyncOverload
-        var bytes2 = httpRemoteService.GetAsByteArray($"http://localhost:{port}/test", null,
+        var bytes2 = httpRemoteService.GetAsByteArray($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", Encoding.UTF8.GetString(bytes!));
@@ -127,7 +127,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var str = await httpRemoteService.GetAsStringAsync($"http://localhost:{port}/test");
-        var str2 = await httpRemoteService.GetAsStringAsync($"http://localhost:{port}/test", null,
+        var str2 = await httpRemoteService.GetAsStringAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", str);
@@ -159,7 +159,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         await using var stream = await httpRemoteService.GetAsStreamAsync($"http://localhost:{port}/test");
         using var streamReader = new StreamReader(stream!);
 
-        await using var stream2 = await httpRemoteService.GetAsStreamAsync($"http://localhost:{port}/test", null,
+        await using var stream2 = await httpRemoteService.GetAsStreamAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
         using var streamReader2 = new StreamReader(stream2!);
 
@@ -190,7 +190,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var bytes = await httpRemoteService.GetAsByteArrayAsync($"http://localhost:{port}/test");
-        var bytes2 = await httpRemoteService.GetAsByteArrayAsync($"http://localhost:{port}/test", null,
+        var bytes2 = await httpRemoteService.GetAsByteArrayAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", Encoding.UTF8.GetString(bytes!));
@@ -223,7 +223,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var str = httpRemoteService.PutAsString($"http://localhost:{port}/test");
 
         // ReSharper disable once MethodHasAsyncOverload
-        var str2 = httpRemoteService.PutAsString($"http://localhost:{port}/test", null,
+        var str2 = httpRemoteService.PutAsString($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", str);
@@ -257,7 +257,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         using var streamReader = new StreamReader(stream!);
 
         // ReSharper disable once MethodHasAsyncOverload
-        await using var stream2 = httpRemoteService.PutAsStream($"http://localhost:{port}/test", null,
+        await using var stream2 = httpRemoteService.PutAsStream($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
         using var streamReader2 = new StreamReader(stream2!);
 
@@ -291,7 +291,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var bytes = httpRemoteService.PutAsByteArray($"http://localhost:{port}/test");
 
         // ReSharper disable once MethodHasAsyncOverload
-        var bytes2 = httpRemoteService.PutAsByteArray($"http://localhost:{port}/test", null,
+        var bytes2 = httpRemoteService.PutAsByteArray($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", Encoding.UTF8.GetString(bytes!));
@@ -321,7 +321,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var str = await httpRemoteService.PutAsStringAsync($"http://localhost:{port}/test");
-        var str2 = await httpRemoteService.PutAsStringAsync($"http://localhost:{port}/test", null,
+        var str2 = await httpRemoteService.PutAsStringAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", str);
@@ -353,7 +353,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         await using var stream = await httpRemoteService.PutAsStreamAsync($"http://localhost:{port}/test");
         using var streamReader = new StreamReader(stream!);
 
-        await using var stream2 = await httpRemoteService.PutAsStreamAsync($"http://localhost:{port}/test", null,
+        await using var stream2 = await httpRemoteService.PutAsStreamAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
         using var streamReader2 = new StreamReader(stream2!);
 
@@ -384,7 +384,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var bytes = await httpRemoteService.PutAsByteArrayAsync($"http://localhost:{port}/test");
-        var bytes2 = await httpRemoteService.PutAsByteArrayAsync($"http://localhost:{port}/test", null,
+        var bytes2 = await httpRemoteService.PutAsByteArrayAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", Encoding.UTF8.GetString(bytes!));
@@ -417,7 +417,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var str = httpRemoteService.PostAsString($"http://localhost:{port}/test");
 
         // ReSharper disable once MethodHasAsyncOverload
-        var str2 = httpRemoteService.PostAsString($"http://localhost:{port}/test", null,
+        var str2 = httpRemoteService.PostAsString($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", str);
@@ -451,7 +451,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         using var streamReader = new StreamReader(stream!);
 
         // ReSharper disable once MethodHasAsyncOverload
-        await using var stream2 = httpRemoteService.PostAsStream($"http://localhost:{port}/test", null,
+        await using var stream2 = httpRemoteService.PostAsStream($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
         using var streamReader2 = new StreamReader(stream2!);
 
@@ -485,7 +485,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var bytes = httpRemoteService.PostAsByteArray($"http://localhost:{port}/test");
 
         // ReSharper disable once MethodHasAsyncOverload
-        var bytes2 = httpRemoteService.PostAsByteArray($"http://localhost:{port}/test", null,
+        var bytes2 = httpRemoteService.PostAsByteArray($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", Encoding.UTF8.GetString(bytes!));
@@ -515,7 +515,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var str = await httpRemoteService.PostAsStringAsync($"http://localhost:{port}/test");
-        var str2 = await httpRemoteService.PostAsStringAsync($"http://localhost:{port}/test", null,
+        var str2 = await httpRemoteService.PostAsStringAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", str);
@@ -547,7 +547,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         await using var stream = await httpRemoteService.PostAsStreamAsync($"http://localhost:{port}/test");
         using var streamReader = new StreamReader(stream!);
 
-        await using var stream2 = await httpRemoteService.PostAsStreamAsync($"http://localhost:{port}/test", null,
+        await using var stream2 = await httpRemoteService.PostAsStreamAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
         using var streamReader2 = new StreamReader(stream2!);
 
@@ -578,7 +578,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var bytes = await httpRemoteService.PostAsByteArrayAsync($"http://localhost:{port}/test");
-        var bytes2 = await httpRemoteService.PostAsByteArrayAsync($"http://localhost:{port}/test", null,
+        var bytes2 = await httpRemoteService.PostAsByteArrayAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", Encoding.UTF8.GetString(bytes!));
@@ -611,7 +611,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var str = httpRemoteService.DeleteAsString($"http://localhost:{port}/test");
 
         // ReSharper disable once MethodHasAsyncOverload
-        var str2 = httpRemoteService.DeleteAsString($"http://localhost:{port}/test", null,
+        var str2 = httpRemoteService.DeleteAsString($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", str);
@@ -645,7 +645,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         using var streamReader = new StreamReader(stream!);
 
         // ReSharper disable once MethodHasAsyncOverload
-        await using var stream2 = httpRemoteService.DeleteAsStream($"http://localhost:{port}/test", null,
+        await using var stream2 = httpRemoteService.DeleteAsStream($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
         using var streamReader2 = new StreamReader(stream2!);
 
@@ -679,7 +679,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var bytes = httpRemoteService.DeleteAsByteArray($"http://localhost:{port}/test");
 
         // ReSharper disable once MethodHasAsyncOverload
-        var bytes2 = httpRemoteService.DeleteAsByteArray($"http://localhost:{port}/test", null,
+        var bytes2 = httpRemoteService.DeleteAsByteArray($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", Encoding.UTF8.GetString(bytes!));
@@ -709,7 +709,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var str = await httpRemoteService.DeleteAsStringAsync($"http://localhost:{port}/test");
-        var str2 = await httpRemoteService.DeleteAsStringAsync($"http://localhost:{port}/test", null,
+        var str2 = await httpRemoteService.DeleteAsStringAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", str);
@@ -741,7 +741,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         await using var stream = await httpRemoteService.DeleteAsStreamAsync($"http://localhost:{port}/test");
         using var streamReader = new StreamReader(stream!);
 
-        await using var stream2 = await httpRemoteService.DeleteAsStreamAsync($"http://localhost:{port}/test", null,
+        await using var stream2 = await httpRemoteService.DeleteAsStreamAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
         using var streamReader2 = new StreamReader(stream2!);
 
@@ -772,7 +772,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var bytes = await httpRemoteService.DeleteAsByteArrayAsync($"http://localhost:{port}/test");
-        var bytes2 = await httpRemoteService.DeleteAsByteArrayAsync($"http://localhost:{port}/test", null,
+        var bytes2 = await httpRemoteService.DeleteAsByteArrayAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", Encoding.UTF8.GetString(bytes!));
@@ -805,7 +805,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var str = httpRemoteService.HeadAsString($"http://localhost:{port}/test");
 
         // ReSharper disable once MethodHasAsyncOverload
-        var str2 = httpRemoteService.HeadAsString($"http://localhost:{port}/test", null,
+        var str2 = httpRemoteService.HeadAsString($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("", str);
@@ -839,7 +839,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         using var streamReader = new StreamReader(stream!);
 
         // ReSharper disable once MethodHasAsyncOverload
-        await using var stream2 = httpRemoteService.HeadAsStream($"http://localhost:{port}/test", null,
+        await using var stream2 = httpRemoteService.HeadAsStream($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
         using var streamReader2 = new StreamReader(stream2!);
 
@@ -873,7 +873,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var bytes = httpRemoteService.HeadAsByteArray($"http://localhost:{port}/test");
 
         // ReSharper disable once MethodHasAsyncOverload
-        var bytes2 = httpRemoteService.HeadAsByteArray($"http://localhost:{port}/test", null,
+        var bytes2 = httpRemoteService.HeadAsByteArray($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("", Encoding.UTF8.GetString(bytes!));
@@ -903,7 +903,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var str = await httpRemoteService.HeadAsStringAsync($"http://localhost:{port}/test");
-        var str2 = await httpRemoteService.HeadAsStringAsync($"http://localhost:{port}/test", null,
+        var str2 = await httpRemoteService.HeadAsStringAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("", str);
@@ -935,7 +935,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         await using var stream = await httpRemoteService.HeadAsStreamAsync($"http://localhost:{port}/test");
         using var streamReader = new StreamReader(stream!);
 
-        await using var stream2 = await httpRemoteService.HeadAsStreamAsync($"http://localhost:{port}/test", null,
+        await using var stream2 = await httpRemoteService.HeadAsStreamAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
         using var streamReader2 = new StreamReader(stream2!);
 
@@ -966,7 +966,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var bytes = await httpRemoteService.HeadAsByteArrayAsync($"http://localhost:{port}/test");
-        var bytes2 = await httpRemoteService.HeadAsByteArrayAsync($"http://localhost:{port}/test", null,
+        var bytes2 = await httpRemoteService.HeadAsByteArrayAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("", Encoding.UTF8.GetString(bytes!));
@@ -999,7 +999,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var str = httpRemoteService.OptionsAsString($"http://localhost:{port}/test");
 
         // ReSharper disable once MethodHasAsyncOverload
-        var str2 = httpRemoteService.OptionsAsString($"http://localhost:{port}/test", null,
+        var str2 = httpRemoteService.OptionsAsString($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", str);
@@ -1033,7 +1033,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         using var streamReader = new StreamReader(stream!);
 
         // ReSharper disable once MethodHasAsyncOverload
-        await using var stream2 = httpRemoteService.OptionsAsStream($"http://localhost:{port}/test", null,
+        await using var stream2 = httpRemoteService.OptionsAsStream($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
         using var streamReader2 = new StreamReader(stream2!);
 
@@ -1067,7 +1067,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var bytes = httpRemoteService.OptionsAsByteArray($"http://localhost:{port}/test");
 
         // ReSharper disable once MethodHasAsyncOverload
-        var bytes2 = httpRemoteService.OptionsAsByteArray($"http://localhost:{port}/test", null,
+        var bytes2 = httpRemoteService.OptionsAsByteArray($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", Encoding.UTF8.GetString(bytes!));
@@ -1097,7 +1097,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var str = await httpRemoteService.OptionsAsStringAsync($"http://localhost:{port}/test");
-        var str2 = await httpRemoteService.OptionsAsStringAsync($"http://localhost:{port}/test", null,
+        var str2 = await httpRemoteService.OptionsAsStringAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", str);
@@ -1129,7 +1129,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         await using var stream = await httpRemoteService.OptionsAsStreamAsync($"http://localhost:{port}/test");
         using var streamReader = new StreamReader(stream!);
 
-        await using var stream2 = await httpRemoteService.OptionsAsStreamAsync($"http://localhost:{port}/test", null,
+        await using var stream2 = await httpRemoteService.OptionsAsStreamAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
         using var streamReader2 = new StreamReader(stream2!);
 
@@ -1160,7 +1160,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var bytes = await httpRemoteService.OptionsAsByteArrayAsync($"http://localhost:{port}/test");
-        var bytes2 = await httpRemoteService.OptionsAsByteArrayAsync($"http://localhost:{port}/test", null,
+        var bytes2 = await httpRemoteService.OptionsAsByteArrayAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", Encoding.UTF8.GetString(bytes!));
@@ -1193,7 +1193,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var str = httpRemoteService.TraceAsString($"http://localhost:{port}/test");
 
         // ReSharper disable once MethodHasAsyncOverload
-        var str2 = httpRemoteService.TraceAsString($"http://localhost:{port}/test", null,
+        var str2 = httpRemoteService.TraceAsString($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", str);
@@ -1227,7 +1227,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         using var streamReader = new StreamReader(stream!);
 
         // ReSharper disable once MethodHasAsyncOverload
-        await using var stream2 = httpRemoteService.TraceAsStream($"http://localhost:{port}/test", null,
+        await using var stream2 = httpRemoteService.TraceAsStream($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
         using var streamReader2 = new StreamReader(stream2!);
 
@@ -1261,7 +1261,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var bytes = httpRemoteService.TraceAsByteArray($"http://localhost:{port}/test");
 
         // ReSharper disable once MethodHasAsyncOverload
-        var bytes2 = httpRemoteService.TraceAsByteArray($"http://localhost:{port}/test", null,
+        var bytes2 = httpRemoteService.TraceAsByteArray($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", Encoding.UTF8.GetString(bytes!));
@@ -1291,7 +1291,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var str = await httpRemoteService.TraceAsStringAsync($"http://localhost:{port}/test");
-        var str2 = await httpRemoteService.TraceAsStringAsync($"http://localhost:{port}/test", null,
+        var str2 = await httpRemoteService.TraceAsStringAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", str);
@@ -1323,7 +1323,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         await using var stream = await httpRemoteService.TraceAsStreamAsync($"http://localhost:{port}/test");
         using var streamReader = new StreamReader(stream!);
 
-        await using var stream2 = await httpRemoteService.TraceAsStreamAsync($"http://localhost:{port}/test", null,
+        await using var stream2 = await httpRemoteService.TraceAsStreamAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
         using var streamReader2 = new StreamReader(stream2!);
 
@@ -1354,7 +1354,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var bytes = await httpRemoteService.TraceAsByteArrayAsync($"http://localhost:{port}/test");
-        var bytes2 = await httpRemoteService.TraceAsByteArrayAsync($"http://localhost:{port}/test", null,
+        var bytes2 = await httpRemoteService.TraceAsByteArrayAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", Encoding.UTF8.GetString(bytes!));
@@ -1387,7 +1387,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var str = httpRemoteService.PatchAsString($"http://localhost:{port}/test");
 
         // ReSharper disable once MethodHasAsyncOverload
-        var str2 = httpRemoteService.PatchAsString($"http://localhost:{port}/test", null,
+        var str2 = httpRemoteService.PatchAsString($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", str);
@@ -1421,7 +1421,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         using var streamReader = new StreamReader(stream!);
 
         // ReSharper disable once MethodHasAsyncOverload
-        await using var stream2 = httpRemoteService.PatchAsStream($"http://localhost:{port}/test", null,
+        await using var stream2 = httpRemoteService.PatchAsStream($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
         using var streamReader2 = new StreamReader(stream2!);
 
@@ -1455,7 +1455,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var bytes = httpRemoteService.PatchAsByteArray($"http://localhost:{port}/test");
 
         // ReSharper disable once MethodHasAsyncOverload
-        var bytes2 = httpRemoteService.PatchAsByteArray($"http://localhost:{port}/test", null,
+        var bytes2 = httpRemoteService.PatchAsByteArray($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", Encoding.UTF8.GetString(bytes!));
@@ -1485,7 +1485,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var str = await httpRemoteService.PatchAsStringAsync($"http://localhost:{port}/test");
-        var str2 = await httpRemoteService.PatchAsStringAsync($"http://localhost:{port}/test", null,
+        var str2 = await httpRemoteService.PatchAsStringAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", str);
@@ -1517,7 +1517,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         await using var stream = await httpRemoteService.PatchAsStreamAsync($"http://localhost:{port}/test");
         using var streamReader = new StreamReader(stream!);
 
-        await using var stream2 = await httpRemoteService.PatchAsStreamAsync($"http://localhost:{port}/test", null,
+        await using var stream2 = await httpRemoteService.PatchAsStreamAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
         using var streamReader2 = new StreamReader(stream2!);
 
@@ -1548,7 +1548,7 @@ public class HttpRemoteServiceHttpMethodsTests2
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var bytes = await httpRemoteService.PatchAsByteArrayAsync($"http://localhost:{port}/test");
-        var bytes2 = await httpRemoteService.PatchAsByteArrayAsync($"http://localhost:{port}/test", null,
+        var bytes2 = await httpRemoteService.PatchAsByteArrayAsync($"http://localhost:{port}/test",
             HttpCompletionOption.ResponseContentRead);
 
         Assert.Equal("Hello World!", Encoding.UTF8.GetString(bytes!));

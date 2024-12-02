@@ -76,8 +76,7 @@ public partial interface IHttpRemoteService
     /// <returns>
     ///     <see cref="HttpResponseMessage" />
     /// </returns>
-    Task<HttpResponseMessage> SendAsync(HttpRequestBuilder httpRequestBuilder,
-        HttpCompletionOption completionOption,
+    Task<HttpResponseMessage> SendAsync(HttpRequestBuilder httpRequestBuilder, HttpCompletionOption completionOption,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -242,8 +241,7 @@ public partial interface IHttpRemoteService
     /// <returns>
     ///     <typeparamref name="TResult" />
     /// </returns>
-    Task<TResult?> SendAsAsync<TResult>(HttpRequestBuilder httpRequestBuilder,
-        HttpCompletionOption completionOption,
+    Task<TResult?> SendAsAsync<TResult>(HttpRequestBuilder httpRequestBuilder, HttpCompletionOption completionOption,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -413,8 +411,7 @@ public partial interface IHttpRemoteService
     ///     <see cref="object" />
     /// </returns>
     Task<object?> SendAsAsync(Type resultType, HttpRequestBuilder httpRequestBuilder,
-        HttpCompletionOption completionOption,
-        CancellationToken cancellationToken = default);
+        HttpCompletionOption completionOption, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     发送 HTTP 远程请求
@@ -484,6 +481,5 @@ public partial interface IHttpRemoteService
     ///     <see cref="HttpRemoteResult{TResult}" />
     /// </returns>
     Task<HttpRemoteResult<TResult>> SendAsync<TResult>(HttpRequestBuilder httpRequestBuilder,
-        HttpCompletionOption completionOption,
-        CancellationToken cancellationToken = default);
+        HttpCompletionOption completionOption, CancellationToken cancellationToken = default);
 }
