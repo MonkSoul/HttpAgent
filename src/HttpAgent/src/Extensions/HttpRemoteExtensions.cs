@@ -149,10 +149,14 @@ public static class HttpRemoteExtensions
     ///     <see cref="HttpContent" />
     /// </param>
     /// <param name="summary">摘要</param>
+    /// <param name="cancellationToken">
+    ///     <see cref="CancellationToken" />
+    /// </param>
     /// <returns>
     ///     <see cref="string" />
     /// </returns>
-    public static async Task<string?> ProfilerAsync(this HttpContent? httpContent, string? summary = "Request Body")
+    public static async Task<string?> ProfilerAsync(this HttpContent? httpContent, string? summary = "Request Body",
+        CancellationToken cancellationToken = default)
     {
         // 空检查
         if (httpContent is null)
@@ -161,7 +165,9 @@ public static class HttpRemoteExtensions
         }
 
         return StringUtility.FormatKeyValuesSummary(
-            [new KeyValuePair<string, IEnumerable<string>>(string.Empty, [await httpContent.ReadAsStringAsync()])],
-            $"{summary} ({httpContent.GetType().Name})");
+            [
+                new KeyValuePair<string, IEnumerable<string>>(string.Empty,
+                    [await httpContent.ReadAsStringAsync(cancellationToken)])
+            ], $"{summary} ({httpContent.GetType().Name})");
     }
 }

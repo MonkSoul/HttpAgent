@@ -41,7 +41,8 @@ public sealed class ProfilerDelegatingHandler(ILogger<Logging> logger, IOptions<
         }
 
         // 记录请求信息
-        LogRequestAsync(logger, httpRemoteOptions.Value.ProfilerLogLevel, httpRequestMessage).GetAwaiter().GetResult();
+        LogRequestAsync(logger, httpRemoteOptions.Value.ProfilerLogLevel, httpRequestMessage, cancellationToken)
+            .GetAwaiter().GetResult();
 
         // 初始化 Stopwatch 实例并开启计时操作
         var stopwatch = Stopwatch.StartNew();
@@ -56,8 +57,8 @@ public sealed class ProfilerDelegatingHandler(ILogger<Logging> logger, IOptions<
         stopwatch.Stop();
 
         // 记录响应信息
-        LogResponseAsync(logger, httpRemoteOptions.Value.ProfilerLogLevel, httpResponseMessage, requestDuration)
-            .GetAwaiter().GetResult();
+        LogResponseAsync(logger, httpRemoteOptions.Value.ProfilerLogLevel, httpResponseMessage, requestDuration,
+            cancellationToken).GetAwaiter().GetResult();
 
         // 打印 CookieContainer 内容
         LogCookieContainer(logger, httpRemoteOptions.Value.ProfilerLogLevel, httpRequestMessage,
@@ -77,7 +78,7 @@ public sealed class ProfilerDelegatingHandler(ILogger<Logging> logger, IOptions<
         }
 
         // 记录请求信息
-        await LogRequestAsync(logger, httpRemoteOptions.Value.ProfilerLogLevel, httpRequestMessage);
+        await LogRequestAsync(logger, httpRemoteOptions.Value.ProfilerLogLevel, httpRequestMessage, cancellationToken);
 
         // 初始化 Stopwatch 实例并开启计时操作
         var stopwatch = Stopwatch.StartNew();
@@ -92,7 +93,8 @@ public sealed class ProfilerDelegatingHandler(ILogger<Logging> logger, IOptions<
         stopwatch.Stop();
 
         // 记录响应信息
-        await LogResponseAsync(logger, httpRemoteOptions.Value.ProfilerLogLevel, httpResponseMessage, requestDuration);
+        await LogResponseAsync(logger, httpRemoteOptions.Value.ProfilerLogLevel, httpResponseMessage, requestDuration,
+            cancellationToken);
 
         // 打印 CookieContainer 内容
         LogCookieContainer(logger, httpRemoteOptions.Value.ProfilerLogLevel, httpRequestMessage,
@@ -111,10 +113,15 @@ public sealed class ProfilerDelegatingHandler(ILogger<Logging> logger, IOptions<
     /// <param name="request">
     ///     <see cref="HttpRequestMessage" />
     /// </param>
-    internal static async Task LogRequestAsync(ILogger logger, LogLevel logLevel, HttpRequestMessage request)
+    /// <param name="cancellationToken">
+    ///     <see cref="CancellationToken" />
+    /// </param>
+    internal static async Task LogRequestAsync(ILogger logger, LogLevel logLevel, HttpRequestMessage request,
+        CancellationToken cancellationToken = default)
     {
         Log(logger, logLevel, request.ProfilerHeaders());
-        Log(logger, logLevel, await request.Content.ProfilerAsync());
+        Log(logger, logLevel,
+            await request.Content.ProfilerAsync(cancellationToken: cancellationToken));
     }
 
     /// <summary>
@@ -128,12 +135,16 @@ public sealed class ProfilerDelegatingHandler(ILogger<Logging> logger, IOptions<
     ///     <see cref="HttpResponseMessage" />
     /// </param>
     /// <param name="requestDuration">请求耗时（毫秒）</param>
+    /// <param name="cancellationToken">
+    ///     <see cref="CancellationToken" />
+    /// </param>
     internal static async Task LogResponseAsync(ILogger logger, LogLevel logLevel,
-        HttpResponseMessage httpResponseMessage, long requestDuration)
+        HttpResponseMessage httpResponseMessage, long requestDuration, CancellationToken cancellationToken = default)
     {
         Log(logger, logLevel, httpResponseMessage.ProfilerGeneralAndHeaders(generalCustomKeyValues:
             [new KeyValuePair<string, IEnumerable<string>>("Request Duration (ms)", [$"{requestDuration:N2}"])]));
-        Log(logger, logLevel, await httpResponseMessage.Content.ProfilerAsync("Response Body"));
+        Log(logger, logLevel,
+            await httpResponseMessage.Content.ProfilerAsync("Response Body", cancellationToken));
     }
 
     /// <summary>

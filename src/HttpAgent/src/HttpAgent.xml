@@ -5180,7 +5180,7 @@
         <member name="M:HttpAgent.ProfilerDelegatingHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogRequestAsync(Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel,System.Net.Http.HttpRequestMessage)">
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogRequestAsync(Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel,System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
             <summary>
                 记录请求信息
             </summary>
@@ -5191,8 +5191,11 @@
             <param name="request">
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
             </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
         </member>
-        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogResponseAsync(Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel,System.Net.Http.HttpResponseMessage,System.Int64)">
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogResponseAsync(Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel,System.Net.Http.HttpResponseMessage,System.Int64,System.Threading.CancellationToken)">
             <summary>
                 记录响应信息
             </summary>
@@ -5204,6 +5207,9 @@
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </param>
             <param name="requestDuration">请求耗时（毫秒）</param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
         </member>
         <member name="M:HttpAgent.ProfilerDelegatingHandler.LogCookieContainer(Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel,System.Net.Http.HttpRequestMessage,System.Net.CookieContainer)">
             <summary>
@@ -5301,7 +5307,7 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.ProfilerAsync(System.Net.Http.HttpContent,System.String)">
+        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.ProfilerAsync(System.Net.Http.HttpContent,System.String,System.Threading.CancellationToken)">
             <summary>
                 分析 <see cref="T:System.Net.Http.HttpContent" /> 内容
             </summary>
@@ -5309,6 +5315,9 @@
                 <see cref="T:System.Net.Http.HttpContent" />
             </param>
             <param name="summary">摘要</param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
             <returns>
                 <see cref="T:System.String" />
             </returns>
