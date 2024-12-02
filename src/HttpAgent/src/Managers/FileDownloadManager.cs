@@ -229,8 +229,7 @@ internal sealed class FileDownloadManager
                 new FileTransferProgress(destinationPath, httpResponseMessage.Content.Headers.ContentLength ?? -1);
 
             // 初始化 FileStream 实例，使用文件流创建文件，设置写入模式，并允许其他进程同时读取文件
-            fileStream = new FileStream(tempDestinationPath, FileMode.Create, FileAccess.Write,
-                FileShare.Read,
+            fileStream = new FileStream(tempDestinationPath, FileMode.Create, FileAccess.Write, FileShare.Read,
                 bufferSize, true);
 
             // 获取 HTTP 响应体中的内容流
