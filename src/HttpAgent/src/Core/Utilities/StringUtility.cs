@@ -55,7 +55,18 @@ public static class StringUtility
                 stringBuilder.Append('\t');
             }
 
-            stringBuilder.Append($"{(key + ':').PadStringToByteLength(totalByteCount)} {string.Join(", ", value)}");
+            // 获取格式化后的值
+            var formatValue = AddTabToEachLine(string.Join(", ", value), true);
+
+            // 处理空 Key 问题
+            if (!string.IsNullOrWhiteSpace(key))
+            {
+                stringBuilder.Append($"{(key + ':').PadStringToByteLength(totalByteCount)} {formatValue}");
+            }
+            else
+            {
+                stringBuilder.Append($"{string.Join(", ", formatValue)}");
+            }
 
             // 处理最后一行空行问题
             if (index < count - 1)
@@ -70,5 +81,26 @@ public static class StringUtility
         var formatString = stringBuilder.ToString();
 
         return hasSummary ? $"{summary}: \r\n{formatString}" : formatString;
+    }
+
+    /// <summary>
+    ///     在字符串每一行添加制表符
+    /// </summary>
+    /// <param name="input">文本</param>
+    /// <param name="skipFirstLine">是否跳过第一行</param>
+    /// <returns>
+    ///     <see cref="string" />
+    /// </returns>
+    internal static string? AddTabToEachLine(string? input, bool skipFirstLine = false)
+    {
+        // 空检查
+        if (input is null)
+        {
+            return input;
+        }
+
+        // 使用 Environment.NewLine 以确保跨平台兼容性
+        return string.Join(Environment.NewLine, input.Split([Environment.NewLine, "\n"], StringSplitOptions.None)
+            .Select((line, i) => (skipFirstLine && i == 0 ? string.Empty : "  ") + line));
     }
 }

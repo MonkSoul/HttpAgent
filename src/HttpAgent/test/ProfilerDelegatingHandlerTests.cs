@@ -20,26 +20,26 @@ public class ProfilerDelegatingHandlerTests
     }
 
     [Fact]
-    public void LogRequestHeaders_ReturnOK()
+    public async Task LogRequestAsync_ReturnOK()
     {
         var services = new ServiceCollection();
         services.AddLogging();
-        using var provider = services.BuildServiceProvider();
+        await using var provider = services.BuildServiceProvider();
         var logger = provider.GetRequiredService<ILogger<Logging>>();
 
         var httpRequestMessage = new HttpRequestMessage();
         httpRequestMessage.Headers.TryAddWithoutValidation("Accept", "application/json");
         httpRequestMessage.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
 
-        ProfilerDelegatingHandler.LogRequestHeaders(logger, LogLevel.Warning, httpRequestMessage);
+        await ProfilerDelegatingHandler.LogRequestAsync(logger, LogLevel.Warning, httpRequestMessage);
     }
 
     [Fact]
-    public void LogResponseHeadersAndSummary_ReturnOK()
+    public async Task LogResponseAsync_ReturnOK()
     {
         var services = new ServiceCollection();
         services.AddLogging();
-        using var provider = services.BuildServiceProvider();
+        await using var provider = services.BuildServiceProvider();
         var logger = provider.GetRequiredService<ILogger<Logging>>();
 
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost"));
@@ -52,7 +52,7 @@ public class ProfilerDelegatingHandlerTests
         httpResponseMessage.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
         httpResponseMessage.Content.Headers.TryAddWithoutValidation("Content-Type", "application/json");
 
-        ProfilerDelegatingHandler.LogResponseHeadersAndSummary(logger, LogLevel.Warning, httpResponseMessage, 200);
+        await ProfilerDelegatingHandler.LogResponseAsync(logger, LogLevel.Warning, httpResponseMessage, 200);
     }
 
     [Fact]

@@ -28,7 +28,8 @@ public class HttpRemoteExtensionsTests
         Assert.Single(httpClientFactoryOptions2.HttpMessageHandlerBuilderActions);
 
         var builder = WebApplication.CreateBuilder(new WebApplicationOptions { EnvironmentName = "Production" });
-        builder.Services.AddHttpClient(string.Empty).AddProfilerDelegatingHandler(true);
+        builder.Services.AddHttpClient(string.Empty)
+            .AddProfilerDelegatingHandler(() => builder.Environment.EnvironmentName == "Production");
         Assert.NotNull(httpClientFactoryOptions.HttpMessageHandlerBuilderActions);
         Assert.Empty(httpClientFactoryOptions.HttpMessageHandlerBuilderActions);
     }
@@ -72,10 +73,10 @@ public class HttpRemoteExtensionsTests
         httpRequestMessage.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
 
         Assert.Equal(
-            "Request Headers: \r\n\tAccept:              application/json\r\n\tAccept-Encoding:     gzip, deflate\r\nContent Headers (StringContent): \r\n  Content-Type:     application/json; charset=utf-8",
+            "Request Headers: \r\n\tAccept:              application/json\r\n\tAccept-Encoding:     gzip, deflate\r\n\tContent-Type:        application/json; charset=utf-8",
             httpRequestMessage.ProfilerHeaders());
         Assert.Equal(
-            "Accept:              application/json\r\nAccept-Encoding:     gzip, deflate\r\nContent Headers (StringContent): \r\n  Content-Type:     application/json; charset=utf-8",
+            "Accept:              application/json\r\nAccept-Encoding:     gzip, deflate\r\nContent-Type:        application/json; charset=utf-8",
             httpRequestMessage.ProfilerHeaders(null));
     }
 
@@ -127,15 +128,43 @@ public class HttpRemoteExtensionsTests
     }
 
     [Fact]
-    public void GetHostEnvironmentName_ReturnOK()
+    public async Task LogHttpContentAsync_ReturnOK()
     {
-        var services = new ServiceCollection();
-        Assert.Null(HttpRemoteExtensions.GetHostEnvironmentName(services));
+        Assert.Null(await HttpRemoteExtensions.ProfilerAsync(null));
 
-        var builder = WebApplication.CreateBuilder(new WebApplicationOptions { EnvironmentName = "Development" });
-        Assert.Equal("Development", HttpRemoteExtensions.GetHostEnvironmentName(builder.Services));
+        var stringContent = new StringContent("Hello World");
+        Assert.Equal("Request Body (StringContent): \r\n\tHello World", await stringContent.ProfilerAsync());
 
-        var builder2 = WebApplication.CreateBuilder(new WebApplicationOptions { EnvironmentName = "Production" });
-        Assert.Equal("Production", HttpRemoteExtensions.GetHostEnvironmentName(builder2.Services));
+        var jsonContent = JsonContent.Create(new { id = 1, name = "furion" });
+        Assert.Equal("Request Body (JsonContent): \r\n\t{\"id\":1,\"name\":\"furion\"}",
+            await jsonContent.ProfilerAsync());
+
+        var byteArrayContent = new ByteArrayContent("Hello World"u8.ToArray());
+        Assert.Equal("Request Body (ByteArrayContent): \r\n\tHello World", await byteArrayContent.ProfilerAsync());
+
+        var formUrlEncodedContent = new FormUrlEncodedContent([
+            new KeyValuePair<string, string>("id", "1"), new KeyValuePair<string, string>("name", "Furion")
+        ]);
+        Assert.Equal("Request Body (FormUrlEncodedContent): \r\n\tid=1&name=Furion",
+            await formUrlEncodedContent.ProfilerAsync());
+
+        var streamStream = new StreamContent(File.OpenRead(Path.Combine(AppContext.BaseDirectory, "test.txt")));
+        Assert.Equal("Request Body (StreamContent): \r\n\t测试文件内容", await streamStream.ProfilerAsync());
+
+        var readOnlyMemoryContent = new ReadOnlyMemoryContent(new ReadOnlyMemory<byte>("Hello World"u8.ToArray()));
+        Assert.Equal("Request Body (ReadOnlyMemoryContent): \r\n\tHello World",
+            await readOnlyMemoryContent.ProfilerAsync());
+
+        var multipartFormDataContent = new MultipartFormDataContent("--------------------------");
+        multipartFormDataContent.Add(new StringContent("Hello World"), "text");
+        multipartFormDataContent.Add(
+            new StreamContent(File.OpenRead(Path.Combine(AppContext.BaseDirectory, "test.txt"))), "file");
+        Assert.Equal(
+            "Request Body (MultipartFormDataContent): \r\n\t----------------------------\r\n  Content-Type: text/plain; charset=utf-8\r\n  Content-Disposition: form-data; name=text\r\n  \r\n  Hello World\r\n  ----------------------------\r\n  Content-Disposition: form-data; name=file\r\n  \r\n  ﻿测试文件内容\r\n  ------------------------------\r\n  ",
+            await multipartFormDataContent.ProfilerAsync());
+
+        var stringContent2 = new StringContent("Hello World");
+        Assert.Equal("Response Body (StringContent): \r\n\tHello World",
+            await stringContent2.ProfilerAsync("Response Body"));
     }
 }

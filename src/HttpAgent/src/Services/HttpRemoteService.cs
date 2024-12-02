@@ -413,7 +413,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         // 检查是否启用请求分析工具
         if (httpRequestBuilder.ProfilerEnabled)
         {
-            ProfilerDelegatingHandler.LogRequestHeaders(_logger, _httpRemoteOptions.ProfilerLogLevel,
+            await ProfilerDelegatingHandler.LogRequestAsync(_logger, _httpRemoteOptions.ProfilerLogLevel,
                 httpRequestMessage);
         }
 
@@ -457,7 +457,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
             // 检查是否启用请求分析工具
             if (httpRequestBuilder.ProfilerEnabled)
             {
-                ProfilerDelegatingHandler.LogResponseHeadersAndSummary(_logger, _httpRemoteOptions.ProfilerLogLevel,
+                await ProfilerDelegatingHandler.LogResponseAsync(_logger, _httpRemoteOptions.ProfilerLogLevel,
                     httpResponseMessage, requestDuration);
             }
 

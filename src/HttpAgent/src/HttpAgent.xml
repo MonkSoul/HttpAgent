@@ -4032,6 +4032,16 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
+        <member name="M:HttpAgent.Core.Utilities.StringUtility.AddTabToEachLine(System.String,System.Boolean)">
+            <summary>
+                在字符串每一行添加制表符
+            </summary>
+            <param name="input">文本</param>
+            <param name="skipFirstLine">是否跳过第一行</param>
+            <returns>
+                <see cref="T:System.String" />
+            </returns>
+        </member>
         <member name="T:HttpAgent.AcceptLanguageAttribute">
             <summary>
                 HTTP 声明式客户端所偏好的自然语言和区域特性
@@ -5170,9 +5180,9 @@
         <member name="M:HttpAgent.ProfilerDelegatingHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogRequestHeaders(Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel,System.Net.Http.HttpRequestMessage)">
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogRequestAsync(Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel,System.Net.Http.HttpRequestMessage)">
             <summary>
-                记录请求标头
+                记录请求信息
             </summary>
             <param name="logger">
                 <see cref="T:Microsoft.Extensions.Logging.ILogger" />
@@ -5182,9 +5192,9 @@
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
             </param>
         </member>
-        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogResponseHeadersAndSummary(Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel,System.Net.Http.HttpResponseMessage,System.Int64)">
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogResponseAsync(Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel,System.Net.Http.HttpResponseMessage,System.Int64)">
             <summary>
-                记录常规和响应标头
+                记录响应信息
             </summary>
             <param name="logger">
                 <see cref="T:Microsoft.Extensions.Logging.ILogger" />
@@ -5233,14 +5243,14 @@
                 HTTP 远程服务拓展类
             </summary>
         </member>
-        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.AddProfilerDelegatingHandler(Microsoft.Extensions.DependencyInjection.IHttpClientBuilder,System.Boolean)">
+        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.AddProfilerDelegatingHandler(Microsoft.Extensions.DependencyInjection.IHttpClientBuilder,System.Func{System.Boolean})">
             <summary>
                 添加 HTTP 远程请求分析工具处理委托
             </summary>
             <param name="builder">
                 <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />
             </param>
-            <param name="disableInProduction">是否在生产环境中禁用。默认值为：<c>false</c>。</param>
+            <param name="disableConfigure">自定义禁用配置委托</param>
             <returns>
                 <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />
             </returns>
@@ -5253,15 +5263,14 @@
                 <see cref="T:System.Net.Http.HttpClient" />
             </param>
         </member>
-        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.ProfilerHeaders(System.Net.Http.HttpRequestMessage,System.String,System.String)">
+        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.ProfilerHeaders(System.Net.Http.HttpRequestMessage,System.String)">
             <summary>
                 分析 <see cref="T:System.Net.Http.HttpRequestMessage" /> 标头
             </summary>
             <param name="httpRequestMessage">
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
             </param>
-            <param name="requestSummary">请求标头摘要</param>
-            <param name="contentSummary">请求内容标头摘要</param>
+            <param name="summary">摘要</param>
             <returns>
                 <see cref="T:System.String" />
             </returns>
@@ -5292,13 +5301,14 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.GetHostEnvironmentName(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.ProfilerAsync(System.Net.Http.HttpContent,System.String)">
             <summary>
-                获取主机环境名
+                分析 <see cref="T:System.Net.Http.HttpContent" /> 内容
             </summary>
-            <param name="services">
-                <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
+            <param name="httpContent">
+                <see cref="T:System.Net.Http.HttpContent" />
             </param>
+            <param name="summary">摘要</param>
             <returns>
                 <see cref="T:System.String" />
             </returns>

@@ -15,12 +15,12 @@ public static class HttpRemoteExtensions
     /// <param name="builder">
     ///     <see cref="IHttpClientBuilder" />
     /// </param>
-    /// <param name="disableInProduction">是否在生产环境中禁用。默认值为：<c>false</c>。</param>
+    /// <param name="disableConfigure">自定义禁用配置委托</param>
     /// <returns>
     ///     <see cref="IHttpClientBuilder" />
     /// </returns>
     public static IHttpClientBuilder AddProfilerDelegatingHandler(this IHttpClientBuilder builder,
-        bool disableInProduction = false)
+        Func<bool>? disableConfigure = null)
     {
         // 获取 IServiceCollection 实例
         var services = builder.Services;
@@ -28,13 +28,10 @@ public static class HttpRemoteExtensions
         // 注册请求分析工具服务
         services.TryAddTransient<ProfilerDelegatingHandler>();
 
-        // 检查是否在生产环境中禁用
-        if (disableInProduction && GetHostEnvironmentName(services)?.ToLower() == "production")
-        {
-            return builder;
-        }
-
-        return builder.AddHttpMessageHandler<ProfilerDelegatingHandler>();
+        // 检查自定义禁用配置委托
+        return disableConfigure?.Invoke() == true
+            ? builder
+            : builder.AddHttpMessageHandler<ProfilerDelegatingHandler>();
     }
 
     /// <summary>
@@ -67,62 +64,14 @@ public static class HttpRemoteExtensions
     /// <param name="httpRequestMessage">
     ///     <see cref="HttpRequestMessage" />
     /// </param>
-    /// <param name="requestSummary">请求标头摘要</param>
-    /// <param name="contentSummary">请求内容标头摘要</param>
+    /// <param name="summary">摘要</param>
     /// <returns>
     ///     <see cref="string" />
     /// </returns>
     public static string? ProfilerHeaders(this HttpRequestMessage httpRequestMessage,
-        string? requestSummary = "Request Headers", string? contentSummary = "Content Headers")
-    {
-        // 格式化请求条目
-        var requestEntry = StringUtility.FormatKeyValuesSummary(httpRequestMessage.Headers, requestSummary);
-
-        // 获取 HttpContent 实例
-        var httpContent = httpRequestMessage.Content;
-
-        // 空检查
-        if (httpContent is null)
-        {
-            return requestEntry;
-        }
-
-        // 获取请求内容集合
-        var httpContentCollection = httpContent as MultipartContent ?? [httpContent];
-
-        // 初始化 StringBuilder 实例用于构建请求内容标头条目
-        var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine($"{contentSummary} ({httpContent?.GetType().Name}): ");
-
-        var count = httpContentCollection.Count();
-        for (var i = 0; i < count; i++)
-        {
-            // 获取当前请求内容
-            var content = httpContentCollection.ElementAt(i);
-
-            // 获取内容（表单名）摘要
-            var nameSummary = string.IsNullOrWhiteSpace(content.Headers.ContentDisposition?.Name)
-                ? null
-                : $"\t[{content.Headers.ContentDisposition?.Name}]";
-
-            // 格式化请求内容标头条目
-            var contentHeaderEntry =
-                StringUtility.FormatKeyValuesSummary(content.Headers.ToDictionary(u => $"  {u.Key}", u => u.Value),
-                    nameSummary);
-
-            // 处理最后一行换行问题
-            if (i == count - 1)
-            {
-                stringBuilder.Append(contentHeaderEntry);
-            }
-            else
-            {
-                stringBuilder.AppendLine(contentHeaderEntry);
-            }
-        }
-
-        return $"{requestEntry}\r\n{stringBuilder}";
-    }
+        string? summary = "Request Headers") =>
+        StringUtility.FormatKeyValuesSummary(
+            httpRequestMessage.Headers.ConcatIgnoreNull(httpRequestMessage.Content?.Headers), summary);
 
     /// <summary>
     ///     分析 <see cref="HttpResponseMessage" /> 标头
@@ -194,24 +143,25 @@ public static class HttpRemoteExtensions
     }
 
     /// <summary>
-    ///     获取主机环境名
+    ///     分析 <see cref="HttpContent" /> 内容
     /// </summary>
-    /// <param name="services">
-    ///     <see cref="IServiceCollection" />
+    /// <param name="httpContent">
+    ///     <see cref="HttpContent" />
     /// </param>
+    /// <param name="summary">摘要</param>
     /// <returns>
     ///     <see cref="string" />
     /// </returns>
-    internal static string? GetHostEnvironmentName(IServiceCollection services)
+    public static async Task<string?> ProfilerAsync(this HttpContent? httpContent, string? summary = "Request Body")
     {
-        // 获取主机环境对象
-        var hostEnvironment = services
-            .FirstOrDefault(u => u.ServiceType.FullName == "Microsoft.Extensions.Hosting.IHostEnvironment")
-            ?.ImplementationInstance;
-
         // 空检查
-        return hostEnvironment is null
-            ? null
-            : Convert.ToString(hostEnvironment.GetType().GetProperty("EnvironmentName")?.GetValue(hostEnvironment));
+        if (httpContent is null)
+        {
+            return null;
+        }
+
+        return StringUtility.FormatKeyValuesSummary(
+            [new KeyValuePair<string, IEnumerable<string>>(string.Empty, [await httpContent.ReadAsStringAsync()])],
+            $"{summary} ({httpContent.GetType().Name})");
     }
 }
