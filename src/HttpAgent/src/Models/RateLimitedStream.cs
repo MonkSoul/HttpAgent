@@ -18,14 +18,14 @@ public sealed class RateLimitedStream : Stream
     internal readonly Stream _innerStream;
 
     /// <summary>
-    ///     流开始读取的时间点
+    ///     用于精确计时的 <see cref="Stopwatch" /> 实例
     /// </summary>
-    internal readonly DateTime _startTime;
+    internal readonly Stopwatch _stopwatch = new();
 
     /// <summary>
-    ///     到目前为止已读取的总字节数
+    ///     到目前为止已读取或写入的总字节数
     /// </summary>
-    internal long _totalBytesRead;
+    internal long _totalBytesProcessed;
 
     /// <summary>
     ///     <inheritdoc cref="RateLimitedStream" />
@@ -49,8 +49,8 @@ public sealed class RateLimitedStream : Stream
         _innerStream = innerStream;
         _bytesPerSecond = bytesPerSecond;
 
-        // 记录当前时间作为开始时间
-        _startTime = DateTime.UtcNow;
+        // 启动 Stopwatch 来开始计时
+        _stopwatch.Start();
     }
 
     /// <inheritdoc />
@@ -119,17 +119,17 @@ public sealed class RateLimitedStream : Stream
     /// <summary>
     ///     根据设定的速率限制调整读写操作的速度
     /// </summary>
-    /// <param name="bytesToRead">本次操作将处理的字节数。</param>
-    internal async Task ApplyRateLimitAsync(int bytesToRead)
+    /// <param name="bytesToProcess">本次操作将处理的字节数</param>
+    internal async Task ApplyRateLimitAsync(int bytesToProcess)
     {
         // 自开始以来经过的时间（秒）
-        var elapsedSeconds = (DateTime.UtcNow - _startTime).TotalSeconds;
+        var elapsedSeconds = _stopwatch.ElapsedMilliseconds / 1000.0;
 
         // 根据速率预期应读取的字节数
         var totalBytesExpected = elapsedSeconds * _bytesPerSecond;
 
         // 计算实际与预期之差
-        var bytesOverLimit = _totalBytesRead + bytesToRead - totalBytesExpected;
+        var bytesOverLimit = _totalBytesProcessed + bytesToProcess - totalBytesExpected;
 
         if (bytesOverLimit > 0)
         {
@@ -139,7 +139,7 @@ public sealed class RateLimitedStream : Stream
             await Task.Delay(delayMilliseconds).ConfigureAwait(false);
         }
 
-        // 更新已读取的总字节数
-        _totalBytesRead += bytesToRead;
+        // 更新已处理的总字节数
+        _totalBytesProcessed += bytesToProcess;
     }
 }

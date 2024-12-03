@@ -6934,14 +6934,14 @@
         <member name="F:HttpAgent.RateLimitedStream._innerStream">
             <inheritdoc cref="T:System.IO.Stream" />
         </member>
-        <member name="F:HttpAgent.RateLimitedStream._startTime">
+        <member name="F:HttpAgent.RateLimitedStream._stopwatch">
             <summary>
-                流开始读取的时间点
+                用于精确计时的 <see cref="T:System.Diagnostics.Stopwatch" /> 实例
             </summary>
         </member>
-        <member name="F:HttpAgent.RateLimitedStream._totalBytesRead">
+        <member name="F:HttpAgent.RateLimitedStream._totalBytesProcessed">
             <summary>
-                到目前为止已读取的总字节数
+                到目前为止已读取或写入的总字节数
             </summary>
         </member>
         <member name="M:HttpAgent.RateLimitedStream.#ctor(System.IO.Stream,System.Int32)">
@@ -6993,7 +6993,7 @@
             <summary>
                 根据设定的速率限制调整读写操作的速度
             </summary>
-            <param name="bytesToRead">本次操作将处理的字节数。</param>
+            <param name="bytesToProcess">本次操作将处理的字节数</param>
         </member>
         <member name="T:HttpAgent.ServerSentEventsData">
             <summary>

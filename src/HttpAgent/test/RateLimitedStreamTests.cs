@@ -25,13 +25,15 @@ public class RateLimitedStreamTests
         using var fileStream = File.OpenRead(filePath);
         using var rateLimitedStream = new RateLimitedStream(fileStream, 5);
 
-        Assert.Equal(0, rateLimitedStream._totalBytesRead);
+        Assert.Equal(fileStream, rateLimitedStream._innerStream);
+        Assert.Equal(0, rateLimitedStream._totalBytesProcessed);
         Assert.Equal(fileStream.CanRead, rateLimitedStream.CanRead);
         Assert.Equal(fileStream.CanSeek, rateLimitedStream.CanSeek);
         Assert.Equal(fileStream.CanWrite, rateLimitedStream.CanWrite);
         Assert.Equal(fileStream.CanTimeout, rateLimitedStream.CanTimeout);
         Assert.Equal(21, rateLimitedStream.Length);
         Assert.Equal(fileStream.Position, rateLimitedStream.Position);
+        Assert.NotNull(rateLimitedStream._stopwatch);
     }
 
     [Fact]
