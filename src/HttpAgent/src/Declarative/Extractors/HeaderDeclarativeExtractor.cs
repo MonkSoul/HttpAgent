@@ -23,7 +23,7 @@ internal sealed class HeaderDeclarativeExtractor : IHttpDeclarativeExtractor
             // 遍历所有 [Header] 特性并添加到 HttpRequestBuilder 中
             foreach (var headerAttribute in headerAttributes)
             {
-                // 获取标头
+                // 获取请求标头键
                 var headerName = headerAttribute.Name;
 
                 // 空检查

@@ -1334,7 +1334,7 @@ public sealed partial class HttpRequestBuilder
         WithHeader(HeaderNames.AcceptLanguage, language, replace: true);
 
     /// <summary>
-    ///     设置 HTTP 请求的属性
+    ///     设置 <see cref="HttpRequestMessage" /> 请求属性
     /// </summary>
     /// <remarks>支持多次调用。</remarks>
     /// <param name="key">键</param>
@@ -1351,10 +1351,10 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
-    ///     设置 HTTP 请求的属性集合
+    ///     设置 <see cref="HttpRequestMessage" /> 请求属性集合
     /// </summary>
     /// <remarks>支持多次调用。</remarks>
-    /// <param name="properties">HTTP 请求的属性集合</param>
+    /// <param name="properties">请求的属性集合</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
@@ -1363,16 +1363,16 @@ public sealed partial class HttpRequestBuilder
         // 空检查
         ArgumentNullException.ThrowIfNull(properties);
 
-        Properties.TryAdd(properties);
+        Properties.AddOrUpdate(properties);
 
         return this;
     }
 
     /// <summary>
-    ///     设置 HTTP 请求的属性集合
+    ///     设置 <see cref="HttpRequestMessage" /> 请求属性集合
     /// </summary>
     /// <remarks>支持多次调用。</remarks>
-    /// <param name="propertySource">请求的属性源对象</param>
+    /// <param name="propertySource"><see cref="HttpRequestMessage" /> 请求的属性源对象</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>

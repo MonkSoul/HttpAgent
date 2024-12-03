@@ -23,7 +23,7 @@ internal sealed class QueryDeclarativeExtractor : IHttpDeclarativeExtractor
             // 遍历所有 [Query] 特性并添加到 HttpRequestBuilder 中
             foreach (var queryAttribute in queryAttributes)
             {
-                // 获取查询参数
+                // 获取查询参数键
                 var queryName = queryAttribute.Name;
 
                 // 空检查

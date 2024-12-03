@@ -24,8 +24,8 @@ public sealed class CookieAttribute : Attribute
     ///     <inheritdoc cref="CookieAttribute" />
     /// </summary>
     /// <remarks>
-    ///     <para>当特性作用于方法或接口时，则表示移除指定Cookie 操作。</para>
-    ///     <para>当特性作用于参数时，则表示添加Cookie ，同时设置Cookie 键为 <c>name</c> 的值。</para>
+    ///     <para>当特性作用于方法或接口时，则表示移除指定 Cookie 操作。</para>
+    ///     <para>当特性作用于参数时，则表示添加 Cookie ，同时设置 Cookie 键为 <c>name</c> 的值。</para>
     /// </remarks>
     /// <param name="name">Cookie 键</param>
     public CookieAttribute(string name)

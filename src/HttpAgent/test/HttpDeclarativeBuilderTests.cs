@@ -48,6 +48,7 @@ public class HttpDeclarativeBuilderTests
             { typeof(PathDeclarativeExtractor), new PathDeclarativeExtractor() },
             { typeof(CookieDeclarativeExtractor), new CookieDeclarativeExtractor() },
             { typeof(HeaderDeclarativeExtractor), new HeaderDeclarativeExtractor() },
+            { typeof(PropertyDeclarativeExtractor), new PropertyDeclarativeExtractor() },
             { typeof(BodyDeclarativeExtractor), new BodyDeclarativeExtractor() }
         };
 
@@ -133,6 +134,7 @@ public class HttpDeclarativeBuilderTests
             { typeof(PathDeclarativeExtractor), new PathDeclarativeExtractor() },
             { typeof(CookieDeclarativeExtractor), new CookieDeclarativeExtractor() },
             { typeof(HeaderDeclarativeExtractor), new HeaderDeclarativeExtractor() },
+            { typeof(PropertyDeclarativeExtractor), new PropertyDeclarativeExtractor() },
             { typeof(BodyDeclarativeExtractor), new BodyDeclarativeExtractor() },
             { typeof(CustomHttpDeclarativeExtractor), new CustomHttpDeclarativeExtractor() }
         };

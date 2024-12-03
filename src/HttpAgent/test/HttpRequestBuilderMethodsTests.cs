@@ -1542,7 +1542,7 @@ public class HttpRequestBuilderMethodsTests
 
         httpRequestBuilder.WithProperty("foo", "bar").WithProperty("foo", "bar1").WithProperty("foo2", "bar2");
         Assert.Equal(2, httpRequestBuilder.Properties.Count);
-        Assert.Equal("bar", httpRequestBuilder.Properties["foo"]);
+        Assert.Equal("bar1", httpRequestBuilder.Properties["foo"]);
         Assert.Equal("bar2", httpRequestBuilder.Properties["foo2"]);
     }
 

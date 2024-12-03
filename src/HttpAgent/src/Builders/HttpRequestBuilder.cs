@@ -79,7 +79,7 @@ public sealed partial class HttpRequestBuilder
         // 构建并设置指定的 HttpRequestMessage 请求消息的内容
         BuildAndSetContent(httpRequestMessage, httpContentProcessorFactory, httpRemoteOptions);
 
-        // 追加 HTTP 请求的属性集
+        // 追加 HttpRequestMessage 请求属性集合
         AppendProperties(httpRequestMessage);
 
         return httpRequestMessage;
@@ -429,7 +429,7 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
-    ///     追加 HTTP 请求的属性集
+    ///     追加 <see cref="HttpRequestMessage" /> 请求属性集合
     /// </summary>
     /// <param name="httpRequestMessage">
     ///     <see cref="HttpRequestMessage" />
@@ -440,7 +440,7 @@ public sealed partial class HttpRequestBuilder
         if (Properties.Count > 0)
         {
             // 注意：httpRequestMessage.Properties 已过时，使用 Options 替代
-            httpRequestMessage.Options.TryAdd(Properties);
+            httpRequestMessage.Options.AddOrUpdate(Properties);
         }
 
         // 检查是否禁用全局请求分析工具

@@ -1160,7 +1160,7 @@
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.AppendProperties(System.Net.Http.HttpRequestMessage)">
             <summary>
-                追加 HTTP 请求的属性集
+                追加 <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性集合
             </summary>
             <param name="httpRequestMessage">
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
@@ -1884,7 +1884,7 @@
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.WithProperty(System.String,System.Object)">
             <summary>
-                设置 HTTP 请求的属性
+                设置 <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性
             </summary>
             <remarks>支持多次调用。</remarks>
             <param name="key">键</param>
@@ -1895,20 +1895,20 @@
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.WithProperties(System.Collections.Generic.IDictionary{System.String,System.Object})">
             <summary>
-                设置 HTTP 请求的属性集合
+                设置 <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性集合
             </summary>
             <remarks>支持多次调用。</remarks>
-            <param name="properties">HTTP 请求的属性集合</param>
+            <param name="properties">请求的属性集合</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.WithProperties(System.Object)">
             <summary>
-                设置 HTTP 请求的属性集合
+                设置 <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性集合
             </summary>
             <remarks>支持多次调用。</remarks>
-            <param name="propertySource">请求的属性源对象</param>
+            <param name="propertySource"><see cref="T:System.Net.Http.HttpRequestMessage" /> 请求的属性源对象</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -2118,9 +2118,9 @@
         </member>
         <member name="P:HttpAgent.HttpRequestBuilder.Properties">
             <summary>
-                HTTP 请求的属性集合
+                <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性集合
             </summary>
-            <remarks>用于添加 HTTP 请求自定义拓展属性。该值将合并到 <c>HttpRequestMessage.Options</c> 属性中。</remarks>
+            <remarks>用于添加 <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性。该值将合并到 <c>HttpRequestMessage.Options</c> 属性中。</remarks>
         </member>
         <member name="P:HttpAgent.HttpRequestBuilder.MultipartFormDataBuilder">
             <summary>
@@ -4144,8 +4144,8 @@
                 <inheritdoc cref="T:HttpAgent.CookieAttribute" />
             </summary>
             <remarks>
-                <para>当特性作用于方法或接口时，则表示移除指定Cookie 操作。</para>
-                <para>当特性作用于参数时，则表示添加Cookie ，同时设置Cookie 键为 <c>name</c> 的值。</para>
+                <para>当特性作用于方法或接口时，则表示移除指定 Cookie 操作。</para>
+                <para>当特性作用于参数时，则表示添加 Cookie ，同时设置 Cookie 键为 <c>name</c> 的值。</para>
             </remarks>
             <param name="name">Cookie 键</param>
         </member>
@@ -4567,6 +4567,68 @@
                 是否启用
             </summary>
         </member>
+        <member name="T:HttpAgent.PropertyAttribute">
+            <summary>
+                HTTP 声明式 <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性特性
+            </summary>
+            <remarks>支持多次指定。</remarks>
+        </member>
+        <member name="M:HttpAgent.PropertyAttribute.#ctor">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.PropertyAttribute" />
+            </summary>
+            <remarks>特性作用于参数时有效。</remarks>
+        </member>
+        <member name="M:HttpAgent.PropertyAttribute.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.PropertyAttribute" />
+            </summary>
+            <remarks>
+                当特性作用于参数时，则表示添加 <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性，同时设置 <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性键为
+                <c>name</c> 的值。
+            </remarks>
+            <param name="name"><see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性键</param>
+        </member>
+        <member name="M:HttpAgent.PropertyAttribute.#ctor(System.String,System.Object)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.PropertyAttribute" />
+            </summary>
+            <param name="name"><see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性键</param>
+            <param name="value"><see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性的值</param>
+        </member>
+        <member name="P:HttpAgent.PropertyAttribute.Name">
+            <summary>
+                <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性键
+            </summary>
+            <remarks>该属性优先级低于 <see cref="P:HttpAgent.PropertyAttribute.AliasAs" /> 属性设置的值。</remarks>
+        </member>
+        <member name="P:HttpAgent.PropertyAttribute.Value">
+            <summary>
+                <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性的值
+            </summary>
+            <remarks>当特性作用于参数时，表示默认值。</remarks>
+        </member>
+        <member name="P:HttpAgent.PropertyAttribute.AliasAs">
+            <summary>
+                别名
+            </summary>
+            <remarks>
+                <para>特性用于参数时有效。</para>
+                <para>该属性优先级高于 <see cref="P:HttpAgent.PropertyAttribute.Name" /> 属性设置的值。</para>
+            </remarks>
+        </member>
+        <member name="P:HttpAgent.PropertyAttribute.AsItem">
+            <summary>
+                表示是否作为 <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性的一项
+            </summary>
+            <remarks>
+                <para>当参数类型为对象类型时有效。</para>
+                <para>
+                    该属性值为 <c>true</c> 时作为 <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性的一项。否则将遍历对象类型的每一个公开属性作为
+                    <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性的项。默认值为：<c>true</c>。
+                </para>
+            </remarks>
+        </member>
         <member name="T:HttpAgent.QueryAttribute">
             <summary>
                 HTTP 声明式查询参数特性
@@ -4987,6 +5049,14 @@
             </summary>
         </member>
         <member name="M:HttpAgent.ProfilerDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <inheritdoc />
+        </member>
+        <member name="T:HttpAgent.PropertyDeclarativeExtractor">
+            <summary>
+                HTTP 声明式 <see cref="T:HttpAgent.PropertyAttribute" /> 特性提取器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.PropertyDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
             <inheritdoc />
         </member>
         <member name="T:HttpAgent.QueryDeclarativeExtractor">
