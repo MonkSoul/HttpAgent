@@ -6925,33 +6925,52 @@
             <summary>
                 带应用速率限制的流
             </summary>
+            <remarks>
+                <para>基于令牌桶算法（Token Bucket Algorithm）实现流量控制和速率限制。</para>
+                <para>参考文献：https://baike.baidu.com/item/令牌桶算法/6597000。</para>
+            </remarks>
+        </member>
+        <member name="F:HttpAgent.RateLimitedStream.CHUNK_SIZE">
+            <summary>
+                单次读取或写入操作中处理的最大数据块大小
+            </summary>
         </member>
         <member name="F:HttpAgent.RateLimitedStream._bytesPerSecond">
             <summary>
-                每秒允许的最大字节数
+                每秒允许传输的最大字节数
             </summary>
         </member>
         <member name="F:HttpAgent.RateLimitedStream._innerStream">
             <inheritdoc cref="T:System.IO.Stream" />
         </member>
+        <member name="F:HttpAgent.RateLimitedStream._lockObject">
+            <summary>
+                用于同步访问的锁对象
+            </summary>
+        </member>
         <member name="F:HttpAgent.RateLimitedStream._stopwatch">
             <summary>
-                用于精确计时的 <see cref="T:System.Diagnostics.Stopwatch" /> 实例
+                用来计算时间间隔的计时器
             </summary>
         </member>
-        <member name="F:HttpAgent.RateLimitedStream._totalBytesProcessed">
+        <member name="F:HttpAgent.RateLimitedStream._availableTokens">
             <summary>
-                到目前为止已读取或写入的总字节数
+                当前可用的令牌数量（字节数）
             </summary>
         </member>
-        <member name="M:HttpAgent.RateLimitedStream.#ctor(System.IO.Stream,System.Int32)">
+        <member name="F:HttpAgent.RateLimitedStream._lastTokenRefillTime">
+            <summary>
+                上次令牌补充的时间戳
+            </summary>
+        </member>
+        <member name="M:HttpAgent.RateLimitedStream.#ctor(System.IO.Stream,System.Double)">
             <summary>
                 <inheritdoc cref="T:HttpAgent.RateLimitedStream" />
             </summary>
             <param name="innerStream">
                 <see cref="T:System.IO.Stream" />
             </param>
-            <param name="bytesPerSecond">每秒允许的最大字节数</param>
+            <param name="bytesPerSecond">每秒允许传输的最大字节数</param>
         </member>
         <member name="P:HttpAgent.RateLimitedStream.CanRead">
             <inheritdoc />
@@ -6989,11 +7008,16 @@
         <member name="M:HttpAgent.RateLimitedStream.Dispose(System.Boolean)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.RateLimitedStream.ApplyRateLimitAsync(System.Int32)">
+        <member name="M:HttpAgent.RateLimitedStream.RefillTokens">
             <summary>
-                根据设定的速率限制调整读写操作的速度
+                补充令牌的方法
             </summary>
-            <param name="bytesToProcess">本次操作将处理的字节数</param>
+        </member>
+        <member name="M:HttpAgent.RateLimitedStream.WaitForTokens(System.Int32)">
+            <summary>
+                等待直到有足够令牌可用
+            </summary>
+            <param name="desiredTokens">需要等待的令牌数量</param>
         </member>
         <member name="T:HttpAgent.ServerSentEventsData">
             <summary>

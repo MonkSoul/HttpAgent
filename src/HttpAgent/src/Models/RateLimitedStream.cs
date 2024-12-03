@@ -7,25 +7,44 @@ namespace HttpAgent;
 /// <summary>
 ///     带应用速率限制的流
 /// </summary>
+/// <remarks>
+///     <para>基于令牌桶算法（Token Bucket Algorithm）实现流量控制和速率限制。</para>
+///     <para>参考文献：https://baike.baidu.com/item/令牌桶算法/6597000。</para>
+/// </remarks>
 public sealed class RateLimitedStream : Stream
 {
     /// <summary>
-    ///     每秒允许的最大字节数
+    ///     单次读取或写入操作中处理的最大数据块大小
     /// </summary>
-    private readonly int _bytesPerSecond;
+    internal const int CHUNK_SIZE = 4096;
+
+    /// <summary>
+    ///     每秒允许传输的最大字节数
+    /// </summary>
+    internal readonly double _bytesPerSecond;
 
     /// <inheritdoc cref="Stream" />
     internal readonly Stream _innerStream;
 
     /// <summary>
-    ///     用于精确计时的 <see cref="Stopwatch" /> 实例
+    ///     用于同步访问的锁对象
     /// </summary>
-    internal readonly Stopwatch _stopwatch = new();
+    internal readonly object _lockObject = new();
 
     /// <summary>
-    ///     到目前为止已读取或写入的总字节数
+    ///     用来计算时间间隔的计时器
     /// </summary>
-    internal long _totalBytesProcessed;
+    internal readonly Stopwatch _stopwatch;
+
+    /// <summary>
+    ///     当前可用的令牌数量（字节数）
+    /// </summary>
+    internal double _availableTokens;
+
+    /// <summary>
+    ///     上次令牌补充的时间戳
+    /// </summary>
+    internal long _lastTokenRefillTime;
 
     /// <summary>
     ///     <inheritdoc cref="RateLimitedStream" />
@@ -33,8 +52,8 @@ public sealed class RateLimitedStream : Stream
     /// <param name="innerStream">
     ///     <see cref="Stream" />
     /// </param>
-    /// <param name="bytesPerSecond">每秒允许的最大字节数</param>
-    public RateLimitedStream(Stream innerStream, int bytesPerSecond)
+    /// <param name="bytesPerSecond">每秒允许传输的最大字节数</param>
+    public RateLimitedStream(Stream innerStream, double bytesPerSecond)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(innerStream);
@@ -49,8 +68,14 @@ public sealed class RateLimitedStream : Stream
         _innerStream = innerStream;
         _bytesPerSecond = bytesPerSecond;
 
-        // 启动 Stopwatch 来开始计时
-        _stopwatch.Start();
+        // 开始计时
+        _stopwatch = Stopwatch.StartNew();
+
+        // 记录初始时间
+        _lastTokenRefillTime = _stopwatch.ElapsedMilliseconds;
+
+        // 初始化可用令牌数
+        _availableTokens = bytesPerSecond;
     }
 
     /// <inheritdoc />
@@ -81,11 +106,14 @@ public sealed class RateLimitedStream : Stream
     /// <inheritdoc />
     public override int Read(byte[] buffer, int offset, int count)
     {
-        // 根据设定的速率限制调整读写操作的速度
-        ApplyRateLimitAsync(count).GetAwaiter().GetResult();
+        // 确保单次读取不会超过预设的数据块大小
+        var adjustedCount = Math.Min(count, CHUNK_SIZE);
+
+        // 等待直到有足够令牌可用
+        WaitForTokens(adjustedCount);
 
         // 从内部流读取数据到缓冲区
-        return _innerStream.Read(buffer, offset, count);
+        return _innerStream.Read(buffer, offset, adjustedCount);
     }
 
     /// <inheritdoc />
@@ -97,11 +125,14 @@ public sealed class RateLimitedStream : Stream
     /// <inheritdoc />
     public override void Write(byte[] buffer, int offset, int count)
     {
-        // 向内部流写入数据
-        _innerStream.Write(buffer, offset, count);
+        // 确保单次写入不会超过预设的数据块大小
+        var adjustedCount = Math.Min(count, CHUNK_SIZE);
 
-        // 根据设定的速率限制调整读写操作的速度
-        ApplyRateLimitAsync(count).GetAwaiter().GetResult();
+        // 等待直到有足够令牌可用
+        WaitForTokens(adjustedCount);
+
+        // 向内部流写入数据
+        _innerStream.Write(buffer, offset, adjustedCount);
     }
 
     /// <inheritdoc />
@@ -111,35 +142,78 @@ public sealed class RateLimitedStream : Stream
         if (disposing)
         {
             _innerStream.Dispose();
+            _stopwatch.Stop();
         }
 
         base.Dispose(disposing);
     }
 
     /// <summary>
-    ///     根据设定的速率限制调整读写操作的速度
+    ///     补充令牌的方法
     /// </summary>
-    /// <param name="bytesToProcess">本次操作将处理的字节数</param>
-    internal async Task ApplyRateLimitAsync(int bytesToProcess)
+    internal void RefillTokens()
     {
-        // 自开始以来经过的时间（秒）
-        var elapsedSeconds = _stopwatch.ElapsedMilliseconds / 1000.0;
+        // 获取当前计时器的时间
+        var now = _stopwatch.ElapsedMilliseconds;
 
-        // 根据速率预期应读取的字节数
-        var totalBytesExpected = elapsedSeconds * _bytesPerSecond;
+        // 计算自上次填充令牌以来经过的时间
+        var timePassed = now - _lastTokenRefillTime;
 
-        // 计算实际与预期之差
-        var bytesOverLimit = _totalBytesProcessed + bytesToProcess - totalBytesExpected;
-
-        if (bytesOverLimit > 0)
+        // 如果时间没有流逝或者流逝时间不足以产生新的令牌，则直接返回
+        if (timePassed <= 0)
         {
-            // 如果实际操作超过预期，则计算需要等待的时间，并进行延迟
-            var delayMilliseconds = (int)(bytesOverLimit / _bytesPerSecond * 1000.0);
-
-            await Task.Delay(delayMilliseconds).ConfigureAwait(false);
+            return;
         }
 
-        // 更新已处理的总字节数
-        _totalBytesProcessed += bytesToProcess;
+        // 据每秒允许的最大字节数以及经过的时间计算可以补充的令牌数量
+        var newTokens = _bytesPerSecond * timePassed / 1000.0;
+
+        // 更新可用令牌，但不超过每秒允许的最大值
+        _availableTokens = Math.Min(_bytesPerSecond, _availableTokens + newTokens);
+
+        // 更新最后一次填充令牌的时间戳
+        _lastTokenRefillTime = now;
+    }
+
+    /// <summary>
+    ///     等待直到有足够令牌可用
+    /// </summary>
+    /// <param name="desiredTokens">需要等待的令牌数量</param>
+    internal void WaitForTokens(int desiredTokens)
+    {
+        while (true)
+        {
+            // 防止并发访问问题
+            lock (_lockObject)
+            {
+                //  尝试补充令牌
+                RefillTokens();
+
+                // 检查是否已有足够的令牌
+                if (_availableTokens >= desiredTokens)
+                {
+                    // 扣除所需的令牌数量
+                    _availableTokens -= desiredTokens;
+
+                    // 如果有足够的令牌，退出循环
+                    return;
+                }
+            }
+
+            // 如果没有足够的令牌，计算还需要多少令牌
+            var requiredTokens = desiredTokens - _availableTokens;
+
+            // 计算为了获得所需令牌需要等待的时间
+            var waitTime = (int)(requiredTokens * 1000.0 / _bytesPerSecond);
+
+            // 添加一点额外延迟用来确保精确性，具体是增加了 5% 的延迟
+            waitTime = (int)(waitTime * 1.05);
+
+            // 确保不会一次性等待过长时间，最多等待 100 毫秒
+            if (waitTime > 0)
+            {
+                Thread.Sleep(Math.Min(100, waitTime));
+            }
+        }
     }
 }

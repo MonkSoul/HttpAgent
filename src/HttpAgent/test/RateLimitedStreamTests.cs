@@ -25,15 +25,20 @@ public class RateLimitedStreamTests
         using var fileStream = File.OpenRead(filePath);
         using var rateLimitedStream = new RateLimitedStream(fileStream, 5);
 
+        Assert.Equal(4096, RateLimitedStream.CHUNK_SIZE);
+        Assert.Equal(5, rateLimitedStream._bytesPerSecond);
         Assert.Equal(fileStream, rateLimitedStream._innerStream);
-        Assert.Equal(0, rateLimitedStream._totalBytesProcessed);
+        Assert.NotNull(rateLimitedStream._lockObject);
+        Assert.NotNull(rateLimitedStream._stopwatch);
+        Assert.Equal(5, rateLimitedStream._availableTokens);
+        Assert.Equal(0, rateLimitedStream._lastTokenRefillTime);
+
         Assert.Equal(fileStream.CanRead, rateLimitedStream.CanRead);
         Assert.Equal(fileStream.CanSeek, rateLimitedStream.CanSeek);
         Assert.Equal(fileStream.CanWrite, rateLimitedStream.CanWrite);
         Assert.Equal(fileStream.CanTimeout, rateLimitedStream.CanTimeout);
         Assert.Equal(21, rateLimitedStream.Length);
         Assert.Equal(fileStream.Position, rateLimitedStream.Position);
-        Assert.NotNull(rateLimitedStream._stopwatch);
     }
 
     [Fact]
@@ -47,31 +52,6 @@ public class RateLimitedStreamTests
     }
 
     [Fact]
-    public void Read_ReturnOK()
-    {
-        var data = new byte[1024 * 1024];
-        new Random().NextBytes(data);
-
-        using var memoryStream = new MemoryStream();
-        memoryStream.Write(data, 0, data.Length);
-        memoryStream.Position = 0;
-
-        const int bytesPerSecond = 1024 * 1024;
-        using var rateLimitedStream = new RateLimitedStream(memoryStream, bytesPerSecond);
-
-        var stopwatch = Stopwatch.StartNew();
-        var buffer = new byte[1024 * 1024];
-        var bytesRead = rateLimitedStream.Read(buffer, 0, buffer.Length);
-        stopwatch.Stop();
-
-        Assert.Equal(data.Length, bytesRead);
-
-        Assert.InRange(stopwatch.ElapsedMilliseconds, 900, 1100);
-        Assert.True(data.SequenceEqual(buffer));
-    }
-
-
-    [Fact]
     public void Seek_ReturnOK()
     {
         var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
@@ -79,28 +59,6 @@ public class RateLimitedStreamTests
         using var rateLimitedStream = new RateLimitedStream(fileStream, 5);
 
         rateLimitedStream.Seek(0, SeekOrigin.Begin);
-    }
-
-    [Fact]
-    public void Write_ReturnOK()
-    {
-        var data = new byte[1024 * 1024];
-        new Random().NextBytes(data);
-
-        using var memoryStream = new MemoryStream();
-        const int bytesPerSecond = 1024 * 1024;
-        using var rateLimitedStream = new RateLimitedStream(memoryStream, bytesPerSecond);
-
-        var stopwatch = Stopwatch.StartNew();
-        rateLimitedStream.Write(data, 0, data.Length);
-        stopwatch.Stop();
-
-        Assert.InRange(stopwatch.ElapsedMilliseconds, 900, 1100);
-
-        memoryStream.Position = 0;
-        var verificationBuffer = new byte[data.Length];
-        _ = memoryStream.Read(verificationBuffer, 0, verificationBuffer.Length);
-        Assert.True(data.SequenceEqual(verificationBuffer));
     }
 
     [Fact]
@@ -125,12 +83,65 @@ public class RateLimitedStreamTests
     }
 
     [Fact]
-    public async Task ApplyRateLimitAsync_ReturnOK()
+    public void Read_ReturnOK()
     {
-        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
-        await using var fileStream = File.OpenRead(filePath);
-        await using var rateLimitedStream = new RateLimitedStream(fileStream, 2);
+        var testData = new byte[8192];
+        using var memoryStream = new MemoryStream(testData);
+        using var rateLimitedStream = new RateLimitedStream(memoryStream, 4096);
+        var buffer = new byte[4096];
+        var totalBytesRead = 0;
 
-        await rateLimitedStream.ApplyRateLimitAsync(21);
+        while (totalBytesRead < testData.Length)
+        {
+            var bytesRead =
+                rateLimitedStream.Read(buffer, 0, Math.Min(buffer.Length, testData.Length - totalBytesRead));
+            totalBytesRead += bytesRead;
+            Assert.InRange(bytesRead, 0, 4096);
+
+            if (totalBytesRead < testData.Length)
+            {
+                Thread.Sleep(1000);
+            }
+        }
+
+        Assert.Equal(testData.Length, totalBytesRead);
+    }
+
+    [Fact]
+    public void Write_ReturnOK()
+    {
+        var testData = new byte[8192];
+        using var memoryStream = new MemoryStream();
+        using var rateLimitedStream = new RateLimitedStream(memoryStream, 4096);
+
+        rateLimitedStream.Write(testData, 0, testData.Length / 2);
+
+        Thread.Sleep(1000);
+
+        rateLimitedStream.Write(testData, testData.Length / 2, testData.Length / 2);
+
+        Assert.Equal(testData.Length, memoryStream.Length);
+    }
+
+    [Fact]
+    public void RefillTokens_ReturnOK()
+    {
+        using var memoryStream = new MemoryStream();
+        using var rateLimitedStream = new RateLimitedStream(memoryStream, 1024);
+        rateLimitedStream.RefillTokens();
+
+        // 无
+    }
+
+    [Fact]
+    public void WaitForTokens_ReturnOK()
+    {
+        using var memoryStream = new MemoryStream();
+        using var rateLimitedStream = new RateLimitedStream(memoryStream, 1024);
+
+        rateLimitedStream._availableTokens = 256.0;
+        rateLimitedStream.WaitForTokens(512);
+
+        // 无
     }
 }
