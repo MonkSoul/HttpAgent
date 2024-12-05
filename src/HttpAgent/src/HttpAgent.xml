@@ -3592,17 +3592,6 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Core.Extensions.StringExtensions.ToLowerFirstLetter(System.String)">
-            <summary>
-                将字符串首字母转换为小写
-            </summary>
-            <param name="input">
-                <see cref="T:System.String" />
-            </param>
-            <returns>
-                <see cref="T:System.String" />
-            </returns>
-        </member>
         <member name="M:HttpAgent.Core.Extensions.StringExtensions.EscapeDataString(System.String,System.Boolean)">
             <summary>
                 将字符串进行转义
