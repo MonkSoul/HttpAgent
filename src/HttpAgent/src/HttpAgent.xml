@@ -6967,6 +6967,11 @@
         <member name="F:HttpAgent.ProgressFileStream._stopwatch">
             <inheritdoc cref="T:System.Diagnostics.Stopwatch" />
         </member>
+        <member name="F:HttpAgent.ProgressFileStream._hasStarted">
+            <summary>
+                是否已经开始读取或写入
+            </summary>
+        </member>
         <member name="F:HttpAgent.ProgressFileStream._transferred">
             <summary>
                 已传输的数据量
@@ -7024,6 +7029,11 @@
                 报告进度
             </summary>
             <param name="increment">增加的数据量</param>
+        </member>
+        <member name="M:HttpAgent.ProgressFileStream.EnsureInitialized">
+            <summary>
+                确保进度信息已初始化
+            </summary>
         </member>
         <member name="T:HttpAgent.RateLimitedStream">
             <summary>

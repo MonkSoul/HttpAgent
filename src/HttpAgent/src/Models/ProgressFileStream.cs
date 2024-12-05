@@ -29,6 +29,11 @@ internal sealed class ProgressFileStream : Stream
     internal readonly Stopwatch _stopwatch;
 
     /// <summary>
+    ///     是否已经开始读取或写入
+    /// </summary>
+    internal bool _hasStarted;
+
+    /// <summary>
     ///     已传输的数据量
     /// </summary>
     internal long _transferred;
@@ -59,6 +64,7 @@ internal sealed class ProgressFileStream : Stream
 
         // 初始化 Stopwatch 实例并开启计时操作
         _stopwatch = Stopwatch.StartNew();
+        _hasStarted = false;
     }
 
     /// <inheritdoc />
@@ -80,7 +86,18 @@ internal sealed class ProgressFileStream : Stream
     public override long Position
     {
         get => _fileStream.Position;
-        set => _fileStream.Position = value;
+        set
+        {
+            _fileStream.Position = value;
+
+            // 恢复进度信息初始状态
+            // ReSharper disable once InvertIf
+            if (_hasStarted && value == 0)
+            {
+                _transferred = 0;
+                _stopwatch.Restart();
+            }
+        }
     }
 
     /// <inheritdoc />
@@ -89,6 +106,9 @@ internal sealed class ProgressFileStream : Stream
     /// <inheritdoc />
     public override int Read(byte[] buffer, int offset, int count)
     {
+        // 确保进度信息已初始化
+        EnsureInitialized();
+
         // 从文件流读取数据到缓冲区
         var bytesRead = _fileStream.Read(buffer, offset, count);
 
@@ -110,6 +130,9 @@ internal sealed class ProgressFileStream : Stream
     /// <inheritdoc />
     public override void Write(byte[] buffer, int offset, int count)
     {
+        // 确保进度信息已初始化
+        EnsureInitialized();
+
         // 向文件流写入数据
         _fileStream.Write(buffer, offset, count);
 
@@ -142,5 +165,16 @@ internal sealed class ProgressFileStream : Stream
 
         // 发送文件传输进度到通道
         _progressChannel.Writer.TryWrite(_fileTransferProgress);
+    }
+
+    /// <summary>
+    ///     确保进度信息已初始化
+    /// </summary>
+    internal void EnsureInitialized()
+    {
+        if (!_hasStarted && Position == 0)
+        {
+            _hasStarted = true;
+        }
     }
 }

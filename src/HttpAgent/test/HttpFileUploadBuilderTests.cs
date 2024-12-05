@@ -345,7 +345,7 @@ public class HttpFileUploadBuilderTests
         var item = httpRequestBuilder.MultipartFormDataBuilder._partContents[0];
         Assert.True(item.RawContent is ProgressFileStream);
         Assert.Equal("test.txt", item.FileName);
-        Assert.Equal("application/octet-stream", item.ContentType);
+        Assert.Equal("text/plain", item.ContentType);
         Assert.Equal("file", item.Name);
 
         var httpRequestBuilder2 = httpFileUploadBuilder.SetEventHandler<CustomFileTransferEventHandler2>().Build(

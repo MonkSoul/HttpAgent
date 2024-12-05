@@ -40,6 +40,7 @@ public class ProgressFileStreamTests(ITestOutputHelper output)
         Assert.NotNull(progressFileStream._stopwatch);
         Assert.Equal(0, progressFileStream._transferred);
         Assert.Equal(progressChannel, progressFileStream._progressChannel);
+        Assert.False(progressFileStream._hasStarted);
 
         Assert.Equal(fileStream.CanRead, progressFileStream.CanRead);
         Assert.Equal(fileStream.CanSeek, progressFileStream.CanSeek);
@@ -160,5 +161,18 @@ public class ProgressFileStreamTests(ITestOutputHelper output)
 
             break;
         }
+    }
+
+    [Fact]
+    public void EnsureInitialized_ReturnOK()
+    {
+        var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
+        using var fileStream = File.OpenRead(filePath);
+        var progressChannel = Channel.CreateUnbounded<FileTransferProgress>();
+        using var progressFileStream =
+            new ProgressFileStream(fileStream, filePath, progressChannel);
+
+        progressFileStream.EnsureInitialized();
+        Assert.True(progressFileStream._hasStarted);
     }
 }
