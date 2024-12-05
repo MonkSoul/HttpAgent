@@ -597,11 +597,26 @@
                 多部分表单内容的边界
             </summary>
         </member>
+        <member name="P:HttpAgent.HttpMultipartFormDataBuilder.OnPreAddContent">
+            <summary>
+                用于处理在添加 <see cref="T:System.Net.Http.HttpContent" /> 表单项内容时的操作
+            </summary>
+        </member>
         <member name="M:HttpAgent.HttpMultipartFormDataBuilder.SetBoundary(System.String)">
             <summary>
                 设置多部分表单内容的边界
             </summary>
             <param name="boundary">多部分表单内容的边界</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.SetOnPreAddContent(System.Action{System.Net.Http.HttpContent,System.String})">
+            <summary>
+                设置用于处理在添加 <see cref="T:System.Net.Http.HttpContent" /> 表单项内容时的操作
+            </summary>
+            <remarks>支持多次调用。</remarks>
+            <param name="configure">自定义配置委托</param>
             <returns>
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
@@ -3565,6 +3580,28 @@
             <summary>
                 <see cref="T:System.String" /> 拓展类
             </summary>
+        </member>
+        <member name="M:HttpAgent.Core.Extensions.StringExtensions.AddQuotes(System.String)">
+            <summary>
+                为字符串前后添加双引号
+            </summary>
+            <param name="input">
+                <see cref="T:System.String" />
+            </param>
+            <returns>
+                <see cref="T:System.String" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Core.Extensions.StringExtensions.ToLowerFirstLetter(System.String)">
+            <summary>
+                将字符串首字母转换为小写
+            </summary>
+            <param name="input">
+                <see cref="T:System.String" />
+            </param>
+            <returns>
+                <see cref="T:System.String" />
+            </returns>
         </member>
         <member name="M:HttpAgent.Core.Extensions.StringExtensions.EscapeDataString(System.String,System.Boolean)">
             <summary>

@@ -38,6 +38,11 @@ public sealed class HttpMultipartFormDataBuilder
     public string? Boundary { get; set; }
 
     /// <summary>
+    ///     用于处理在添加 <see cref="HttpContent" /> 表单项内容时的操作
+    /// </summary>
+    internal Action<HttpContent, string>? OnPreAddContent { get; private set; }
+
+    /// <summary>
     ///     设置多部分表单内容的边界
     /// </summary>
     /// <param name="boundary">多部分表单内容的边界</param>
@@ -50,6 +55,40 @@ public sealed class HttpMultipartFormDataBuilder
         ArgumentException.ThrowIfNullOrWhiteSpace(boundary);
 
         Boundary = boundary;
+
+        return this;
+    }
+
+    /// <summary>
+    ///     设置用于处理在添加 <see cref="HttpContent" /> 表单项内容时的操作
+    /// </summary>
+    /// <remarks>支持多次调用。</remarks>
+    /// <param name="configure">自定义配置委托</param>
+    /// <returns>
+    ///     <see cref="HttpMultipartFormDataBuilder" />
+    /// </returns>
+    public HttpMultipartFormDataBuilder SetOnPreAddContent(Action<HttpContent, string> configure)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(configure);
+
+        // 如果 OnPreAddContent 未设置则直接赋值
+        if (OnPreAddContent is null)
+        {
+            OnPreAddContent = configure;
+        }
+        // 否则创建级联调用委托
+        else
+        {
+            // 复制一个新的委托避免死循环
+            var originalOnPreAddContent = OnPreAddContent;
+
+            OnPreAddContent = (content, name) =>
+            {
+                originalOnPreAddContent.Invoke(content, name);
+                configure.Invoke(content, name);
+            };
+        }
 
         return this;
     }
@@ -582,7 +621,7 @@ public sealed class HttpMultipartFormDataBuilder
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
-    public HttpMultipartFormDataBuilder Add(HttpContent httpContent, string? name, string? contentType,
+    public HttpMultipartFormDataBuilder Add(HttpContent httpContent, string? name, string? contentType = null,
         Encoding? contentEncoding = null)
     {
         // 空检查
@@ -609,8 +648,16 @@ public sealed class HttpMultipartFormDataBuilder
             mediaType = mediaTypeHeaderValue?.MediaType;
         }
 
+        // 尝试从 FileName 中解析 MediaType
+        if (string.IsNullOrWhiteSpace(mediaType))
+        {
+            mediaType = FileTypeMapper.GetContentType(
+                httpContent.Headers.ContentDisposition?.FileName?.TrimStart('"').TrimEnd('"')!,
+                null!);
+        }
+
         // 空检查
-        ArgumentException.ThrowIfNullOrWhiteSpace(mediaType);
+        ArgumentException.ThrowIfNullOrWhiteSpace(mediaType, nameof(contentType));
 
         // 设置或解析内容编码
         encoding = contentEncoding ?? encoding ?? (string.IsNullOrWhiteSpace(mediaTypeHeaderValue?.CharSet)
@@ -660,6 +707,13 @@ public sealed class HttpMultipartFormDataBuilder
             ? new MultipartFormDataContent()
             : new MultipartFormDataContent(boundary);
 
+        // 处理 OSS 对象存储服务必须设置 Content-Type 问题
+        if (!string.IsNullOrWhiteSpace(boundary))
+        {
+            multipartFormDataContent.Headers.ContentType =
+                MediaTypeHeaderValue.Parse($"{MediaTypeNames.Multipart.FormData}; boundary={boundary}");
+        }
+
         // 逐条遍历添加
         foreach (var dataItem in _partContents)
         {
@@ -667,10 +721,16 @@ public sealed class HttpMultipartFormDataBuilder
             var httpContent = BuildHttpContent(dataItem, httpContentProcessorFactory, processors);
 
             // 空检查
-            if (httpContent is not null)
+            if (httpContent is null)
             {
-                multipartFormDataContent.Add(httpContent, dataItem.Name);
+                continue;
             }
+
+            // 调用用于处理在添加 HttpContent 表单项内容时的操作
+            OnPreAddContent?.Invoke(httpContent, dataItem.Name);
+
+            // 添加 HttpContent 表单项内容
+            multipartFormDataContent.Add(httpContent, dataItem.Name);
         }
 
         return multipartFormDataContent;
@@ -704,16 +764,15 @@ public sealed class HttpMultipartFormDataBuilder
         var httpContent = httpContentProcessorFactory.Build(multipartFormDataItem.RawContent, contentType,
             multipartFormDataItem.ContentEncoding, processors);
 
-        // 处理 ByteArrayContent、StreamContent 和 ReadOnlyMemoryContent 类型文件的名称
-        if (httpContent is ByteArrayContent and not (FormUrlEncodedContent or StringContent) or StreamContent
-                or ReadOnlyMemoryContent && httpContent.Headers.ContentDisposition is null &&
-            !string.IsNullOrWhiteSpace(multipartFormDataItem.FileName))
+        // 空检查
+        if (httpContent is not null && httpContent.Headers.ContentDisposition is null)
         {
+            // 设置表单项内容 Content-Disposition 标头
             httpContent.Headers.ContentDisposition =
                 new ContentDispositionHeaderValue(Constants.FORM_DATA_DISPOSITION_TYPE)
                 {
-                    Name = multipartFormDataItem.Name,
-                    FileName = multipartFormDataItem.FileName,
+                    Name = multipartFormDataItem.Name.AddQuotes(),
+                    FileName = multipartFormDataItem.FileName.AddQuotes(),
                     Size = multipartFormDataItem.FileSize
                 };
         }

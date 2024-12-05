@@ -176,7 +176,7 @@ public sealed partial class HttpRequestBuilder
         ArgumentNullException.ThrowIfNull(text);
         ArgumentException.ThrowIfNullOrWhiteSpace(contentType);
 
-        return SetContent($"\"{text}\"", contentType, contentEncoding);
+        return SetContent(text.AddQuotes(), contentType, contentEncoding);
     }
 
     /// <summary>

@@ -10,6 +10,58 @@ namespace HttpAgent.Core.Extensions;
 internal static partial class StringExtensions
 {
     /// <summary>
+    ///     为字符串前后添加双引号
+    /// </summary>
+    /// <param name="input">
+    ///     <see cref="string" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="string" />
+    /// </returns>
+    internal static string? AddQuotes(this string? input)
+    {
+        // 空检查
+        if (input is null)
+        {
+            return input;
+        }
+
+        // 检查是否已经有双引号，防止重复添加
+        if (input.StartsWith('"') && input.EndsWith('"'))
+        {
+            return input;
+        }
+
+        return $"\"{input}\"";
+    }
+
+    /// <summary>
+    ///     将字符串首字母转换为小写
+    /// </summary>
+    /// <param name="input">
+    ///     <see cref="string" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="string" />
+    /// </returns>
+    internal static string? ToLowerFirstLetter(this string? input)
+    {
+        // 空检查
+        if (string.IsNullOrWhiteSpace(input))
+        {
+            return input;
+        }
+
+        // 初始化字符串构建器
+        var stringBuilder = new StringBuilder(input);
+
+        // 设置字符串构建器首个字符为小写
+        stringBuilder[0] = char.ToLower(stringBuilder[0]);
+
+        return stringBuilder.ToString();
+    }
+
+    /// <summary>
     ///     将字符串进行转义
     /// </summary>
     /// <param name="input">

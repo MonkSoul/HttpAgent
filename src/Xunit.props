@@ -30,7 +30,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="$(SolutionDir)Xunit.props" Pack="true" PackagePath="\"/>
+        <None Include="$(ProjectDir)..\..\Xunit.props" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
 </Project>

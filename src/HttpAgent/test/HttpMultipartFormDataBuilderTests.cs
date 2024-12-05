@@ -19,6 +19,7 @@ public class HttpMultipartFormDataBuilderTests
         Assert.NotNull(builder._partContents);
         Assert.Empty(builder._partContents);
         Assert.Null(builder.Boundary);
+        Assert.Null(builder.OnPreAddContent);
     }
 
     [Fact]
@@ -40,6 +41,45 @@ public class HttpMultipartFormDataBuilderTests
         Assert.Equal("--------------------", builder.Boundary);
 
         builder.Boundary = "x-----------x";
+    }
+
+    [Fact]
+    public void SetOnPreAddContent_Invalid_Parameters()
+    {
+        var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
+
+        Assert.Throws<ArgumentNullException>(() =>
+        {
+            builder.SetOnPreAddContent(null!);
+        });
+    }
+
+    [Fact]
+    public void SetOnPreAddContent_ReturnOK()
+    {
+        var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
+
+        builder.SetOnPreAddContent((_, _) => { });
+        Assert.NotNull(builder.OnPreAddContent);
+    }
+
+    [Fact]
+    public void SetOnPreAddContent_Cascade_ReturnOK()
+    {
+        var i = 0;
+        var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
+
+        builder.SetOnPreAddContent((_, _) =>
+        {
+            i++;
+        }).SetOnPreAddContent((_, _) =>
+        {
+            i++;
+        });
+        Assert.NotNull(builder.OnPreAddContent);
+
+        builder.OnPreAddContent.Invoke(new StringContent("Furion"), "name");
+        Assert.Equal(2, i);
     }
 
     [Fact]
@@ -810,8 +850,8 @@ public class HttpMultipartFormDataBuilderTests
         var stringContent = new StringContent("test");
         stringContent.Headers.ContentType = null;
 
-        Assert.Throws<ArgumentNullException>(() => builder.Add(null!, null, null));
-        Assert.Throws<ArgumentNullException>(() => builder.Add(stringContent, null, null));
+        Assert.Throws<ArgumentNullException>(() => builder.Add(null!, null));
+        Assert.Throws<ArgumentNullException>(() => builder.Add(stringContent, null));
     }
 
     [Fact]
@@ -819,7 +859,7 @@ public class HttpMultipartFormDataBuilderTests
     {
         var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
         var stringContent = new StringContent("test");
-        builder.Add(stringContent, "test", null);
+        builder.Add(stringContent, "test");
 
         Assert.Single(builder._partContents);
         Assert.Equal("text/plain", builder._partContents[0].ContentType);
@@ -955,7 +995,8 @@ public class HttpMultipartFormDataBuilderTests
                 },
                 httpContentProcessorFactory, null)!;
         Assert.NotNull(httpContent3);
-        Assert.Null(httpContent3.Headers.ContentDisposition);
+        Assert.Equal("form-data; name=\"test\"; filename=\"text.txt\"",
+            httpContent3.Headers.ContentDisposition?.ToString());
 
         var httpContent4 =
             HttpMultipartFormDataBuilder.BuildHttpContent(
@@ -968,8 +1009,8 @@ public class HttpMultipartFormDataBuilderTests
                 httpContentProcessorFactory, null)!;
         Assert.NotNull(httpContent4);
         Assert.NotNull(httpContent4.Headers.ContentDisposition);
-        Assert.Equal("test", httpContent4.Headers.ContentDisposition.Name);
-        Assert.Equal("text.txt", httpContent4.Headers.ContentDisposition.FileName);
+        Assert.Equal("\"test\"", httpContent4.Headers.ContentDisposition.Name);
+        Assert.Equal("\"text.txt\"", httpContent4.Headers.ContentDisposition.FileName);
 
         using var stream = new MemoryStream();
         var httpContent5 =
@@ -983,8 +1024,8 @@ public class HttpMultipartFormDataBuilderTests
                 httpContentProcessorFactory, null)!;
         Assert.NotNull(httpContent5);
         Assert.NotNull(httpContent5.Headers.ContentDisposition);
-        Assert.Equal("test", httpContent5.Headers.ContentDisposition.Name);
-        Assert.Equal("text.txt", httpContent5.Headers.ContentDisposition.FileName);
+        Assert.Equal("\"test\"", httpContent5.Headers.ContentDisposition.Name);
+        Assert.Equal("\"text.txt\"", httpContent5.Headers.ContentDisposition.FileName);
 
         var httpContent6 =
             HttpMultipartFormDataBuilder.BuildHttpContent(
@@ -996,7 +1037,8 @@ public class HttpMultipartFormDataBuilderTests
                 },
                 httpContentProcessorFactory, null)!;
         Assert.NotNull(httpContent6);
-        Assert.Null(httpContent6.Headers.ContentDisposition);
+        Assert.Equal("form-data; name=\"test\"; filename=\"text.txt\"",
+            httpContent6.Headers.ContentDisposition?.ToString());
 
         var httpContent7 =
             HttpMultipartFormDataBuilder.BuildHttpContent(
@@ -1008,7 +1050,8 @@ public class HttpMultipartFormDataBuilderTests
                 },
                 httpContentProcessorFactory, new CustomStringContentProcessor())!;
         Assert.NotNull(httpContent7);
-        Assert.Null(httpContent7.Headers.ContentDisposition);
+        Assert.Equal("form-data; name=\"test\"; filename=\"text.txt\"",
+            httpContent7.Headers.ContentDisposition?.ToString());
     }
 
     [Fact]
