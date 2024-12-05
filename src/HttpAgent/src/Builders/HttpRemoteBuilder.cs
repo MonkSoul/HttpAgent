@@ -259,9 +259,15 @@ public sealed class HttpRemoteBuilder
             services.AddHttpClient();
         }
 
+        // 检查是否配置（注册）了日志程序
+        var isLoggingRegistered = services.Any(u => u.ServiceType == typeof(ILoggerProvider));
+
         // 注册并配置 HttpRemoteOptions 选项服务
         services.Configure<HttpRemoteOptions>(options =>
-            options.HttpDeclarativeExtractors = _httpDeclarativeExtractors?.AsReadOnly());
+        {
+            options.HttpDeclarativeExtractors = _httpDeclarativeExtractors?.AsReadOnly();
+            options.IsLoggingRegistered = isLoggingRegistered;
+        });
 
         // 注册 HttpContent 内容处理器工厂
         services.TryAddSingleton<IHttpContentProcessorFactory>(provider =>

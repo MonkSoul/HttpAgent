@@ -5287,14 +5287,16 @@
         <member name="M:HttpAgent.ProfilerDelegatingHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogRequestAsync(Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel,System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogRequestAsync(Microsoft.Extensions.Logging.ILogger,HttpAgent.HttpRemoteOptions,System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
             <summary>
                 记录请求信息
             </summary>
             <param name="logger">
                 <see cref="T:Microsoft.Extensions.Logging.ILogger" />
             </param>
-            <param name="logLevel">日志级别</param>
+            <param name="remoteOptions">
+                <see cref="T:HttpAgent.HttpRemoteOptions" />
+            </param>
             <param name="request">
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
             </param>
@@ -5302,14 +5304,16 @@
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
-        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogResponseAsync(Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel,System.Net.Http.HttpResponseMessage,System.Int64,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogResponseAsync(Microsoft.Extensions.Logging.ILogger,HttpAgent.HttpRemoteOptions,System.Net.Http.HttpResponseMessage,System.Int64,System.Threading.CancellationToken)">
             <summary>
                 记录响应信息
             </summary>
             <param name="logger">
                 <see cref="T:Microsoft.Extensions.Logging.ILogger" />
             </param>
-            <param name="logLevel">日志级别</param>
+            <param name="remoteOptions">
+                <see cref="T:HttpAgent.HttpRemoteOptions" />
+            </param>
             <param name="httpResponseMessage">
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </param>
@@ -5318,14 +5322,16 @@
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
-        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogCookieContainer(Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel,System.Net.Http.HttpRequestMessage,System.Net.CookieContainer)">
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.LogCookieContainer(Microsoft.Extensions.Logging.ILogger,HttpAgent.HttpRemoteOptions,System.Net.Http.HttpRequestMessage,System.Net.CookieContainer)">
             <summary>
                 打印 <see cref="T:System.Net.CookieContainer" /> 内容
             </summary>
             <param name="logger">
                 <see cref="T:Microsoft.Extensions.Logging.ILogger" />
             </param>
-            <param name="logLevel">日志级别</param>
+            <param name="remoteOptions">
+                <see cref="T:HttpAgent.HttpRemoteOptions" />
+            </param>
             <param name="request">
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
             </param>
@@ -5333,14 +5339,16 @@
                 <see cref="T:System.Net.CookieContainer" />
             </param>
         </member>
-        <member name="M:HttpAgent.ProfilerDelegatingHandler.Log(Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel,System.String)">
+        <member name="M:HttpAgent.ProfilerDelegatingHandler.Log(Microsoft.Extensions.Logging.ILogger,HttpAgent.HttpRemoteOptions,System.String)">
             <summary>
                 打印日志
             </summary>
             <param name="logger">
                 <see cref="T:Microsoft.Extensions.Logging.ILogger" />
             </param>
-            <param name="logLevel">日志级别</param>
+            <param name="remoteOptions">
+                <see cref="T:HttpAgent.HttpRemoteOptions" />
+            </param>
             <param name="message">日志消息</param>
         </member>
         <member name="M:HttpAgent.ProfilerDelegatingHandler.ExtractCookieContainer">
@@ -7351,6 +7359,11 @@
                 自定义 HTTP 声明式 <see cref="T:HttpAgent.IHttpDeclarativeExtractor" /> 集合提供器
             </summary>
             <value>返回多个包含实现 <see cref="T:HttpAgent.IHttpDeclarativeExtractor" /> 集合的集合。</value>
+        </member>
+        <member name="P:HttpAgent.HttpRemoteOptions.IsLoggingRegistered">
+            <summary>
+                指示是否配置（注册）了日志程序
+            </summary>
         </member>
         <member name="T:HttpAgent.ByteArrayContentProcessor">
             <summary>

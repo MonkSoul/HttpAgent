@@ -339,6 +339,7 @@ public class HttpRemoteBuilderTests
 
         using var serviceProvider = services.BuildServiceProvider();
         var remoteOptions = serviceProvider.GetRequiredService<IOptions<HttpRemoteOptions>>().Value;
+        Assert.False(remoteOptions.IsLoggingRegistered);
 
         Assert.Equal("application/json", remoteOptions.DefaultContentType);
         Assert.Equal(@"C:\Workspaces", remoteOptions.DefaultFileDownloadDirectory);
@@ -375,5 +376,16 @@ public class HttpRemoteBuilderTests
 
         Assert.NotNull(remoteOptions.HttpDeclarativeExtractors);
         Assert.Single(remoteOptions.HttpDeclarativeExtractors);
+    }
+
+    [Fact]
+    public void Build_WithCheckLogging_ReturnOK()
+    {
+        var builder = WebApplication.CreateBuilder();
+        builder.Services.AddHttpRemote();
+
+        var app = builder.Build();
+        var remoteOptions = app.Services.GetRequiredService<IOptions<HttpRemoteOptions>>().Value;
+        Assert.True(remoteOptions.IsLoggingRegistered);
     }
 }
