@@ -335,7 +335,6 @@ public class HttpMultipartFormDataBuilderTests
         Assert.Equal("ContentLengthReadStream", builder._partContents[0].RawContent?.GetType().Name);
         Assert.Equal("Installer_迅捷屏幕录像工具_1.7.9_123.exe",
             builder._partContents[0].FileName);
-        Assert.Equal(2785992, builder._partContents[0].FileSize);
         Assert.NotNull(builder._httpRequestBuilder.Disposables);
         Assert.Single(builder._httpRequestBuilder.Disposables);
         Assert.Equal("ContentLengthReadStream", builder._httpRequestBuilder.Disposables[0].GetType().Name);
@@ -379,7 +378,6 @@ public class HttpMultipartFormDataBuilderTests
         Assert.NotNull(builder._partContents[0].RawContent);
         Assert.True(builder._partContents[0].RawContent is byte[]);
         Assert.Equal("test.txt", builder._partContents[0].FileName);
-        Assert.Equal(21, builder._partContents[0].FileSize);
         Assert.Null(builder._httpRequestBuilder.Disposables);
     }
 
@@ -421,7 +419,6 @@ public class HttpMultipartFormDataBuilderTests
         Assert.NotNull(builder._partContents[0].RawContent);
         Assert.True(builder._partContents[0].RawContent is FileStream);
         Assert.Equal("test.txt", builder._partContents[0].FileName);
-        Assert.Equal(21, builder._partContents[0].FileSize);
         Assert.NotNull(builder._httpRequestBuilder.Disposables);
         Assert.Single(builder._httpRequestBuilder.Disposables);
         Assert.Equal(typeof(FileStream), builder._httpRequestBuilder.Disposables[0].GetType());
@@ -505,7 +502,6 @@ public class HttpMultipartFormDataBuilderTests
         Assert.NotNull(builder._partContents[0].RawContent);
         Assert.True(builder._partContents[0].RawContent is ProgressFileStream);
         Assert.Equal("test.txt", builder._partContents[0].FileName);
-        Assert.Equal(21, builder._partContents[0].FileSize);
         Assert.NotNull(builder._httpRequestBuilder.Disposables);
         Assert.Single(builder._httpRequestBuilder.Disposables);
         Assert.Equal(typeof(ProgressFileStream), builder._httpRequestBuilder.Disposables[0].GetType());
@@ -578,7 +574,6 @@ public class HttpMultipartFormDataBuilderTests
         Assert.NotNull(builder._partContents[0].RawContent);
         Assert.True(builder._partContents[0].RawContent is byte[]);
         Assert.Equal("test.txt", builder._partContents[0].FileName);
-        Assert.Equal(21, builder._partContents[0].FileSize);
 
         builder.AddFileAsByteArray(filePath, "test", null, "image/jpeg;charset=utf-8");
         Assert.Equal(2, builder._partContents.Count);
@@ -700,14 +695,13 @@ public class HttpMultipartFormDataBuilderTests
         Assert.Equal(stream, builder._partContents[4].RawContent);
         Assert.Null(builder._partContents[4].FileName);
 
-        builder.AddStream(stream, "test", "image.jpg", fileSize: 21);
+        builder.AddStream(stream, "test", "image.jpg");
         Assert.Equal(6, builder._partContents.Count);
         Assert.Equal("test", builder._partContents[5].Name);
         Assert.Equal("image/jpeg", builder._partContents[5].ContentType);
         Assert.Null(builder._partContents[5].ContentEncoding);
         Assert.Equal(stream, builder._partContents[5].RawContent);
         Assert.Equal("image.jpg", builder._partContents[5].FileName);
-        Assert.Equal(21, builder._partContents[5].FileSize);
     }
 
     [Fact]
@@ -771,14 +765,13 @@ public class HttpMultipartFormDataBuilderTests
         Assert.Equal(bytes, builder._partContents[4].RawContent);
         Assert.Null(builder._partContents[4].FileName);
 
-        builder.AddByteArray(bytes, "test", "image.jpg", fileSize: 21);
+        builder.AddByteArray(bytes, "test", "image.jpg");
         Assert.Equal(6, builder._partContents.Count);
         Assert.Equal("test", builder._partContents[5].Name);
         Assert.Equal("image/jpeg", builder._partContents[5].ContentType);
         Assert.Null(builder._partContents[5].ContentEncoding);
         Assert.Equal(bytes, builder._partContents[5].RawContent);
         Assert.Equal("image.jpg", builder._partContents[5].FileName);
-        Assert.Equal(21, builder._partContents[5].FileSize);
     }
 
     [Fact]

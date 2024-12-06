@@ -24,6 +24,5 @@ public class MultipartFormDataItemTests
         Assert.Null(multipartFormDataItem.ContentEncoding);
         Assert.Null(multipartFormDataItem.RawContent);
         Assert.Null(multipartFormDataItem.FileName);
-        Assert.Null(multipartFormDataItem.FileSize);
     }
 }

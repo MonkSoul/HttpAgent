@@ -21,16 +21,9 @@ public class HelpersTests
     [Fact]
     public void GetStreamFromRemote_ReturnOK()
     {
-        var tuple = HttpAgent.Helpers.GetStreamFromRemote(
+        var stream = HttpAgent.Helpers.GetStreamFromRemote(
             "https://download2.huduntech.com/application/workspace/49/49d0cbe19a9bf7e54c1735b24fa41f27/Installer_%E8%BF%85%E6%8D%B7%E5%B1%8F%E5%B9%95%E5%BD%95%E5%83%8F%E5%B7%A5%E5%85%B7_1.7.9_123.exe");
-        Assert.NotNull(tuple);
-
-        using var stream = tuple.Item1;
         Assert.NotNull(stream);
-
-        var length = tuple.Item2;
-        Assert.True(length > 0);
-        Assert.Equal(2785992, length);
     }
 
     [Theory]

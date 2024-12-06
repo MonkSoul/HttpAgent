@@ -105,13 +105,12 @@ internal sealed class MultipartDeclarativeExtractor : IFrozenHttpDeclarativeExtr
             // 添加流
             case Stream stream:
                 httpMultipartFormDataBuilder.AddStream(stream, name, multipartAttribute.FileName,
-                    multipartAttribute.ContentType ?? MediaTypeNames.Application.Octet, contentEncoding, stream.Length);
+                    multipartAttribute.ContentType ?? MediaTypeNames.Application.Octet, contentEncoding);
                 break;
             // 添加字节数组
             case byte[] byteArray:
                 httpMultipartFormDataBuilder.AddByteArray(byteArray, name, multipartAttribute.FileName,
-                    multipartAttribute.ContentType ?? MediaTypeNames.Application.Octet, contentEncoding,
-                    byteArray.Length);
+                    multipartAttribute.ContentType ?? MediaTypeNames.Application.Octet, contentEncoding);
                 break;
             // 添加 MultipartFile
             case MultipartFile multipartFile:

@@ -46,9 +46,4 @@ internal sealed class MultipartFormDataItem
     ///     文件的名称
     /// </summary>
     internal string? FileName { get; init; }
-
-    /// <summary>
-    ///     文件大小
-    /// </summary>
-    internal long? FileSize { get; init; }
 }

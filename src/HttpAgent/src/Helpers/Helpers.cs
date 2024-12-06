@@ -17,12 +17,11 @@ internal static partial class Helpers
     /// <param name="requestUri">互联网 URL 地址</param>
     /// <param name="maxResponseContentBufferSize">响应内容的最大缓存大小。默认值为：<c>100MB</c>。</param>
     /// <returns>
-    ///     <see cref="Tuple{T1, T2}" />
+    ///     <see cref="Stream" />
     /// </returns>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="InvalidOperationException"></exception>
-    internal static Tuple<Stream, long> GetStreamFromRemote(string requestUri,
-        long maxResponseContentBufferSize = 104857600L)
+    internal static Stream GetStreamFromRemote(string requestUri, long maxResponseContentBufferSize = 104857600L)
     {
         // 空检查
         ArgumentException.ThrowIfNullOrWhiteSpace(requestUri);
@@ -55,11 +54,8 @@ internal static partial class Helpers
             // 确保请求成功
             httpResponseMessage.EnsureSuccessStatusCode();
 
-            // 读取流和长度
-            var stream = httpResponseMessage.Content.ReadAsStream();
-            var length = httpResponseMessage.Content.Headers.ContentLength ?? stream.Length;
-
-            return Tuple.Create(stream, length);
+            // 读取流并返回
+            return httpResponseMessage.Content.ReadAsStream();
         }
         catch (Exception e)
         {

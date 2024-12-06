@@ -772,7 +772,7 @@
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddStream(System.IO.Stream,System.String,System.String,System.String,System.Text.Encoding,System.Nullable{System.Int64})">
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddStream(System.IO.Stream,System.String,System.String,System.String,System.Text.Encoding)">
             <summary>
                 添加流
             </summary>
@@ -783,12 +783,11 @@
             <param name="fileName">文件的名称</param>
             <param name="contentType">内容类型</param>
             <param name="contentEncoding">内容编码</param>
-            <param name="fileSize">文件大小</param>
             <returns>
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddByteArray(System.Byte[],System.String,System.String,System.String,System.Text.Encoding,System.Nullable{System.Int64})">
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddByteArray(System.Byte[],System.String,System.String,System.String,System.Text.Encoding)">
             <summary>
                 添加字节数组
             </summary>
@@ -797,7 +796,6 @@
             <param name="fileName">文件的名称</param>
             <param name="contentType">内容类型</param>
             <param name="contentEncoding">内容编码</param>
-            <param name="fileSize">文件大小</param>
             <returns>
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
@@ -5790,7 +5788,7 @@
             <param name="requestUri">互联网 URL 地址</param>
             <param name="maxResponseContentBufferSize">响应内容的最大缓存大小。默认值为：<c>100MB</c>。</param>
             <returns>
-                <see cref="T:System.Tuple`2" />
+                <see cref="T:System.IO.Stream" />
             </returns>
             <exception cref="T:System.ArgumentException"></exception>
             <exception cref="T:System.InvalidOperationException"></exception>
@@ -6936,11 +6934,6 @@
         <member name="P:HttpAgent.MultipartFormDataItem.FileName">
             <summary>
                 文件的名称
-            </summary>
-        </member>
-        <member name="P:HttpAgent.MultipartFormDataItem.FileSize">
-            <summary>
-                文件大小
             </summary>
         </member>
         <member name="T:HttpAgent.ProgressFileStream">
