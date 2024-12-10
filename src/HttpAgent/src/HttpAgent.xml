@@ -1070,7 +1070,7 @@
             <param name="httpContentProcessorFactory">
                 <see cref="T:HttpAgent.IHttpContentProcessorFactory" />
             </param>
-            <param name="baseUri">基地址</param>
+            <param name="clientBaseAddress">客户端基地址</param>
             <returns>
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
             </returns>
@@ -1079,7 +1079,7 @@
             <summary>
                 构建最终的请求地址
             </summary>
-            <param name="baseUri">基地址</param>
+            <param name="clientBaseAddress">客户端基地址</param>
             <returns>
                 <see cref="T:System.String" />
             </returns>
@@ -1962,6 +1962,24 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.SetBaseAddress(System.Uri)">
+            <summary>
+                设置请求基地址
+            </summary>
+            <param name="baseAddress">基地址</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.SetBaseAddress(System.String)">
+            <summary>
+                设置请求基地址
+            </summary>
+            <param name="baseAddress">基地址</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.ReleaseDisposables">
             <summary>
                 释放可释放的对象集合
@@ -2134,6 +2152,11 @@
                 <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性集合
             </summary>
             <remarks>用于添加 <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性。该值将合并到 <c>HttpRequestMessage.Options</c> 属性中。</remarks>
+        </member>
+        <member name="P:HttpAgent.HttpRequestBuilder.BaseAddress">
+            <summary>
+                请求基地址
+            </summary>
         </member>
         <member name="P:HttpAgent.HttpRequestBuilder.MultipartFormDataBuilder">
             <summary>
@@ -4103,6 +4126,22 @@
                 是否启用
             </summary>
         </member>
+        <member name="T:HttpAgent.BaseAddressAttribute">
+            <summary>
+                HTTP 声明式请求基地址特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.BaseAddressAttribute.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.BaseAddressAttribute" />
+            </summary>
+            <param name="baseAddress">请求基地址</param>
+        </member>
+        <member name="P:HttpAgent.BaseAddressAttribute.BaseAddress">
+            <summary>
+                请求基地址
+            </summary>
+        </member>
         <member name="T:HttpAgent.BodyAttribute">
             <summary>
                 HTTP 声明式请求内容特性
@@ -4890,6 +4929,14 @@
             </summary>
         </member>
         <member name="M:HttpAgent.AutoSetHostHeaderDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <inheritdoc />
+        </member>
+        <member name="T:HttpAgent.BaseAddressDeclarativeExtractor">
+            <summary>
+                HTTP 声明式 <see cref="T:HttpAgent.BaseAddressAttribute" /> 特性提取器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.BaseAddressDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
             <inheritdoc />
         </member>
         <member name="T:HttpAgent.BodyDeclarativeExtractor">

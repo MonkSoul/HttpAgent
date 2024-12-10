@@ -16,6 +16,7 @@ public sealed class HttpDeclarativeBuilder
     ///     HTTP 声明式 <see cref="IHttpDeclarativeExtractor" /> 提取器集合
     /// </summary>
     internal static readonly ConcurrentDictionary<Type, IHttpDeclarativeExtractor> _extractors = new([
+        new(typeof(BaseAddressDeclarativeExtractor), new BaseAddressDeclarativeExtractor()),
         new(typeof(ValidationDeclarativeExtractor), new ValidationDeclarativeExtractor()),
         new(typeof(AutoSetHostHeaderDeclarativeExtractor), new AutoSetHostHeaderDeclarativeExtractor()),
         new(typeof(PerformanceOptimizationDeclarativeExtractor), new PerformanceOptimizationDeclarativeExtractor()),

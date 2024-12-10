@@ -1433,6 +1433,38 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
+    ///     设置请求基地址
+    /// </summary>
+    /// <param name="baseAddress">基地址</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder SetBaseAddress(Uri? baseAddress)
+    {
+        // 检查基地址是否是绝对路径地址
+        if (baseAddress is not null && !baseAddress.IsAbsoluteUri)
+        {
+            throw new ArgumentException("The base address must be absolute.", nameof(baseAddress));
+        }
+
+        BaseAddress = baseAddress;
+
+        return this;
+    }
+
+    /// <summary>
+    ///     设置请求基地址
+    /// </summary>
+    /// <param name="baseAddress">基地址</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder SetBaseAddress(string? baseAddress) =>
+        SetBaseAddress(string.IsNullOrWhiteSpace(baseAddress)
+            ? null
+            : new Uri(baseAddress, UriKind.RelativeOrAbsolute));
+
+    /// <summary>
     ///     释放可释放的对象集合
     /// </summary>
     internal void ReleaseDisposables()

@@ -27,6 +27,7 @@ public class HttpDeclarativeBuilderTests
 
         Dictionary<Type, IHttpDeclarativeExtractor> extractors = new()
         {
+            { typeof(BaseAddressDeclarativeExtractor), new BaseAddressDeclarativeExtractor() },
             { typeof(ValidationDeclarativeExtractor), new ValidationDeclarativeExtractor() },
             {
                 typeof(PerformanceOptimizationDeclarativeExtractor),
@@ -113,6 +114,7 @@ public class HttpDeclarativeBuilderTests
 
         Dictionary<Type, IHttpDeclarativeExtractor> extractors = new()
         {
+            { typeof(BaseAddressDeclarativeExtractor), new BaseAddressDeclarativeExtractor() },
             { typeof(ValidationDeclarativeExtractor), new ValidationDeclarativeExtractor() },
             {
                 typeof(PerformanceOptimizationDeclarativeExtractor),

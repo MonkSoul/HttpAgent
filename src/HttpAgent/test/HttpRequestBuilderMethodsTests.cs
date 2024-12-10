@@ -1608,4 +1608,31 @@ public class HttpRequestBuilderMethodsTests
         Assert.NotNull(httpRequestBuilder.HttpContentProcessorProviders);
         Assert.Single(httpRequestBuilder.HttpContentProcessorProviders);
     }
+
+    [Fact]
+    public void SetBaseAddress_Invalid_Parameters()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+
+        var exception = Assert.Throws<ArgumentException>(() =>
+            httpRequestBuilder.SetBaseAddress(new Uri("/api/test", UriKind.RelativeOrAbsolute)));
+        Assert.Equal("The base address must be absolute. (Parameter 'baseAddress')", exception.Message);
+
+        var exception2 = Assert.Throws<ArgumentException>(() => httpRequestBuilder.SetBaseAddress("/api/test"));
+        Assert.Equal("The base address must be absolute. (Parameter 'baseAddress')", exception2.Message);
+    }
+
+    [Fact]
+    public void SetBaseAddress_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder.SetBaseAddress((Uri?)null);
+        httpRequestBuilder.SetBaseAddress((string?)null);
+
+        Assert.Null(httpRequestBuilder.BaseAddress);
+
+        httpRequestBuilder.SetBaseAddress("https://furion.net");
+        Assert.NotNull(httpRequestBuilder.BaseAddress);
+        Assert.Equal("https://furion.net/", httpRequestBuilder.BaseAddress.ToString());
+    }
 }

@@ -43,12 +43,12 @@ public sealed partial class HttpRequestBuilder
     /// <param name="httpContentProcessorFactory">
     ///     <see cref="IHttpContentProcessorFactory" />
     /// </param>
-    /// <param name="baseUri">基地址</param>
+    /// <param name="clientBaseAddress">客户端基地址</param>
     /// <returns>
     ///     <see cref="HttpRequestMessage" />
     /// </returns>
     internal HttpRequestMessage Build(HttpRemoteOptions httpRemoteOptions,
-        IHttpContentProcessorFactory httpContentProcessorFactory, Uri? baseUri)
+        IHttpContentProcessorFactory httpContentProcessorFactory, Uri? clientBaseAddress)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(httpRemoteOptions);
@@ -56,7 +56,7 @@ public sealed partial class HttpRequestBuilder
         ArgumentNullException.ThrowIfNull(Method);
 
         // 构建最终的请求地址
-        var finalRequestUri = BuildFinalRequestUri(baseUri);
+        var finalRequestUri = BuildFinalRequestUri(clientBaseAddress);
 
         // 初始化 HttpRequestMessage 实例
         var httpRequestMessage = new HttpRequestMessage(Method, finalRequestUri);
@@ -88,19 +88,26 @@ public sealed partial class HttpRequestBuilder
     /// <summary>
     ///     构建最终的请求地址
     /// </summary>
-    /// <param name="baseUri">基地址</param>
+    /// <param name="clientBaseAddress">客户端基地址</param>
     /// <returns>
     ///     <see cref="string" />
     /// </returns>
-    internal string BuildFinalRequestUri(Uri? baseUri)
+    internal string BuildFinalRequestUri(Uri? clientBaseAddress)
     {
         // 替换路径参数，处理非标准 HTTP URI 的应用场景（如 {url}），此时需优先解决路径参数问题
         var newRequestUri = RequestUri is null or { OriginalString: null }
             ? RequestUri
             : new Uri(ReplacePathPlaceholders(RequestUri.OriginalString), UriKind.RelativeOrAbsolute);
 
+        // 初始化带局部 BaseAddress 的请求地址
+        var requestUriWithBaseAddress = BaseAddress is null
+            ? newRequestUri!
+            : new Uri(BaseAddress, newRequestUri!);
+
         // 初始化 UriBuilder 实例
-        var uriBuilder = new UriBuilder(baseUri is null ? newRequestUri! : new Uri(baseUri, newRequestUri!));
+        var uriBuilder = new UriBuilder(clientBaseAddress is null
+            ? requestUriWithBaseAddress
+            : new Uri(clientBaseAddress, requestUriWithBaseAddress));
 
         // 追加片段标识符
         AppendFragment(uriBuilder);

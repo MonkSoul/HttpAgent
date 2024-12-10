@@ -81,6 +81,17 @@ public class HttpRequestBuilderTests
 
         var finalRequestUri5 = httpRequestBuilder5.BuildFinalRequestUri(null);
         Assert.Equal("http://localhost/#furion", finalRequestUri5);
+
+        // With BassAddress
+        var httpRequestBuilder6 =
+            new HttpRequestBuilder(HttpMethod.Get, new Uri("/api/test", UriKind.RelativeOrAbsolute));
+        httpRequestBuilder6.SetBaseAddress("http://localhost");
+
+        var finalRequestUri6 = httpRequestBuilder6.BuildFinalRequestUri(null);
+        Assert.Equal("http://localhost/api/test", finalRequestUri6);
+
+        var finalRequestUri7 = httpRequestBuilder6.BuildFinalRequestUri(new Uri("https://furion.net"));
+        Assert.Equal("http://localhost/api/test", finalRequestUri7);
     }
 
     [Fact]

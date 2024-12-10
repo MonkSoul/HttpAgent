@@ -355,4 +355,19 @@ public class DeclarativeAttributeTests
         var attribute2 = new AcceptLanguageAttribute(null);
         Assert.Null(attribute2.Language);
     }
+
+    [Fact]
+    public void BaseAddressAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(BaseAddressAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface, attributeUsage.ValidOn);
+        Assert.False(attributeUsage.AllowMultiple);
+
+        var attribute = new BaseAddressAttribute(null);
+        Assert.Null(attribute.BaseAddress);
+
+        var attribute2 = new BaseAddressAttribute("https://localhost");
+        Assert.Equal("https://localhost", attribute2.BaseAddress);
+    }
 }

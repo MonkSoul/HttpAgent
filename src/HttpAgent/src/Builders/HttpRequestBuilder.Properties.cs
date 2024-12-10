@@ -173,6 +173,11 @@ public sealed partial class HttpRequestBuilder
     public IDictionary<string, object?> Properties { get; } = new Dictionary<string, object?>();
 
     /// <summary>
+    ///     请求基地址
+    /// </summary>
+    public Uri? BaseAddress { get; private set; }
+
+    /// <summary>
     ///     <inheritdoc cref="HttpMultipartFormDataBuilder" />
     /// </summary>
     internal HttpMultipartFormDataBuilder? MultipartFormDataBuilder { get; private set; }
