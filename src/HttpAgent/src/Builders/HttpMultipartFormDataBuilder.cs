@@ -438,23 +438,23 @@ public sealed class HttpMultipartFormDataBuilder
             // 字节数组
             case FileSourceType.ByteArray:
                 return AddByteArray((byte[])multipartFile.Source!, multipartFile.Name!, multipartFile.FileName,
-                    multipartFile.ContentType!, multipartFile.ContentEncoding);
+                    multipartFile.ContentType, multipartFile.ContentEncoding);
             // Stream
             case FileSourceType.Stream:
                 return AddStream((Stream)multipartFile.Source!, multipartFile.Name!, multipartFile.FileName,
-                    multipartFile.ContentType!, multipartFile.ContentEncoding);
+                    multipartFile.ContentType, multipartFile.ContentEncoding);
             // 本地文件路径
             case FileSourceType.Path:
                 return AddFileAsStream((string)multipartFile.Source!, multipartFile.Name!, multipartFile.FileName,
-                    multipartFile.ContentType!, multipartFile.ContentEncoding);
+                    multipartFile.ContentType, multipartFile.ContentEncoding);
             // Base64 字符串文件
             case FileSourceType.Base64String:
                 return AddFileFromBase64String((string)multipartFile.Source!, multipartFile.Name!,
-                    multipartFile.FileName, multipartFile.ContentType!, multipartFile.ContentEncoding);
+                    multipartFile.FileName, multipartFile.ContentType, multipartFile.ContentEncoding);
             // 互联网文件地址
             case FileSourceType.Remote:
                 return AddFileFromRemote((string)multipartFile.Source!, multipartFile.Name!, multipartFile.FileName,
-                    multipartFile.ContentType!, multipartFile.ContentEncoding);
+                    multipartFile.ContentType, multipartFile.ContentEncoding);
             // 不做处理
             case FileSourceType.None:
             default:
