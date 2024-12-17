@@ -38,7 +38,9 @@ public class DeclarativeAttributeTests
         Assert.False(attributeUsage.AllowMultiple);
 
         var attribute = new MultipartFormAttribute();
-        Assert.Null(attribute.Boundary);
+        Assert.NotNull(attribute.Boundary);
+        Assert.StartsWith("--------------------------", attribute.Boundary);
+        Assert.True(attribute.OmitContentType);
 
         var attribute2 = new MultipartFormAttribute("--------------------");
         Assert.Equal("--------------------", attribute2.Boundary);

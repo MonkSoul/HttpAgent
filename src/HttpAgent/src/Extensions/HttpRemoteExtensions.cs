@@ -164,8 +164,8 @@ public static class HttpRemoteExtensions
             return null;
         }
 
-        // 默认只读取 10KB 的内容
-        const int maxBytesToDisplay = 10240;
+        // 默认只读取 5KB 的内容
+        const int maxBytesToDisplay = 5120;
 
         // 读取内容为字节数组
         var buffer = await httpContent.ReadAsByteArrayAsync(cancellationToken);

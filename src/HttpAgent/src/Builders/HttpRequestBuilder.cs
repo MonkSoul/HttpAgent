@@ -212,7 +212,7 @@ public sealed partial class HttpRequestBuilder
         if (AutoSetHostHeaderEnabled)
         {
             httpRequestMessage.Headers.Host =
-                $"{httpRequestMessage.RequestUri?.Host}{(string.IsNullOrWhiteSpace(httpRequestMessage.RequestUri?.Port.ToString()) ? string.Empty : $":{httpRequestMessage.RequestUri.Port}")}";
+                $"{httpRequestMessage.RequestUri?.Host}{(httpRequestMessage.RequestUri?.IsDefaultPort != true ? $":{httpRequestMessage.RequestUri?.Port}" : string.Empty)}";
         }
 
         // 添加跟踪标识

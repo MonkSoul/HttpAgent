@@ -198,7 +198,8 @@ public class HttpRequestBuilderTests
     [Fact]
     public void AppendHeaders_ReturnOK()
     {
-        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        var httpRequestBuilder =
+            new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost")).AutoSetHostHeader(false);
         var finalRequestUri = httpRequestBuilder.BuildFinalRequestUri(null);
         var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.Method!, finalRequestUri);
 
@@ -237,7 +238,7 @@ public class HttpRequestBuilderTests
 
         httpRequestBuilder.AutoSetHostHeader();
         httpRequestBuilder.AppendHeaders(httpRequestMessage);
-        Assert.Equal("localhost:80", httpRequestMessage.Headers.Host);
+        Assert.Equal("localhost", httpRequestMessage.Headers.Host);
     }
 
     [Fact]
@@ -324,7 +325,8 @@ public class HttpRequestBuilderTests
     [Fact]
     public void RemoveHeaders_ReturnOK()
     {
-        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        var httpRequestBuilder =
+            new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost")).AutoSetHostHeader(false);
         var finalRequestUri = httpRequestBuilder.BuildFinalRequestUri(null);
         var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.Method!, finalRequestUri);
 
@@ -522,6 +524,7 @@ public class HttpRequestBuilderTests
             .WithHeaders(new { id = 10, name = "furion" })
             .RemoveHeaders("name")
             .Profiler(false)
+            .AutoSetHostHeader(false)
             .Build(httpRemoteOptions, new HttpContentProcessorFactory(serviceProvider, []), null);
 
         Assert.NotNull(httpRequestMessage);
@@ -553,6 +556,7 @@ public class HttpRequestBuilderTests
                 .WithQueryParameters(new { id = 10, name = "furion" })
                 .WithPathParameters(new { id = 10, name = "furion" })
                 .WithCookies(new { id = 10, name = "furion" })
+                .AutoSetHostHeader(false)
                 .Build(httpRemoteOptions, new HttpContentProcessorFactory(serviceProvider, []),
                     new Uri("http://localhost"));
 

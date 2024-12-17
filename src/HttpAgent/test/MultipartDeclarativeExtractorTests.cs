@@ -98,24 +98,25 @@ public class MultipartDeclarativeExtractorTests
     }
 
     [Fact]
-    public void SetBoundary_ReturnOK()
+    public void SetMultipartFormData_ReturnOK()
     {
         var method1 =
             typeof(IMultipartDeclarativeExtractorTest).GetMethod(nameof(IMultipartDeclarativeExtractorTest.Test1))!;
         var httpRequestBuilder1 = HttpRequestBuilder.Get("http://localhost");
         var httpMultipartFormDataBuilder = new HttpMultipartFormDataBuilder(httpRequestBuilder1);
 
-        MultipartDeclarativeExtractor.SetBoundary(method1, httpMultipartFormDataBuilder);
-        Assert.Null(httpMultipartFormDataBuilder.Boundary);
+        MultipartDeclarativeExtractor.SetMultipartFormData(method1, httpMultipartFormDataBuilder);
+        Assert.NotNull(httpMultipartFormDataBuilder.Boundary);
 
         var method2 =
             typeof(IMultipartDeclarativeExtractorTest).GetMethod(nameof(IMultipartDeclarativeExtractorTest.Test2))!;
         var httpRequestBuilder2 = HttpRequestBuilder.Get("http://localhost");
         var httpMultipartFormDataBuilder2 = new HttpMultipartFormDataBuilder(httpRequestBuilder2);
 
-        MultipartDeclarativeExtractor.SetBoundary(method2, httpMultipartFormDataBuilder2);
+        MultipartDeclarativeExtractor.SetMultipartFormData(method2, httpMultipartFormDataBuilder2);
         Assert.NotNull(httpMultipartFormDataBuilder2.Boundary);
-        Assert.Equal("--------------------", httpMultipartFormDataBuilder2.Boundary);
+        Assert.StartsWith("--------------------", httpMultipartFormDataBuilder2.Boundary);
+        Assert.True(httpMultipartFormDataBuilder2.OmitContentType);
     }
 
     [Fact]

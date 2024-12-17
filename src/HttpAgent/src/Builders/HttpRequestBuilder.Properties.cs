@@ -191,7 +191,7 @@ public sealed partial class HttpRequestBuilder
     /// <summary>
     ///     是否禁用 HTTP 缓存
     /// </summary>
-    /// <remarks>可为单次请求设置禁用 HTTP 缓存。</remarks>
+    /// <remarks>可为单次请求设置禁用 HTTP 缓存。默认值为：<c>false</c>。</remarks>
     internal bool DisableCacheEnabled { get; private set; }
 
     /// <summary>
@@ -212,22 +212,26 @@ public sealed partial class HttpRequestBuilder
     /// <summary>
     ///     是否启用 <see cref="HttpClient" /> 的池化管理
     /// </summary>
+    /// <remarks>默认值为：<c>false</c>。</remarks>
     internal bool HttpClientPoolingEnabled { get; private set; }
 
     /// <summary>
     ///     是否启用请求分析工具
     /// </summary>
+    /// <remarks>默认值为：<c>false</c>。</remarks>
     internal bool ProfilerEnabled { get; private set; }
 
     /// <summary>
     ///     是否启用性能优化
     /// </summary>
+    /// <remarks>默认值为：<c>false</c>。</remarks>
     internal bool PerformanceOptimizationEnabled { get; private set; }
 
     /// <summary>
     ///     是否自动设置 <c>Host</c> 标头
     /// </summary>
-    internal bool AutoSetHostHeaderEnabled { get; private set; }
+    /// <remarks><c>Host</c> 标头是 <c>HTTP/1.1</c> 协议中的一个必需标头。默认值为：<c>true</c>，表示默认添加 <c>Host</c> 标头。</remarks>
+    internal bool AutoSetHostHeaderEnabled { get; private set; } = true;
 
     /// <summary>
     ///     表示禁用请求分析工具标识

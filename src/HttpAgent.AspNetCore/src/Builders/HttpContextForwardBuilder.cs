@@ -121,7 +121,8 @@ public sealed class HttpContextForwardBuilder
     {
         // 初始化 HttpRequestBuilder 实例
         var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure)
-            .AddHttpContentConverters(() => [_actionResultContentConverterInstance.Value]).DisableCache();
+            .AddHttpContentConverters(() => [_actionResultContentConverterInstance.Value]).DisableCache()
+            .AutoSetHostHeader(false);
 
         // 复制查询参数和路由参数
         CopyQueryAndRouteValues(httpRequestBuilder);
@@ -146,7 +147,8 @@ public sealed class HttpContextForwardBuilder
     {
         // 初始化 HttpRequestBuilder 实例
         var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure)
-            .AddHttpContentConverters(() => [new IActionResultContentConverter()]).DisableCache();
+            .AddHttpContentConverters(() => [new IActionResultContentConverter()]).DisableCache()
+            .AutoSetHostHeader(false);
 
         // 复制查询参数和路由参数
         CopyQueryAndRouteValues(httpRequestBuilder);
@@ -225,7 +227,7 @@ public sealed class HttpContextForwardBuilder
         if (ForwardOptions.ResetHostRequestHeader)
         {
             httpRequestBuilder.WithHeader(HeaderNames.Host,
-                $"{RequestUri?.Host}{(string.IsNullOrWhiteSpace(RequestUri?.Port.ToString()) ? string.Empty : $":{RequestUri.Port}")}",
+                $"{RequestUri?.Host}{(RequestUri?.IsDefaultPort != true ? $":{RequestUri?.Port}" : string.Empty)}",
                 replace: true);
         }
     }

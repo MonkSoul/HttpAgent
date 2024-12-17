@@ -25,8 +25,8 @@ internal sealed class MultipartDeclarativeExtractor : IFrozenHttpDeclarativeExtr
         // 初始化 HttpMultipartFormDataBuilder 实例
         var httpMultipartFormDataBuilder = new HttpMultipartFormDataBuilder(httpRequestBuilder);
 
-        // 设置多部分表单内容的边界
-        SetBoundary(context.Method, httpMultipartFormDataBuilder);
+        // 设置多部分表单
+        SetMultipartFormData(context.Method, httpMultipartFormDataBuilder);
 
         // 遍历所有贴有 [Multipart] 特性的参数
         foreach (var (parameter, value) in multipartParameters)
@@ -43,7 +43,7 @@ internal sealed class MultipartDeclarativeExtractor : IFrozenHttpDeclarativeExtr
     public int Order => 3;
 
     /// <summary>
-    ///     设置多部分表单内容的边界
+    ///     设置多部分表单
     /// </summary>
     /// <param name="method">
     ///     <see cref="MethodInfo" />
@@ -51,7 +51,8 @@ internal sealed class MultipartDeclarativeExtractor : IFrozenHttpDeclarativeExtr
     /// <param name="httpMultipartFormDataBuilder">
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </param>
-    internal static void SetBoundary(MethodInfo method, HttpMultipartFormDataBuilder httpMultipartFormDataBuilder)
+    internal static void SetMultipartFormData(MethodInfo method,
+        HttpMultipartFormDataBuilder httpMultipartFormDataBuilder)
     {
         // 检查方法是否定义了 MultipartFormAttribute 特性
         if (!method.IsDefined(typeof(MultipartFormAttribute), true))
@@ -62,12 +63,11 @@ internal sealed class MultipartDeclarativeExtractor : IFrozenHttpDeclarativeExtr
         // 获取 MultipartFormAttribute 实例
         var multipartFormAttribute = method.GetCustomAttribute<MultipartFormAttribute>(true)!;
 
-        // 空检查
-        if (!string.IsNullOrWhiteSpace(multipartFormAttribute.Boundary))
-        {
-            // 多部分表单内容的边界
-            httpMultipartFormDataBuilder.SetBoundary(multipartFormAttribute.Boundary);
-        }
+        // 设置多部分表单内容的边界
+        httpMultipartFormDataBuilder.SetBoundary(multipartFormAttribute.Boundary);
+
+        // 设置是否移除默认的多部分内容的 Content-Type
+        httpMultipartFormDataBuilder.OmitContentType = multipartFormAttribute.OmitContentType;
     }
 
     /// <summary>

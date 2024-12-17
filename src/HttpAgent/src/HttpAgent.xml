@@ -597,6 +597,12 @@
                 多部分表单内容的边界
             </summary>
         </member>
+        <member name="P:HttpAgent.HttpMultipartFormDataBuilder.OmitContentType">
+            <summary>
+                是否移除默认的多部分内容的 <c>Content-Type</c>
+            </summary>
+            <remarks>默认值为：<c>true</c>。</remarks>
+        </member>
         <member name="P:HttpAgent.HttpMultipartFormDataBuilder.OnPreAddContent">
             <summary>
                 用于处理在添加 <see cref="T:System.Net.Http.HttpContent" /> 表单项内容时的操作
@@ -2173,7 +2179,7 @@
             <summary>
                 是否禁用 HTTP 缓存
             </summary>
-            <remarks>可为单次请求设置禁用 HTTP 缓存。</remarks>
+            <remarks>可为单次请求设置禁用 HTTP 缓存。默认值为：<c>false</c>。</remarks>
         </member>
         <member name="P:HttpAgent.HttpRequestBuilder.RequestEventHandlerType">
             <summary>
@@ -2194,21 +2200,25 @@
             <summary>
                 是否启用 <see cref="T:System.Net.Http.HttpClient" /> 的池化管理
             </summary>
+            <remarks>默认值为：<c>false</c>。</remarks>
         </member>
         <member name="P:HttpAgent.HttpRequestBuilder.ProfilerEnabled">
             <summary>
                 是否启用请求分析工具
             </summary>
+            <remarks>默认值为：<c>false</c>。</remarks>
         </member>
         <member name="P:HttpAgent.HttpRequestBuilder.PerformanceOptimizationEnabled">
             <summary>
                 是否启用性能优化
             </summary>
+            <remarks>默认值为：<c>false</c>。</remarks>
         </member>
         <member name="P:HttpAgent.HttpRequestBuilder.AutoSetHostHeaderEnabled">
             <summary>
                 是否自动设置 <c>Host</c> 标头
             </summary>
+            <remarks><c>Host</c> 标头是 <c>HTTP/1.1</c> 协议中的一个必需标头。默认值为：<c>true</c>，表示默认添加 <c>Host</c> 标头。</remarks>
         </member>
         <member name="P:HttpAgent.HttpRequestBuilder.__Disabled_Profiler__">
             <summary>
@@ -4563,6 +4573,12 @@
                 多部分表单内容的边界
             </summary>
         </member>
+        <member name="P:HttpAgent.MultipartFormAttribute.OmitContentType">
+            <summary>
+                是否移除默认的多部分内容的 <c>Content-Type</c>
+            </summary>
+            <remarks>默认值为：<c>true</c>。</remarks>
+        </member>
         <member name="T:HttpAgent.PathAttribute">
             <summary>
                 HTTP 声明式路径参数特性
@@ -5046,9 +5062,9 @@
         <member name="P:HttpAgent.MultipartDeclarativeExtractor.Order">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.MultipartDeclarativeExtractor.SetBoundary(System.Reflection.MethodInfo,HttpAgent.HttpMultipartFormDataBuilder)">
+        <member name="M:HttpAgent.MultipartDeclarativeExtractor.SetMultipartFormData(System.Reflection.MethodInfo,HttpAgent.HttpMultipartFormDataBuilder)">
             <summary>
-                设置多部分表单内容的边界
+                设置多部分表单
             </summary>
             <param name="method">
                 <see cref="T:System.Reflection.MethodInfo" />

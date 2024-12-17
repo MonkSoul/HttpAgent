@@ -18,29 +18,21 @@ public class HttpMultipartFormDataBuilderTests
         Assert.NotNull(builder._httpRequestBuilder);
         Assert.NotNull(builder._partContents);
         Assert.Empty(builder._partContents);
-        Assert.Null(builder.Boundary);
+        Assert.NotNull(builder.Boundary);
+        Assert.StartsWith("--------------------------", builder.Boundary);
+        Assert.True(builder.OmitContentType);
         Assert.Null(builder.OnPreAddContent);
-    }
-
-    [Fact]
-    public void SetBoundary_Invalid_Parameters()
-    {
-        var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
-
-        Assert.Throws<ArgumentNullException>(() => builder.SetBoundary(null!));
-        Assert.Throws<ArgumentException>(() => builder.SetBoundary(string.Empty));
-        Assert.Throws<ArgumentException>(() => builder.SetBoundary(" "));
     }
 
     [Fact]
     public void SetBoundary_ReturnOK()
     {
         var builder = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
-        builder.SetBoundary("--------------------");
+        builder.SetBoundary("--------------------------");
         Assert.NotNull(builder.Boundary);
-        Assert.Equal("--------------------", builder.Boundary);
+        Assert.Equal("--------------------------", builder.Boundary);
 
-        builder.Boundary = "x-----------x";
+        builder.Boundary = $"--------------------------{DateTime.Now.Ticks:x}";
     }
 
     [Fact]
@@ -925,6 +917,7 @@ public class HttpMultipartFormDataBuilderTests
         var multipartFormDataContent1 = builder.Build(httpRemoteOptions, httpContentProcessorFactory, null);
         Assert.NotNull(multipartFormDataContent1);
         Assert.Single(multipartFormDataContent1);
+        Assert.Null(multipartFormDataContent1.First().Headers.ContentType);
 
         builder.AddFormItem(null, "test");
         var multipartFormDataContent2 = builder.Build(httpRemoteOptions, httpContentProcessorFactory, null);
@@ -936,6 +929,8 @@ public class HttpMultipartFormDataBuilderTests
             builder.Build(httpRemoteOptions, httpContentProcessorFactory, new CustomStringContentProcessor());
         Assert.NotNull(multipartFormDataContent3);
         Assert.Equal(2, multipartFormDataContent3.Count());
+        Assert.NotNull(multipartFormDataContent3.Headers.ContentType);
+        Assert.Contains("--------------------------", multipartFormDataContent3.Headers.ContentType.ToString());
     }
 
     [Fact]

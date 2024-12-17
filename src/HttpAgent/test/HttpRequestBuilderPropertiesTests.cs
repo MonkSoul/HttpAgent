@@ -61,7 +61,7 @@ public class HttpRequestBuilderPropertiesTests
         Assert.NotNull(httpRequestBuilder2.Properties);
         Assert.Empty(httpRequestBuilder2.Properties);
         Assert.False(httpRequestBuilder2.PerformanceOptimizationEnabled);
-        Assert.False(httpRequestBuilder2.AutoSetHostHeaderEnabled);
+        Assert.True(httpRequestBuilder2.AutoSetHostHeaderEnabled);
         Assert.Null(httpRequestBuilder2.BaseAddress);
     }
 }

@@ -35,7 +35,13 @@ public sealed class HttpMultipartFormDataBuilder
     /// <summary>
     ///     多部分表单内容的边界
     /// </summary>
-    public string? Boundary { get; set; }
+    public string? Boundary { get; set; } = $"--------------------------{DateTime.Now.Ticks:x}";
+
+    /// <summary>
+    ///     是否移除默认的多部分内容的 <c>Content-Type</c>
+    /// </summary>
+    /// <remarks>默认值为：<c>true</c>。</remarks>
+    public bool OmitContentType { get; set; } = true;
 
     /// <summary>
     ///     用于处理在添加 <see cref="HttpContent" /> 表单项内容时的操作
@@ -49,11 +55,8 @@ public sealed class HttpMultipartFormDataBuilder
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
-    public HttpMultipartFormDataBuilder SetBoundary(string boundary)
+    public HttpMultipartFormDataBuilder SetBoundary(string? boundary)
     {
-        // 空检查
-        ArgumentException.ThrowIfNullOrWhiteSpace(boundary);
-
         Boundary = boundary;
 
         return this;
@@ -713,6 +716,12 @@ public sealed class HttpMultipartFormDataBuilder
             if (httpContent is null)
             {
                 continue;
+            }
+
+            // 检查是否移除默认的多部分内容的 Content-Type，解决对接 Java 程序时可能出现失败问题
+            if (OmitContentType)
+            {
+                httpContent.Headers.ContentType = null;
             }
 
             // 调用用于处理在添加 HttpContent 表单项内容时的操作
