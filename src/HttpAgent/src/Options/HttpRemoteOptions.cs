@@ -39,7 +39,7 @@ public sealed class HttpRemoteOptions
     /// <summary>
     ///     JSON 序列化配置
     /// </summary>
-    public JsonSerializerOptions JsonSerializerOptions { get; set; } = JsonSerializerOptionsDefault;
+    public JsonSerializerOptions JsonSerializerOptions { get; set; } = new(JsonSerializerOptionsDefault);
 
     /// <summary>
     ///     自定义 HTTP 声明式 <see cref="IHttpDeclarativeExtractor" /> 集合提供器

@@ -22,6 +22,6 @@ public class HttpRemoteOptionsTests
             HttpRemoteOptions.JsonSerializerOptionsDefault.NumberHandling);
 
         Assert.NotNull(httpRemoteOptions.JsonSerializerOptions);
-        Assert.Equal(HttpRemoteOptions.JsonSerializerOptionsDefault, httpRemoteOptions.JsonSerializerOptions);
+        Assert.NotEqual(HttpRemoteOptions.JsonSerializerOptionsDefault, httpRemoteOptions.JsonSerializerOptions);
     }
 }
