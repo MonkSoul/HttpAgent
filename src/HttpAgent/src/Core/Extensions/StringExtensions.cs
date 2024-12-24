@@ -84,28 +84,35 @@ internal static partial class StringExtensions
     }
 
     /// <summary>
-    ///     解析 URL 中的查询字符串为键值对列表
+    ///     解析符合键值对格式的字符串为键值对列表
     /// </summary>
-    /// <param name="urlQuery">URL 中的查询字符串</param>
+    /// <param name="keyValueString">键值对格式的字符串</param>
+    /// <param name="separators">分隔符字符数组</param>
+    /// <param name="trimChar">要删除的前导字符</param>
     /// <returns>
     ///     <see cref="List{T}" />
     /// </returns>
-    internal static List<KeyValuePair<string, string?>> ParseUrlQueryParameters(this string urlQuery)
+    internal static List<KeyValuePair<string, string?>> ParseFormatKeyValueString(this string keyValueString,
+        char[]? separators = null, char? trimChar = null)
     {
         // 空检查
-        ArgumentNullException.ThrowIfNull(urlQuery);
+        ArgumentNullException.ThrowIfNull(keyValueString);
 
-        if (string.IsNullOrWhiteSpace(urlQuery))
+        // 空检查
+        if (string.IsNullOrWhiteSpace(keyValueString))
         {
             return [];
         }
 
-        var pairs = urlQuery.TrimStart('?').Split('&');
+        // 默认隔符为 &
+        separators ??= ['&'];
+
+        var pairs = (trimChar is null ? keyValueString : keyValueString.TrimStart(trimChar.Value)).Split(separators);
         return (from pair in pairs
             select pair.Split('=')
             into keyValue
             where keyValue.Length == 2
-            select new KeyValuePair<string, string?>(keyValue[0], keyValue[1])).ToList();
+            select new KeyValuePair<string, string?>(keyValue[0].Trim(), keyValue[1])).ToList();
     }
 
     /// <summary>

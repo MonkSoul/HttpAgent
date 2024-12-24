@@ -1560,6 +1560,16 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.WithCookie(System.String)">
+            <summary>
+                设置 Cookies
+            </summary>
+            <remarks>支持多次调用。</remarks>
+            <param name="cookieHeaderValue">Cookie 标头值格式化字符串</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.WithCookie(System.String,System.Object,System.Boolean,System.Globalization.CultureInfo,System.Collections.Generic.IEqualityComparer{System.String})">
             <summary>
                 设置 Cookies
@@ -3652,11 +3662,13 @@
                 <see cref="T:System.Boolean" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Core.Extensions.StringExtensions.ParseUrlQueryParameters(System.String)">
+        <member name="M:HttpAgent.Core.Extensions.StringExtensions.ParseFormatKeyValueString(System.String,System.Char[],System.Nullable{System.Char})">
             <summary>
-                解析 URL 中的查询字符串为键值对列表
+                解析符合键值对格式的字符串为键值对列表
             </summary>
-            <param name="urlQuery">URL 中的查询字符串</param>
+            <param name="keyValueString">键值对格式的字符串</param>
+            <param name="separators">分隔符字符数组</param>
+            <param name="trimChar">要删除的前导字符</param>
             <returns>
                 <see cref="T:System.Collections.Generic.List`1" />
             </returns>

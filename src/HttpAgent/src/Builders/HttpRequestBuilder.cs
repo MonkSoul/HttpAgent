@@ -153,7 +153,7 @@ public sealed partial class HttpRequestBuilder
         }
 
         // 解析 URL 中的查询字符串为键值对列表
-        var queryParameters = uriBuilder.Query.ParseUrlQueryParameters();
+        var queryParameters = uriBuilder.Query.ParseFormatKeyValueString(['&'], '?');
 
         // 追加查询参数
         foreach (var (key, values) in QueryParameters)

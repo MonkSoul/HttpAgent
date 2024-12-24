@@ -837,6 +837,10 @@ public class HttpRequestBuilderMethodsTests
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
 
+        Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.WithCookie(null!));
+        Assert.Throws<ArgumentException>(() => httpRequestBuilder.WithCookie(string.Empty));
+        Assert.Throws<ArgumentException>(() => httpRequestBuilder.WithCookie(" "));
+
         Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.WithCookie(null!, null));
         Assert.Throws<ArgumentException>(() => httpRequestBuilder.WithCookie(string.Empty, null));
         Assert.Throws<ArgumentException>(() => httpRequestBuilder.WithCookie(" ", null));
@@ -865,6 +869,12 @@ public class HttpRequestBuilderMethodsTests
 
         httpRequestBuilder.WithCookie("name", new[] { "monksoul", "furion" });
         Assert.Equal("monksoul,furion", httpRequestBuilder.Cookies["name"]);
+
+        var httpRequestBuilder2 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder2.WithCookie("DeviceId=; ASP.NET_SessionId=dr1kcfupurtqpk42dzhwvsvq; CookieLastUName=sh");
+        Assert.NotNull(httpRequestBuilder2.Cookies);
+        Assert.Equal(3, httpRequestBuilder2.Cookies.Count);
+        Assert.Equal(["DeviceId", "ASP.NET_SessionId", "CookieLastUName"], httpRequestBuilder2.Cookies.Keys);
     }
 
     [Fact]

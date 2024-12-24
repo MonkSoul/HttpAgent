@@ -715,6 +715,22 @@ public sealed partial class HttpRequestBuilder
     ///     设置 Cookies
     /// </summary>
     /// <remarks>支持多次调用。</remarks>
+    /// <param name="cookieHeaderValue">Cookie 标头值格式化字符串</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder WithCookie(string cookieHeaderValue)
+    {
+        // 空检查
+        ArgumentException.ThrowIfNullOrWhiteSpace(cookieHeaderValue);
+
+        return WithCookies(cookieHeaderValue.ParseFormatKeyValueString([';']));
+    }
+
+    /// <summary>
+    ///     设置 Cookies
+    /// </summary>
+    /// <remarks>支持多次调用。</remarks>
     /// <param name="key">键</param>
     /// <param name="value">值</param>
     /// <param name="escape">是否转义字符串，默认 <c>false</c></param>
