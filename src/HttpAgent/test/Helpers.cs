@@ -10,16 +10,21 @@ public class Helpers
         CustomRequestEventHandler? requestEventHandler = null,
         CustomFileTransferEventHandler? fileTransferEventHandler = null,
         CustomServerSentEventsEventHandler? sentEventsEventHandler = null,
-        CustomLongPollingEventHandler? longPollingEventHandler = null)
+        CustomLongPollingEventHandler? longPollingEventHandler = null,
+        bool allowAutoRedirect = true, bool frameworkAllowAutoRedirect = true)
     {
         var services = new ServiceCollection();
-        services.AddHttpClient();
+        services.AddHttpClient(string.Empty)
+            .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler { AllowAutoRedirect = allowAutoRedirect });
         services.AddHttpClient("test", client =>
         {
             client.BaseAddress = new Uri("http://localhost/test/");
-        });
+        }).ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler { AllowAutoRedirect = allowAutoRedirect });
 
-        services.AddOptions<HttpRemoteOptions>();
+        services.AddOptions<HttpRemoteOptions>().Configure(remoteOptions =>
+        {
+            remoteOptions.AllowAutoRedirect = frameworkAllowAutoRedirect;
+        });
 
         if (requestEventHandler is not null)
         {

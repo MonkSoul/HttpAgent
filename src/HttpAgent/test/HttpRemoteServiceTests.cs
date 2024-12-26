@@ -986,6 +986,93 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
     }
 
     [Fact]
+    public async Task SendCoreAsync_WithRedirect_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+        await using var app = builder.Build();
+
+        app.MapGet("/test", () => Results.Redirect("/redirect"));
+
+        app.MapGet("/redirect", async () =>
+        {
+            await Task.Delay(50);
+            return "Redirect!";
+        });
+
+        await app.StartAsync();
+
+        // 测试代码
+        var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService(allowAutoRedirect: false);
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri($"http://localhost:{port}/test"));
+        var (httpResponseMessage, requestDuration) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
+            HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
+                httpClient.SendAsync(httpRequestMessage, option, token), default);
+
+        Assert.NotNull(httpResponseMessage);
+        Assert.True(requestDuration > 0);
+        Assert.True(httpResponseMessage.IsSuccessStatusCode);
+        Assert.Equal(200, (int)httpResponseMessage.StatusCode);
+        Assert.Equal("Redirect!", await httpResponseMessage.Content.ReadAsStringAsync());
+
+        var (httpResponseMessage2, requestDuration2) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
+            HttpCompletionOption.ResponseContentRead, default, (httpClient, httpRequestMessage, option, token) =>
+                httpClient.Send(httpRequestMessage, option, token));
+
+        Assert.NotNull(httpResponseMessage2);
+        Assert.True(requestDuration2 > 0);
+        Assert.True(httpResponseMessage2.IsSuccessStatusCode);
+        Assert.Equal(200, (int)httpResponseMessage2.StatusCode);
+        Assert.Equal("Redirect!", await httpResponseMessage2.Content.ReadAsStringAsync());
+
+        await app.StopAsync();
+        await serviceProvider.DisposeAsync();
+    }
+
+    [Fact]
+    public async Task SendCoreAsync_WithNoRedirect_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+        await using var app = builder.Build();
+
+        app.MapGet("/test", () => Results.Redirect("/redirect"));
+
+        app.MapGet("/redirect", async () =>
+        {
+            await Task.Delay(50);
+            return "Redirect!";
+        });
+
+        await app.StartAsync();
+
+        // 测试代码
+        var (httpRemoteService, serviceProvider) =
+            Helpers.CreateHttpRemoteService(allowAutoRedirect: false, frameworkAllowAutoRedirect: false);
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri($"http://localhost:{port}/test"));
+        var (httpResponseMessage, requestDuration) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
+            HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
+                httpClient.SendAsync(httpRequestMessage, option, token), default);
+
+        Assert.NotNull(httpResponseMessage);
+        Assert.False(httpResponseMessage.IsSuccessStatusCode);
+        Assert.Equal(302, (int)httpResponseMessage.StatusCode);
+
+        var (httpResponseMessage2, requestDuration2) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
+            HttpCompletionOption.ResponseContentRead, default, (httpClient, httpRequestMessage, option, token) =>
+                httpClient.Send(httpRequestMessage, option, token));
+
+        Assert.NotNull(httpResponseMessage2);
+        Assert.False(httpResponseMessage2.IsSuccessStatusCode);
+        Assert.Equal(302, (int)httpResponseMessage2.StatusCode);
+
+        await app.StopAsync();
+        await serviceProvider.DisposeAsync();
+    }
+
+    [Fact]
     public void DynamicCreateHttpRemoteResult_Invalid_Parameters()
     {
         var exception = Assert.Throws<ArgumentException>(() =>

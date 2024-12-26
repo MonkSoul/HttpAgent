@@ -155,6 +155,29 @@ internal static partial class Helpers
             or HttpStatusCode.RedirectMethod or HttpStatusCode.RedirectKeepVerb || (int)statusCode == 308;
 
     /// <summary>
+    ///     从给定的绝对 URI 中解析出基础地址
+    /// </summary>
+    /// <param name="requestUri">请求地址</param>
+    /// <returns>
+    ///     <see cref="Uri" />
+    /// </returns>
+    /// <exception cref="ArgumentException"></exception>
+    internal static Uri ParseBaseAddress(Uri? requestUri)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(requestUri);
+
+        // 检查是否是绝对地址
+        if (!requestUri.IsAbsoluteUri)
+        {
+            throw new ArgumentException("The requestUri must be an absolute URI.", nameof(requestUri));
+        }
+
+        return new Uri(
+            $"{requestUri.Scheme}://{requestUri.Host}{(requestUri.IsDefaultPort ? string.Empty : $":{requestUri.Port}")}");
+    }
+
+    /// <summary>
     ///     <c>application/x-www-form-urlencoded</c> 格式正则表达式
     /// </summary>
     /// <returns>

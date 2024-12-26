@@ -231,7 +231,7 @@ public sealed partial class HttpRequestBuilder
     ///     是否自动设置 <c>Host</c> 标头
     /// </summary>
     /// <remarks><c>Host</c> 标头是 <c>HTTP/1.1</c> 协议中的一个必需标头。默认值为：<c>false</c>，表示不默认添加 <c>Host</c> 标头。</remarks>
-    internal bool AutoSetHostHeaderEnabled { get; private set; } = false;
+    internal bool AutoSetHostHeaderEnabled { get; private set; }
 
     /// <summary>
     ///     表示禁用请求分析工具标识

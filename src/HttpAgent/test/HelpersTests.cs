@@ -95,4 +95,19 @@ public class HelpersTests
         Assert.Equal(result, HttpAgent.Helpers.IsRedirectStatusCode(statusCode));
         Assert.True(HttpAgent.Helpers.IsRedirectStatusCode((HttpStatusCode)308));
     }
+
+    [Fact]
+    public void ParseBaseAddress_Invalid_Parameters()
+    {
+        Assert.Throws<ArgumentNullException>(() => HttpAgent.Helpers.ParseBaseAddress(null!));
+
+        var exception = Assert.Throws<ArgumentException>(() =>
+            HttpAgent.Helpers.ParseBaseAddress(new Uri("/test", UriKind.RelativeOrAbsolute)));
+        Assert.Equal("The requestUri must be an absolute URI. (Parameter 'requestUri')", exception.Message);
+    }
+
+    [Fact]
+    public void ParseBaseAddress_ReturnOK() =>
+        Assert.Equal("https://furion.net/",
+            HttpAgent.Helpers.ParseBaseAddress(new Uri("https://furion.net/user/1")).ToString());
 }

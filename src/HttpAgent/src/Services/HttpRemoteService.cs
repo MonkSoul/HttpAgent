@@ -443,15 +443,19 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
                 // 获取重定向地址
                 var redirectUrl = httpResponseMessage.Headers.Location;
 
-                // 检查重定向地址是否为空或分绝对路径地址
-                if (redirectUrl is null || !redirectUrl.IsAbsoluteUri)
+                // 空检查
+                if (redirectUrl is null)
                 {
                     break;
                 }
 
                 // 构建新的 HttpRequestMessage 实例（TODO：未来考虑克隆新的 HttpRequestBuilder 实例）
-                var newHttpRequestMessage = httpRequestBuilder.RewriteRequestUri(redirectUrl).Build(_httpRemoteOptions,
-                    _httpContentProcessorFactory, httpClient.BaseAddress);
+                var newHttpRequestMessage = httpRequestBuilder
+                    // 处理相对地址
+                    .RewriteRequestUri(redirectUrl.IsAbsoluteUri
+                        ? redirectUrl
+                        : new Uri(Helpers.ParseBaseAddress(httpRequestMessage.RequestUri), redirectUrl))
+                    .Build(_httpRemoteOptions, _httpContentProcessorFactory, httpClient.BaseAddress);
 
                 // 释放前一个 HttpResponseMessage 实例
                 httpResponseMessage.Dispose();

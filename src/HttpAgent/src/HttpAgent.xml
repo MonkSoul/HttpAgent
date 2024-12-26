@@ -5917,6 +5917,16 @@
                 <see cref="T:System.Boolean" />
             </returns>
         </member>
+        <member name="M:HttpAgent.Helpers.ParseBaseAddress(System.Uri)">
+            <summary>
+                从给定的绝对 URI 中解析出基础地址
+            </summary>
+            <param name="requestUri">请求地址</param>
+            <returns>
+                <see cref="T:System.Uri" />
+            </returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
         <member name="M:HttpAgent.Helpers.FormUrlEncodedFormatRegex">
             <remarks>
             Pattern:<br/>
