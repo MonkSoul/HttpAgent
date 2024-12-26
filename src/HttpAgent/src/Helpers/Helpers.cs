@@ -142,6 +142,19 @@ internal static partial class Helpers
     }
 
     /// <summary>
+    ///     检查 HTTP 状态码是否是重定向状态码
+    /// </summary>
+    /// <param name="statusCode">
+    ///     <see cref="HttpStatusCode" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="bool" />
+    /// </returns>
+    internal static bool IsRedirectStatusCode(HttpStatusCode statusCode) =>
+        statusCode is HttpStatusCode.Ambiguous or HttpStatusCode.Moved or HttpStatusCode.Redirect
+            or HttpStatusCode.RedirectMethod or HttpStatusCode.RedirectKeepVerb || (int)statusCode == 308;
+
+    /// <summary>
     ///     <c>application/x-www-form-urlencoded</c> 格式正则表达式
     /// </summary>
     /// <returns>

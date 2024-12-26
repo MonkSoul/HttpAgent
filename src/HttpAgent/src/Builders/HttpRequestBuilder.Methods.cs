@@ -1518,4 +1518,18 @@ public sealed partial class HttpRequestBuilder
             AddHttpContentProcessors(() => [_stringContentForFormUrlEncodedContentProcessorInstance.Value]);
         }
     }
+
+    /// <summary>
+    ///     重写请求地址
+    /// </summary>
+    /// <param name="newRequestUri">新的请求地址</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    internal HttpRequestBuilder RewriteRequestUri(Uri? newRequestUri)
+    {
+        RequestUri = newRequestUri;
+
+        return this;
+    }
 }

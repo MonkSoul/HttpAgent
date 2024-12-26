@@ -8,6 +8,15 @@ public class GetStartController(
     IHttpContextAccessor httpContextAccessor,
     IAuthService authService) : ControllerBase
 {
+    [HttpGet]
+    public async Task<int> AllowAutoRedirect()
+    {
+        var res = await httpRemoteService.HeadAsync(
+            "https://gitee.com/Hgui/FastTunnel/releases/download/v2.1.2/FastTunnel.Server.tar.gz");
+
+        return (int)res.StatusCode;
+    }
+
     /// <summary>
     ///     获取网站内容
     /// </summary>

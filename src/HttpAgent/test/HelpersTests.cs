@@ -82,4 +82,17 @@ public class HelpersTests
     [InlineData("key%3Dvalue", false)]
     public void IsFormUrlEncodedFormat_ReturnOK(string output, bool result) =>
         Assert.Equal(result, HttpAgent.Helpers.IsFormUrlEncodedFormat(output));
+
+    [Theory]
+    [InlineData(HttpStatusCode.Ambiguous, true)]
+    [InlineData(HttpStatusCode.Moved, true)]
+    [InlineData(HttpStatusCode.Redirect, true)]
+    [InlineData(HttpStatusCode.RedirectMethod, true)]
+    [InlineData(HttpStatusCode.RedirectKeepVerb, true)]
+    [InlineData(HttpStatusCode.OK, false)]
+    public void IsRedirectStatusCode_ReturnOK(HttpStatusCode statusCode, bool result)
+    {
+        Assert.Equal(result, HttpAgent.Helpers.IsRedirectStatusCode(statusCode));
+        Assert.True(HttpAgent.Helpers.IsRedirectStatusCode((HttpStatusCode)308));
+    }
 }

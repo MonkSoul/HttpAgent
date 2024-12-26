@@ -14,6 +14,8 @@ public class HttpRemoteOptionsTests
         Assert.Null(httpRemoteOptions.DefaultFileDownloadDirectory);
         Assert.Null(httpRemoteOptions.HttpDeclarativeExtractors);
         Assert.Equal(LogLevel.Warning, httpRemoteOptions.ProfilerLogLevel);
+        Assert.True(httpRemoteOptions.AllowAutoRedirect);
+        Assert.Equal(50, httpRemoteOptions.MaximumAutomaticRedirections);
         Assert.False(httpRemoteOptions.IsLoggingRegistered);
 
         Assert.True(HttpRemoteOptions.JsonSerializerOptionsDefault.PropertyNameCaseInsensitive);

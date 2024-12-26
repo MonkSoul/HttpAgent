@@ -2006,6 +2006,15 @@
                 添加 <see cref="T:HttpAgent.StringContentForFormUrlEncodedContentProcessor" /> 处理器
             </summary>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.RewriteRequestUri(System.Uri)">
+            <summary>
+                重写请求地址
+            </summary>
+            <param name="newRequestUri">新的请求地址</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
         <member name="P:HttpAgent.HttpRequestBuilder.RequestUri">
             <summary>
                 请求地址
@@ -2228,7 +2237,7 @@
             <summary>
                 是否自动设置 <c>Host</c> 标头
             </summary>
-            <remarks><c>Host</c> 标头是 <c>HTTP/1.1</c> 协议中的一个必需标头。默认值为：<c>true</c>，表示默认添加 <c>Host</c> 标头。</remarks>
+            <remarks><c>Host</c> 标头是 <c>HTTP/1.1</c> 协议中的一个必需标头。默认值为：<c>false</c>，表示不默认添加 <c>Host</c> 标头。</remarks>
         </member>
         <member name="P:HttpAgent.HttpRequestBuilder.__Disabled_Profiler__">
             <summary>
@@ -5897,6 +5906,17 @@
                 <see cref="T:System.Boolean" />
             </returns>
         </member>
+        <member name="M:HttpAgent.Helpers.IsRedirectStatusCode(System.Net.HttpStatusCode)">
+            <summary>
+                检查 HTTP 状态码是否是重定向状态码
+            </summary>
+            <param name="statusCode">
+                <see cref="T:System.Net.HttpStatusCode" />
+            </param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.Helpers.FormUrlEncodedFormatRegex">
             <remarks>
             Pattern:<br/>
@@ -7415,6 +7435,18 @@
                 请求分析工具日志级别
             </summary>
             <remarks>默认值为 <see cref="F:Microsoft.Extensions.Logging.LogLevel.Warning" /></remarks>
+        </member>
+        <member name="P:HttpAgent.HttpRemoteOptions.AllowAutoRedirect">
+            <summary>
+                指示请求是否应遵循重定向响应
+            </summary>
+            <remarks>默认值为：<c>true</c>。</remarks>
+        </member>
+        <member name="P:HttpAgent.HttpRemoteOptions.MaximumAutomaticRedirections">
+            <summary>
+                请求所遵循的最大重定向数
+            </summary>
+            <remarks>默认值为：50 次。</remarks>
         </member>
         <member name="P:HttpAgent.HttpRemoteOptions.JsonSerializerOptions">
             <summary>

@@ -25,7 +25,7 @@ public class AutoSetHostHeaderDeclarativeExtractorTests
         var context1 = new HttpDeclarativeExtractorContext(method1, []);
         var httpRequestBuilder1 = HttpRequestBuilder.Get("http://localhost");
         new AutoSetHostHeaderDeclarativeExtractor().Extract(httpRequestBuilder1, context1);
-        Assert.True(httpRequestBuilder1.AutoSetHostHeaderEnabled);
+        Assert.False(httpRequestBuilder1.AutoSetHostHeaderEnabled);
 
         var method2 =
             typeof(IAutoSetHostHeaderDeclarativeExtractorTest2).GetMethod(

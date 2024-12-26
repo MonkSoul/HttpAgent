@@ -37,6 +37,18 @@ public sealed class HttpRemoteOptions
     public LogLevel ProfilerLogLevel { get; set; } = LogLevel.Warning;
 
     /// <summary>
+    ///     指示请求是否应遵循重定向响应
+    /// </summary>
+    /// <remarks>默认值为：<c>true</c>。</remarks>
+    public bool AllowAutoRedirect { get; set; } = true;
+
+    /// <summary>
+    ///     请求所遵循的最大重定向数
+    /// </summary>
+    /// <remarks>默认值为：50 次。</remarks>
+    public int MaximumAutomaticRedirections { get; set; } = 50;
+
+    /// <summary>
     ///     JSON 序列化配置
     /// </summary>
     public JsonSerializerOptions JsonSerializerOptions { get; set; } = new(JsonSerializerOptionsDefault);

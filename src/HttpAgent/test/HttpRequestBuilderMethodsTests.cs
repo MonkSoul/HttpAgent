@@ -1645,4 +1645,16 @@ public class HttpRequestBuilderMethodsTests
         Assert.NotNull(httpRequestBuilder.BaseAddress);
         Assert.Equal("https://furion.net/", httpRequestBuilder.BaseAddress.ToString());
     }
+
+    [Fact]
+    public void RewriteRequestUri_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder.RewriteRequestUri(null);
+        Assert.Null(httpRequestBuilder.RequestUri);
+
+        httpRequestBuilder.RewriteRequestUri(new Uri("https://furion.net/"));
+        Assert.NotNull(httpRequestBuilder.RequestUri);
+        Assert.Equal("https://furion.net/", httpRequestBuilder.RequestUri.ToString());
+    }
 }

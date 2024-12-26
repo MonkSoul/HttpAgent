@@ -121,8 +121,7 @@ public sealed class HttpContextForwardBuilder
     {
         // 初始化 HttpRequestBuilder 实例
         var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure)
-            .AddHttpContentConverters(() => [_actionResultContentConverterInstance.Value]).DisableCache()
-            .AutoSetHostHeader(false);
+            .AddHttpContentConverters(() => [_actionResultContentConverterInstance.Value]).DisableCache();
 
         // 复制查询参数和路由参数
         CopyQueryAndRouteValues(httpRequestBuilder);
@@ -147,8 +146,7 @@ public sealed class HttpContextForwardBuilder
     {
         // 初始化 HttpRequestBuilder 实例
         var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure)
-            .AddHttpContentConverters(() => [new IActionResultContentConverter()]).DisableCache()
-            .AutoSetHostHeader(false);
+            .AddHttpContentConverters(() => [new IActionResultContentConverter()]).DisableCache();
 
         // 复制查询参数和路由参数
         CopyQueryAndRouteValues(httpRequestBuilder);

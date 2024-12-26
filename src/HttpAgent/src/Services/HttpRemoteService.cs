@@ -434,6 +434,39 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
                     timeoutCancellationTokenSource.Token)
                 : sendMethod!(httpClient, httpRequestMessage, completionOption, timeoutCancellationTokenSource.Token);
 
+            // 处理重定向问题
+            var redirections = 0;
+            while (Helpers.IsRedirectStatusCode(httpResponseMessage.StatusCode) &&
+                   _httpRemoteOptions.AllowAutoRedirect &&
+                   redirections < _httpRemoteOptions.MaximumAutomaticRedirections)
+            {
+                // 获取重定向地址
+                var redirectUrl = httpResponseMessage.Headers.Location;
+
+                // 检查重定向地址是否为空或分绝对路径地址
+                if (redirectUrl is null || !redirectUrl.IsAbsoluteUri)
+                {
+                    break;
+                }
+
+                // 构建新的 HttpRequestMessage 实例（TODO：未来考虑克隆新的 HttpRequestBuilder 实例）
+                var newHttpRequestMessage = httpRequestBuilder.RewriteRequestUri(redirectUrl).Build(_httpRemoteOptions,
+                    _httpContentProcessorFactory, httpClient.BaseAddress);
+
+                // 释放前一个 HttpResponseMessage 实例
+                httpResponseMessage.Dispose();
+
+                // 重新调用发送 HTTP 请求委托
+                httpResponseMessage = sendAsyncMethod is not null
+                    ? await sendAsyncMethod(httpClient, newHttpRequestMessage, completionOption,
+                        timeoutCancellationTokenSource.Token)
+                    : sendMethod!(httpClient, newHttpRequestMessage, completionOption,
+                        timeoutCancellationTokenSource.Token);
+
+                // 递增重定向次数
+                redirections++;
+            }
+
             // 获取请求耗时
             var requestDuration = stopwatch.ElapsedMilliseconds;
 
