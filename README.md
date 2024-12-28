@@ -85,3 +85,5 @@ community contributions for bug fixes and improvements.
 ## License
 
 HttpAgent is released under the [MIT](./LICENSE) open source license.
+
+[![](./assets/baiqian.svg)](https://baiqian.com)

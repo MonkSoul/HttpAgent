@@ -70,3 +70,5 @@ public class YourService(IHttpRemoteService httpRemoteService)
 ## 许可证
 
 HttpAgent 采用 [MIT](./LICENSE) 开源许可证。
+
+[![](./assets/baiqian.svg)](https://baiqian.com)
