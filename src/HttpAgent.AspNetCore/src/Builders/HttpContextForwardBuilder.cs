@@ -33,8 +33,8 @@ public sealed class HttpContextForwardBuilder
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="forwardOptions">
     ///     <see cref="HttpContextForwardOptions" />
     /// </param>
@@ -53,12 +53,12 @@ public sealed class HttpContextForwardBuilder
     }
 
     /// <summary>
-    ///     请求地址
+    ///     转发地址
     /// </summary>
     public Uri? RequestUri { get; }
 
     /// <summary>
-    ///     请求方式
+    ///     转发方式
     /// </summary>
     public HttpMethod Method { get; }
 

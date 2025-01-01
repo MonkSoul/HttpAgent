@@ -500,6 +500,78 @@ public class GetStartController(
     }
 
     /// <summary>
+    ///     转发代理到网站
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)] // 禁用浏览器缓存
+    [Forward("https://github.com")]
+    public Task<IActionResult?> ForwardToWebSite2()
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    ///     转发代理到图片
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)] // 禁用浏览器缓存
+    [Forward("https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA1u7RJI.img?w=584&h=326&m=6")]
+    public Task<IActionResult?> ForwardToImage2()
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    ///     转发代理到文件
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)] // 禁用浏览器缓存
+    [Forward(
+        "https://download.visualstudio.microsoft.com/download/pr/a17b907f-8457-45a8-90db-53f2665ee49e/49bccd33593ebceb2847674fe5fd768e/aspnetcore-runtime-8.0.10-win-x64.exe")]
+    public Task<IActionResult?> ForwardToDownload2()
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    ///     转发代理到表单
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [Forward("https://localhost:7044/HttpRemote/AddForm")]
+    public Task<YourRemoteFormResult?> ForwardToForm2(int id, [FromForm] YourRemoteFormModel model)
+    {
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    ///     转发代理到字符串
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    [Forward("https://localhost:7044/GetStart/PostRawString")]
+    public Task<string> ForwardToString2()
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    ///     转发代理到无返回值
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    [Forward("https://localhost:7044/GetStart/PostRawString")]
+    public Task ForwardToVoid2()
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
     ///     HttpRemoteResult
     /// </summary>
     /// <returns></returns>

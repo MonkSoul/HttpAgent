@@ -88,6 +88,36 @@ public class HttpContextExtensionsTests
     }
 
     [Fact]
+    public void PrepareForwardService_ReturnOK()
+    {
+        var services = new ServiceCollection();
+        services.AddHttpRemote();
+        using var provider = services.BuildServiceProvider();
+
+        var httpContext = new DefaultHttpContext { RequestServices = provider };
+
+        var tuple = HttpContextExtensions.PrepareForwardService(httpContext, HttpMethod.Get, null);
+        Assert.NotNull(tuple.httpContextForwardBuilder);
+        Assert.NotNull(tuple.httpRequestBuilder);
+        Assert.NotNull(tuple.httpRemoteService);
+    }
+
+    [Fact]
+    public async Task PrepareForwardServiceAsync_ReturnOK()
+    {
+        var services = new ServiceCollection();
+        services.AddHttpRemote();
+        await using var provider = services.BuildServiceProvider();
+
+        var httpContext = new DefaultHttpContext { RequestServices = provider };
+
+        var tuple = await HttpContextExtensions.PrepareForwardServiceAsync(httpContext, HttpMethod.Get, null);
+        Assert.NotNull(tuple.httpContextForwardBuilder);
+        Assert.NotNull(tuple.httpRequestBuilder);
+        Assert.NotNull(tuple.httpRemoteService);
+    }
+
+    [Fact]
     public async Task ForwardAsync_Invalid_Parameters()
     {
         await Assert.ThrowsAsync<ArgumentNullException>(async () =>

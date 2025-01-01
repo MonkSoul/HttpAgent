@@ -15,7 +15,7 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -38,9 +38,11 @@ public static partial class HttpContextExtensions
     /// <summary>
     ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
     /// </summary>
-    /// <param name="httpContext"></param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpContext">
+    ///     <see cref="HttpContext" />
+    /// </param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -65,7 +67,7 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -90,8 +92,8 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -112,14 +114,9 @@ public static partial class HttpContextExtensions
         ArgumentNullException.ThrowIfNull(httpContext);
         ArgumentNullException.ThrowIfNull(httpMethod);
 
-        // 创建 HttpContextForwardBuilder 实例
-        var httpContextForwardBuilder = CreateForwardBuilder(httpContext, httpMethod, requestUri, forwardOptions);
-
-        // 构建 HttpRequestBuilder 实例
-        var httpRequestBuilder = httpContextForwardBuilder.Build(configure);
-
-        // 获取 IHttpRemoteService 实例
-        var httpRemoteService = httpContext.RequestServices.GetRequiredService<IHttpRemoteService>();
+        // 初始化转发所需的服务
+        var (httpContextForwardBuilder, httpRequestBuilder, httpRemoteService) =
+            PrepareForwardService(httpContext, httpMethod, requestUri, configure, forwardOptions);
 
         // 获取 IHttpContentConverterFactory 实例
         var httpContentConverterFactory =
@@ -144,7 +141,7 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -167,9 +164,11 @@ public static partial class HttpContextExtensions
     /// <summary>
     ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
     /// </summary>
-    /// <param name="httpContext"></param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpContext">
+    ///     <see cref="HttpContext" />
+    /// </param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -195,7 +194,7 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -220,8 +219,8 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -242,14 +241,9 @@ public static partial class HttpContextExtensions
         ArgumentNullException.ThrowIfNull(httpContext);
         ArgumentNullException.ThrowIfNull(httpMethod);
 
-        // 创建 HttpContextForwardBuilder 实例
-        var httpContextForwardBuilder = CreateForwardBuilder(httpContext, httpMethod, requestUri, forwardOptions);
-
-        // 构建 HttpRequestBuilder 实例
-        var httpRequestBuilder = await httpContextForwardBuilder.BuildAsync(configure);
-
-        // 获取 IHttpRemoteService 实例
-        var httpRemoteService = httpContext.RequestServices.GetRequiredService<IHttpRemoteService>();
+        // 初始化转发所需的服务
+        var (httpContextForwardBuilder, httpRequestBuilder, httpRemoteService) =
+            await PrepareForwardServiceAsync(httpContext, httpMethod, requestUri, configure, forwardOptions);
 
         // 获取 IHttpContentConverterFactory 实例
         var httpContentConverterFactory =
@@ -274,7 +268,7 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -294,9 +288,11 @@ public static partial class HttpContextExtensions
     /// <summary>
     ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
     /// </summary>
-    /// <param name="httpContext"></param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpContext">
+    ///     <see cref="HttpContext" />
+    /// </param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -319,7 +315,7 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -342,8 +338,8 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -366,7 +362,7 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -386,9 +382,11 @@ public static partial class HttpContextExtensions
     /// <summary>
     ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
     /// </summary>
-    /// <param name="httpContext"></param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpContext">
+    ///     <see cref="HttpContext" />
+    /// </param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -411,7 +409,7 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -434,8 +432,8 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -458,7 +456,7 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -478,9 +476,11 @@ public static partial class HttpContextExtensions
     /// <summary>
     ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
     /// </summary>
-    /// <param name="httpContext"></param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpContext">
+    ///     <see cref="HttpContext" />
+    /// </param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -503,7 +503,7 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -526,8 +526,8 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -551,7 +551,7 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -571,9 +571,11 @@ public static partial class HttpContextExtensions
     /// <summary>
     ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
     /// </summary>
-    /// <param name="httpContext"></param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpContext">
+    ///     <see cref="HttpContext" />
+    /// </param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -596,7 +598,7 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -619,8 +621,8 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -643,7 +645,7 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -663,9 +665,11 @@ public static partial class HttpContextExtensions
     /// <summary>
     ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
     /// </summary>
-    /// <param name="httpContext"></param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpContext">
+    ///     <see cref="HttpContext" />
+    /// </param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -688,7 +692,7 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -711,8 +715,8 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -735,7 +739,7 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -755,9 +759,11 @@ public static partial class HttpContextExtensions
     /// <summary>
     ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
     /// </summary>
-    /// <param name="httpContext"></param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpContext">
+    ///     <see cref="HttpContext" />
+    /// </param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -780,7 +786,7 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -803,8 +809,8 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -827,7 +833,7 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -847,9 +853,11 @@ public static partial class HttpContextExtensions
     /// <summary>
     ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
     /// </summary>
-    /// <param name="httpContext"></param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpContext">
+    ///     <see cref="HttpContext" />
+    /// </param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -873,7 +881,7 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -896,8 +904,8 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -921,7 +929,7 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -942,9 +950,11 @@ public static partial class HttpContextExtensions
     /// <summary>
     ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
     /// </summary>
-    /// <param name="httpContext"></param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpContext">
+    ///     <see cref="HttpContext" />
+    /// </param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -967,7 +977,7 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -990,8 +1000,8 @@ public static partial class HttpContextExtensions
     /// <param name="httpContext">
     ///     <see cref="HttpContext" />
     /// </param>
-    /// <param name="httpMethod">请求方式</param>
-    /// <param name="requestUri">请求地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
     /// <param name="configure">自定义配置委托</param>
     /// <param name="completionOption">
     ///     <see cref="HttpCompletionOption" />
@@ -1007,4 +1017,256 @@ public static partial class HttpContextExtensions
         HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
         HttpContextForwardOptions? forwardOptions = null) =>
         ForwardAsAsync<IActionResult>(httpContext, httpMethod, requestUri, configure, completionOption, forwardOptions);
+
+    /// <summary>
+    ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
+    /// </summary>
+    /// <param name="httpContext">
+    ///     <see cref="HttpContext" />
+    /// </param>
+    /// <param name="resultType">转换的目标类型</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="configure">自定义配置委托</param>
+    /// <param name="completionOption">
+    ///     <see cref="HttpCompletionOption" />
+    /// </param>
+    /// <param name="forwardOptions">
+    ///     <see cref="HttpContextForwardOptions" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="object" />
+    /// </returns>
+    public static object? ForwardAs(this HttpContext? httpContext, Type resultType, string? requestUri = null,
+        Action<HttpRequestBuilder>? configure = null,
+        HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
+        HttpContextForwardOptions? forwardOptions = null) => ForwardAs(httpContext, resultType,
+        Helpers.ParseHttpMethod(httpContext?.Request.Method),
+        string.IsNullOrWhiteSpace(requestUri) ? null : new Uri(requestUri, UriKind.RelativeOrAbsolute), configure,
+        completionOption, forwardOptions);
+
+    /// <summary>
+    ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
+    /// </summary>
+    /// <param name="resultType">转换的目标类型</param>
+    /// <param name="httpContext">
+    ///     <see cref="HttpContext" />
+    /// </param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="configure">自定义配置委托</param>
+    /// <param name="completionOption">
+    ///     <see cref="HttpCompletionOption" />
+    /// </param>
+    /// <param name="forwardOptions">
+    ///     <see cref="HttpContextForwardOptions" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="object" />
+    /// </returns>
+    public static object? ForwardAs(this HttpContext? httpContext, Type resultType, HttpMethod httpMethod,
+        string? requestUri = null, Action<HttpRequestBuilder>? configure = null,
+        HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
+        HttpContextForwardOptions? forwardOptions = null) => ForwardAs(httpContext, resultType, httpMethod,
+        string.IsNullOrWhiteSpace(requestUri) ? null : new Uri(requestUri, UriKind.RelativeOrAbsolute), configure,
+        completionOption, forwardOptions);
+
+    /// <summary>
+    ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
+    /// </summary>
+    /// <param name="httpContext">
+    ///     <see cref="HttpContext" />
+    /// </param>
+    /// <param name="resultType">转换的目标类型</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="configure">自定义配置委托</param>
+    /// <param name="completionOption">
+    ///     <see cref="HttpCompletionOption" />
+    /// </param>
+    /// <param name="forwardOptions">
+    ///     <see cref="HttpContextForwardOptions" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="object" />
+    /// </returns>
+    public static object? ForwardAs(this HttpContext? httpContext, Type resultType, Uri? requestUri = null,
+        Action<HttpRequestBuilder>? configure = null,
+        HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
+        HttpContextForwardOptions? forwardOptions = null) => ForwardAs(httpContext, resultType,
+        Helpers.ParseHttpMethod(httpContext?.Request.Method), requestUri, configure, completionOption, forwardOptions);
+
+    /// <summary>
+    ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
+    /// </summary>
+    /// <param name="httpContext">
+    ///     <see cref="HttpContext" />
+    /// </param>
+    /// <param name="resultType">转换的目标类型</param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="configure">自定义配置委托</param>
+    /// <param name="completionOption">
+    ///     <see cref="HttpCompletionOption" />
+    /// </param>
+    /// <param name="forwardOptions">
+    ///     <see cref="HttpContextForwardOptions" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="object" />
+    /// </returns>
+    public static object? ForwardAs(this HttpContext? httpContext, Type resultType, HttpMethod httpMethod,
+        Uri? requestUri = null, Action<HttpRequestBuilder>? configure = null,
+        HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
+        HttpContextForwardOptions? forwardOptions = null)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(httpContext);
+        ArgumentNullException.ThrowIfNull(httpMethod);
+
+        // 初始化转发所需的服务
+        var (httpContextForwardBuilder, httpRequestBuilder, httpRemoteService) =
+            PrepareForwardService(httpContext, httpMethod, requestUri, configure, forwardOptions);
+
+        // 获取 IHttpContentConverterFactory 实例
+        var httpContentConverterFactory =
+            httpContext.RequestServices.GetRequiredService<IHttpContentConverterFactory>();
+
+        // 发送 HTTP 远程请求
+        var httpResponseMessage =
+            httpRemoteService.Send(httpRequestBuilder, completionOption, httpContext.RequestAborted);
+
+        // 根据配置选项将 HttpResponseMessage 信息转发到 HttpContext 中
+        ForwardResponseMessage(httpContext, httpResponseMessage, httpContextForwardBuilder.ForwardOptions);
+
+        // 将 HttpResponseMessage 转换为 TResult 实例
+        return httpContentConverterFactory.Read(resultType, httpResponseMessage,
+            httpRequestBuilder.HttpContentConverterProviders?.SelectMany(u => u.Invoke()).ToArray(),
+            httpContext.RequestAborted);
+    }
+
+    /// <summary>
+    ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
+    /// </summary>
+    /// <param name="httpContext">
+    ///     <see cref="HttpContext" />
+    /// </param>
+    /// <param name="resultType">转换的目标类型</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="configure">自定义配置委托</param>
+    /// <param name="completionOption">
+    ///     <see cref="HttpCompletionOption" />
+    /// </param>
+    /// <param name="forwardOptions">
+    ///     <see cref="HttpContextForwardOptions" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="object" />
+    /// </returns>
+    public static Task<object?> ForwardAsAsync(this HttpContext? httpContext, Type resultType,
+        string? requestUri = null, Action<HttpRequestBuilder>? configure = null,
+        HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
+        HttpContextForwardOptions? forwardOptions = null) =>
+        ForwardAsAsync(httpContext, resultType, Helpers.ParseHttpMethod(httpContext?.Request.Method),
+            string.IsNullOrWhiteSpace(requestUri) ? null : new Uri(requestUri, UriKind.RelativeOrAbsolute), configure,
+            completionOption, forwardOptions);
+
+    /// <summary>
+    ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
+    /// </summary>
+    /// <param name="httpContext">
+    ///     <see cref="HttpContext" />
+    /// </param>
+    /// <param name="resultType">转换的目标类型</param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="configure">自定义配置委托</param>
+    /// <param name="completionOption">
+    ///     <see cref="HttpCompletionOption" />
+    /// </param>
+    /// <param name="forwardOptions">
+    ///     <see cref="HttpContextForwardOptions" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="object" />
+    /// </returns>
+    public static Task<object?> ForwardAsAsync(this HttpContext? httpContext, Type resultType, HttpMethod httpMethod,
+        string? requestUri = null, Action<HttpRequestBuilder>? configure = null,
+        HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
+        HttpContextForwardOptions? forwardOptions = null) =>
+        ForwardAsAsync(httpContext, resultType, httpMethod,
+            string.IsNullOrWhiteSpace(requestUri) ? null : new Uri(requestUri, UriKind.RelativeOrAbsolute), configure,
+            completionOption, forwardOptions);
+
+    /// <summary>
+    ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
+    /// </summary>
+    /// <param name="httpContext">
+    ///     <see cref="HttpContext" />
+    /// </param>
+    /// <param name="resultType">转换的目标类型</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="configure">自定义配置委托</param>
+    /// <param name="completionOption">
+    ///     <see cref="HttpCompletionOption" />
+    /// </param>
+    /// <param name="forwardOptions">
+    ///     <see cref="HttpContextForwardOptions" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="object" />
+    /// </returns>
+    public static Task<object?> ForwardAsAsync(this HttpContext? httpContext, Type resultType,
+        Uri? requestUri = null, Action<HttpRequestBuilder>? configure = null,
+        HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
+        HttpContextForwardOptions? forwardOptions = null) =>
+        ForwardAsAsync(httpContext, resultType, Helpers.ParseHttpMethod(httpContext?.Request.Method), requestUri,
+            configure, completionOption, forwardOptions);
+
+    /// <summary>
+    ///     转发 <see cref="HttpContext" /> 到新的 HTTP 远程地址
+    /// </summary>
+    /// <param name="httpContext">
+    ///     <see cref="HttpContext" />
+    /// </param>
+    /// <param name="resultType">转换的目标类型</param>
+    /// <param name="httpMethod">转发方式</param>
+    /// <param name="requestUri">转发地址。若为空则尝试从请求标头 <c>X-Forward-To</c> 中获取目标地址。</param>
+    /// <param name="configure">自定义配置委托</param>
+    /// <param name="completionOption">
+    ///     <see cref="HttpCompletionOption" />
+    /// </param>
+    /// <param name="forwardOptions">
+    ///     <see cref="HttpContextForwardOptions" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="object" />
+    /// </returns>
+    public static async Task<object?> ForwardAsAsync(this HttpContext? httpContext, Type resultType,
+        HttpMethod httpMethod, Uri? requestUri = null, Action<HttpRequestBuilder>? configure = null,
+        HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead,
+        HttpContextForwardOptions? forwardOptions = null)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(httpContext);
+        ArgumentNullException.ThrowIfNull(httpMethod);
+
+        // 初始化转发所需的服务
+        var (httpContextForwardBuilder, httpRequestBuilder, httpRemoteService) =
+            await PrepareForwardServiceAsync(httpContext, httpMethod, requestUri, configure, forwardOptions);
+
+        // 获取 IHttpContentConverterFactory 实例
+        var httpContentConverterFactory =
+            httpContext.RequestServices.GetRequiredService<IHttpContentConverterFactory>();
+
+        // 发送 HTTP 远程请求
+        var httpResponseMessage =
+            await httpRemoteService.SendAsync(httpRequestBuilder, completionOption, httpContext.RequestAborted);
+
+        // 根据配置选项将 HttpResponseMessage 信息转发到 HttpContext 中
+        ForwardResponseMessage(httpContext, httpResponseMessage, httpContextForwardBuilder.ForwardOptions);
+
+        // 将 HttpResponseMessage 转换为 TResult 实例
+        return await httpContentConverterFactory.ReadAsync(resultType, httpResponseMessage,
+            httpRequestBuilder.HttpContentConverterProviders?.SelectMany(u => u.Invoke()).ToArray(),
+            httpContext.RequestAborted);
+    }
 }
