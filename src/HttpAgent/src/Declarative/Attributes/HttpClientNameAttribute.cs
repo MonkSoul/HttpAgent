@@ -14,10 +14,10 @@ public sealed class HttpClientNameAttribute : Attribute
     ///     <inheritdoc cref="HttpClientNameAttribute" />
     /// </summary>
     /// <param name="name"><see cref="HttpClient" /> 实例的配置名称</param>
-    public HttpClientNameAttribute(string? name) => Name = name ?? string.Empty;
+    public HttpClientNameAttribute(string? name) => Name = name;
 
     /// <summary>
     ///     <see cref="HttpClient" /> 实例的配置名称
     /// </summary>
-    public string Name { get; set; }
+    public string? Name { get; set; }
 }

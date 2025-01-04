@@ -5,6 +5,7 @@
 global using HttpAgent.Core.Utilities;
 global using HttpAgent.Extensions;
 global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Mvc.Filters;
 global using Microsoft.AspNetCore.WebUtilities;
 global using System.Diagnostics;
 global using System.Globalization;
@@ -13,6 +14,7 @@ global using System.Net.Mime;
 global using System.Text;
 global using Xunit;
 global using System.Net.Http.Headers;
+global using System.Reflection;
 global using System.Text.Json;
 global using System.Threading.Channels;
 global using Xunit.Abstractions;

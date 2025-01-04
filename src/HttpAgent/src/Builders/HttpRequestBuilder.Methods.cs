@@ -854,11 +854,8 @@ public sealed partial class HttpRequestBuilder
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
-    public HttpRequestBuilder SetHttpClientName(string httpClientName)
+    public HttpRequestBuilder SetHttpClientName(string? httpClientName)
     {
-        // 空检查
-        ArgumentNullException.ThrowIfNull(httpClientName);
-
         HttpClientName = httpClientName;
 
         return this;

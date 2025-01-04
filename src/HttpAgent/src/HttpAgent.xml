@@ -1081,11 +1081,14 @@
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.BuildFinalRequestUri(System.Uri)">
+        <member name="M:HttpAgent.HttpRequestBuilder.BuildFinalRequestUri(System.Uri,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
                 构建最终的请求地址
             </summary>
             <param name="clientBaseAddress">客户端基地址</param>
+            <param name="configuration">
+                <see cref="T:Microsoft.Extensions.Configuration.IConfiguration" />
+            </param>
             <returns>
                 <see cref="T:System.String" />
             </returns>
@@ -1106,11 +1109,14 @@
                 <see cref="T:System.UriBuilder" />
             </param>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.ReplacePathPlaceholders(System.String)">
+        <member name="M:HttpAgent.HttpRequestBuilder.ReplacePlaceholders(System.String,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
-                替换路径参数
+                替换路径或配置参数
             </summary>
             <param name="originalUri">源请求地址</param>
+            <param name="configuration">
+                <see cref="T:Microsoft.Extensions.Configuration.IConfiguration" />
+            </param>
             <returns>
                 <see cref="T:System.String" />
             </returns>
@@ -3642,6 +3648,17 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
+        <member name="M:HttpAgent.Core.Extensions.StringExtensions.ToLowerFirstLetter(System.String)">
+            <summary>
+                将字符串首字母转换为小写
+            </summary>
+            <param name="input">
+                <see cref="T:System.String" />
+            </param>
+            <returns>
+                <see cref="T:System.String" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.Core.Extensions.StringExtensions.EscapeDataString(System.String,System.Boolean)">
             <summary>
                 将字符串进行转义
@@ -3722,6 +3739,18 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
+        <member name="M:HttpAgent.Core.Extensions.StringExtensions.ReplacePlaceholders(System.String,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+                替换字符串中的占位符为实际值
+            </summary>
+            <param name="template">包含占位符的模板字符串</param>
+            <param name="replacementSource">
+                <see cref="T:Microsoft.Extensions.Configuration.IConfiguration" />
+            </param>
+            <returns>
+                <see cref="T:System.String" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.Core.Extensions.StringExtensions.PlaceholderRegex">
             <remarks>
             Pattern:<br/>
@@ -3741,6 +3770,33 @@
                         ○ Match a whitespace character greedily any number of times.<br/>
             ○ Match a whitespace character atomically any number of times.<br/>
             ○ Match '}'.<br/>
+            </code>
+            </remarks>
+        </member>
+        <member name="M:HttpAgent.Core.Extensions.StringExtensions.ConfigurationKeyRegex">
+            <remarks>
+            Pattern:<br/>
+            <code>\\[\\[\\s*([\\w\\-:]+)((?:\\s*\\|\\s*[\\w\\-:]+)*)\\s*(?:\\|\\|\\s*([^\\]]*))?\\s*\\]\\]</code><br/>
+            Explanation:<br/>
+            <code>
+            ○ Match the string "[[".<br/>
+            ○ Match a whitespace character greedily any number of times.<br/>
+            ○ 1st capture group.<br/>
+                ○ Match a character in the set [-:\w] greedily at least once.<br/>
+            ○ 2nd capture group.<br/>
+                ○ Loop greedily any number of times.<br/>
+                    ○ Match a whitespace character atomically any number of times.<br/>
+                    ○ Match '|'.<br/>
+                    ○ Match a whitespace character greedily any number of times.<br/>
+                    ○ Match a character in the set [-:\w] greedily at least once.<br/>
+            ○ Match a whitespace character greedily any number of times.<br/>
+            ○ Optional (greedy).<br/>
+                ○ Match the string "||".<br/>
+                ○ Match a whitespace character greedily any number of times.<br/>
+                ○ 3rd capture group.<br/>
+                    ○ Match a character other than ']' greedily any number of times.<br/>
+            ○ Match a whitespace character atomically any number of times.<br/>
+            ○ Match the string "]]".<br/>
             </code>
             </remarks>
         </member>
@@ -7462,6 +7518,12 @@
             <summary>
                 JSON 序列化配置
             </summary>
+        </member>
+        <member name="P:HttpAgent.HttpRemoteOptions.Configuration">
+            <summary>
+                <inheritdoc cref="T:Microsoft.Extensions.Configuration.IConfiguration" />
+            </summary>
+            <remarks>支持作为替换 URL 地址中配置模板参数的提供源。</remarks>
         </member>
         <member name="P:HttpAgent.HttpRemoteOptions.HttpDeclarativeExtractors">
             <summary>
@@ -12863,98 +12925,130 @@
             <param name="inputSpan">The text being scanned by the regular expression.</param>
             <returns>true if the regular expression matches at the current position; otherwise, false.</returns>
         </member>
-        <member name="T:System.Text.RegularExpressions.Generated.FormUrlEncodedFormatRegex_1">
+        <member name="T:System.Text.RegularExpressions.Generated.ConfigurationKeyRegex_1">
+            <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the ConfigurationKeyRegex method.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.ConfigurationKeyRegex_1.Instance">
+            <summary>Cached, thread-safe singleton instance.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.ConfigurationKeyRegex_1.#ctor">
+            <summary>Initializes the instance.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.ConfigurationKeyRegex_1.RunnerFactory">
+            <summary>Provides a factory for creating <see cref="T:System.Text.RegularExpressions.RegexRunner"/> instances to be used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.ConfigurationKeyRegex_1.RunnerFactory.CreateInstance">
+            <summary>Creates an instance of a <see cref="T:System.Text.RegularExpressions.RegexRunner"/> used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.ConfigurationKeyRegex_1.RunnerFactory.Runner">
+            <summary>Provides the runner that contains the custom logic implementing the specified regular expression.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.ConfigurationKeyRegex_1.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
+            <summary>Scan the <paramref name="inputSpan"/> starting from base.runtextstart for the next match.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.ConfigurationKeyRegex_1.RunnerFactory.Runner.TryFindNextPossibleStartingPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Search <paramref name="inputSpan"/> starting from base.runtextpos for the next location a match could possibly start.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if a possible match was found; false if no more matches are possible.</returns>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.ConfigurationKeyRegex_1.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Determine whether <paramref name="inputSpan"/> at base.runtextpos is a match for the regular expression.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if the regular expression matches at the current position; otherwise, false.</returns>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.FormUrlEncodedFormatRegex_2">
             <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the FormUrlEncodedFormatRegex method.</summary>
         </member>
-        <member name="F:System.Text.RegularExpressions.Generated.FormUrlEncodedFormatRegex_1.Instance">
+        <member name="F:System.Text.RegularExpressions.Generated.FormUrlEncodedFormatRegex_2.Instance">
             <summary>Cached, thread-safe singleton instance.</summary>
         </member>
-        <member name="M:System.Text.RegularExpressions.Generated.FormUrlEncodedFormatRegex_1.#ctor">
+        <member name="M:System.Text.RegularExpressions.Generated.FormUrlEncodedFormatRegex_2.#ctor">
             <summary>Initializes the instance.</summary>
         </member>
-        <member name="T:System.Text.RegularExpressions.Generated.FormUrlEncodedFormatRegex_1.RunnerFactory">
+        <member name="T:System.Text.RegularExpressions.Generated.FormUrlEncodedFormatRegex_2.RunnerFactory">
             <summary>Provides a factory for creating <see cref="T:System.Text.RegularExpressions.RegexRunner"/> instances to be used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
         </member>
-        <member name="M:System.Text.RegularExpressions.Generated.FormUrlEncodedFormatRegex_1.RunnerFactory.CreateInstance">
+        <member name="M:System.Text.RegularExpressions.Generated.FormUrlEncodedFormatRegex_2.RunnerFactory.CreateInstance">
             <summary>Creates an instance of a <see cref="T:System.Text.RegularExpressions.RegexRunner"/> used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
         </member>
-        <member name="T:System.Text.RegularExpressions.Generated.FormUrlEncodedFormatRegex_1.RunnerFactory.Runner">
+        <member name="T:System.Text.RegularExpressions.Generated.FormUrlEncodedFormatRegex_2.RunnerFactory.Runner">
             <summary>Provides the runner that contains the custom logic implementing the specified regular expression.</summary>
         </member>
-        <member name="M:System.Text.RegularExpressions.Generated.FormUrlEncodedFormatRegex_1.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
+        <member name="M:System.Text.RegularExpressions.Generated.FormUrlEncodedFormatRegex_2.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
             <summary>Scan the <paramref name="inputSpan"/> starting from base.runtextstart for the next match.</summary>
             <param name="inputSpan">The text being scanned by the regular expression.</param>
         </member>
-        <member name="M:System.Text.RegularExpressions.Generated.FormUrlEncodedFormatRegex_1.RunnerFactory.Runner.TryFindNextPossibleStartingPosition(System.ReadOnlySpan{System.Char})">
+        <member name="M:System.Text.RegularExpressions.Generated.FormUrlEncodedFormatRegex_2.RunnerFactory.Runner.TryFindNextPossibleStartingPosition(System.ReadOnlySpan{System.Char})">
             <summary>Search <paramref name="inputSpan"/> starting from base.runtextpos for the next location a match could possibly start.</summary>
             <param name="inputSpan">The text being scanned by the regular expression.</param>
             <returns>true if a possible match was found; false if no more matches are possible.</returns>
         </member>
-        <member name="M:System.Text.RegularExpressions.Generated.FormUrlEncodedFormatRegex_1.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
+        <member name="M:System.Text.RegularExpressions.Generated.FormUrlEncodedFormatRegex_2.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
             <summary>Determine whether <paramref name="inputSpan"/> at base.runtextpos is a match for the regular expression.</summary>
             <param name="inputSpan">The text being scanned by the regular expression.</param>
             <returns>true if the regular expression matches at the current position; otherwise, false.</returns>
         </member>
-        <member name="T:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_2">
+        <member name="T:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_3">
             <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the StatusCodeRangeRegex method.</summary>
         </member>
-        <member name="F:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_2.Instance">
+        <member name="F:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_3.Instance">
             <summary>Cached, thread-safe singleton instance.</summary>
         </member>
-        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_2.#ctor">
+        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_3.#ctor">
             <summary>Initializes the instance.</summary>
         </member>
-        <member name="T:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_2.RunnerFactory">
+        <member name="T:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_3.RunnerFactory">
             <summary>Provides a factory for creating <see cref="T:System.Text.RegularExpressions.RegexRunner"/> instances to be used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
         </member>
-        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_2.RunnerFactory.CreateInstance">
+        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_3.RunnerFactory.CreateInstance">
             <summary>Creates an instance of a <see cref="T:System.Text.RegularExpressions.RegexRunner"/> used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
         </member>
-        <member name="T:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_2.RunnerFactory.Runner">
+        <member name="T:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_3.RunnerFactory.Runner">
             <summary>Provides the runner that contains the custom logic implementing the specified regular expression.</summary>
         </member>
-        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_2.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
+        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_3.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
             <summary>Scan the <paramref name="inputSpan"/> starting from base.runtextstart for the next match.</summary>
             <param name="inputSpan">The text being scanned by the regular expression.</param>
         </member>
-        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_2.RunnerFactory.Runner.TryFindNextPossibleStartingPosition(System.ReadOnlySpan{System.Char})">
+        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_3.RunnerFactory.Runner.TryFindNextPossibleStartingPosition(System.ReadOnlySpan{System.Char})">
             <summary>Search <paramref name="inputSpan"/> starting from base.runtextpos for the next location a match could possibly start.</summary>
             <param name="inputSpan">The text being scanned by the regular expression.</param>
             <returns>true if a possible match was found; false if no more matches are possible.</returns>
         </member>
-        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_2.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
+        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeRangeRegex_3.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
             <summary>Determine whether <paramref name="inputSpan"/> at base.runtextpos is a match for the regular expression.</summary>
             <param name="inputSpan">The text being scanned by the regular expression.</param>
             <returns>true if the regular expression matches at the current position; otherwise, false.</returns>
         </member>
-        <member name="T:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_3">
+        <member name="T:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_4">
             <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the StatusCodeCompareRegex method.</summary>
         </member>
-        <member name="F:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_3.Instance">
+        <member name="F:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_4.Instance">
             <summary>Cached, thread-safe singleton instance.</summary>
         </member>
-        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_3.#ctor">
+        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_4.#ctor">
             <summary>Initializes the instance.</summary>
         </member>
-        <member name="T:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_3.RunnerFactory">
+        <member name="T:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_4.RunnerFactory">
             <summary>Provides a factory for creating <see cref="T:System.Text.RegularExpressions.RegexRunner"/> instances to be used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
         </member>
-        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_3.RunnerFactory.CreateInstance">
+        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_4.RunnerFactory.CreateInstance">
             <summary>Creates an instance of a <see cref="T:System.Text.RegularExpressions.RegexRunner"/> used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
         </member>
-        <member name="T:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_3.RunnerFactory.Runner">
+        <member name="T:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_4.RunnerFactory.Runner">
             <summary>Provides the runner that contains the custom logic implementing the specified regular expression.</summary>
         </member>
-        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_3.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
+        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_4.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
             <summary>Scan the <paramref name="inputSpan"/> starting from base.runtextstart for the next match.</summary>
             <param name="inputSpan">The text being scanned by the regular expression.</param>
         </member>
-        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_3.RunnerFactory.Runner.TryFindNextPossibleStartingPosition(System.ReadOnlySpan{System.Char})">
+        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_4.RunnerFactory.Runner.TryFindNextPossibleStartingPosition(System.ReadOnlySpan{System.Char})">
             <summary>Search <paramref name="inputSpan"/> starting from base.runtextpos for the next location a match could possibly start.</summary>
             <param name="inputSpan">The text being scanned by the regular expression.</param>
             <returns>true if a possible match was found; false if no more matches are possible.</returns>
         </member>
-        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_3.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
+        <member name="M:System.Text.RegularExpressions.Generated.StatusCodeCompareRegex_4.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
             <summary>Determine whether <paramref name="inputSpan"/> at base.runtextpos is a match for the regular expression.</summary>
             <param name="inputSpan">The text being scanned by the regular expression.</param>
             <returns>true if the regular expression matches at the current position; otherwise, false.</returns>
@@ -12985,6 +13079,9 @@
         </member>
         <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_ascii_60FF03FEFFFF87FEFFFF47">
             <summary>Supports searching for characters in or not in "-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~".</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_indexOfString_EBC667BDABA1472FA863B5B39B31251EF2B4C95DD643BDECF694CB1CE7BDC178">
+            <summary>Supports searching for the string "[[".</summary>
         </member>
         <member name="T:Microsoft.Extensions.DependencyInjection.HttpRemoteServiceCollectionExtensions">
             <summary>

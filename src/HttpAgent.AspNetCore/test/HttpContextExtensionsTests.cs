@@ -151,11 +151,15 @@ public class HttpContextExtensionsTests
         app.MapGet("/test", async context =>
         {
             var result1 = await context.ForwardAsync<string>(HttpMethod.Get,
-                new Uri($"http://localhost:{port}/HttpRemote/Request1"));
-            var result2 = await context.ForwardAsync<string>(new Uri($"http://localhost:{port}/HttpRemote/Request1"));
+                new Uri($"http://localhost:{port}/HttpRemote/Request1"),
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
+            var result2 = await context.ForwardAsync<string>(new Uri($"http://localhost:{port}/HttpRemote/Request1"),
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
             var result3 = await context.ForwardAsync<string>(HttpMethod.Get,
-                $"http://localhost:{port}/HttpRemote/Request1");
-            var result4 = await context.ForwardAsync<string>($"http://localhost:{port}/HttpRemote/Request1");
+                $"http://localhost:{port}/HttpRemote/Request1",
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
+            var result4 = await context.ForwardAsync<string>($"http://localhost:{port}/HttpRemote/Request1",
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
             await context.Response.WriteAsync(result1.Result + " " + result2.Result + " " + result3.Result + " " +
                                               result4.Result);
@@ -199,14 +203,18 @@ public class HttpContextExtensionsTests
         app.MapPost("/test", async (HttpContext context, HttpRemoteAspNetCoreModel1 model) =>
         {
             var result1 = await context.ForwardAsync<HttpRemoteAspNetCoreModel1>(HttpMethod.Post,
-                new Uri($"http://localhost:{port}/HttpRemote/Request2"));
+                new Uri($"http://localhost:{port}/HttpRemote/Request2"),
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
             var result2 = await context.ForwardAsync<HttpRemoteAspNetCoreModel1>(
-                new Uri($"http://localhost:{port}/HttpRemote/Request2"));
+                new Uri($"http://localhost:{port}/HttpRemote/Request2"),
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
             var result3 = await context.ForwardAsync<HttpRemoteAspNetCoreModel1>(HttpMethod.Post,
-                $"http://localhost:{port}/HttpRemote/Request2");
+                $"http://localhost:{port}/HttpRemote/Request2",
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
             var result4 =
-                await context.ForwardAsync<HttpRemoteAspNetCoreModel1>($"http://localhost:{port}/HttpRemote/Request2");
+                await context.ForwardAsync<HttpRemoteAspNetCoreModel1>($"http://localhost:{port}/HttpRemote/Request2",
+                    forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
             await context.Response.WriteAsync(result1.Result!.Id + " " + result1.Result.Name + " " +
                                               result2.Result!.Id + " " + result2.Result.Name +
@@ -257,15 +265,19 @@ public class HttpContextExtensionsTests
             async (HttpContext context, [FromForm] HttpRemoteAspNetCoreModel1 model) =>
             {
                 var result1 = await context.ForwardAsync<HttpRemoteAspNetCoreModel1>(HttpMethod.Post,
-                    new Uri($"http://localhost:{port}/HttpRemote/Request3"));
+                    new Uri($"http://localhost:{port}/HttpRemote/Request3"),
+                    forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
                 var result2 = await context.ForwardAsync<HttpRemoteAspNetCoreModel1>(
-                    new Uri($"http://localhost:{port}/HttpRemote/Request3"));
+                    new Uri($"http://localhost:{port}/HttpRemote/Request3"),
+                    forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
                 var result3 = await context.ForwardAsync<HttpRemoteAspNetCoreModel1>(HttpMethod.Post,
-                    $"http://localhost:{port}/HttpRemote/Request3");
+                    $"http://localhost:{port}/HttpRemote/Request3",
+                    forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
                 var result4 =
                     await context.ForwardAsync<HttpRemoteAspNetCoreModel1>(
-                        $"http://localhost:{port}/HttpRemote/Request3");
+                        $"http://localhost:{port}/HttpRemote/Request3",
+                        forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
                 await context.Response.WriteAsync(result1.Result!.Id + " " + result1.Result.Name + " " +
                                                   result2.Result!.Id + " " + result2.Result.Name +
@@ -323,14 +335,18 @@ public class HttpContextExtensionsTests
         app.MapPost("/test", async (HttpContext context, [FromForm] HttpRemoteAspNetCoreMultipartModel1 model) =>
         {
             var result1 = await context.ForwardAsync<string>(HttpMethod.Post,
-                new Uri($"http://localhost:{port}/HttpRemote/Request4"));
+                new Uri($"http://localhost:{port}/HttpRemote/Request4"),
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
             var result2 = await context.ForwardAsync<string>(
-                new Uri($"http://localhost:{port}/HttpRemote/Request4"));
+                new Uri($"http://localhost:{port}/HttpRemote/Request4"),
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
             var result3 = await context.ForwardAsync<string>(HttpMethod.Post,
-                $"http://localhost:{port}/HttpRemote/Request4");
+                $"http://localhost:{port}/HttpRemote/Request4",
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
             var result4 =
-                await context.ForwardAsync<string>($"http://localhost:{port}/HttpRemote/Request4");
+                await context.ForwardAsync<string>($"http://localhost:{port}/HttpRemote/Request4",
+                    forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
             await context.Response.WriteAsync(result1.Result + " " + result2.Result + " " + result3.Result + " " +
                                               result4.Result);
@@ -386,14 +402,18 @@ public class HttpContextExtensionsTests
         app.MapPost("/test", async (HttpContext context, [FromForm] HttpRemoteAspNetCoreMultipartModel1 model) =>
         {
             var result1 = await context.ForwardAsync<string>(HttpMethod.Post,
-                new Uri($"http://localhost:{port}/HttpRemote/Request5"));
+                new Uri($"http://localhost:{port}/HttpRemote/Request5"),
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
             var result2 = await context.ForwardAsync<string>(
-                new Uri($"http://localhost:{port}/HttpRemote/Request5"));
+                new Uri($"http://localhost:{port}/HttpRemote/Request5"),
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
             var result3 = await context.ForwardAsync<string>(HttpMethod.Post,
-                $"http://localhost:{port}/HttpRemote/Request5");
+                $"http://localhost:{port}/HttpRemote/Request5",
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
             var result4 =
-                await context.ForwardAsync<string>($"http://localhost:{port}/HttpRemote/Request5");
+                await context.ForwardAsync<string>($"http://localhost:{port}/HttpRemote/Request5",
+                    forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
             await context.Response.WriteAsync(result1.Result + " " + result2.Result + " " + result3.Result + " " +
                                               result4.Result);
@@ -450,14 +470,18 @@ public class HttpContextExtensionsTests
         app.MapPost("/test", async (HttpContext context, [FromForm] HttpRemoteAspNetCoreMultipartModel1 model) =>
         {
             var result1 = await context.ForwardAsync<string>(HttpMethod.Post,
-                new Uri($"http://localhost:{port}/HttpRemote/Request6"));
+                new Uri($"http://localhost:{port}/HttpRemote/Request6"),
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
             var result2 = await context.ForwardAsync<string>(
-                new Uri($"http://localhost:{port}/HttpRemote/Request6"));
+                new Uri($"http://localhost:{port}/HttpRemote/Request6"),
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
             var result3 = await context.ForwardAsync<string>(HttpMethod.Post,
-                $"http://localhost:{port}/HttpRemote/Request6");
+                $"http://localhost:{port}/HttpRemote/Request6",
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
             var result4 =
-                await context.ForwardAsync<string>($"http://localhost:{port}/HttpRemote/Request6");
+                await context.ForwardAsync<string>($"http://localhost:{port}/HttpRemote/Request6",
+                    forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
             await context.Response.WriteAsync(result1.Result + " " + result2.Result + " " + result3.Result + " " +
                                               result4.Result);
@@ -584,11 +608,15 @@ public class HttpContextExtensionsTests
         app.MapGet("/test", async context =>
         {
             var result1 = context.Forward<string>(HttpMethod.Get,
-                new Uri($"http://localhost:{port}/HttpRemote/Request1"));
-            var result2 = context.Forward<string>(new Uri($"http://localhost:{port}/HttpRemote/Request1"));
+                new Uri($"http://localhost:{port}/HttpRemote/Request1"),
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
+            var result2 = context.Forward<string>(new Uri($"http://localhost:{port}/HttpRemote/Request1"),
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
             var result3 = context.Forward<string>(HttpMethod.Get,
-                $"http://localhost:{port}/HttpRemote/Request1");
-            var result4 = context.Forward<string>($"http://localhost:{port}/HttpRemote/Request1");
+                $"http://localhost:{port}/HttpRemote/Request1",
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
+            var result4 = context.Forward<string>($"http://localhost:{port}/HttpRemote/Request1",
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
             await context.Response.WriteAsync(result1.Result + " " + result2.Result + " " + result3.Result + " " +
                                               result4.Result);
@@ -632,14 +660,18 @@ public class HttpContextExtensionsTests
         app.MapPost("/test", async (HttpContext context, HttpRemoteAspNetCoreModel1 model) =>
         {
             var result1 = context.Forward<HttpRemoteAspNetCoreModel1>(HttpMethod.Post,
-                new Uri($"http://localhost:{port}/HttpRemote/Request2"));
+                new Uri($"http://localhost:{port}/HttpRemote/Request2"),
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
             var result2 = context.Forward<HttpRemoteAspNetCoreModel1>(
-                new Uri($"http://localhost:{port}/HttpRemote/Request2"));
+                new Uri($"http://localhost:{port}/HttpRemote/Request2"),
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
             var result3 = context.Forward<HttpRemoteAspNetCoreModel1>(HttpMethod.Post,
-                $"http://localhost:{port}/HttpRemote/Request2");
+                $"http://localhost:{port}/HttpRemote/Request2",
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
             var result4 =
-                context.Forward<HttpRemoteAspNetCoreModel1>($"http://localhost:{port}/HttpRemote/Request2");
+                context.Forward<HttpRemoteAspNetCoreModel1>($"http://localhost:{port}/HttpRemote/Request2",
+                    forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
             await context.Response.WriteAsync(result1.Result!.Id + " " + result1.Result.Name + " " +
                                               result2.Result!.Id + " " + result2.Result.Name +
@@ -689,14 +721,18 @@ public class HttpContextExtensionsTests
         app.MapPost("/test", async (HttpContext context, [FromForm] HttpRemoteAspNetCoreMultipartModel1 model) =>
         {
             var result1 = context.Forward<string>(HttpMethod.Post,
-                new Uri($"http://localhost:{port}/HttpRemote/Request6"));
+                new Uri($"http://localhost:{port}/HttpRemote/Request6"),
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
             var result2 = context.Forward<string>(
-                new Uri($"http://localhost:{port}/HttpRemote/Request6"));
+                new Uri($"http://localhost:{port}/HttpRemote/Request6"),
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
             var result3 = context.Forward<string>(HttpMethod.Post,
-                $"http://localhost:{port}/HttpRemote/Request6");
+                $"http://localhost:{port}/HttpRemote/Request6",
+                forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
             var result4 =
-                context.Forward<string>($"http://localhost:{port}/HttpRemote/Request6");
+                context.Forward<string>($"http://localhost:{port}/HttpRemote/Request6",
+                    forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
             await context.Response.WriteAsync(result1.Result + " " + result2.Result + " " + result3.Result + " " +
                                               result4.Result);
@@ -1360,23 +1396,35 @@ public class HttpContextExtensionsTests
         var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.InternalServerError);
         httpResponseMessage.Headers.TryAddWithoutValidation("Framework", "furion");
         httpResponseMessage.Headers.TryAddWithoutValidation("Transfer-Encoding", "chunked");
+        httpResponseMessage.Content.Headers.TryAddWithoutValidation("Content-Length", "21");
         httpResponseMessage.Content.Headers.ContentDisposition =
             new ContentDispositionHeaderValue("attachment") { FileName = "test.txt" };
 
         var defaultHttpContext = new DefaultHttpContext();
-        HttpContextExtensions.ForwardHttpHeaders(defaultHttpContext.Response, httpResponseMessage.Headers);
-        HttpContextExtensions.ForwardHttpHeaders(defaultHttpContext.Response, httpResponseMessage.Content.Headers);
+        HttpContextExtensions.ForwardHttpHeaders(defaultHttpContext.Response, httpResponseMessage.Headers,
+            new HttpContextForwardOptions());
+        HttpContextExtensions.ForwardHttpHeaders(defaultHttpContext.Response, httpResponseMessage.Content.Headers,
+            new HttpContextForwardOptions());
         Assert.Equal("furion", defaultHttpContext.Response.Headers["Framework"]);
         Assert.DoesNotContain(defaultHttpContext.Response.Headers, h => h.Key == "Transfer-Encoding");
         Assert.Equal("attachment; filename=test.txt", defaultHttpContext.Response.Headers.ContentDisposition);
+
+        var defaultHttpContext3 = new DefaultHttpContext();
+        HttpContextExtensions.ForwardHttpHeaders(defaultHttpContext3.Response, httpResponseMessage.Content.Headers,
+            new HttpContextForwardOptions());
+        Assert.Equal(21, defaultHttpContext3.Response.ContentLength);
+
+        var defaultHttpContext4 = new DefaultHttpContext();
+        HttpContextExtensions.ForwardHttpHeaders(defaultHttpContext4.Response, httpResponseMessage.Content.Headers,
+            new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
+        Assert.Null(defaultHttpContext4.Response.ContentLength);
     }
 
     [Fact]
     public void IgnoreResponseHeaders_ReturnOK() =>
         Assert.Equal(
             [
-                "Content-Type", "Content-Length", "Connection", "Transfer-Encoding", "Keep-Alive", "Upgrade",
-                "Proxy-Connection"
+                "Content-Type", "Connection", "Transfer-Encoding", "Keep-Alive", "Upgrade", "Proxy-Connection"
             ],
             HttpContextExtensions._ignoreResponseHeaders);
 

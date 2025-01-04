@@ -209,7 +209,7 @@ public class DeclarativeAttributeTests
         Assert.False(attributeUsage.AllowMultiple);
 
         var attribute = new HttpClientNameAttribute(null);
-        Assert.Equal(string.Empty, attribute.Name);
+        Assert.Null(attribute.Name);
 
         var attribute2 = new HttpClientNameAttribute("client-name");
         Assert.Equal("client-name", attribute2.Name);

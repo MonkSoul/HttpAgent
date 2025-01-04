@@ -54,6 +54,12 @@ public sealed class HttpRemoteOptions
     public JsonSerializerOptions JsonSerializerOptions { get; set; } = new(JsonSerializerOptionsDefault);
 
     /// <summary>
+    ///     <inheritdoc cref="IConfiguration" />
+    /// </summary>
+    /// <remarks>支持作为替换 URL 地址中配置模板参数的提供源。</remarks>
+    public IConfiguration? Configuration { get; set; }
+
+    /// <summary>
     ///     自定义 HTTP 声明式 <see cref="IHttpDeclarativeExtractor" /> 集合提供器
     /// </summary>
     /// <value>返回多个包含实现 <see cref="IHttpDeclarativeExtractor" /> 集合的集合。</value>

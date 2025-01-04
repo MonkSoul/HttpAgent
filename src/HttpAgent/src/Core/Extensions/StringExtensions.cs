@@ -36,6 +36,32 @@ internal static partial class StringExtensions
     }
 
     /// <summary>
+    ///     将字符串首字母转换为小写
+    /// </summary>
+    /// <param name="input">
+    ///     <see cref="string" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="string" />
+    /// </returns>
+    internal static string? ToLowerFirstLetter(this string? input)
+    {
+        // 空检查
+        if (string.IsNullOrWhiteSpace(input))
+        {
+            return input;
+        }
+
+        // 初始化字符串构建器
+        var stringBuilder = new StringBuilder(input);
+
+        // 设置字符串构建器首个字符为小写
+        stringBuilder[0] = char.ToLower(stringBuilder[0]);
+
+        return stringBuilder.ToString();
+    }
+
+    /// <summary>
     ///     将字符串进行转义
     /// </summary>
     /// <param name="input">
@@ -197,7 +223,7 @@ internal static partial class StringExtensions
                 match => replacementSource.TryGetValue(match.Groups[1].Value.Trim(), out var replacement)
                     // 如果找到匹配则替换
                     ? replacement ?? string.Empty
-                    // 否则返回原始字符串
+                    // 否则保留原样
                     : match.ToString());
     }
 
@@ -231,17 +257,83 @@ internal static partial class StringExtensions
                     return isMatch
                         // 如果找到匹配则替换
                         ? replacement?.ToCultureString(CultureInfo.InvariantCulture) ?? string.Empty
-                        // 否则返回原始字符串
+                        // 否则保留原样
                         : match.ToString();
                 });
 
     /// <summary>
+    ///     替换字符串中的占位符为实际值
+    /// </summary>
+    /// <param name="template">包含占位符的模板字符串</param>
+    /// <param name="replacementSource">
+    ///     <see cref="IConfiguration" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="string" />
+    /// </returns>
+    internal static string? ReplacePlaceholders(this string? template, IConfiguration? replacementSource)
+    {
+        // 空检查
+        if (replacementSource is null)
+        {
+            return template;
+        }
+
+        return template is null
+            ? null
+            : ConfigurationKeyRegex().Replace(template,
+                match =>
+                {
+                    // 获取主键、备用键和默认值
+                    var mainKey = match.Groups[1].Value.Trim();
+                    var backupKeysRaw = match.Groups[2].Value.Trim();
+                    var defaultValue = match.Groups[3].Success ? match.Groups[3].Value.Trim() : null;
+
+                    // 分割并清理备用键列表
+                    var backupKeys = backupKeysRaw.Split(['|'], StringSplitOptions.RemoveEmptyEntries)
+                        .Select(s => s.Trim())
+                        .Where(s => !string.IsNullOrWhiteSpace(s))
+                        .ToList();
+
+                    // 合并主键和备用键列表
+                    var allKeys = new List<string> { mainKey };
+                    allKeys.AddRange(backupKeys);
+
+                    // 逐个匹配键，一旦找到有效的配置项，立即返回并停止查找
+                    foreach (var section in allKeys.Select(replacementSource.GetSection)
+                                 .Where(section => section.Exists()))
+                    {
+                        return section.Value!;
+                    }
+
+                    return !string.IsNullOrEmpty(defaultValue)
+                        // 如果所有备用键都没有找到，则使用默认值
+                        ? defaultValue
+                        // 如果找不到配置项且没有默认值，则保留原样
+                        : match.Value;
+                });
+    }
+
+    /// <summary>
     ///     占位符匹配正则表达式
     /// </summary>
-    /// <remarks>占位符格式：<c>{Key}</c> 或 <c>{Key.Property}</c> 或 {Key.Property.NestProperty}。</remarks>
+    /// <remarks>占位符格式：<c>{Key}</c> 或 <c>{Key.Property}</c> 或 <c>{Key.Property.NestProperty}</c>。</remarks>
     /// <returns>
     ///     <see cref="Regex" />
     /// </returns>
     [GeneratedRegex(@"\{\s*(\w+\s*(\.\s*\w+\s*)*)\s*\}")]
     private static partial Regex PlaceholderRegex();
+
+    /// <summary>
+    ///     配置键匹配正则表达式
+    /// </summary>
+    /// <remarks>
+    ///     占位符格式：<c>[[Key]]</c> 或 <c>[[Key:Sub]]</c> 或 <c>[[Key:Sub:Nest]]</c> 或 <c>[[Key | Key2 | Key3]]</c> 或
+    ///     <c>[Key | Key2 || 默认值]]</c>。
+    /// </remarks>
+    /// <returns>
+    ///     <see cref="Regex" />
+    /// </returns>
+    [GeneratedRegex(@"\[\[\s*([\w\-:]+)((?:\s*\|\s*[\w\-:]+)*)\s*(?:\|\|\s*([^\]]*))?\s*\]\]")]
+    private static partial Regex ConfigurationKeyRegex();
 }

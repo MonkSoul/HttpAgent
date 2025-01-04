@@ -971,23 +971,15 @@ public class HttpRequestBuilderMethodsTests
     }
 
     [Fact]
-    public void SetHttpClientName_Invalid_Parameters()
-    {
-        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-
-        Assert.Throws<ArgumentNullException>(() =>
-        {
-            httpRequestBuilder.SetHttpClientName(null!);
-        });
-    }
-
-    [Fact]
     public void SetHttpClientName_ReturnOK()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
 
         httpRequestBuilder.SetHttpClientName("furion");
         Assert.Equal("furion", httpRequestBuilder.HttpClientName);
+
+        httpRequestBuilder.SetHttpClientName(null);
+        Assert.Null(httpRequestBuilder.HttpClientName);
     }
 
     [Fact]

@@ -56,7 +56,7 @@ public sealed partial class HttpRequestBuilder
         ArgumentNullException.ThrowIfNull(Method);
 
         // 构建最终的请求地址
-        var finalRequestUri = BuildFinalRequestUri(clientBaseAddress);
+        var finalRequestUri = BuildFinalRequestUri(clientBaseAddress, httpRemoteOptions.Configuration);
 
         // 初始化 HttpRequestMessage 实例
         var httpRequestMessage = new HttpRequestMessage(Method, finalRequestUri);
@@ -89,15 +89,18 @@ public sealed partial class HttpRequestBuilder
     ///     构建最终的请求地址
     /// </summary>
     /// <param name="clientBaseAddress">客户端基地址</param>
+    /// <param name="configuration">
+    ///     <see cref="IConfiguration" />
+    /// </param>
     /// <returns>
     ///     <see cref="string" />
     /// </returns>
-    internal string BuildFinalRequestUri(Uri? clientBaseAddress)
+    internal string BuildFinalRequestUri(Uri? clientBaseAddress, IConfiguration? configuration)
     {
-        // 替换路径参数，处理非标准 HTTP URI 的应用场景（如 {url}），此时需优先解决路径参数问题
+        // 替换路径或配置参数，处理非标准 HTTP URI 的应用场景（如 {url}），此时需优先解决路径或配置参数问题
         var newRequestUri = RequestUri is null or { OriginalString: null }
             ? RequestUri
-            : new Uri(ReplacePathPlaceholders(RequestUri.OriginalString), UriKind.RelativeOrAbsolute);
+            : new Uri(ReplacePlaceholders(RequestUri.OriginalString, configuration), UriKind.RelativeOrAbsolute);
 
         // 初始化带局部 BaseAddress 的请求地址
         var requestUriWithBaseAddress = BaseAddress is null
@@ -115,8 +118,8 @@ public sealed partial class HttpRequestBuilder
         // 追加查询参数
         AppendQueryParameters(uriBuilder);
 
-        // 替换路径参数
-        var finalRequestUri = ReplacePathPlaceholders(uriBuilder.Uri.ToString());
+        // 替换路径或配置参数
+        var finalRequestUri = ReplacePlaceholders(uriBuilder.Uri.ToString(), configuration);
 
         return finalRequestUri;
     }
@@ -173,13 +176,16 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
-    ///     替换路径参数
+    ///     替换路径或配置参数
     /// </summary>
     /// <param name="originalUri">源请求地址</param>
+    /// <param name="configuration">
+    ///     <see cref="IConfiguration" />
+    /// </param>
     /// <returns>
     ///     <see cref="string" />
     /// </returns>
-    internal string ReplacePathPlaceholders(string originalUri)
+    internal string ReplacePlaceholders(string originalUri, IConfiguration? configuration)
     {
         var newUri = originalUri;
 
@@ -196,6 +202,9 @@ public sealed partial class HttpRequestBuilder
                 (current, objectPathParameter) =>
                     current.ReplacePlaceholders(objectPathParameter.Value, objectPathParameter.Key));
         }
+
+        // 替换配置参数
+        newUri = newUri.ReplacePlaceholders(configuration);
 
         return newUri!;
     }

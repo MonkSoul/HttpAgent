@@ -17,6 +17,7 @@ public class HttpRemoteOptionsTests
         Assert.True(httpRemoteOptions.AllowAutoRedirect);
         Assert.Equal(50, httpRemoteOptions.MaximumAutomaticRedirections);
         Assert.False(httpRemoteOptions.IsLoggingRegistered);
+        Assert.Null(httpRemoteOptions.Configuration);
 
         Assert.True(HttpRemoteOptions.JsonSerializerOptionsDefault.PropertyNameCaseInsensitive);
         Assert.Equal(JsonNamingPolicy.CamelCase, HttpRemoteOptions.JsonSerializerOptionsDefault.PropertyNamingPolicy);

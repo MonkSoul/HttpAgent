@@ -33,7 +33,7 @@ public class HttpClientNameDeclarativeExtractorTests
         var context2 = new HttpDeclarativeExtractorContext(method2, []);
         var httpRequestBuilder2 = HttpRequestBuilder.Get("http://localhost");
         new HttpClientNameDeclarativeExtractor().Extract(httpRequestBuilder2, context2);
-        Assert.Equal(string.Empty, httpRequestBuilder2.HttpClientName);
+        Assert.Null(httpRequestBuilder2.HttpClientName);
 
         var method3 =
             typeof(IHttpClientNameDeclarativeExtractorTest2).GetMethod(
@@ -51,7 +51,7 @@ public interface IHttpClientNameDeclarativeExtractorTest1 : IHttpDeclarative
     Task Test1();
 }
 
-[HttpClientName(default)]
+[HttpClientName(null)]
 public interface IHttpClientNameDeclarativeExtractorTest2 : IHttpDeclarative
 {
     [Post("http://localhost:5000")]

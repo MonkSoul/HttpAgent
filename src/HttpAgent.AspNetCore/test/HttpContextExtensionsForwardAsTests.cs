@@ -932,6 +932,109 @@ public class HttpContextExtensionsForwardAsTests
         await app.StopAsync();
     }
 
+    [Fact]
+    public async Task ForwardAs_Object_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+
+        builder.Services.AddControllers()
+            .AddApplicationPart(typeof(HttpRemoteController).Assembly);
+        builder.Services.AddHttpRemote();
+
+        await using var app = builder.Build();
+        app.Use(async (ctx, next) =>
+        {
+            ctx.Request.EnableBuffering();
+            ctx.Request.Body.Position = 0;
+
+            await next.Invoke();
+        });
+
+        app.MapControllers();
+
+        app.MapGet("/test", async context =>
+        {
+            // ReSharper disable once MethodHasAsyncOverload
+            var str = context.ForwardAs(typeof(string), HttpMethod.Get,
+                new Uri($"http://localhost:{port}/HttpRemote/Request1")) as string;
+            // ReSharper disable once MethodHasAsyncOverload
+            var str2 =
+                context.ForwardAs(typeof(string), new Uri($"http://localhost:{port}/HttpRemote/Request1")) as string;
+            // ReSharper disable once MethodHasAsyncOverload
+            var str3 = context.ForwardAs(typeof(string), HttpMethod.Get,
+                $"http://localhost:{port}/HttpRemote/Request1") as string;
+            // ReSharper disable once MethodHasAsyncOverload
+            var str4 = context.ForwardAs(typeof(string), $"http://localhost:{port}/HttpRemote/Request1") as string;
+
+            await context.Response.WriteAsync(str + " " + str2 + " " + str3 + " " + str4);
+        });
+
+        await app.StartAsync();
+
+        var httpClient = app.Services.GetRequiredService<IHttpClientFactory>().CreateClient();
+        var httpResponseMessage =
+            await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get,
+                new Uri($"http://localhost:{port}/test")));
+        httpResponseMessage.EnsureSuccessStatusCode();
+        var str = await httpResponseMessage.Content.ReadAsStringAsync();
+        Assert.Equal("Hello World Hello World Hello World Hello World", str);
+
+        await app.StopAsync();
+    }
+
+    [Fact]
+    public async Task ForwardAsAsync_Object_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+
+        builder.Services.AddControllers()
+            .AddApplicationPart(typeof(HttpRemoteController).Assembly);
+        builder.Services.AddHttpRemote();
+
+        await using var app = builder.Build();
+        app.Use(async (ctx, next) =>
+        {
+            ctx.Request.EnableBuffering();
+            ctx.Request.Body.Position = 0;
+
+            await next.Invoke();
+        });
+
+        app.MapControllers();
+
+        app.MapGet("/test", async context =>
+        {
+            var str = await context.ForwardAsAsync(typeof(string), HttpMethod.Get,
+                new Uri($"http://localhost:{port}/HttpRemote/Request1")) as string;
+            var str2 =
+                await context.ForwardAsAsync(typeof(string), new Uri($"http://localhost:{port}/HttpRemote/Request1"))
+                    as string;
+            var str3 = await context.ForwardAsAsync(typeof(string), HttpMethod.Get,
+                $"http://localhost:{port}/HttpRemote/Request1") as string;
+            var str4 =
+                await context.ForwardAsAsync(typeof(string),
+                    $"http://localhost:{port}/HttpRemote/Request1") as string;
+
+            await context.Response.WriteAsync(str + " " + str2 + " " + str3 + " " + str4);
+        });
+
+        await app.StartAsync();
+
+        var httpClient = app.Services.GetRequiredService<IHttpClientFactory>().CreateClient();
+        var httpResponseMessage =
+            await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get,
+                new Uri($"http://localhost:{port}/test")));
+        httpResponseMessage.EnsureSuccessStatusCode();
+        var str = await httpResponseMessage.Content.ReadAsStringAsync();
+        Assert.Equal("Hello World Hello World Hello World Hello World", str);
+
+        await app.StopAsync();
+    }
+
     private static string StreamToString(Stream stream)
     {
         using var reader = new StreamReader(stream, Encoding.UTF8);

@@ -7,6 +7,7 @@ global using HttpAgent.Extensions;
 global using System.Runtime.CompilerServices;
 global using HttpAgent;
 global using HttpAgent.Core.Utilities;
+global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.DependencyInjection.Extensions;
 global using Microsoft.Extensions.Http.Logging;

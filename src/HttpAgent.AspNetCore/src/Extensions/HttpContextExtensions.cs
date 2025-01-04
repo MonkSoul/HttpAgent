@@ -10,7 +10,7 @@ namespace HttpAgent.Extensions;
 public static partial class HttpContextExtensions
 {
     /// <summary>
-    ///     忽略在转发时需要跳过的响应标头列表。
+    ///     忽略在转发时需要跳过的响应标头列表
     /// </summary>
     /// <remarks>
     ///     <list type="bullet">
@@ -23,13 +23,6 @@ public static partial class HttpContextExtensions
     ///             </description>
     ///         </item>
     ///         <item>
-    ///             <term>Content-Length: </term>
-    ///             <description>
-    ///                 若响应标头中包含 <c>Content-Length</c>，且其值与实际响应体大小不符，则可能引发“Error while copying content to a
-    ///                 stream.”。忽略此标头有助于解决因长度不匹配引起的错误。
-    ///             </description>
-    ///         </item>
-    ///         <item>
     ///             <term>Transfer-Encoding: </term>
     ///             <description>当响应标头包含 <c>Transfer-Encoding: chunked</c> 时，可能导致响应处理过程无限期挂起。忽略此标头可避免该问题。</description>
     ///         </item>
@@ -37,7 +30,7 @@ public static partial class HttpContextExtensions
     /// </remarks>
     internal static HashSet<string> _ignoreResponseHeaders =
     [
-        "Content-Type", "Content-Length", "Connection", "Transfer-Encoding", "Keep-Alive", "Upgrade", "Proxy-Connection"
+        "Content-Type", "Connection", "Transfer-Encoding", "Keep-Alive", "Upgrade", "Proxy-Connection"
     ];
 
     /// <summary>
@@ -637,13 +630,13 @@ public static partial class HttpContextExtensions
         // 检查是否配置了响应标头转发
         if (forwardOptions.WithResponseHeaders)
         {
-            ForwardHttpHeaders(httpResponse, httpResponseMessage.Headers);
+            ForwardHttpHeaders(httpResponse, httpResponseMessage.Headers, forwardOptions);
         }
 
         // 检查是否配置了响应内容标头转发
         if (forwardOptions.WithResponseContentHeaders)
         {
-            ForwardHttpHeaders(httpResponse, httpResponseMessage.Content.Headers);
+            ForwardHttpHeaders(httpResponse, httpResponseMessage.Content.Headers, forwardOptions);
         }
 
         // 调用用于在转发响应之前执行自定义操作
@@ -659,13 +652,21 @@ public static partial class HttpContextExtensions
     /// <param name="httpHeaders">
     ///     <see cref="HttpHeaders" />
     /// </param>
-    internal static void ForwardHttpHeaders(HttpResponse httpResponse, HttpHeaders httpHeaders)
+    /// <param name="forwardOptions">
+    ///     <see cref="HttpContextForwardOptions" />
+    /// </param>
+    internal static void ForwardHttpHeaders(HttpResponse httpResponse, HttpHeaders httpHeaders,
+        HttpContextForwardOptions forwardOptions)
     {
+        // 初始化忽略在转发时需要跳过的响应标头列表
+        var ignoreResponseHeaders =
+            _ignoreResponseHeaders.ConcatIgnoreNull(forwardOptions.IgnoreResponseHeaders).Distinct().ToArray();
+
         // 逐条更新响应标头
         foreach (var (key, values) in httpHeaders)
         {
             // 忽略特定响应标头
-            if (key.IsIn(_ignoreResponseHeaders, StringComparer.OrdinalIgnoreCase))
+            if (key.IsIn(ignoreResponseHeaders, StringComparer.OrdinalIgnoreCase))
             {
                 continue;
             }

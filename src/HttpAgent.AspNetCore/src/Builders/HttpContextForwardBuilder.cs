@@ -216,9 +216,13 @@ public sealed class HttpContextForwardBuilder
             return;
         }
 
+        // 初始化忽略在转发时需要跳过的请求标头列表
+        var ignoreRequestHeaders =
+            _ignoreRequestHeaders.ConcatIgnoreNull(ForwardOptions.IgnoreRequestHeaders).Distinct().ToArray();
+
         // 忽略特定请求标头列表
         httpRequestBuilder.WithHeaders(
-            httpRequest.Headers.Where(u => !u.Key.IsIn(_ignoreRequestHeaders, StringComparer.OrdinalIgnoreCase)),
+            httpRequest.Headers.Where(u => !u.Key.IsIn(ignoreRequestHeaders, StringComparer.OrdinalIgnoreCase)),
             replace: true);
 
         // 检查是否需要重新设置 Host 请求标头
