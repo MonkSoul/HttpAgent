@@ -384,7 +384,7 @@ public class HttpRemoteBuilderTests
         var builder = WebApplication.CreateBuilder();
         builder.Services.AddHttpRemote();
 
-        var app = builder.Build();
+        using var app = builder.Build();
         var remoteOptions = app.Services.GetRequiredService<IOptions<HttpRemoteOptions>>().Value;
         Assert.True(remoteOptions.IsLoggingRegistered);
     }
