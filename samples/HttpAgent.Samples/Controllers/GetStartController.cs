@@ -548,7 +548,7 @@ public class GetStartController(
     {
         throw new NotImplementedException();
     }
-    
+
     /// <summary>
     ///     转发代理到字符串
     /// </summary>
@@ -604,5 +604,14 @@ public class GetStartController(
     {
         var str = await authService.GetDataAsync();
         var result = await authService.LoginAsync("admin", "admin");
+    }
+
+    [HttpGet]
+    public async Task CheckAuth2([FromServices] IHttpClientFactory httpClientFactory)
+    {
+        var result = await httpRemoteService.GetAsStringAsync(
+            "https://ocr.1datatech.net/oauth/1.0/token",
+            builder => builder.WithQueryParameter("a", "123", replace: true)
+                .Profiler());
     }
 }

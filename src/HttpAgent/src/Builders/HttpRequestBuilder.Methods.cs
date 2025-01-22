@@ -1519,6 +1519,7 @@ public sealed partial class HttpRequestBuilder
     /// <summary>
     ///     重写请求地址
     /// </summary>
+    /// <remarks>用于处理重定向操作。</remarks>
     /// <param name="newRequestUri">新的请求地址</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
@@ -1526,6 +1527,10 @@ public sealed partial class HttpRequestBuilder
     internal HttpRequestBuilder RewriteRequestUri(Uri? newRequestUri)
     {
         RequestUri = newRequestUri;
+
+        // 解决重定向时重复拼接查询参数问题
+        QueryParameters?.Clear();
+        QueryParametersToRemove?.Clear();
 
         return this;
     }

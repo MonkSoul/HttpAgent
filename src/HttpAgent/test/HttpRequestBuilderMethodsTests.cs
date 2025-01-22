@@ -1641,12 +1641,22 @@ public class HttpRequestBuilderMethodsTests
     [Fact]
     public void RewriteRequestUri_ReturnOK()
     {
-        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        var httpRequestBuilder =
+            new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost")).WithQueryParameter("id", 1)
+                .RemoveQueryParameters("name");
         httpRequestBuilder.RewriteRequestUri(null);
         Assert.Null(httpRequestBuilder.RequestUri);
+        Assert.NotNull(httpRequestBuilder.QueryParameters);
+        Assert.Empty(httpRequestBuilder.QueryParameters);
+        Assert.NotNull(httpRequestBuilder.QueryParametersToRemove);
+        Assert.Empty(httpRequestBuilder.QueryParametersToRemove);
 
         httpRequestBuilder.RewriteRequestUri(new Uri("https://furion.net/"));
         Assert.NotNull(httpRequestBuilder.RequestUri);
         Assert.Equal("https://furion.net/", httpRequestBuilder.RequestUri.ToString());
+        Assert.NotNull(httpRequestBuilder.QueryParameters);
+        Assert.Empty(httpRequestBuilder.QueryParameters);
+        Assert.NotNull(httpRequestBuilder.QueryParametersToRemove);
+        Assert.Empty(httpRequestBuilder.QueryParametersToRemove);
     }
 }

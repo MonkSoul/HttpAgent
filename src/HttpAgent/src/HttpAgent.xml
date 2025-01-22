@@ -2016,6 +2016,7 @@
             <summary>
                 重写请求地址
             </summary>
+            <remarks>用于处理重定向操作。</remarks>
             <param name="newRequestUri">新的请求地址</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
