@@ -1,5 +1,4 @@
-﻿
-namespace HttpAgent.Samples;
+﻿namespace HttpAgent.Samples;
 
 public class AuthorizationDelegatingHandler : DelegatingHandler
 {
@@ -10,7 +9,8 @@ public class AuthorizationDelegatingHandler : DelegatingHandler
         return base.Send(request, cancellationToken);
     }
 
-    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+        CancellationToken cancellationToken)
     {
         // 添加 JWT (JSON Web Token) 身份验证
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", "your token");

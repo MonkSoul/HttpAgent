@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\HttpAgent.AspNetCore\src\HttpAgent.AspNetCore.csproj" />
+        <ProjectReference Include="..\..\src\HttpAgent.AspNetCore\src\HttpAgent.AspNetCore.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

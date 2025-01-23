@@ -115,14 +115,14 @@ public class GetStartController(
             "https://localhost:7044/HttpRemote/AddForm?id=1",
             builder => builder.SetMultipartContent(multipart => multipart // 设置表单内容
                 .AddJson(new { id = 1, name = "furion" }) // 设置常规字段
-                .AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file"))); // 设置文件（支持流方式、字节数组方式、远程 URL 地址和 Base64 字符串
+                .AddFileAsStream(@"C:\Workspaces\httptest.jpg"))); // 设置文件（支持流方式、字节数组方式、远程 URL 地址和 Base64 字符串
 
         // 使用构建器模式
         var content2 = await httpRemoteService.SendAsAsync<YourRemoteFormResult>(HttpRequestBuilder
             .Post("https://localhost:7044/HttpRemote/AddForm?id=1")
             .SetMultipartContent(multipart => multipart // 设置表单内容
                 .AddJson(new { id = 1, name = "furion" }) // 设置常规字段
-                .AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file"))); // 设置文件（支持流方式、字节数组方式、远程 URL 地址和 Base64 字符串
+                .AddFileAsStream(@"C:\Workspaces\httptest.jpg"))); // 设置文件（支持流方式、字节数组方式、远程 URL 地址和 Base64 字符串
 
         // 更多详细用法可参考第 19.2.1 节
 
@@ -132,7 +132,7 @@ public class GetStartController(
             builder => builder.SetMultipartContent(multipart => multipart // 设置表单内容
                 .AddJson(new { id = 1, name = "furion" }) // 设置常规字段
                 .AddFormItem("age", "Age") // 支持设置单个值
-                .AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file") // 设置单个文件（对应表单 File 字段）
+                .AddFileAsStream(@"C:\Workspaces\httptest.jpg") // 设置单个文件（对应表单 File 字段）
                 // 支持互联网文件地址
                 .AddFileFromRemote("https://furion.net/img/furionlogo.png", "files") // 设置多个文件（对应表单 Files 字段）
                 // 支持读取本地文件作为字节数组
@@ -175,7 +175,7 @@ public class GetStartController(
         // Form 表单提交
         var content3 = await httpService.PostForm(multipart => multipart
             .AddJson(new { id = 1, name = "furion" }) // 设置常规字段
-            .AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file"));
+            .AddFileAsStream(@"C:\Workspaces\httptest.jpg"));
 
         var content4 = await httpService.PostForm2(new { id = 1, name = "furion" }, @"C:\Workspaces\httptest.jpg");
 
@@ -240,7 +240,7 @@ public class GetStartController(
         // 上传单个文件
         await httpRemoteService.PostAsync("https://localhost:7044/HttpRemote/AddFile", builder => builder
             .SetMultipartContent(multipart => multipart
-                .AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file")));
+                .AddFileAsStream(@"C:\Workspaces\httptest.jpg")));
 
         // 上传多个文件
         await httpRemoteService.PostAsync("https://localhost:7044/HttpRemote/AddFiles", builder => builder
@@ -251,7 +251,7 @@ public class GetStartController(
         // 使用构建器模式
         await httpRemoteService.SendAsync(HttpRequestBuilder.Post("https://localhost:7044/HttpRemote/AddFile")
             .SetMultipartContent(multipart => multipart
-                .AddFileAsStream(@"C:\Workspaces\httptest.jpg", "file")));
+                .AddFileAsStream(@"C:\Workspaces\httptest.jpg")));
 
         // 上传文件带进度
         await httpRemoteService.UploadFileAsync("https://localhost:7044/HttpRemote/AddFile",

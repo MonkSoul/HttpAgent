@@ -157,18 +157,21 @@
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
-        <member name="M:HttpAgent.HttpContextForwardBuilder.CopyFileMultipartSection(Microsoft.AspNetCore.WebUtilities.FileMultipartSection,HttpAgent.HttpMultipartFormDataBuilder,HttpAgent.HttpRequestBuilder)">
+        <member name="M:HttpAgent.HttpContextForwardBuilder.CopyFileMultipartSectionAsync(Microsoft.AspNetCore.WebUtilities.MultipartSection,HttpAgent.HttpMultipartFormDataBuilder,HttpAgent.HttpRequestBuilder,System.Threading.CancellationToken)">
             <summary>
                 复制多部分表单内容文件节内容
             </summary>
-            <param name="fileMultipartSection">
-                <see cref="T:Microsoft.AspNetCore.WebUtilities.FileMultipartSection" />
+            <param name="multipartSection">
+                <see cref="T:Microsoft.AspNetCore.WebUtilities.MultipartSection" />
             </param>
             <param name="httpMultipartFormDataBuilder">
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </param>
             <param name="httpRequestBuilder">
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
         <member name="M:HttpAgent.HttpContextForwardBuilder.ReadBodyAsync(HttpAgent.HttpRequestBuilder)">

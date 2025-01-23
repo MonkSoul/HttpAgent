@@ -12,7 +12,8 @@ public interface IHttpService : IHttpDeclarative
     [Post("https://localhost:7044/HttpRemote/AddModel")]
     [Query("query1", 1)] // 设置查询参数
     Task<YourRemoteModel> PostData([Query(AliasAs = "query2")] string param,
-        [Body(MediaTypeNames.Application.Json)] object data); // 设置查询参数并指定别名和请求内容
+        [Body(MediaTypeNames.Application.Json)]
+        object data); // 设置查询参数并指定别名和请求内容
 
     [Profiler(false)]
     // Form 表单提交
@@ -22,7 +23,8 @@ public interface IHttpService : IHttpDeclarative
     // Form 表单提交
     [Post("https://localhost:7044/HttpRemote/AddForm?id=1")]
     Task<YourRemoteFormResult> PostForm2([Multipart(AsFormItem = false)] object obj,
-        [Multipart("file", AsFileFrom = FileSourceType.Path)] string filePath);
+        [Multipart("file", AsFileFrom = FileSourceType.Path)]
+        string filePath);
 
     // URL 编码表单提交
     [Post("https://localhost:7044/HttpRemote/AddURLForm")]
