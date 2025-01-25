@@ -1532,7 +1532,7 @@ public sealed partial class HttpRequestBuilder
         RequestUri = redirectUri;
         Method = redirectMethod;
 
-        // 重定向时不应评价原始请求参数信息
+        // 重定向时不应拼接原始请求参数
         QueryParameters?.Clear();
         QueryParametersToRemove?.Clear();
 
