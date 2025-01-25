@@ -119,7 +119,7 @@ public class HttpMultipartFormDataBuilderTests
         Assert.Equal("furion", builder2._partContents[1].RawContent?.ToString());
         Assert.NotNull(builder2._httpRequestBuilder.Disposables);
         Assert.Single(builder2._httpRequestBuilder.Disposables);
-        Assert.True(builder2._httpRequestBuilder.Disposables[0] is JsonDocument);
+        Assert.True(builder2._httpRequestBuilder.Disposables.First() is JsonDocument);
 
         builder.AddJson(new { id = 1, name = "furion" }, "child");
         Assert.Equal(3, builder._partContents.Count);
@@ -329,7 +329,7 @@ public class HttpMultipartFormDataBuilderTests
             builder._partContents[0].FileName);
         Assert.NotNull(builder._httpRequestBuilder.Disposables);
         Assert.Single(builder._httpRequestBuilder.Disposables);
-        Assert.Equal("ContentLengthReadStream", builder._httpRequestBuilder.Disposables[0].GetType().Name);
+        Assert.Equal("ContentLengthReadStream", builder._httpRequestBuilder.Disposables.First().GetType().Name);
 
         builder.AddFileFromRemote(url, "test", "test.exe");
         Assert.Equal(2, builder._partContents.Count);
@@ -413,7 +413,7 @@ public class HttpMultipartFormDataBuilderTests
         Assert.Equal("test.txt", builder._partContents[0].FileName);
         Assert.NotNull(builder._httpRequestBuilder.Disposables);
         Assert.Single(builder._httpRequestBuilder.Disposables);
-        Assert.Equal(typeof(FileStream), builder._httpRequestBuilder.Disposables[0].GetType());
+        Assert.Equal(typeof(FileStream), builder._httpRequestBuilder.Disposables.First().GetType());
 
         builder.AddFileAsStream(filePath, "test", null, "image/jpeg;charset=utf-8");
         Assert.Equal(2, builder._partContents.Count);
@@ -496,7 +496,7 @@ public class HttpMultipartFormDataBuilderTests
         Assert.Equal("test.txt", builder._partContents[0].FileName);
         Assert.NotNull(builder._httpRequestBuilder.Disposables);
         Assert.Single(builder._httpRequestBuilder.Disposables);
-        Assert.Equal(typeof(ProgressFileStream), builder._httpRequestBuilder.Disposables[0].GetType());
+        Assert.Equal(typeof(ProgressFileStream), builder._httpRequestBuilder.Disposables.First().GetType());
 
         builder.AddFileWithProgressAsStream(filePath, progressChannel, "test", null, "image/jpeg;charset=utf-8");
         Assert.Equal(2, builder._partContents.Count);

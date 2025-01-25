@@ -1517,20 +1517,32 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
-    ///     重写请求地址
+    ///     配置重定向信息
     /// </summary>
-    /// <remarks>用于处理重定向操作。</remarks>
-    /// <param name="newRequestUri">新的请求地址</param>
+    /// <param name="redirectUri">重定向地址</param>
+    /// <param name="redirectMethod">重定向方法</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
-    internal HttpRequestBuilder RewriteRequestUri(Uri? newRequestUri)
+    internal HttpRequestBuilder ConfigureForRedirect(Uri? redirectUri, HttpMethod redirectMethod)
     {
-        RequestUri = newRequestUri;
+        // 空检查
+        ArgumentNullException.ThrowIfNull(redirectMethod);
 
-        // 解决重定向时重复拼接查询参数问题
+        RequestUri = redirectUri;
+        Method = redirectMethod;
+
+        // 重定向时不应评价原始请求参数信息
         QueryParameters?.Clear();
         QueryParametersToRemove?.Clear();
+
+        // 重定向时若请求方法为 GET 或 HEAD，则不应设置请求体内容
+        // ReSharper disable once InvertIf
+        if (redirectMethod == HttpMethod.Get || redirectMethod == HttpMethod.Head)
+        {
+            RawContent = null;
+            MultipartFormDataBuilder = null;
+        }
 
         return this;
     }

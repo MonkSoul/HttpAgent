@@ -83,17 +83,38 @@ public class HelpersTests
     public void IsFormUrlEncodedFormat_ReturnOK(string output, bool result) =>
         Assert.Equal(result, HttpAgent.Helpers.IsFormUrlEncodedFormat(output));
 
-    [Theory]
-    [InlineData(HttpStatusCode.Ambiguous, true)]
-    [InlineData(HttpStatusCode.Moved, true)]
-    [InlineData(HttpStatusCode.Redirect, true)]
-    [InlineData(HttpStatusCode.RedirectMethod, true)]
-    [InlineData(HttpStatusCode.RedirectKeepVerb, true)]
-    [InlineData(HttpStatusCode.OK, false)]
-    public void IsRedirectStatusCode_ReturnOK(HttpStatusCode statusCode, bool result)
+    [Fact]
+    public void DetermineRedirectMethod_ReturnOK()
     {
-        Assert.Equal(result, HttpAgent.Helpers.IsRedirectStatusCode(statusCode));
-        Assert.True(HttpAgent.Helpers.IsRedirectStatusCode((HttpStatusCode)308));
+        Assert.True(HttpAgent.Helpers.DetermineRedirectMethod(HttpStatusCode.Ambiguous, HttpMethod.Post,
+            out var redirectMethod));
+        Assert.NotNull(redirectMethod);
+        Assert.Equal(HttpMethod.Get, redirectMethod);
+
+        Assert.True(HttpAgent.Helpers.DetermineRedirectMethod(HttpStatusCode.Moved, HttpMethod.Post,
+            out var redirectMethod2));
+        Assert.NotNull(redirectMethod2);
+        Assert.Equal(HttpMethod.Get, redirectMethod2);
+
+        Assert.True(HttpAgent.Helpers.DetermineRedirectMethod(HttpStatusCode.Redirect, HttpMethod.Post,
+            out var redirectMethod3));
+        Assert.NotNull(redirectMethod3);
+        Assert.Equal(HttpMethod.Get, redirectMethod3);
+
+        Assert.True(HttpAgent.Helpers.DetermineRedirectMethod(HttpStatusCode.RedirectMethod, HttpMethod.Post,
+            out var redirectMethod4));
+        Assert.NotNull(redirectMethod4);
+        Assert.Equal(HttpMethod.Get, redirectMethod4);
+
+        Assert.True(HttpAgent.Helpers.DetermineRedirectMethod(HttpStatusCode.RedirectKeepVerb, HttpMethod.Post,
+            out var redirectMethod5));
+        Assert.NotNull(redirectMethod5);
+        Assert.Equal(HttpMethod.Post, redirectMethod5);
+
+        Assert.True(HttpAgent.Helpers.DetermineRedirectMethod((HttpStatusCode)308, HttpMethod.Post,
+            out var redirectMethod6));
+        Assert.NotNull(redirectMethod6);
+        Assert.Equal(HttpMethod.Post, redirectMethod6);
     }
 
     [Fact]

@@ -142,17 +142,40 @@ internal static partial class Helpers
     }
 
     /// <summary>
-    ///     检查 HTTP 状态码是否是重定向状态码
+    ///     检查 HTTP 状态码是否是重定向状态码并返回重定向时应使用的 HTTP 请求方法
     /// </summary>
     /// <param name="statusCode">
     ///     <see cref="HttpStatusCode" />
     /// </param>
+    /// <param name="originalHttpMethod">
+    ///     <see cref="HttpMethod" />
+    /// </param>
+    /// <param name="httpMethod">
+    ///     <see cref="HttpMethod" />
+    /// </param>
     /// <returns>
     ///     <see cref="bool" />
     /// </returns>
-    internal static bool IsRedirectStatusCode(HttpStatusCode statusCode) =>
-        statusCode is HttpStatusCode.Ambiguous or HttpStatusCode.Moved or HttpStatusCode.Redirect
-            or HttpStatusCode.RedirectMethod or HttpStatusCode.RedirectKeepVerb || (int)statusCode == 308;
+    internal static bool DetermineRedirectMethod(HttpStatusCode statusCode, HttpMethod originalHttpMethod,
+        [NotNullWhen(true)] out HttpMethod? httpMethod)
+    {
+        switch (statusCode)
+        {
+            // 300, 301, 302, 303 使用 GET 请求
+            case HttpStatusCode.Ambiguous or HttpStatusCode.Moved or HttpStatusCode.Redirect
+                or HttpStatusCode.RedirectMethod:
+                httpMethod = HttpMethod.Get;
+                return true;
+            // 307, 308 保持原来请求
+            case HttpStatusCode.RedirectKeepVerb:
+            case var code when (int)code == 308:
+                httpMethod = originalHttpMethod;
+                return true;
+            default:
+                httpMethod = null;
+                return false;
+        }
+    }
 
     /// <summary>
     ///     从给定的绝对 URI 中解析出基础地址

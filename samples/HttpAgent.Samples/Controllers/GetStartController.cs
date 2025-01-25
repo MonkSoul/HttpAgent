@@ -607,7 +607,7 @@ public class GetStartController(
     }
 
     [HttpGet]
-    public async Task CheckAuth2([FromServices] IHttpClientFactory httpClientFactory)
+    public async Task AllowAutoRedirect2([FromServices] IHttpClientFactory httpClientFactory)
     {
         var result = await httpRemoteService.GetAsStringAsync(
             "https://ocr.1datatech.net/oauth/1.0/token",

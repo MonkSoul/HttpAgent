@@ -434,10 +434,13 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
                     timeoutCancellationTokenSource.Token)
                 : sendMethod!(httpClient, httpRequestMessage, completionOption, timeoutCancellationTokenSource.Token);
 
-            // 处理重定向问题
+            // 初始化当前重定向次数和原始请求方法
             var redirections = 0;
-            while (Helpers.IsRedirectStatusCode(httpResponseMessage.StatusCode) &&
-                   _httpRemoteOptions.AllowAutoRedirect &&
+            var originalHttpMethod = httpRequestBuilder.Method!;
+
+            // 处理请求重定向
+            while (Helpers.DetermineRedirectMethod(httpResponseMessage.StatusCode, originalHttpMethod,
+                       out var redirectMethod) && _httpRemoteOptions.AllowAutoRedirect &&
                    redirections < _httpRemoteOptions.MaximumAutomaticRedirections)
             {
                 // 获取重定向地址
@@ -449,22 +452,22 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
                     break;
                 }
 
-                // 构建新的 HttpRequestMessage 实例（TODO：未来考虑克隆新的 HttpRequestBuilder 实例）
-                var newHttpRequestMessage = httpRequestBuilder
-                    // 处理相对地址
-                    .RewriteRequestUri(redirectUrl.IsAbsoluteUri
-                        ? redirectUrl
-                        : new Uri(Helpers.ParseBaseAddress(httpRequestMessage.RequestUri), redirectUrl))
-                    .Build(_httpRemoteOptions, _httpContentProcessorFactory, httpClient.BaseAddress);
+                // 构建新的 HttpRequestMessage 实例
+                var redirectHttpRequestMessage = httpRequestBuilder
+                    .ConfigureForRedirect(
+                        redirectUrl.IsAbsoluteUri
+                            ? redirectUrl
+                            : new Uri(Helpers.ParseBaseAddress(httpRequestMessage.RequestUri), redirectUrl),
+                        redirectMethod).Build(_httpRemoteOptions, _httpContentProcessorFactory, httpClient.BaseAddress);
 
                 // 释放前一个 HttpResponseMessage 实例
                 httpResponseMessage.Dispose();
 
                 // 重新调用发送 HTTP 请求委托
                 httpResponseMessage = sendAsyncMethod is not null
-                    ? await sendAsyncMethod(httpClient, newHttpRequestMessage, completionOption,
+                    ? await sendAsyncMethod(httpClient, redirectHttpRequestMessage, completionOption,
                         timeoutCancellationTokenSource.Token)
-                    : sendMethod!(httpClient, newHttpRequestMessage, completionOption,
+                    : sendMethod!(httpClient, redirectHttpRequestMessage, completionOption,
                         timeoutCancellationTokenSource.Token);
 
                 // 递增重定向次数

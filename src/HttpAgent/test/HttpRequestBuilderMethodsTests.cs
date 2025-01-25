@@ -1639,24 +1639,50 @@ public class HttpRequestBuilderMethodsTests
     }
 
     [Fact]
-    public void RewriteRequestUri_ReturnOK()
+    public void ConfigureForRedirect_Invalid_Parameters()
     {
         var httpRequestBuilder =
             new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost")).WithQueryParameter("id", 1)
                 .RemoveQueryParameters("name");
-        httpRequestBuilder.RewriteRequestUri(null);
-        Assert.Null(httpRequestBuilder.RequestUri);
-        Assert.NotNull(httpRequestBuilder.QueryParameters);
-        Assert.Empty(httpRequestBuilder.QueryParameters);
-        Assert.NotNull(httpRequestBuilder.QueryParametersToRemove);
-        Assert.Empty(httpRequestBuilder.QueryParametersToRemove);
+        Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.ConfigureForRedirect(null, null!));
+    }
 
-        httpRequestBuilder.RewriteRequestUri(new Uri("https://furion.net/"));
-        Assert.NotNull(httpRequestBuilder.RequestUri);
-        Assert.Equal("https://furion.net/", httpRequestBuilder.RequestUri.ToString());
+    [Fact]
+    public void ConfigureForRedirect_ReturnOK()
+    {
+        var httpRequestBuilder =
+            new HttpRequestBuilder(HttpMethod.Post, new Uri("http://localhost")).WithQueryParameter("id", 1)
+                .RemoveQueryParameters("name").SetJsonContent("{}");
+        httpRequestBuilder.ConfigureForRedirect(null, HttpMethod.Get);
+
+        Assert.Null(httpRequestBuilder.RequestUri);
+        Assert.Equal(HttpMethod.Get, httpRequestBuilder.Method);
         Assert.NotNull(httpRequestBuilder.QueryParameters);
         Assert.Empty(httpRequestBuilder.QueryParameters);
         Assert.NotNull(httpRequestBuilder.QueryParametersToRemove);
         Assert.Empty(httpRequestBuilder.QueryParametersToRemove);
+        Assert.Null(httpRequestBuilder.RawContent);
+        Assert.Null(httpRequestBuilder.MultipartFormDataBuilder);
+
+        var httpRequestBuilder2 =
+            new HttpRequestBuilder(HttpMethod.Post, new Uri("http://localhost")).WithQueryParameter("id", 1)
+                .RemoveQueryParameters("name").SetMultipartContent(_ => { });
+        httpRequestBuilder2.ConfigureForRedirect(new Uri("https://furion.net/"), HttpMethod.Head);
+
+        Assert.NotNull(httpRequestBuilder2.RequestUri);
+        Assert.Equal("https://furion.net/", httpRequestBuilder2.RequestUri.ToString());
+        Assert.Null(httpRequestBuilder2.RawContent);
+        Assert.Null(httpRequestBuilder2.MultipartFormDataBuilder);
+
+        var httpRequestBuilder3 =
+            new HttpRequestBuilder(HttpMethod.Post, new Uri("http://localhost")).WithQueryParameter("id", 1)
+                .RemoveQueryParameters("name").SetMultipartContent(_ => { });
+        Assert.NotNull(httpRequestBuilder3.MultipartFormDataBuilder);
+
+        var httpRequestBuilder4 =
+            new HttpRequestBuilder(HttpMethod.Post, new Uri("http://localhost")).WithQueryParameter("id", 1)
+                .RemoveQueryParameters("name").SetJsonContent("{}");
+        httpRequestBuilder4.ConfigureForRedirect(new Uri("https://furion.net/"), HttpMethod.Post);
+        Assert.NotNull(httpRequestBuilder4.RawContent);
     }
 }

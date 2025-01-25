@@ -2012,12 +2012,12 @@
                 添加 <see cref="T:HttpAgent.StringContentForFormUrlEncodedContentProcessor" /> 处理器
             </summary>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.RewriteRequestUri(System.Uri)">
+        <member name="M:HttpAgent.HttpRequestBuilder.ConfigureForRedirect(System.Uri,System.Net.Http.HttpMethod)">
             <summary>
-                重写请求地址
+                配置重定向信息
             </summary>
-            <remarks>用于处理重定向操作。</remarks>
-            <param name="newRequestUri">新的请求地址</param>
+            <param name="redirectUri">重定向地址</param>
+            <param name="redirectMethod">重定向方法</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -5963,12 +5963,18 @@
                 <see cref="T:System.Boolean" />
             </returns>
         </member>
-        <member name="M:HttpAgent.Helpers.IsRedirectStatusCode(System.Net.HttpStatusCode)">
+        <member name="M:HttpAgent.Helpers.DetermineRedirectMethod(System.Net.HttpStatusCode,System.Net.Http.HttpMethod,System.Net.Http.HttpMethod@)">
             <summary>
-                检查 HTTP 状态码是否是重定向状态码
+                检查 HTTP 状态码是否是重定向状态码并返回重定向时应使用的 HTTP 请求方法
             </summary>
             <param name="statusCode">
                 <see cref="T:System.Net.HttpStatusCode" />
+            </param>
+            <param name="originalHttpMethod">
+                <see cref="T:System.Net.Http.HttpMethod" />
+            </param>
+            <param name="httpMethod">
+                <see cref="T:System.Net.Http.HttpMethod" />
             </param>
             <returns>
                 <see cref="T:System.Boolean" />
@@ -13080,6 +13086,9 @@
         </member>
         <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_ascii_60FF03FEFFFF87FEFFFF47">
             <summary>Supports searching for characters in or not in "-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~".</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_indexOfString_EBC667BDABA1472FA863B5B39B31251EF2B4C95DD643BDECF694CB1CE7BDC178">
+            <summary>Supports searching for the string "[[".</summary>
         </member>
         <member name="T:Microsoft.Extensions.DependencyInjection.HttpRemoteServiceCollectionExtensions">
             <summary>
