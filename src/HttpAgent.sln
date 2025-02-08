@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpAgent.Samples", "..\sam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpAgent.AspNetCore.Samples", "..\samples\HttpAgent.AspNetCore.Samples\HttpAgent.AspNetCore.Samples.csproj", "{8B1B6769-DB0B-4ECB-82B9-9A222197B1AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpAgent.Console.Samples", "..\samples\HttpAgent.Console.Samples\HttpAgent.Console.Samples.csproj", "{04F0D2C6-414D-FC1E-1792-C9DCFDAFC43A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{8B1B6769-DB0B-4ECB-82B9-9A222197B1AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B1B6769-DB0B-4ECB-82B9-9A222197B1AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B1B6769-DB0B-4ECB-82B9-9A222197B1AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04F0D2C6-414D-FC1E-1792-C9DCFDAFC43A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04F0D2C6-414D-FC1E-1792-C9DCFDAFC43A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04F0D2C6-414D-FC1E-1792-C9DCFDAFC43A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04F0D2C6-414D-FC1E-1792-C9DCFDAFC43A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
