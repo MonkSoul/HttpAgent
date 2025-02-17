@@ -5565,6 +5565,34 @@
                 <see cref="T:System.String" />
             </returns>
         </member>
+        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.CloneAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+                克隆 <see cref="T:System.Net.Http.HttpRequestMessage" />
+            </summary>
+            <param name="httpRequestMessage">
+                <see cref="T:System.Net.Http.HttpRequestMessage" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.Net.Http.HttpRequestMessage" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.Clone(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+                克隆 <see cref="T:System.Net.Http.HttpRequestMessage" />
+            </summary>
+            <param name="httpRequestMessage">
+                <see cref="T:System.Net.Http.HttpRequestMessage" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
+            <returns>
+                <see cref="T:System.Net.Http.HttpRequestMessage" />
+            </returns>
+        </member>
         <member name="T:HttpAgent.HttpContentConverterFactory">
             <inheritdoc cref="T:HttpAgent.IHttpContentConverterFactory" />
         </member>

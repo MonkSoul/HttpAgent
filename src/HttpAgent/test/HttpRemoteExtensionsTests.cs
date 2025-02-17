@@ -167,4 +167,52 @@ public class HttpRemoteExtensionsTests
         Assert.Equal("Response Body (StringContent): \r\n\tHello World",
             await stringContent2.ProfilerAsync("Response Body"));
     }
+
+    [Fact]
+    public async Task CloneAsync_Invalid_Parameters() =>
+        await Assert.ThrowsAsync<ArgumentNullException>(() => HttpRemoteExtensions.CloneAsync(null!));
+
+    [Fact]
+    public async Task CloneAsync_ReturnOK()
+    {
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "http://localhost");
+        httpRequestMessage.Headers.TryAddWithoutValidation("User-Agent", "furion");
+        var stringContent = new StringContent("Hello World", Encoding.UTF8, "application/json");
+        httpRequestMessage.Content = stringContent;
+
+        var clonedHttpRequestMessage = await httpRequestMessage.CloneAsync();
+        Assert.Equal("furion", clonedHttpRequestMessage.Headers.GetValues("User-Agent").First());
+
+        var streamContent = clonedHttpRequestMessage.Content as StreamContent;
+        Assert.NotNull(streamContent);
+        var str = await streamContent.ReadAsStringAsync();
+        Assert.Equal("Hello World", str);
+
+        Assert.Equal("application/json", clonedHttpRequestMessage.Content?.Headers.ContentType?.MediaType);
+    }
+
+    [Fact]
+    public void Clone_Invalid_Parameters() =>
+        Assert.Throws<ArgumentNullException>(() => HttpRemoteExtensions.Clone(null!));
+
+    [Fact]
+    public void Clone_ReturnOK()
+    {
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "http://localhost");
+        httpRequestMessage.Headers.TryAddWithoutValidation("User-Agent", "furion");
+        var stringContent = new StringContent("Hello World", Encoding.UTF8, "application/json");
+        httpRequestMessage.Content = stringContent;
+
+        var clonedHttpRequestMessage = httpRequestMessage.Clone();
+        Assert.Equal("furion", clonedHttpRequestMessage.Headers.GetValues("User-Agent").First());
+
+        var streamContent = clonedHttpRequestMessage.Content as StreamContent;
+        Assert.NotNull(streamContent);
+#pragma warning disable xUnit1031
+        var str = streamContent.ReadAsStringAsync().GetAwaiter().GetResult();
+#pragma warning restore xUnit1031
+        Assert.Equal("Hello World", str);
+
+        Assert.Equal("application/json", clonedHttpRequestMessage.Content?.Headers.ContentType?.MediaType);
+    }
 }
