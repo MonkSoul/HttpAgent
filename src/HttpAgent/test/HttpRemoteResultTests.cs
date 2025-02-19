@@ -22,6 +22,8 @@ public class HttpRemoteResultTests
         Assert.NotNull(httpRemoteResult.ContentEncoding);
         Assert.Empty(httpRemoteResult.ContentEncoding);
         Assert.Equal(0, httpRemoteResult.ContentLength);
+        Assert.NotNull(httpRemoteResult.Server);
+        Assert.Empty(httpRemoteResult.Server);
         Assert.Null(httpRemoteResult.RawSetCookies);
         Assert.Null(httpRemoteResult.SetCookies);
         Assert.Null(httpRemoteResult.Result);
@@ -49,6 +51,7 @@ public class HttpRemoteResultTests
     {
         var httpResponseMessage = new HttpResponseMessage();
         httpResponseMessage.Headers.TryAddWithoutValidation("test", "furion");
+        httpResponseMessage.Headers.TryAddWithoutValidation("Server", "Apache/2.4.1 (Unix)");
         var stringContent = new StringContent("furion", Encoding.UTF8,
             new MediaTypeHeaderValue("application/json") { CharSet = "utf-8" });
         httpResponseMessage.Content = stringContent;
@@ -57,6 +60,9 @@ public class HttpRemoteResultTests
         httpRemoteResult.ParseHeaders();
 
         Assert.Equal("furion", httpRemoteResult.Headers.GetValues("test").FirstOrDefault());
+        Assert.NotNull(httpRemoteResult.Headers.Server);
+        Assert.NotEmpty(httpRemoteResult.Headers.Server);
+        Assert.Equal("Apache/2.4.1 (Unix)", httpRemoteResult.Headers.Server.ToString());
         Assert.Equal(6, httpRemoteResult.ContentHeaders.ContentLength);
         Assert.Equal("application/json", httpRemoteResult.ContentHeaders.ContentType?.MediaType);
         Assert.Equal("utf-8", httpRemoteResult.ContentHeaders.ContentType?.CharSet);

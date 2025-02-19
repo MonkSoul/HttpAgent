@@ -51,6 +51,11 @@ public sealed class HttpRemoteResult<TResult>
     public long? ContentLength { get; private set; }
 
     /// <summary>
+    ///     响应 Server 标头
+    /// </summary>
+    public HttpHeaderValueCollection<ProductInfoHeaderValue> Server { get; private set; } = null!;
+
+    /// <summary>
     ///     原始响应标头 <c>Set-Cookie</c> 集合
     /// </summary>
     public List<string>? RawSetCookies { get; private set; }
@@ -125,6 +130,7 @@ public sealed class HttpRemoteResult<TResult>
     {
         Headers = ResponseMessage.Headers;
         ContentHeaders = ResponseMessage.Content.Headers;
+        Server = ResponseMessage.Headers.Server;
     }
 
     /// <summary>
