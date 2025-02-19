@@ -25,7 +25,9 @@ public class DefaultHttpRemoteBuilderTests
         var services = new ServiceCollection();
         var builder = new DefaultHttpRemoteBuilder(services);
 
-        Assert.Throws<ArgumentNullException>(() => builder.ConfigureOptions(null!));
+        Assert.Throws<ArgumentNullException>(() => builder.ConfigureOptions((Action<HttpRemoteOptions>)null!));
+        Assert.Throws<ArgumentNullException>(() =>
+            builder.ConfigureOptions((Action<HttpRemoteOptions, IServiceProvider>)null!));
     }
 
     [Fact]
@@ -35,5 +37,10 @@ public class DefaultHttpRemoteBuilderTests
         var builder = new DefaultHttpRemoteBuilder(services);
 
         builder.ConfigureOptions(options => options.DefaultContentType = "application/json");
+        builder.ConfigureOptions((options, serviceProvider) =>
+        {
+            Assert.NotNull(serviceProvider);
+            options.DefaultContentType = "application/json";
+        });
     }
 }

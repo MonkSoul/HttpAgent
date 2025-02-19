@@ -51,7 +51,7 @@ public sealed class HttpRemoteResult<TResult>
     public long? ContentLength { get; private set; }
 
     /// <summary>
-    ///     响应 Server 标头
+    ///     响应 <c>Server</c> 标头
     /// </summary>
     public HttpHeaderValueCollection<ProductInfoHeaderValue> Server { get; private set; } = null!;
 

@@ -400,7 +400,8 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
 
         // 构建 HttpRequestMessage 实例
         var httpRequestMessage =
-            httpRequestBuilder.Build(_httpRemoteOptions, _httpContentProcessorFactory, httpClient.BaseAddress);
+            httpRequestBuilder.Build(_httpRemoteOptions, _httpContentProcessorFactory,
+                httpClient.BaseAddress ?? _httpRemoteOptions.FallbackBaseAddress);
 
         // 处理发送 HTTP 请求之前
         HandlePreSendRequest(httpRequestBuilder, requestEventHandler, httpRequestMessage);
@@ -458,7 +459,8 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
                         redirectUrl.IsAbsoluteUri
                             ? redirectUrl
                             : new Uri(Helpers.ParseBaseAddress(httpRequestMessage.RequestUri), redirectUrl),
-                        redirectMethod).Build(_httpRemoteOptions, _httpContentProcessorFactory, httpClient.BaseAddress);
+                        redirectMethod).Build(_httpRemoteOptions, _httpContentProcessorFactory,
+                        httpClient.BaseAddress ?? _httpRemoteOptions.FallbackBaseAddress);
 
                 // 释放前一个 HttpResponseMessage 实例
                 httpResponseMessage.Dispose();

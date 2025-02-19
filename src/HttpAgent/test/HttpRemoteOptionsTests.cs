@@ -16,6 +16,7 @@ public class HttpRemoteOptionsTests
         Assert.Equal(LogLevel.Warning, httpRemoteOptions.ProfilerLogLevel);
         Assert.True(httpRemoteOptions.AllowAutoRedirect);
         Assert.Equal(50, httpRemoteOptions.MaximumAutomaticRedirections);
+        Assert.Null(httpRemoteOptions.FallbackBaseAddress);
         Assert.False(httpRemoteOptions.IsLoggingRegistered);
         Assert.Null(httpRemoteOptions.Configuration);
 

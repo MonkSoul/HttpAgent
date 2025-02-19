@@ -49,6 +49,12 @@ public sealed class HttpRemoteOptions
     public int MaximumAutomaticRedirections { get; set; } = 50;
 
     /// <summary>
+    ///     回退请求基地址
+    /// </summary>
+    /// <remarks>当未配置 <see cref="HttpClient" /> 的 <see cref="HttpClient.BaseAddress" /> 且请求地址为相对地址时使用。</remarks>
+    public Uri? FallbackBaseAddress { get; set; }
+
+    /// <summary>
     ///     JSON 序列化配置
     /// </summary>
     public JsonSerializerOptions JsonSerializerOptions { get; set; } = new(JsonSerializerOptionsDefault);
