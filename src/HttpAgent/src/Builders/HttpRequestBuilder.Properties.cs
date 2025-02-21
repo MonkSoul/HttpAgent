@@ -222,6 +222,11 @@ public sealed partial class HttpRequestBuilder
     internal bool ProfilerEnabled { get; private set; }
 
     /// <summary>
+    ///     请求分析工具委托
+    /// </summary>
+    internal Action<HttpRemoteAnalyzer>? ProfilerPredicate { get; private set; }
+
+    /// <summary>
     ///     是否启用性能优化
     /// </summary>
     /// <remarks>默认值为：<c>false</c>。</remarks>

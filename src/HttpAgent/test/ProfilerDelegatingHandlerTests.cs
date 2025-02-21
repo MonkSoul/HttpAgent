@@ -80,6 +80,24 @@ public class ProfilerDelegatingHandlerTests
     }
 
     [Fact]
+    public void Log_WithHttpRemoteProfiler_ReturnOK()
+    {
+        var services = new ServiceCollection();
+        services.AddLogging();
+        using var provider = services.BuildServiceProvider();
+        var logger = provider.GetRequiredService<ILogger<Logging>>();
+        var remoteOptions = new HttpRemoteOptions { ProfilerLogLevel = LogLevel.Warning, IsLoggingRegistered = false };
+
+        var httpRemoteProfiler = new HttpRemoteAnalyzer();
+        ProfilerDelegatingHandler.Log(logger, remoteOptions, null, httpRemoteProfiler);
+        ProfilerDelegatingHandler.Log(logger, remoteOptions, string.Empty, httpRemoteProfiler);
+        ProfilerDelegatingHandler.Log(logger, remoteOptions, " ", httpRemoteProfiler);
+        ProfilerDelegatingHandler.Log(logger, remoteOptions, "HttpAgent.Tests", httpRemoteProfiler);
+        ProfilerDelegatingHandler.Log(logger, remoteOptions, "__", httpRemoteProfiler);
+        Assert.Equal("HttpAgent.Tests__", httpRemoteProfiler.Data);
+    }
+
+    [Fact]
     public void IsEnabled_ReturnOK()
     {
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost"));

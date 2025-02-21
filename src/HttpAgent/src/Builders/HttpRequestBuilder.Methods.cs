@@ -1336,6 +1336,33 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
+    ///     设置是否启用请求分析工具
+    /// </summary>
+    /// <param name="predicate">自定义处理委托</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder Profiler(Action<HttpRemoteAnalyzer> predicate) => Profiler(predicate, true);
+
+    /// <summary>
+    ///     设置是否启用请求分析工具
+    /// </summary>
+    /// <param name="predicate">自定义处理委托</param>
+    /// <param name="enabled">是否启用</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder Profiler(Action<HttpRemoteAnalyzer> predicate, bool enabled)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(predicate);
+
+        ProfilerPredicate = enabled ? predicate : null;
+
+        return Profiler(enabled);
+    }
+
+    /// <summary>
     ///     设置客户端所偏好的自然语言和区域设置
     /// </summary>
     /// <remarks>设置此配置后，将在单次请求标头中添加 <c>Accept-Language</c> 值。</remarks>

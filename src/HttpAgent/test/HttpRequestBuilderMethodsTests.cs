@@ -1499,6 +1499,29 @@ public class HttpRequestBuilderMethodsTests
     }
 
     [Fact]
+    public void Profiler_WithAction_Invalid_Parameters()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.Profiler(null!));
+    }
+
+    [Fact]
+    public void Profiler_WithAction_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+
+        httpRequestBuilder.Profiler(analyzer => { });
+        Assert.True(httpRequestBuilder.ProfilerEnabled);
+        Assert.False(httpRequestBuilder.__Disabled_Profiler__);
+        Assert.NotNull(httpRequestBuilder.ProfilerPredicate);
+
+        httpRequestBuilder.Profiler(analyzer => { }, false);
+        Assert.False(httpRequestBuilder.ProfilerEnabled);
+        Assert.True(httpRequestBuilder.__Disabled_Profiler__);
+        Assert.Null(httpRequestBuilder.ProfilerPredicate);
+    }
+
+    [Fact]
     public void AcceptLanguage_ReturnOK()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));

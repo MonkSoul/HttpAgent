@@ -406,11 +406,17 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         // 处理发送 HTTP 请求之前
         HandlePreSendRequest(httpRequestBuilder, requestEventHandler, httpRequestMessage);
 
+        // 初始化 HttpRemoteAnalyzer 实例
+        HttpRemoteAnalyzer? httpRemoteAnalyzer = null;
+
         // 检查是否启用请求分析工具
         if (httpRequestBuilder.ProfilerEnabled)
         {
+            // 初始化 HttpRemoteAnalyzer 实例
+            httpRemoteAnalyzer = httpRequestBuilder.ProfilerPredicate is not null ? new HttpRemoteAnalyzer() : null;
+
             await ProfilerDelegatingHandler.LogRequestAsync(_logger, _httpRemoteOptions, httpRequestMessage,
-                cancellationToken);
+                httpRemoteAnalyzer, cancellationToken);
         }
 
         // 创建关联的超时 Token 标识
@@ -423,6 +429,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         }
 
         HttpResponseMessage? httpResponseMessage = null;
+        long requestDuration = 0;
 
         // 初始化 Stopwatch 实例并开启计时操作
         var stopwatch = Stopwatch.StartNew();
@@ -477,7 +484,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
             }
 
             // 获取请求耗时
-            var requestDuration = stopwatch.ElapsedMilliseconds;
+            requestDuration = stopwatch.ElapsedMilliseconds;
 
             // 调用状态码处理程序
             if (sendAsyncMethod is not null)
@@ -489,13 +496,6 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
             {
                 // ReSharper disable once MethodHasAsyncOverload
                 InvokeStatusCodeHandlers(httpRequestBuilder, httpResponseMessage, timeoutCancellationTokenSource.Token);
-            }
-
-            // 检查是否启用请求分析工具
-            if (httpRequestBuilder.ProfilerEnabled)
-            {
-                await ProfilerDelegatingHandler.LogResponseAsync(_logger, _httpRemoteOptions, httpResponseMessage,
-                    requestDuration, cancellationToken);
             }
 
             // 检查 HTTP 响应内容长度是否在设定的最大缓冲区大小限制内
@@ -528,6 +528,16 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
             if (!httpRequestBuilder.HttpClientPoolingEnabled)
             {
                 httpRequestBuilder.ReleaseResources();
+            }
+
+            // 检查是否启用请求分析工具
+            if (httpResponseMessage is not null && httpRequestBuilder.ProfilerEnabled)
+            {
+                await ProfilerDelegatingHandler.LogResponseAsync(_logger, _httpRemoteOptions, httpResponseMessage,
+                    requestDuration, httpRemoteAnalyzer, cancellationToken);
+
+                // 调用请求分析工具委托
+                httpRequestBuilder.ProfilerPredicate?.TryInvoke(httpRemoteAnalyzer!);
             }
         }
     }
