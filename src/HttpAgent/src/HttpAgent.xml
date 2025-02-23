@@ -5641,6 +5641,32 @@
                 <see cref="T:System.Net.Http.HttpRequestMessage" />
             </returns>
         </member>
+        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.TryGetSetCookies(System.Net.Http.HttpResponseMessage,System.Collections.Generic.IList{Microsoft.Net.Http.Headers.SetCookieHeaderValue}@,System.Collections.Generic.List{System.String}@)">
+            <summary>
+                尝试获取响应标头 <c>Set-Cookie</c> 集合
+            </summary>
+            <param name="httpResponseMessage">
+                <see cref="T:System.Net.Http.HttpResponseMessage" />
+            </param>
+            <param name="setCookies">响应标头 <c>Set-Cookie</c> 集合</param>
+            <param name="rawSetCookies">原始响应标头 <c>Set-Cookie</c> 集合</param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.TryGetSetCookies(System.Net.Http.Headers.HttpResponseHeaders,System.Collections.Generic.IList{Microsoft.Net.Http.Headers.SetCookieHeaderValue}@,System.Collections.Generic.List{System.String}@)">
+            <summary>
+                尝试获取响应标头 <c>Set-Cookie</c> 集合
+            </summary>
+            <param name="responseHeaders">
+                <see cref="T:System.Net.Http.Headers.HttpResponseHeaders" />
+            </param>
+            <param name="setCookies">响应标头 <c>Set-Cookie</c> 集合</param>
+            <param name="rawSetCookies">原始响应标头 <c>Set-Cookie</c> 集合</param>
+            <returns>
+                <see cref="T:System.Boolean" />
+            </returns>
+        </member>
         <member name="T:HttpAgent.HttpContentConverterFactory">
             <inheritdoc cref="T:HttpAgent.IHttpContentConverterFactory" />
         </member>

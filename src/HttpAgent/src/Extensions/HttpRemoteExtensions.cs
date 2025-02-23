@@ -2,6 +2,9 @@
 // 
 // 此源代码遵循位于源代码树根目录中的 LICENSE 文件的许可证。
 
+using Microsoft.Net.Http.Headers;
+using StringWithQualityHeaderValue = System.Net.Http.Headers.StringWithQualityHeaderValue;
+
 namespace HttpAgent.Extensions;
 
 /// <summary>
@@ -22,16 +25,17 @@ public static class HttpRemoteExtensions
     public static IHttpClientBuilder AddProfilerDelegatingHandler(this IHttpClientBuilder builder,
         Func<bool>? disableConfigure = null)
     {
-        // 获取 IServiceCollection 实例
-        var services = builder.Services;
+        // 检查是否禁用请求分析工具
+        if (disableConfigure?.Invoke() == true)
+        {
+            return builder;
+        }
 
         // 注册请求分析工具服务
-        services.TryAddTransient<ProfilerDelegatingHandler>();
+        builder.Services.TryAddTransient<ProfilerDelegatingHandler>();
 
-        // 检查自定义禁用配置委托
-        return disableConfigure?.Invoke() == true
-            ? builder
-            : builder.AddHttpMessageHandler<ProfilerDelegatingHandler>();
+        // 添加请求分析工具处理委托
+        return builder.AddHttpMessageHandler<ProfilerDelegatingHandler>();
     }
 
     /// <summary>
@@ -247,4 +251,58 @@ public static class HttpRemoteExtensions
     public static HttpRequestMessage Clone(this HttpRequestMessage httpRequestMessage,
         CancellationToken cancellationToken = default) =>
         httpRequestMessage.CloneAsync(cancellationToken).GetAwaiter().GetResult();
+
+    /// <summary>
+    ///     尝试获取响应标头 <c>Set-Cookie</c> 集合
+    /// </summary>
+    /// <param name="httpResponseMessage">
+    ///     <see cref="HttpResponseMessage" />
+    /// </param>
+    /// <param name="setCookies">响应标头 <c>Set-Cookie</c> 集合</param>
+    /// <param name="rawSetCookies">原始响应标头 <c>Set-Cookie</c> 集合</param>
+    /// <returns>
+    ///     <see cref="bool" />
+    /// </returns>
+    public static bool TryGetSetCookies(this HttpResponseMessage httpResponseMessage,
+        [NotNullWhen(true)] out IList<SetCookieHeaderValue>? setCookies,
+        [NotNullWhen(true)] out List<string>? rawSetCookies)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(httpResponseMessage);
+
+        return httpResponseMessage.Headers.TryGetSetCookies(out setCookies, out rawSetCookies);
+    }
+
+    /// <summary>
+    ///     尝试获取响应标头 <c>Set-Cookie</c> 集合
+    /// </summary>
+    /// <param name="responseHeaders">
+    ///     <see cref="HttpResponseHeaders" />
+    /// </param>
+    /// <param name="setCookies">响应标头 <c>Set-Cookie</c> 集合</param>
+    /// <param name="rawSetCookies">原始响应标头 <c>Set-Cookie</c> 集合</param>
+    /// <returns>
+    ///     <see cref="bool" />
+    /// </returns>
+    public static bool TryGetSetCookies(this HttpResponseHeaders responseHeaders,
+        [NotNullWhen(true)] out IList<SetCookieHeaderValue>? setCookies,
+        [NotNullWhen(true)] out List<string>? rawSetCookies)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(responseHeaders);
+
+        // 检查响应标头是否包含 Set-Cookie 设置
+        if (!responseHeaders.TryGetValues(HeaderNames.SetCookie, out var setCookieValues))
+        {
+            setCookies = null;
+            rawSetCookies = null;
+
+            return false;
+        }
+
+        rawSetCookies = setCookieValues.ToList();
+        setCookies = SetCookieHeaderValue.ParseList(rawSetCookies);
+
+        return true;
+    }
 }

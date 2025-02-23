@@ -2,6 +2,8 @@
 // 
 // 此源代码遵循位于源代码树根目录中的 LICENSE 文件的许可证。
 
+using SameSiteMode = Microsoft.Net.Http.Headers.SameSiteMode;
+
 namespace HttpAgent.Tests;
 
 public class HttpRemoteExtensionsTests
@@ -214,5 +216,79 @@ public class HttpRemoteExtensionsTests
         Assert.Equal("Hello World", str);
 
         Assert.Equal("application/json", clonedHttpRequestMessage.Content?.Headers.ContentType?.MediaType);
+    }
+
+    [Fact]
+    public void TryGetSetCookies_Invalid_Parameters()
+    {
+        Assert.Throws<ArgumentNullException>(() =>
+            // ReSharper disable once InvokeAsExtensionMethod
+            HttpRemoteExtensions.TryGetSetCookies((HttpResponseMessage)null!, out _, out _));
+        Assert.Throws<ArgumentNullException>(() =>
+            // ReSharper disable once InvokeAsExtensionMethod
+            HttpRemoteExtensions.TryGetSetCookies((HttpResponseHeaders)null!, out _, out _));
+    }
+
+    [Fact]
+    public void TryGetSetCookies_ReturnOK()
+    {
+        var httpResponseMessage = new HttpResponseMessage();
+        httpResponseMessage.Headers.TryGetSetCookies(out var setCookies, out var rawSetCookies);
+
+        Assert.Null(rawSetCookies);
+        Assert.Null(setCookies);
+
+        var httpResponseMessage2 = new HttpResponseMessage();
+        const string setCookieHeader =
+            "BDUSS_BFESS=hBSH5yRDI1a0Fzb2lMWllDYk0tRkZ0UEc2OW1URjBvLUtVckNMeFUyaUNxdWxtRVFBQUFBJCQAAAAAAAAAAAEAAADeGZbRsNnHqc34xcwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIIdwmaCHcJmUm; Path=/; Domain=baidu.com; Expires=Fri, 01 Sep 2034 02:22:19 GMT; Max-Age=315360000; HttpOnly; Secure; SameSite=None";
+
+        httpResponseMessage2.Headers.Add("Set-Cookie", setCookieHeader);
+
+        httpResponseMessage2.Headers.TryGetSetCookies(out var setCookies2, out var rawSetCookies2);
+
+        Assert.NotNull(rawSetCookies2);
+        Assert.NotNull(setCookies2);
+        Assert.Equal(setCookieHeader, rawSetCookies2.First());
+        Assert.Single(setCookies2);
+
+        var cookies = setCookies2.First();
+        Assert.Equal("baidu.com", cookies.Domain);
+        Assert.Equal("/", cookies.Path);
+        Assert.Equal("2034/9/1 2:22:19 +00:00", cookies.Expires.ToString());
+        Assert.Equal(TimeSpan.FromSeconds(315360000), cookies.MaxAge);
+        Assert.True(cookies.HttpOnly);
+        Assert.True(cookies.Secure);
+        Assert.Equal(SameSiteMode.None, cookies.SameSite);
+        Assert.Equal("BDUSS_BFESS", cookies.Name);
+        Assert.Equal(
+            "hBSH5yRDI1a0Fzb2lMWllDYk0tRkZ0UEc2OW1URjBvLUtVckNMeFUyaUNxdWxtRVFBQUFBJCQAAAAAAAAAAAEAAADeGZbRsNnHqc34xcwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIIdwmaCHcJmUm",
+            cookies.Value);
+
+        // ===============
+
+        httpResponseMessage.TryGetSetCookies(out var setCookies3, out var rawSetCookies3);
+
+        Assert.Null(setCookies3);
+        Assert.Null(rawSetCookies3);
+
+        httpResponseMessage2.TryGetSetCookies(out var setCookies4, out var rawSetCookies4);
+
+        Assert.NotNull(rawSetCookies4);
+        Assert.NotNull(setCookies4);
+        Assert.Equal(setCookieHeader, rawSetCookies4.First());
+        Assert.Single(setCookies4);
+
+        var cookies2 = setCookies4.First();
+        Assert.Equal("baidu.com", cookies2.Domain);
+        Assert.Equal("/", cookies2.Path);
+        Assert.Equal("2034/9/1 2:22:19 +00:00", cookies2.Expires.ToString());
+        Assert.Equal(TimeSpan.FromSeconds(315360000), cookies2.MaxAge);
+        Assert.True(cookies2.HttpOnly);
+        Assert.True(cookies2.Secure);
+        Assert.Equal(SameSiteMode.None, cookies2.SameSite);
+        Assert.Equal("BDUSS_BFESS", cookies2.Name);
+        Assert.Equal(
+            "hBSH5yRDI1a0Fzb2lMWllDYk0tRkZ0UEc2OW1URjBvLUtVckNMeFUyaUNxdWxtRVFBQUFBJCQAAAAAAAAAAAEAAADeGZbRsNnHqc34xcwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIIdwmaCHcJmUm",
+            cookies2.Value);
     }
 }
