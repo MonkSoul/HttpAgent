@@ -122,7 +122,7 @@ public class ServerSentEventsManagerTests(ITestOutputHelper output)
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpServerSentEventsBuilder =
-            new HttpServerSentEventsBuilder(new Uri("https://furion.net")).SetOnMessage(async _ =>
+            new HttpServerSentEventsBuilder(new Uri("https://furion.net")).SetOnMessage(async (_, _) =>
             {
                 i += 1;
                 await Task.CompletedTask;
@@ -157,7 +157,7 @@ public class ServerSentEventsManagerTests(ITestOutputHelper output)
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         var httpServerSentEventsBuilder =
-            new HttpServerSentEventsBuilder(new Uri("https://furion.net")).SetOnMessage(async _ =>
+            new HttpServerSentEventsBuilder(new Uri("https://furion.net")).SetOnMessage(async (_, _) =>
             {
                 i += 1;
                 throw new Exception("Error");
@@ -243,7 +243,7 @@ public class ServerSentEventsManagerTests(ITestOutputHelper output)
         await serverSentEventsManager.HandleMessageReceivedAsync(serverSentEventsData);
 
         var i = 0;
-        httpServerSentEventsBuilder.SetOnMessage(async _ =>
+        httpServerSentEventsBuilder.SetOnMessage(async (_, _) =>
         {
             i++;
             await Task.CompletedTask;
@@ -296,7 +296,7 @@ public class ServerSentEventsManagerTests(ITestOutputHelper output)
         var i = 0;
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
         var httpServerSentEventsBuilder =
-            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async data =>
+            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async (data, _) =>
             {
                 i++;
                 await Task.CompletedTask;
@@ -344,7 +344,7 @@ public class ServerSentEventsManagerTests(ITestOutputHelper output)
         var i = 0;
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
         var httpServerSentEventsBuilder =
-            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async data =>
+            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async (data, _) =>
             {
                 i++;
                 await Task.CompletedTask;
@@ -505,7 +505,7 @@ public class ServerSentEventsManagerTests(ITestOutputHelper output)
         var i = 0;
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
         var httpServerSentEventsBuilder =
-            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async data =>
+            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async (data, _) =>
             {
                 i++;
                 await Task.CompletedTask;
@@ -553,7 +553,7 @@ public class ServerSentEventsManagerTests(ITestOutputHelper output)
         var i = 0;
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
         var httpServerSentEventsBuilder =
-            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async data =>
+            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async (data, _) =>
             {
                 i++;
                 await Task.CompletedTask;
@@ -714,7 +714,7 @@ public class ServerSentEventsManagerTests(ITestOutputHelper output)
         var i = 0;
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
         var httpServerSentEventsBuilder =
-            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async data =>
+            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async (data, _) =>
             {
                 i++;
                 await Task.CompletedTask;
@@ -766,7 +766,7 @@ public class ServerSentEventsManagerTests(ITestOutputHelper output)
         var i = 0;
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
         var httpServerSentEventsBuilder =
-            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async data =>
+            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async (data, _) =>
             {
                 i++;
                 await Task.CompletedTask;

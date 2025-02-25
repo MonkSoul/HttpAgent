@@ -1349,7 +1349,7 @@ public class HttpRemoteServiceExtensionsTests
         var i = 0;
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
         var httpServerSentEventsBuilder =
-            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async data =>
+            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async (data, _) =>
             {
                 i++;
                 await Task.CompletedTask;
@@ -1396,7 +1396,7 @@ public class HttpRemoteServiceExtensionsTests
         var i = 0;
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
         var httpServerSentEventsBuilder =
-            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async data =>
+            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async (data, _) =>
             {
                 i++;
                 await Task.CompletedTask;
@@ -1550,7 +1550,7 @@ public class HttpRemoteServiceExtensionsTests
         var i = 0;
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
         var httpServerSentEventsBuilder =
-            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async data =>
+            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async (data, _) =>
             {
                 i++;
                 await Task.CompletedTask;
@@ -1603,7 +1603,7 @@ public class HttpRemoteServiceExtensionsTests
         var i = 0;
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
         var httpServerSentEventsBuilder =
-            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async data =>
+            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async (data, _) =>
             {
                 i++;
                 await Task.CompletedTask;
@@ -1649,7 +1649,7 @@ public class HttpRemoteServiceExtensionsTests
         var i = 0;
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
         var httpServerSentEventsBuilder =
-            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async data =>
+            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async (data, _) =>
             {
                 i++;
                 await Task.CompletedTask;
@@ -1803,7 +1803,7 @@ public class HttpRemoteServiceExtensionsTests
         var i = 0;
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
         var httpServerSentEventsBuilder =
-            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async data =>
+            new HttpServerSentEventsBuilder(new Uri($"http://localhost:{port}/test")).SetOnMessage(async (data, _) =>
             {
                 i++;
                 await Task.CompletedTask;
@@ -1856,7 +1856,7 @@ public class HttpRemoteServiceExtensionsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         // ReSharper disable once MethodHasAsyncOverload
-        httpRemoteService.ServerSentEvents($"http://localhost:{port}/test", async data =>
+        httpRemoteService.ServerSentEvents($"http://localhost:{port}/test", async (data, _) =>
         {
             i++;
             await Task.CompletedTask;
@@ -1907,7 +1907,7 @@ public class HttpRemoteServiceExtensionsTests
         try
         {
             // ReSharper disable once MethodHasAsyncOverload
-            httpRemoteService.ServerSentEvents($"http://localhost:{port}/test", async data =>
+            httpRemoteService.ServerSentEvents($"http://localhost:{port}/test", async (data, _) =>
             {
                 i++;
                 await Task.CompletedTask;
@@ -1957,7 +1957,7 @@ public class HttpRemoteServiceExtensionsTests
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
         // ReSharper disable once MethodHasAsyncOverload
-        httpRemoteService.ServerSentEvents($"http://localhost:{port}/test", async data =>
+        httpRemoteService.ServerSentEvents($"http://localhost:{port}/test", async (data, _) =>
         {
             i++;
             await Task.CompletedTask;
@@ -2007,7 +2007,7 @@ public class HttpRemoteServiceExtensionsTests
         var i = 0;
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
-        await httpRemoteService.ServerSentEventsAsync($"http://localhost:{port}/test", async data =>
+        await httpRemoteService.ServerSentEventsAsync($"http://localhost:{port}/test", async (data, _) =>
         {
             i++;
             await Task.CompletedTask;
@@ -2056,7 +2056,7 @@ public class HttpRemoteServiceExtensionsTests
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            await httpRemoteService.ServerSentEventsAsync($"http://localhost:{port}/test", async data =>
+            await httpRemoteService.ServerSentEventsAsync($"http://localhost:{port}/test", async (data, _) =>
             {
                 i++;
                 await Task.CompletedTask;
@@ -2101,7 +2101,7 @@ public class HttpRemoteServiceExtensionsTests
         var i = 0;
         var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
 
-        await httpRemoteService.ServerSentEventsAsync($"http://localhost:{port}/test", async data =>
+        await httpRemoteService.ServerSentEventsAsync($"http://localhost:{port}/test", async (data, _) =>
         {
             i++;
             await Task.CompletedTask;

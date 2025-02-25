@@ -97,7 +97,7 @@ public class HttpServerSentEventsBuilderTests
     public void SetOnMessage_ReturnOK()
     {
         var builder = new HttpServerSentEventsBuilder(new Uri("http://localhost"));
-        builder.SetOnMessage(async _ => await Task.CompletedTask);
+        builder.SetOnMessage(async (_, _) => await Task.CompletedTask);
         Assert.NotNull(builder.OnMessage);
     }
 

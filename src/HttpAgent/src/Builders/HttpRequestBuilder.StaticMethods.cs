@@ -447,7 +447,8 @@ public sealed partial class HttpRequestBuilder
     ///     <see cref="HttpServerSentEventsBuilder" />
     /// </returns>
     public static HttpServerSentEventsBuilder ServerSentEvents(HttpMethod httpMethod, Uri? requestUri,
-        Func<ServerSentEventsData, Task> onMessage, Action<HttpServerSentEventsBuilder>? configure = null)
+        Func<ServerSentEventsData, CancellationToken, Task> onMessage,
+        Action<HttpServerSentEventsBuilder>? configure = null)
     {
         // 初始化 HttpServerSentEventsBuilder 实例
         var httpServerSentEventsBuilder =
@@ -469,7 +470,8 @@ public sealed partial class HttpRequestBuilder
     ///     <see cref="HttpServerSentEventsBuilder" />
     /// </returns>
     public static HttpServerSentEventsBuilder ServerSentEvents(Uri? requestUri,
-        Func<ServerSentEventsData, Task> onMessage, Action<HttpServerSentEventsBuilder>? configure = null) =>
+        Func<ServerSentEventsData, CancellationToken, Task> onMessage,
+        Action<HttpServerSentEventsBuilder>? configure = null) =>
         ServerSentEvents(HttpMethod.Get, requestUri, onMessage, configure);
 
     /// <summary>
@@ -482,7 +484,8 @@ public sealed partial class HttpRequestBuilder
     ///     <see cref="HttpServerSentEventsBuilder" />
     /// </returns>
     public static HttpServerSentEventsBuilder ServerSentEvents(string? requestUri,
-        Func<ServerSentEventsData, Task> onMessage, Action<HttpServerSentEventsBuilder>? configure = null) =>
+        Func<ServerSentEventsData, CancellationToken, Task> onMessage,
+        Action<HttpServerSentEventsBuilder>? configure = null) =>
         ServerSentEvents(string.IsNullOrWhiteSpace(requestUri)
             ? null
             : new Uri(requestUri, UriKind.RelativeOrAbsolute), onMessage, configure);

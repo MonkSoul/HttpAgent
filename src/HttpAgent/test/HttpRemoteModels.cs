@@ -120,7 +120,7 @@ public class CustomServerSentEventsEventHandler : IHttpServerSentEventsEventHand
     public void OnOpen() => counter++;
 
     /// <inheritdoc />
-    public Task OnMessageAsync(ServerSentEventsData serverSentEventsData)
+    public Task OnMessageAsync(ServerSentEventsData serverSentEventsData, CancellationToken cancellationToken)
     {
         counter++;
         return Task.CompletedTask;
@@ -146,7 +146,8 @@ public class CustomServerSentEventsEventHandler2 : IHttpServerSentEventsEventHan
     public void OnOpen() => throw new NotImplementedException();
 
     /// <inheritdoc />
-    public Task OnMessageAsync(ServerSentEventsData serverSentEventsData) => throw new NotImplementedException();
+    public Task OnMessageAsync(ServerSentEventsData serverSentEventsData, CancellationToken cancellationToken) =>
+        throw new NotImplementedException();
 
     /// <inheritdoc />
     public void OnError(Exception exception) => throw new NotImplementedException();

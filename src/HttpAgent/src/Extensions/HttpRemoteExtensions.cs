@@ -18,15 +18,15 @@ public static class HttpRemoteExtensions
     /// <param name="builder">
     ///     <see cref="IHttpClientBuilder" />
     /// </param>
-    /// <param name="disableConfigure">自定义禁用配置委托</param>
+    /// <param name="disableIn">自定义禁用配置委托</param>
     /// <returns>
     ///     <see cref="IHttpClientBuilder" />
     /// </returns>
     public static IHttpClientBuilder AddProfilerDelegatingHandler(this IHttpClientBuilder builder,
-        Func<bool>? disableConfigure = null)
+        Func<bool>? disableIn = null)
     {
         // 检查是否禁用请求分析工具
-        if (disableConfigure?.Invoke() == true)
+        if (disableIn?.Invoke() == true)
         {
             return builder;
         }
@@ -37,6 +37,21 @@ public static class HttpRemoteExtensions
         // 添加请求分析工具处理委托
         return builder.AddHttpMessageHandler<ProfilerDelegatingHandler>();
     }
+
+    /// <summary>
+    ///     添加 HTTP 远程请求分析工具处理委托
+    /// </summary>
+    /// <param name="builder">
+    ///     <see cref="IHttpClientBuilder" />
+    /// </param>
+    /// <param name="disableInProduction">是否在生产环境中禁用。默认值为：<c>false</c>。</param>
+    /// <returns>
+    ///     <see cref="IHttpClientBuilder" />
+    /// </returns>
+    public static IHttpClientBuilder AddProfilerDelegatingHandler(this IHttpClientBuilder builder,
+        bool disableInProduction) =>
+        builder.AddProfilerDelegatingHandler(() =>
+            disableInProduction && GetHostEnvironmentName(builder.Services)?.ToLower() == "production");
 
     /// <summary>
     ///     为 <see cref="HttpClient" /> 启用性能优化
@@ -304,5 +319,27 @@ public static class HttpRemoteExtensions
         setCookies = SetCookieHeaderValue.ParseList(rawSetCookies);
 
         return true;
+    }
+
+    /// <summary>
+    ///     获取主机环境名
+    /// </summary>
+    /// <param name="services">
+    ///     <see cref="IServiceCollection" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="string" />
+    /// </returns>
+    internal static string? GetHostEnvironmentName(IServiceCollection services)
+    {
+        // 获取主机环境对象
+        var hostEnvironment = services
+            .FirstOrDefault(u => u.ServiceType.FullName == "Microsoft.Extensions.Hosting.IHostEnvironment")
+            ?.ImplementationInstance;
+
+        // 空检查
+        return hostEnvironment is null
+            ? null
+            : Convert.ToString(hostEnvironment.GetType().GetProperty("EnvironmentName")?.GetValue(hostEnvironment));
     }
 }

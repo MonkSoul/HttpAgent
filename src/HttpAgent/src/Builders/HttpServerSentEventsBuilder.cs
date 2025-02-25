@@ -67,7 +67,7 @@ public sealed class HttpServerSentEventsBuilder
     /// <summary>
     ///     用于在从事件源接收到数据时的操作
     /// </summary>
-    public Func<ServerSentEventsData, Task>? OnMessage { get; private set; }
+    public Func<ServerSentEventsData, CancellationToken, Task>? OnMessage { get; private set; }
 
     /// <summary>
     ///     用于在事件源连接未能打开时的操作
@@ -145,7 +145,7 @@ public sealed class HttpServerSentEventsBuilder
     /// <returns>
     ///     <see cref="HttpServerSentEventsBuilder" />
     /// </returns>
-    public HttpServerSentEventsBuilder SetOnMessage(Func<ServerSentEventsData, Task> configure)
+    public HttpServerSentEventsBuilder SetOnMessage(Func<ServerSentEventsData, CancellationToken, Task> configure)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(configure);

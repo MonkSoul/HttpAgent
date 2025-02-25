@@ -359,25 +359,27 @@ public class HttpRequestBuilderStaticMethodsTests
     public void ServerSentEvents_ReturnOK()
     {
         var httpServerSentEventsBuilder =
-            HttpRequestBuilder.ServerSentEvents(new Uri("http://localhost"), _ => Task.CompletedTask);
+            HttpRequestBuilder.ServerSentEvents(new Uri("http://localhost"), (_, _) => Task.CompletedTask);
         Assert.NotNull(httpServerSentEventsBuilder);
         Assert.NotNull(httpServerSentEventsBuilder.RequestUri);
         Assert.Equal("http://localhost/", httpServerSentEventsBuilder.RequestUri.ToString());
 
-        var httpServerSentEventsBuilder2 = HttpRequestBuilder.ServerSentEvents((Uri)null!, _ => Task.CompletedTask);
+        var httpServerSentEventsBuilder2 =
+            HttpRequestBuilder.ServerSentEvents((Uri)null!, (_, _) => Task.CompletedTask);
         Assert.Null(httpServerSentEventsBuilder2.RequestUri);
 
         var httpServerSentEventsBuilder3 =
-            HttpRequestBuilder.ServerSentEvents("http://localhost", _ => Task.CompletedTask);
+            HttpRequestBuilder.ServerSentEvents("http://localhost", (_, _) => Task.CompletedTask);
         Assert.NotNull(httpServerSentEventsBuilder3);
         Assert.NotNull(httpServerSentEventsBuilder3.RequestUri);
         Assert.Equal("http://localhost/", httpServerSentEventsBuilder3.RequestUri.ToString());
 
-        var httpServerSentEventsBuilder4 = HttpRequestBuilder.ServerSentEvents((string)null!, _ => Task.CompletedTask);
+        var httpServerSentEventsBuilder4 =
+            HttpRequestBuilder.ServerSentEvents((string)null!, (_, _) => Task.CompletedTask);
         Assert.Null(httpServerSentEventsBuilder4.RequestUri);
 
         var httpServerSentEventsBuilder5 =
-            HttpRequestBuilder.ServerSentEvents(HttpMethod.Post, null!, _ => Task.CompletedTask);
+            HttpRequestBuilder.ServerSentEvents(HttpMethod.Post, null!, (_, _) => Task.CompletedTask);
         Assert.Null(httpServerSentEventsBuilder5.RequestUri);
         Assert.Equal(HttpMethod.Post, httpServerSentEventsBuilder5.Method);
     }

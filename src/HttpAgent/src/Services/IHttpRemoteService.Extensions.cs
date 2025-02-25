@@ -165,7 +165,7 @@ public partial interface IHttpRemoteService
     /// <param name="cancellationToken">
     ///     <see cref="CancellationToken" />
     /// </param>
-    void ServerSentEvents(string? requestUri, Func<ServerSentEventsData, Task> onMessage,
+    void ServerSentEvents(string? requestUri, Func<ServerSentEventsData, CancellationToken, Task> onMessage,
         Action<HttpServerSentEventsBuilder>? configure = null, Action<HttpRequestBuilder>? requestConfigure = null,
         CancellationToken cancellationToken = default);
 
@@ -182,7 +182,7 @@ public partial interface IHttpRemoteService
     /// <returns>
     ///     <see cref="Task" />
     /// </returns>
-    Task ServerSentEventsAsync(string? requestUri, Func<ServerSentEventsData, Task> onMessage,
+    Task ServerSentEventsAsync(string? requestUri, Func<ServerSentEventsData, CancellationToken, Task> onMessage,
         Action<HttpServerSentEventsBuilder>? configure = null, Action<HttpRequestBuilder>? requestConfigure = null,
         CancellationToken cancellationToken = default);
 

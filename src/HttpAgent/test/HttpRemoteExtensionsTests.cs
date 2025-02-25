@@ -34,6 +34,11 @@ public class HttpRemoteExtensionsTests
             .AddProfilerDelegatingHandler(() => builder.Environment.EnvironmentName == "Production");
         Assert.NotNull(httpClientFactoryOptions.HttpMessageHandlerBuilderActions);
         Assert.Empty(httpClientFactoryOptions.HttpMessageHandlerBuilderActions);
+
+        var builder2 = WebApplication.CreateBuilder(new WebApplicationOptions { EnvironmentName = "Production" });
+        builder2.Services.AddHttpClient(string.Empty).AddProfilerDelegatingHandler(true);
+        Assert.NotNull(httpClientFactoryOptions.HttpMessageHandlerBuilderActions);
+        Assert.Empty(httpClientFactoryOptions.HttpMessageHandlerBuilderActions);
     }
 
     [Fact]
@@ -290,5 +295,18 @@ public class HttpRemoteExtensionsTests
         Assert.Equal(
             "hBSH5yRDI1a0Fzb2lMWllDYk0tRkZ0UEc2OW1URjBvLUtVckNMeFUyaUNxdWxtRVFBQUFBJCQAAAAAAAAAAAEAAADeGZbRsNnHqc34xcwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIIdwmaCHcJmUm",
             cookies2.Value);
+    }
+
+    [Fact]
+    public void GetHostEnvironmentName_ReturnOK()
+    {
+        var services = new ServiceCollection();
+        Assert.Null(HttpRemoteExtensions.GetHostEnvironmentName(services));
+
+        var builder = WebApplication.CreateBuilder(new WebApplicationOptions { EnvironmentName = "Development" });
+        Assert.Equal("Development", HttpRemoteExtensions.GetHostEnvironmentName(builder.Services));
+
+        var builder2 = WebApplication.CreateBuilder(new WebApplicationOptions { EnvironmentName = "Production" });
+        Assert.Equal("Production", HttpRemoteExtensions.GetHostEnvironmentName(builder2.Services));
     }
 }

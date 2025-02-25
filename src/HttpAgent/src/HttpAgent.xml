@@ -2603,7 +2603,7 @@
                 <see cref="T:HttpAgent.HttpFileUploadBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.ServerSentEvents(System.Net.Http.HttpMethod,System.Uri,System.Func{HttpAgent.ServerSentEventsData,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpServerSentEventsBuilder})">
+        <member name="M:HttpAgent.HttpRequestBuilder.ServerSentEvents(System.Net.Http.HttpMethod,System.Uri,System.Func{HttpAgent.ServerSentEventsData,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpServerSentEventsBuilder})">
             <summary>
                 创建 <see cref="T:HttpAgent.HttpServerSentEventsBuilder" /> 构建器
             </summary>
@@ -2615,7 +2615,7 @@
                 <see cref="T:HttpAgent.HttpServerSentEventsBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.ServerSentEvents(System.Uri,System.Func{HttpAgent.ServerSentEventsData,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpServerSentEventsBuilder})">
+        <member name="M:HttpAgent.HttpRequestBuilder.ServerSentEvents(System.Uri,System.Func{HttpAgent.ServerSentEventsData,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpServerSentEventsBuilder})">
             <summary>
                 创建 <see cref="T:HttpAgent.HttpServerSentEventsBuilder" /> 构建器
             </summary>
@@ -2626,7 +2626,7 @@
                 <see cref="T:HttpAgent.HttpServerSentEventsBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.ServerSentEvents(System.String,System.Func{HttpAgent.ServerSentEventsData,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpServerSentEventsBuilder})">
+        <member name="M:HttpAgent.HttpRequestBuilder.ServerSentEvents(System.String,System.Func{HttpAgent.ServerSentEventsData,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpServerSentEventsBuilder})">
             <summary>
                 创建 <see cref="T:HttpAgent.HttpServerSentEventsBuilder" /> 构建器
             </summary>
@@ -2809,7 +2809,7 @@
                 <see cref="T:HttpAgent.HttpServerSentEventsBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpServerSentEventsBuilder.SetOnMessage(System.Func{HttpAgent.ServerSentEventsData,System.Threading.Tasks.Task})">
+        <member name="M:HttpAgent.HttpServerSentEventsBuilder.SetOnMessage(System.Func{HttpAgent.ServerSentEventsData,System.Threading.CancellationToken,System.Threading.Tasks.Task})">
             <summary>
                 设置用于在从事件源接收到数据时的操作
             </summary>
@@ -5572,7 +5572,19 @@
             <param name="builder">
                 <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />
             </param>
-            <param name="disableConfigure">自定义禁用配置委托</param>
+            <param name="disableIn">自定义禁用配置委托</param>
+            <returns>
+                <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.AddProfilerDelegatingHandler(Microsoft.Extensions.DependencyInjection.IHttpClientBuilder,System.Boolean)">
+            <summary>
+                添加 HTTP 远程请求分析工具处理委托
+            </summary>
+            <param name="builder">
+                <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />
+            </param>
+            <param name="disableInProduction">是否在生产环境中禁用。默认值为：<c>false</c>。</param>
             <returns>
                 <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />
             </returns>
@@ -5690,6 +5702,17 @@
             <param name="rawSetCookies">原始响应标头 <c>Set-Cookie</c> 集合</param>
             <returns>
                 <see cref="T:System.Boolean" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.Extensions.HttpRemoteExtensions.GetHostEnvironmentName(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+                获取主机环境名
+            </summary>
+            <param name="services">
+                <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
+            </param>
+            <returns>
+                <see cref="T:System.String" />
             </returns>
         </member>
         <member name="T:HttpAgent.HttpContentConverterFactory">
@@ -6025,12 +6048,15 @@
                 用于在与事件源的连接打开时的操作
             </summary>
         </member>
-        <member name="M:HttpAgent.IHttpServerSentEventsEventHandler.OnMessageAsync(HttpAgent.ServerSentEventsData)">
+        <member name="M:HttpAgent.IHttpServerSentEventsEventHandler.OnMessageAsync(HttpAgent.ServerSentEventsData,System.Threading.CancellationToken)">
             <summary>
                 用于在从事件源接收到数据时的操作
             </summary>
             <param name="serverSentEventsData">
                 <see cref="T:HttpAgent.ServerSentEventsData" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
             </param>
             <returns>
                 <see cref="T:System.Threading.Tasks.Task" />
@@ -6635,12 +6661,15 @@
                 <see cref="T:System.Exception" />
             </param>
         </member>
-        <member name="M:HttpAgent.ServerSentEventsManager.HandleMessageReceivedAsync(HttpAgent.ServerSentEventsData)">
+        <member name="M:HttpAgent.ServerSentEventsManager.HandleMessageReceivedAsync(HttpAgent.ServerSentEventsData,System.Threading.CancellationToken)">
             <summary>
                 处理服务器发送的事件消息
             </summary>
             <param name="serverSentEventsData">
                 <see cref="T:HttpAgent.ServerSentEventsData" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
         <member name="T:HttpAgent.StressTestHarnessManager">
@@ -8262,10 +8291,10 @@
         <member name="M:HttpAgent.HttpRemoteService.SendAsync(HttpAgent.HttpFileUploadBuilder,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.ServerSentEvents(System.String,System.Func{HttpAgent.ServerSentEventsData,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpServerSentEventsBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.ServerSentEvents(System.String,System.Func{HttpAgent.ServerSentEventsData,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpServerSentEventsBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.ServerSentEventsAsync(System.String,System.Func{HttpAgent.ServerSentEventsData,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpServerSentEventsBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.ServerSentEventsAsync(System.String,System.Func{HttpAgent.ServerSentEventsData,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpServerSentEventsBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.Send(HttpAgent.HttpServerSentEventsBuilder,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -9476,7 +9505,7 @@
                 <see cref="T:System.Threading.Tasks.Task`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.ServerSentEvents(System.String,System.Func{HttpAgent.ServerSentEventsData,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpServerSentEventsBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.ServerSentEvents(System.String,System.Func{HttpAgent.ServerSentEventsData,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpServerSentEventsBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 Server-Sent Events 请求
             </summary>
@@ -9488,7 +9517,7 @@
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.ServerSentEventsAsync(System.String,System.Func{HttpAgent.ServerSentEventsData,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpServerSentEventsBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.ServerSentEventsAsync(System.String,System.Func{HttpAgent.ServerSentEventsData,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpServerSentEventsBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送 Server-Sent Events 请求
             </summary>

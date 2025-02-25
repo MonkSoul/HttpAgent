@@ -425,14 +425,14 @@ internal sealed class ServerSentEventsManager
                 try
                 {
                     // 处理服务器发送的事件消息
-                    await HandleMessageReceivedAsync(serverSentEventsData);
+                    await HandleMessageReceivedAsync(serverSentEventsData, cancellationToken);
                 }
                 // 捕获当通道关闭或操作被取消时的异常
                 catch (Exception e) when (cancellationToken.IsCancellationRequested ||
                                           e is ChannelClosedException or OperationCanceledException)
                 {
                     // 处理服务器发送的事件消息
-                    await HandleMessageReceivedAsync(serverSentEventsData);
+                    await HandleMessageReceivedAsync(serverSentEventsData, cancellationToken);
 
                     break;
                 }
@@ -491,7 +491,11 @@ internal sealed class ServerSentEventsManager
     /// <param name="serverSentEventsData">
     ///     <see cref="ServerSentEventsData" />
     /// </param>
-    internal async Task HandleMessageReceivedAsync(ServerSentEventsData serverSentEventsData)
+    /// <param name="cancellationToken">
+    ///     <see cref="CancellationToken" />
+    /// </param>
+    internal async Task HandleMessageReceivedAsync(ServerSentEventsData serverSentEventsData,
+        CancellationToken cancellationToken = default)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(serverSentEventsData);
@@ -499,9 +503,10 @@ internal sealed class ServerSentEventsManager
         // 空检查
         if (ServerSentEventsEventHandler is not null)
         {
-            await DelegateExtensions.TryInvokeAsync(ServerSentEventsEventHandler.OnMessageAsync, serverSentEventsData);
+            await DelegateExtensions.TryInvokeAsync(ServerSentEventsEventHandler.OnMessageAsync, serverSentEventsData,
+                cancellationToken);
         }
 
-        await _httpServerSentEventsBuilder.OnMessage.TryInvokeAsync(serverSentEventsData);
+        await _httpServerSentEventsBuilder.OnMessage.TryInvokeAsync(serverSentEventsData, cancellationToken);
     }
 }

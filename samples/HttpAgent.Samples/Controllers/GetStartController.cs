@@ -380,7 +380,7 @@ public class GetStartController(
     {
         await httpRemoteService.ServerSentEventsAsync("https://localhost:7044/HttpRemote/Events"
             // 接收到数据时的操作
-            , async data =>
+            , async (data, token) =>
             {
                 Console.WriteLine(data.Data.ToString());
                 await Task.CompletedTask;
@@ -394,7 +394,7 @@ public class GetStartController(
         //await httpRemoteService.SendAsync(HttpRequestBuilder
         //   .ServerSentEvents("https://localhost:7044/HttpRemote/Events"
         //   // 接收到数据时的操作
-        //   , async data =>
+        //   , async (data, token) =>
         //   {
         //       Console.WriteLine(data.Data.ToString());
         //       await Task.CompletedTask;
@@ -613,5 +613,115 @@ public class GetStartController(
             "https://ocr.1datatech.net/oauth/1.0/token",
             builder => builder.WithQueryParameter("a", "123", replace: true)
                 .Profiler());
+    }
+
+    [HttpGet]
+    public async Task<string> DeepSeek(CancellationToken cancellationToken)
+    {
+        var result = await httpRemoteService.SendAsync<string>(HttpRequestBuilder
+            .Post("https://api.deepseek.com/chat/completions")
+            .Profiler(false) // 建议关闭请求分析工具
+            .AddJwtBearerAuthentication("您的 APIKEY")
+            .SetJsonContent("""
+                            {
+                                "model": "deepseek-chat",
+                                "messages": [
+                                    {"role": "system", "content": "你是一个专业的 C# 领域人才。"},
+                                    {"role": "user", "content": "Furion 框架未来前景？"}
+                                ],
+                                "stream": false
+                            }
+                            """), cancellationToken);
+
+        // 使用流变对象获取实际内容
+        dynamic clay = Clay.Parse(result.Result, ClayOptions.Flexible);
+        var content = clay.choices[0].message.content;
+
+        return content;
+    }
+
+    [HttpGet]
+    public async Task<string> DeepSeek_Stream(CancellationToken cancellationToken)
+    {
+        await httpRemoteService.SendAsync(HttpRequestBuilder.ServerSentEvents(HttpMethod.Post,
+            new Uri("https://api.deepseek.com/chat/completions")
+            , async (data, token) =>
+            {
+                // 输出完成
+                if (data.Data == "[DONE]")
+                {
+                    Console.WriteLine("++++++++++++ 结束 ++++++++++++");
+                    return;
+                }
+
+                // 控制打字机速度
+                await Task.Delay(60, token);
+
+                // 使用流变对象获取实际内容
+                dynamic clay = Clay.Parse(data.Data, ClayOptions.Flexible);
+                var content = clay.choices[0].delta.content;
+
+                Console.WriteLine(content);
+            }), builder => builder
+            .Profiler(false) // 建议关闭请求分析工具
+            .AddJwtBearerAuthentication("您的 APIKEY")
+            .SetJsonContent("""
+                            {
+                                "model": "deepseek-chat",
+                                "messages": [
+                                    {"role": "system", "content": "你是一个专业的 C# 领域人才。"},
+                                    {"role": "user", "content": "Furion 框架的作者是谁？"}
+                                ],
+                                "stream": true
+                            }
+                            """), cancellationToken);
+
+        return "OK";
+    }
+
+    [HttpGet]
+    public async Task DeepSeekChat([FromServices] IHttpContextAccessor httpContextAccessor, [FromQuery] string message,
+        CancellationToken cancellationToken)
+    {
+        var httpContext = httpContextAccessor.HttpContext!;
+
+        // 设置响应头，指定内容类型为 text/event-stream
+        httpContext.Response.ContentType = "text/event-stream; charset=utf-8";
+        httpContext.Response.Headers.CacheControl = "no-cache";
+        httpContext.Response.Headers.Connection = "keep-alive";
+        httpContext.Response.Headers["X-Accel-Buffering"] = "no";
+
+        await httpRemoteService.SendAsync(HttpRequestBuilder.ServerSentEvents(HttpMethod.Post,
+            new Uri("https://api.deepseek.com/chat/completions")
+            , async (data, token) =>
+            {
+                // DeepSeek 输出完成标记
+                if (data.Data == "[DONE]") return;
+
+                // 控制打字机速度
+                await Task.Delay(60, token);
+
+                // 使用流变对象获取实际内容
+                dynamic clay = Clay.Parse(data.Data, ClayOptions.Flexible);
+                var content = clay.choices[0].delta.content;
+
+                // 确保数据被立即发送到客户端
+                await httpContext.Response.Body.WriteAsync(Encoding.UTF8.GetBytes(content), token);
+                await httpContext.Response.Body.FlushAsync(token);
+            }), builder => builder
+            .Profiler(false) // 建议关闭请求分析工具
+            .AddJwtBearerAuthentication("您的 APIKEY")
+            .SetJsonContent($$"""
+                              {
+                              "model": "deepseek-chat",
+                              "messages": [
+                                  {"role": "system", "content": "你是一个专业的 C# 领域人才。"},
+                                  {"role": "user", "content": "{{message}}"}
+                              ],
+                              "stream": true
+                              }
+                              """), cancellationToken);
+
+        await httpContext.Response.CompleteAsync();
     }
 }

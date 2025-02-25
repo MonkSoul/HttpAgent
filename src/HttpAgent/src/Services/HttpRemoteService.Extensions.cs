@@ -70,14 +70,14 @@ internal sealed partial class HttpRemoteService
         new FileUploadManager(this, httpFileUploadBuilder, configure).StartAsync(cancellationToken);
 
     /// <inheritdoc />
-    public void ServerSentEvents(string? requestUri, Func<ServerSentEventsData, Task> onMessage,
+    public void ServerSentEvents(string? requestUri, Func<ServerSentEventsData, CancellationToken, Task> onMessage,
         Action<HttpServerSentEventsBuilder>? configure = null, Action<HttpRequestBuilder>? requestConfigure = null,
         CancellationToken cancellationToken = default) =>
         Send(HttpRequestBuilder.ServerSentEvents(requestUri, onMessage, configure), requestConfigure,
             cancellationToken);
 
     /// <inheritdoc />
-    public Task ServerSentEventsAsync(string? requestUri, Func<ServerSentEventsData, Task> onMessage,
+    public Task ServerSentEventsAsync(string? requestUri, Func<ServerSentEventsData, CancellationToken, Task> onMessage,
         Action<HttpServerSentEventsBuilder>? configure = null, Action<HttpRequestBuilder>? requestConfigure = null,
         CancellationToken cancellationToken = default) =>
         SendAsync(HttpRequestBuilder.ServerSentEvents(requestUri, onMessage, configure), requestConfigure,

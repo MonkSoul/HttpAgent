@@ -20,10 +20,13 @@ public interface IHttpServerSentEventsEventHandler
     /// <param name="serverSentEventsData">
     ///     <see cref="ServerSentEventsData" />
     /// </param>
+    /// <param name="cancellationToken">
+    ///     <see cref="CancellationToken" />
+    /// </param>
     /// <returns>
     ///     <see cref="Task" />
     /// </returns>
-    Task OnMessageAsync(ServerSentEventsData serverSentEventsData);
+    Task OnMessageAsync(ServerSentEventsData serverSentEventsData, CancellationToken cancellationToken);
 
     /// <summary>
     ///     用于在事件源连接未能打开时的操作
