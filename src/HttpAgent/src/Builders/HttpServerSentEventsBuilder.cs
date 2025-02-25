@@ -17,12 +17,35 @@ public sealed class HttpServerSentEventsBuilder
     ///     <inheritdoc cref="HttpServerSentEventsBuilder" />
     /// </summary>
     /// <param name="requestUri">请求地址</param>
-    internal HttpServerSentEventsBuilder(Uri? requestUri) => RequestUri = requestUri;
+    internal HttpServerSentEventsBuilder(Uri? requestUri)
+        : this(HttpMethod.Get, requestUri)
+    {
+    }
+
+    /// <summary>
+    ///     <inheritdoc cref="HttpServerSentEventsBuilder" />
+    /// </summary>
+    /// <param name="httpMethod">请求方式</param>
+    /// <param name="requestUri">请求地址</param>
+    internal HttpServerSentEventsBuilder(HttpMethod httpMethod, Uri? requestUri)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(httpMethod);
+
+        Method = httpMethod;
+        RequestUri = requestUri;
+    }
 
     /// <summary>
     ///     请求地址
     /// </summary>
     public Uri? RequestUri { get; }
+
+    /// <summary>
+    ///     请求方式
+    /// </summary>
+    /// <remarks>默认请求为：<c>GET</c>。</remarks>
+    public HttpMethod Method { get; }
 
     /// <summary>
     ///     默认重新连接的间隔时间（毫秒）
@@ -203,12 +226,11 @@ public sealed class HttpServerSentEventsBuilder
         // 空检查
         ArgumentNullException.ThrowIfNull(httpRemoteOptions);
 
-        // 初始化 HttpRequestBuilder 实例，并确保请求标头中添加了 Accept: text/event-stream；
+        // 初始化 HttpRequestBuilder 实例，并确保请求标头中添加了 Accept: text/event-stream；同时启用 HttpClient 池化管理
         // 如果请求失败，则应抛出异常。
-        // 请注意，Server-Sent Events（SSE）标准仅支持使用 GET 方法进行请求。
-        var httpRequestBuilder = HttpRequestBuilder.Create(HttpMethod.Get, RequestUri, configure)
+        var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure)
             .WithHeader(nameof(HttpRequestHeaders.Accept), "text/event-stream", replace: true).DisableCache()
-            .EnsureSuccessStatusCode();
+            .UseHttpClientPool().EnsureSuccessStatusCode();
 
         // 检查是否设置了事件处理程序且该处理程序实现了 IHttpRequestEventHandler 接口，如果有则设置给 httpRequestBuilder
         if (ServerSentEventsEventHandlerType is not null &&

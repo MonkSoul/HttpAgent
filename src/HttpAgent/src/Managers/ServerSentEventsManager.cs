@@ -175,6 +175,9 @@ internal sealed class ServerSentEventsManager
             // 等待接收事件消息任务完成
             messageCancellationTokenSource.Cancel();
             receiveDataTask.Wait(cancellationToken);
+
+            // 释放资源集合
+            RequestBuilder.ReleaseResources();
         }
     }
 
@@ -277,6 +280,9 @@ internal sealed class ServerSentEventsManager
             // 等待接收事件消息任务完成
             await messageCancellationTokenSource.CancelAsync();
             await receiveDataTask;
+
+            // 释放资源集合
+            RequestBuilder.ReleaseResources();
         }
     }
 
@@ -354,12 +360,23 @@ internal sealed class ServerSentEventsManager
         // 初始化 ServerSentEventsData 实例
         serverSentEventsData ??= new ServerSentEventsData();
 
-        // 采用冒号对行文本进行分割
-        var parts = line.Split(':');
-        var key = parts[0].Trim();
+        string key;
+        string value;
+        // 获取首个冒号位置
+        var colonIndex = line.IndexOf(':');
 
-        // 如果一行文本中不包含冒号，则整行文本会被解析成为字段名，其字段值为空
-        var value = parts.Length > 1 ? parts[1].Trim() : string.Empty;
+        // 如果没有找到冒号，则认为整行为字段名，字段值为空
+        if (colonIndex == -1)
+        {
+            key = line.Trim();
+            value = string.Empty;
+        }
+        // 提取字段名和字段值
+        else
+        {
+            key = line[..colonIndex].Trim();
+            value = line[(colonIndex + 1)..].TrimStart(' ');
+        }
 
         switch (key)
         {

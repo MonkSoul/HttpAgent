@@ -439,6 +439,29 @@ public sealed partial class HttpRequestBuilder
     /// <summary>
     ///     创建 <see cref="HttpServerSentEventsBuilder" /> 构建器
     /// </summary>
+    /// <param name="httpMethod">请求方式</param>
+    /// <param name="requestUri">请求地址</param>
+    /// <param name="onMessage">用于在从事件源接收到数据时的操作</param>
+    /// <param name="configure">自定义配置委托</param>
+    /// <returns>
+    ///     <see cref="HttpServerSentEventsBuilder" />
+    /// </returns>
+    public static HttpServerSentEventsBuilder ServerSentEvents(HttpMethod httpMethod, Uri? requestUri,
+        Func<ServerSentEventsData, Task> onMessage, Action<HttpServerSentEventsBuilder>? configure = null)
+    {
+        // 初始化 HttpServerSentEventsBuilder 实例
+        var httpServerSentEventsBuilder =
+            new HttpServerSentEventsBuilder(httpMethod, requestUri).SetOnMessage(onMessage);
+
+        // 调用自定义配置委托
+        configure?.Invoke(httpServerSentEventsBuilder);
+
+        return httpServerSentEventsBuilder;
+    }
+
+    /// <summary>
+    ///     创建 <see cref="HttpServerSentEventsBuilder" /> 构建器
+    /// </summary>
     /// <param name="requestUri">请求地址</param>
     /// <param name="onMessage">用于在从事件源接收到数据时的操作</param>
     /// <param name="configure">自定义配置委托</param>
@@ -446,16 +469,8 @@ public sealed partial class HttpRequestBuilder
     ///     <see cref="HttpServerSentEventsBuilder" />
     /// </returns>
     public static HttpServerSentEventsBuilder ServerSentEvents(Uri? requestUri,
-        Func<ServerSentEventsData, Task> onMessage, Action<HttpServerSentEventsBuilder>? configure = null)
-    {
-        // 初始化 HttpServerSentEventsBuilder 实例
-        var httpServerSentEventsBuilder = new HttpServerSentEventsBuilder(requestUri).SetOnMessage(onMessage);
-
-        // 调用自定义配置委托
-        configure?.Invoke(httpServerSentEventsBuilder);
-
-        return httpServerSentEventsBuilder;
-    }
+        Func<ServerSentEventsData, Task> onMessage, Action<HttpServerSentEventsBuilder>? configure = null) =>
+        ServerSentEvents(HttpMethod.Get, requestUri, onMessage, configure);
 
     /// <summary>
     ///     创建 <see cref="HttpServerSentEventsBuilder" /> 构建器

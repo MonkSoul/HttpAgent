@@ -16,6 +16,7 @@ public class HttpServerSentEventsBuilderTests
         var builder2 = new HttpServerSentEventsBuilder(new Uri("http://localhost"));
         Assert.NotNull(builder2);
         Assert.NotNull(builder2.RequestUri);
+        Assert.Equal(HttpMethod.Get, builder2.Method);
         Assert.Equal("http://localhost/", builder2.RequestUri.ToString());
         Assert.Equal(2000, builder2.DefaultRetryInterval);
         Assert.Equal(100, builder2.MaxRetries);
@@ -23,6 +24,11 @@ public class HttpServerSentEventsBuilderTests
         Assert.Null(builder2.OnMessage);
         Assert.Null(builder2.OnError);
         Assert.Null(builder2.ServerSentEventsEventHandlerType);
+
+        var builder3 = new HttpServerSentEventsBuilder(HttpMethod.Post, new Uri("http://localhost"));
+        Assert.NotNull(builder3);
+        Assert.NotNull(builder3.RequestUri);
+        Assert.Equal(HttpMethod.Post, builder3.Method);
     }
 
     [Fact]
@@ -156,6 +162,7 @@ public class HttpServerSentEventsBuilderTests
         Assert.True(httpRequestBuilder.EnsureSuccessStatusCodeEnabled);
         Assert.Null(httpRequestBuilder.RequestEventHandlerType);
         Assert.True(httpRequestBuilder.DisableCacheEnabled);
+        Assert.True(httpRequestBuilder.HttpClientPoolingEnabled);
         Assert.NotNull(httpRequestBuilder.Headers);
         Assert.Single(httpRequestBuilder.Headers);
         Assert.Equal("Accept", httpRequestBuilder.Headers.Keys.First());

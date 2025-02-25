@@ -375,6 +375,11 @@ public class HttpRequestBuilderStaticMethodsTests
 
         var httpServerSentEventsBuilder4 = HttpRequestBuilder.ServerSentEvents((string)null!, _ => Task.CompletedTask);
         Assert.Null(httpServerSentEventsBuilder4.RequestUri);
+
+        var httpServerSentEventsBuilder5 =
+            HttpRequestBuilder.ServerSentEvents(HttpMethod.Post, null!, _ => Task.CompletedTask);
+        Assert.Null(httpServerSentEventsBuilder5.RequestUri);
+        Assert.Equal(HttpMethod.Post, httpServerSentEventsBuilder5.Method);
     }
 
     [Fact]

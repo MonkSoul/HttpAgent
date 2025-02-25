@@ -2603,6 +2603,18 @@
                 <see cref="T:HttpAgent.HttpFileUploadBuilder" />
             </returns>
         </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.ServerSentEvents(System.Net.Http.HttpMethod,System.Uri,System.Func{HttpAgent.ServerSentEventsData,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpServerSentEventsBuilder})">
+            <summary>
+                创建 <see cref="T:HttpAgent.HttpServerSentEventsBuilder" /> 构建器
+            </summary>
+            <param name="httpMethod">请求方式</param>
+            <param name="requestUri">请求地址</param>
+            <param name="onMessage">用于在从事件源接收到数据时的操作</param>
+            <param name="configure">自定义配置委托</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpServerSentEventsBuilder" />
+            </returns>
+        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.ServerSentEvents(System.Uri,System.Func{HttpAgent.ServerSentEventsData,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpServerSentEventsBuilder})">
             <summary>
                 创建 <see cref="T:HttpAgent.HttpServerSentEventsBuilder" /> 构建器
@@ -2718,10 +2730,23 @@
             </summary>
             <param name="requestUri">请求地址</param>
         </member>
+        <member name="M:HttpAgent.HttpServerSentEventsBuilder.#ctor(System.Net.Http.HttpMethod,System.Uri)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.HttpServerSentEventsBuilder" />
+            </summary>
+            <param name="httpMethod">请求方式</param>
+            <param name="requestUri">请求地址</param>
+        </member>
         <member name="P:HttpAgent.HttpServerSentEventsBuilder.RequestUri">
             <summary>
                 请求地址
             </summary>
+        </member>
+        <member name="P:HttpAgent.HttpServerSentEventsBuilder.Method">
+            <summary>
+                请求方式
+            </summary>
+            <remarks>默认请求为：<c>GET</c>。</remarks>
         </member>
         <member name="P:HttpAgent.HttpServerSentEventsBuilder.DefaultRetryInterval">
             <summary>
