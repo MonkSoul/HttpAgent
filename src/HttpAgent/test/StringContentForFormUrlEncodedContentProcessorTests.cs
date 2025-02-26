@@ -24,7 +24,6 @@ public class StringContentForFormUrlEncodedContentProcessorTests
         Assert.True(formUrlEncodedContentProcessor.CanProcess(null, "application/x-www-form-urlencoded"));
         Assert.True(formUrlEncodedContentProcessor.CanProcess(null, "Application/X-www-form-urlencoded"));
         Assert.False(formUrlEncodedContentProcessor.CanProcess(null, "application/json"));
-
         Assert.True(formUrlEncodedContentProcessor.CanProcess(new { }, "application/x-www-form-urlencoded"));
         Assert.True(formUrlEncodedContentProcessor.CanProcess(new FormUrlEncodedContent([]),
             "application/x-www-form-urlencoded"));

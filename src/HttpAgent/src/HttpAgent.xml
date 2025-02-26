@@ -627,13 +627,14 @@
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddJson(System.Object,System.String,System.Text.Encoding)">
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddJson(System.Object,System.String,System.Text.Encoding,System.String)">
             <summary>
                 添加 JSON 内容
             </summary>
             <param name="rawJson">JSON 字符串/原始对象</param>
             <param name="name">表单名称。该值不为空时作为表单的一项。否则将遍历对象类型的每一个公开属性作为表单的项。</param>
             <param name="contentEncoding">内容编码</param>
+            <param name="contentType">内容类型</param>
             <returns>
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
@@ -661,13 +662,14 @@
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddXml(System.String,System.String,System.Text.Encoding)">
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddXml(System.String,System.String,System.Text.Encoding,System.String)">
             <summary>
                 添加 XML 内容
             </summary>
             <param name="xmlString">XML 字符串</param>
             <param name="name">表单名称</param>
             <param name="contentEncoding">内容编码</param>
+            <param name="contentType">内容类型</param>
             <returns>
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
@@ -1245,12 +1247,13 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.SetJsonContent(System.Object,System.Text.Encoding)">
+        <member name="M:HttpAgent.HttpRequestBuilder.SetJsonContent(System.Object,System.Text.Encoding,System.String)">
             <summary>
                 设置 JSON 内容
             </summary>
             <param name="rawJson">JSON 字符串/原始对象</param>
             <param name="contentEncoding">内容编码</param>
+            <param name="contentType">内容类型</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -1266,12 +1269,13 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.SetXmlContent(System.String,System.Text.Encoding)">
+        <member name="M:HttpAgent.HttpRequestBuilder.SetXmlContent(System.String,System.Text.Encoding,System.String)">
             <summary>
                 设置 XML 内容
             </summary>
             <param name="xmlString">XML 字符串</param>
             <param name="contentEncoding">内容编码</param>
+            <param name="contentType">内容类型</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>

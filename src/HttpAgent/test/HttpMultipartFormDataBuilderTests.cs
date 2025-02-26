@@ -198,7 +198,7 @@ public class HttpMultipartFormDataBuilderTests
         builder.AddXml("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "test", Encoding.UTF8);
         Assert.Single(builder._partContents);
         Assert.Equal("test", builder._partContents[0].Name);
-        Assert.Equal("application/xml", builder._partContents[0].ContentType);
+        Assert.Equal("text/xml", builder._partContents[0].ContentType);
         Assert.Equal(Encoding.UTF8, builder._partContents[0].ContentEncoding);
         Assert.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", builder._partContents[0].RawContent);
     }

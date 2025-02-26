@@ -106,16 +106,18 @@ public sealed partial class HttpRequestBuilder
     /// </summary>
     /// <param name="rawJson">JSON 字符串/原始对象</param>
     /// <param name="contentEncoding">内容编码</param>
+    /// <param name="contentType">内容类型</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
     /// <exception cref="JsonException"></exception>
-    public HttpRequestBuilder SetJsonContent(object? rawJson, Encoding? contentEncoding = null)
+    public HttpRequestBuilder SetJsonContent(object? rawJson, Encoding? contentEncoding = null,
+        string? contentType = null)
     {
         // 检查是否是字符串类型
         if (rawJson is not string rawString)
         {
-            return SetContent(rawJson, MediaTypeNames.Application.Json, contentEncoding);
+            return SetContent(rawJson, contentType ?? MediaTypeNames.Application.Json, contentEncoding);
         }
 
         // 尝试验证并获取 JsonDocument 实例（需 using）
@@ -124,7 +126,7 @@ public sealed partial class HttpRequestBuilder
         // 添加请求结束时需要释放的对象
         AddDisposable(jsonDocument);
 
-        return SetContent(jsonDocument, MediaTypeNames.Application.Json, contentEncoding);
+        return SetContent(jsonDocument, contentType ?? MediaTypeNames.Application.Json, contentEncoding);
     }
 
     /// <summary>
@@ -143,11 +145,13 @@ public sealed partial class HttpRequestBuilder
     /// </summary>
     /// <param name="xmlString">XML 字符串</param>
     /// <param name="contentEncoding">内容编码</param>
+    /// <param name="contentType">内容类型</param>
     /// <returns>
     ///     <see cref="HttpRequestBuilder" />
     /// </returns>
-    public HttpRequestBuilder SetXmlContent(string? xmlString, Encoding? contentEncoding = null) =>
-        SetContent(xmlString, MediaTypeNames.Application.Xml, contentEncoding);
+    public HttpRequestBuilder SetXmlContent(string? xmlString, Encoding? contentEncoding = null,
+        string? contentType = null) =>
+        SetContent(xmlString, contentType ?? MediaTypeNames.Text.Xml, contentEncoding);
 
     /// <summary>
     ///     设置文本内容

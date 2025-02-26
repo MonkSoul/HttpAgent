@@ -29,6 +29,7 @@ public class StringContentProcessorTests
         Assert.True(processor.CanProcess(null, "text/html"));
         Assert.True(processor.CanProcess(null, "text/plain"));
         Assert.True(processor.CanProcess(null, "Text/Plain"));
+        Assert.True(processor.CanProcess(null, "application/soap+xml"));
 
         Assert.False(processor.CanProcess(null, "application/x-www-form-urlencoded"));
         Assert.False(processor.CanProcess(null, "application/octet-stream"));

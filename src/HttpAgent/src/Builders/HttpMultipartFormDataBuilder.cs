@@ -102,11 +102,13 @@ public sealed class HttpMultipartFormDataBuilder
     /// <param name="rawJson">JSON 字符串/原始对象</param>
     /// <param name="name">表单名称。该值不为空时作为表单的一项。否则将遍历对象类型的每一个公开属性作为表单的项。</param>
     /// <param name="contentEncoding">内容编码</param>
+    /// <param name="contentType">内容类型</param>
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
     /// <exception cref="JsonException"></exception>
-    public HttpMultipartFormDataBuilder AddJson(object rawJson, string? name = null, Encoding? contentEncoding = null)
+    public HttpMultipartFormDataBuilder AddJson(object rawJson, string? name = null, Encoding? contentEncoding = null,
+        string? contentType = null)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(rawJson);
@@ -114,7 +116,7 @@ public sealed class HttpMultipartFormDataBuilder
         // 检查是否配置表单名或不是字符串类型
         if (!string.IsNullOrWhiteSpace(name) || rawJson is not string rawString)
         {
-            return AddObject(rawJson, name, MediaTypeNames.Application.Json, contentEncoding);
+            return AddObject(rawJson, name, contentType ?? MediaTypeNames.Application.Json, contentEncoding);
         }
 
         // 尝试验证并获取 JsonDocument 实例（需 using）
@@ -123,7 +125,7 @@ public sealed class HttpMultipartFormDataBuilder
         // 添加请求结束时需要释放的对象
         _httpRequestBuilder.AddDisposable(jsonDocument);
 
-        return AddObject(jsonDocument, name, MediaTypeNames.Application.Json, contentEncoding);
+        return AddObject(jsonDocument, name, contentType ?? MediaTypeNames.Application.Json, contentEncoding);
     }
 
     /// <summary>
@@ -166,15 +168,17 @@ public sealed class HttpMultipartFormDataBuilder
     /// <param name="xmlString">XML 字符串</param>
     /// <param name="name">表单名称</param>
     /// <param name="contentEncoding">内容编码</param>
+    /// <param name="contentType">内容类型</param>
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
-    public HttpMultipartFormDataBuilder AddXml(string? xmlString, string name, Encoding? contentEncoding = null)
+    public HttpMultipartFormDataBuilder AddXml(string? xmlString, string name, Encoding? contentEncoding = null,
+        string? contentType = null)
     {
         // 空检查
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
-        return AddObject(xmlString, name, MediaTypeNames.Application.Xml, contentEncoding);
+        return AddObject(xmlString, name, contentType ?? MediaTypeNames.Text.Xml, contentEncoding);
     }
 
     /// <summary>

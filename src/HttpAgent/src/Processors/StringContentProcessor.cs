@@ -19,7 +19,8 @@ public class StringContentProcessor : HttpContentProcessorBase
             MediaTypeNames.Application.XmlPatch,
             MediaTypeNames.Text.Xml,
             MediaTypeNames.Text.Html,
-            MediaTypeNames.Text.Plain
+            MediaTypeNames.Text.Plain,
+            MediaTypeNames.Application.Soap // SOAP 1.2
         ], StringComparer.OrdinalIgnoreCase);
 
     /// <inheritdoc />

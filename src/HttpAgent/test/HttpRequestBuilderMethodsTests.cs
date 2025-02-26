@@ -185,6 +185,12 @@ public class HttpRequestBuilderMethodsTests
         Assert.Equal("<html><head></head><body></body></html>", httpRequestBuilder.RawContent);
         Assert.Equal("text/html", httpRequestBuilder.ContentType);
         Assert.Null(httpRequestBuilder.ContentEncoding);
+
+        httpRequestBuilder.SetXmlContent("<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+            contentType: "application/soap+xml");
+        Assert.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", httpRequestBuilder.RawContent);
+        Assert.Equal("application/soap+xml", httpRequestBuilder.ContentType);
+        Assert.Null(httpRequestBuilder.ContentEncoding);
     }
 
     [Fact]
@@ -194,12 +200,12 @@ public class HttpRequestBuilderMethodsTests
 
         httpRequestBuilder.SetXmlContent(null);
         Assert.Null(httpRequestBuilder.RawContent);
-        Assert.Equal("application/xml", httpRequestBuilder.ContentType);
+        Assert.Equal("text/xml", httpRequestBuilder.ContentType);
         Assert.Null(httpRequestBuilder.ContentEncoding);
 
         httpRequestBuilder.SetXmlContent("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         Assert.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", httpRequestBuilder.RawContent);
-        Assert.Equal("application/xml", httpRequestBuilder.ContentType);
+        Assert.Equal("text/xml", httpRequestBuilder.ContentType);
         Assert.Null(httpRequestBuilder.ContentEncoding);
     }
 

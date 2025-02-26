@@ -724,4 +724,59 @@ public class GetStartController(
 
         await httpContext.Response.CompleteAsync();
     }
+
+    [HttpGet]
+    public async Task<string?> WebService()
+    {
+        var result = await httpRemoteService.PostAsStringAsync("http://您的主机地址/Share/DatabaseManager.asmx",
+            builder => builder.WithHeader("SOAPAction", "http://tempuri.org/GetDatabaseList")
+                .SetXmlContent("""
+                               <?xml version="1.0" encoding="utf-8"?>
+                               <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+                                 <soap:Header>
+                                   <Erp7SoapHeader xmlns="http://tempuri.org/">
+                                     <ID></ID>
+                                   </Erp7SoapHeader>
+                                 </soap:Header>
+                                 <soap:Body>
+                                   <GetDatabaseList xmlns="http://tempuri.org/" />
+                                 </soap:Body>
+                               </soap:Envelope>
+                               """, Encoding.UTF8));
+
+        var result2 = await httpRemoteService.PostAsStringAsync("http://您的主机地址/Share/DatabaseManager.asmx",
+            builder => builder.SetXmlContent("""
+                                             <?xml version="1.0" encoding="utf-8"?>
+                                             <soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+                                               <soap12:Header>
+                                                 <Erp7SoapHeader xmlns="http://tempuri.org/">
+                                                   <ID></ID>
+                                                 </Erp7SoapHeader>
+                                               </soap12:Header>
+                                               <soap12:Body>
+                                                 <GetDatabaseList xmlns="http://tempuri.org/" />
+                                               </soap12:Body>
+                                             </soap12:Envelope>
+                                             """, Encoding.UTF8, "application/soap+xml"));
+
+        // 使用 XDocument 解析 XML
+        var xDocument = XDocument.Parse(result!);
+        // SOAP 1.1
+        var bodyContent = xDocument.Descendants(XName.Get("Body", "http://schemas.xmlsoap.org/soap/envelope/")).FirstOrDefault()?.Value!;
+        // SOAP 1.2
+        // var bodyContent = xDocument.Descendants(XName.Get("Body", "http://www.w3.org/2003/05/soap-envelope")).FirstOrDefault()?.Value!;
+
+        // Base64 解码
+        var data = Convert.FromBase64String(bodyContent);
+
+        // GZip 解压缩
+        using var input = new MemoryStream(data);
+        await using var gzip = new GZipStream(input, CompressionMode.Decompress);
+        using var output = new MemoryStream();
+        await gzip.CopyToAsync(output);
+
+        var body = Encoding.UTF8.GetString(output.ToArray());
+
+        return body;
+    }
 }
