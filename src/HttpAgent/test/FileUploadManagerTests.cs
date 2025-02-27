@@ -59,12 +59,13 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var fileUploadManager = new FileUploadManager(httpRemoteService, httpFileUploadBuilder);
 
         using var progressCancellationTokenSource = new CancellationTokenSource();
-        var reportProgressTask = fileUploadManager.ReportProgressAsync(progressCancellationTokenSource.Token);
+        var reportProgressTask =
+            fileUploadManager.ReportProgressAsync(progressCancellationTokenSource.Token, CancellationToken.None);
 
         for (var j = 0; j < 3; j++)
         {
             await fileUploadManager._progressChannel.Writer.WriteAsync(
-                new FileTransferProgress(filePath, -1));
+                new FileTransferProgress(filePath, -1), progressCancellationTokenSource.Token);
         }
 
         await Task.Delay(200, progressCancellationTokenSource.Token);
@@ -99,12 +100,13 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var fileUploadManager = new FileUploadManager(httpRemoteService, httpFileUploadBuilder);
 
         using var progressCancellationTokenSource = new CancellationTokenSource();
-        var reportProgressTask = fileUploadManager.ReportProgressAsync(progressCancellationTokenSource.Token);
+        var reportProgressTask =
+            fileUploadManager.ReportProgressAsync(progressCancellationTokenSource.Token, CancellationToken.None);
 
         for (var j = 0; j < 3; j++)
         {
             await fileUploadManager._progressChannel.Writer.WriteAsync(
-                new FileTransferProgress(filePath, -1));
+                new FileTransferProgress(filePath, -1), progressCancellationTokenSource.Token);
         }
 
         await Task.Delay(200, progressCancellationTokenSource.Token);
@@ -133,6 +135,8 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var fileUploadManager = new FileUploadManager(httpRemoteService, httpFileUploadBuilder);
 
         fileUploadManager.HandleTransferStarted();
+
+        serviceProvider.Dispose();
     }
 
     [Fact]
@@ -149,6 +153,8 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var fileUploadManager = new FileUploadManager(httpRemoteService, httpFileUploadBuilder);
 
         fileUploadManager.HandleTransferCompleted(100);
+
+        serviceProvider.Dispose();
     }
 
     [Fact]
@@ -165,6 +171,8 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var fileUploadManager = new FileUploadManager(httpRemoteService, httpFileUploadBuilder);
 
         fileUploadManager.HandleTransferFailed(new Exception("出错了"));
+
+        serviceProvider.Dispose();
     }
 
     [Fact]
@@ -287,7 +295,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
 
         Assert.Throws<TaskCanceledException>(() =>
         {
-            var httpResponseMessage = fileUploadManager.Start(cancellationTokenSource.Token);
+            _ = fileUploadManager.Start(cancellationTokenSource.Token);
         });
 
         await app.StopAsync();
@@ -330,7 +338,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var result = await httpResponseMessage.Content.ReadAsStringAsync();
         output.WriteLine(result);
 
-        Assert.Equal(2, i);
+        Assert.Equal(1, i);
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal("test.txt", result);
 
@@ -484,7 +492,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
 
         Assert.Throws<HttpRequestException>(() =>
         {
-            var httpResponseMessage = fileUploadManager.Start();
+            _ = fileUploadManager.Start();
         });
         Assert.Equal(2, i);
 
@@ -557,7 +565,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
         {
-            var httpResponseMessage = await fileUploadManager.StartAsync(cancellationTokenSource.Token);
+            _ = await fileUploadManager.StartAsync(cancellationTokenSource.Token);
         });
 
         await app.StopAsync();
@@ -599,7 +607,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var result = await httpResponseMessage.Content.ReadAsStringAsync();
         output.WriteLine(result);
 
-        Assert.Equal(2, i);
+        Assert.Equal(1, i);
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal("test.txt", result);
 
@@ -751,7 +759,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
 
         await Assert.ThrowsAsync<HttpRequestException>(async () =>
         {
-            var httpResponseMessage = await fileUploadManager.StartAsync();
+            _ = await fileUploadManager.StartAsync();
         });
         Assert.Equal(2, i);
 

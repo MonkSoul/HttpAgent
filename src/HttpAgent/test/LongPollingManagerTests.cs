@@ -26,8 +26,6 @@ public class LongPollingManagerTests
 
         Assert.NotNull(longPollingManager._httpLongPollingBuilder);
         Assert.NotNull(longPollingManager._httpRemoteService);
-        Assert.NotNull(longPollingManager._dataChannel);
-        Assert.Equal("UnboundedChannel`1", longPollingManager._dataChannel.GetType().Name);
         Assert.NotNull(longPollingManager.RequestBuilder);
         Assert.Null(longPollingManager.LongPollingEventHandler);
         Assert.Equal(0, longPollingManager.CurrentRetries);
@@ -39,6 +37,21 @@ public class LongPollingManagerTests
         Assert.Equal(TimeSpan.FromMilliseconds(100), longPollingManager2.RequestBuilder.Timeout);
 
         serviceProvider.Dispose();
+    }
+
+    [Fact]
+    public async Task FetchResponseAsync_Invalid_Parameters()
+    {
+        var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
+
+        var httpLongPollingBuilder =
+            new HttpLongPollingBuilder(HttpMethod.Get, new Uri("https://furion.net"));
+        var longPollingManager = new LongPollingManager(httpRemoteService, httpLongPollingBuilder);
+
+        await Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await longPollingManager.FetchResponseAsync(null!, CancellationToken.None));
+
+        await serviceProvider.DisposeAsync();
     }
 
     [Fact]
@@ -61,21 +74,22 @@ public class LongPollingManagerTests
                 });
         var longPollingManager = new LongPollingManager(httpRemoteService, httpLongPollingBuilder);
 
+        var dataChannel = Channel.CreateUnbounded<HttpResponseMessage>();
         using var messageCancellationTokenSource = new CancellationTokenSource();
-        var receiveDataTask = longPollingManager.FetchResponseAsync(messageCancellationTokenSource.Token);
+        var receiveDataTask = longPollingManager.FetchResponseAsync(dataChannel, messageCancellationTokenSource.Token);
 
         for (var j = 0; j < 3; j++)
         {
-            await longPollingManager._dataChannel.Writer.WriteAsync(
+            await dataChannel.Writer.WriteAsync(
                 new HttpResponseMessage
                 {
                     StatusCode = j % 2 == 0 ? HttpStatusCode.OK : HttpStatusCode.InternalServerError
-                });
+                }, messageCancellationTokenSource.Token);
         }
 
         await Task.Delay(200, messageCancellationTokenSource.Token);
 
-        longPollingManager._dataChannel.Writer.Complete();
+        dataChannel.Writer.Complete();
 
         await messageCancellationTokenSource.CancelAsync();
         await receiveDataTask;
@@ -103,18 +117,19 @@ public class LongPollingManagerTests
             });
         var longPollingManager = new LongPollingManager(httpRemoteService, httpLongPollingBuilder);
 
+        var dataChannel = Channel.CreateUnbounded<HttpResponseMessage>();
         using var messageCancellationTokenSource = new CancellationTokenSource();
-        var receiveDataTask = longPollingManager.FetchResponseAsync(messageCancellationTokenSource.Token);
+        var receiveDataTask = longPollingManager.FetchResponseAsync(dataChannel, messageCancellationTokenSource.Token);
 
         for (var j = 0; j < 3; j++)
         {
-            await longPollingManager._dataChannel.Writer.WriteAsync(
-                new HttpResponseMessage());
+            await dataChannel.Writer.WriteAsync(
+                new HttpResponseMessage(), messageCancellationTokenSource.Token);
         }
 
         await Task.Delay(200, messageCancellationTokenSource.Token);
 
-        longPollingManager._dataChannel.Writer.Complete();
+        dataChannel.Writer.Complete();
 
         await messageCancellationTokenSource.CancelAsync();
         await receiveDataTask;
@@ -374,6 +389,8 @@ public class LongPollingManagerTests
         var httpResponseMessage3 = new HttpResponseMessage { StatusCode = HttpStatusCode.InternalServerError };
         Assert.False(longPollingManager.ShouldTerminatePolling(httpResponseMessage3));
         Assert.Equal(1, longPollingManager.CurrentRetries);
+
+        serviceProvider.Dispose();
     }
 
     [Fact]

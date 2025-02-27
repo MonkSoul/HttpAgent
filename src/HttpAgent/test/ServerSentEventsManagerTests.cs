@@ -26,8 +26,6 @@ public class ServerSentEventsManagerTests(ITestOutputHelper output)
 
         Assert.NotNull(serverSentEventsManager._httpServerSentEventsBuilder);
         Assert.NotNull(serverSentEventsManager._httpRemoteService);
-        Assert.NotNull(serverSentEventsManager._messageChannel);
-        Assert.Equal("UnboundedChannel`1", serverSentEventsManager._messageChannel.GetType().Name);
         Assert.NotNull(serverSentEventsManager.RequestBuilder);
         Assert.Null(serverSentEventsManager.ServerSentEventsEventHandler);
         Assert.Equal(2000, serverSentEventsManager.CurrentRetryInterval);
@@ -109,10 +107,26 @@ public class ServerSentEventsManagerTests(ITestOutputHelper output)
         Assert.Equal(2000, serverSentEventsData5.Retry);
 
         var result10 = serverSentEventsManager.TryParseEventLine("some: ok", ref serverSentEventsData5);
-        Assert.False(result10);
-        Assert.Null(serverSentEventsData5);
+        Assert.True(result10);
+        Assert.NotNull(serverSentEventsData5);
+        Assert.Equal("这是一行数据", serverSentEventsData5.Data);
 
         serviceProvider.Dispose();
+    }
+
+    [Fact]
+    public async Task ReceiveDataAsync_Invalid_Parameters()
+    {
+        var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
+
+        var httpServerSentEventsBuilder =
+            new HttpServerSentEventsBuilder(new Uri("https://furion.net"));
+        var serverSentEventsManager = new ServerSentEventsManager(httpRemoteService, httpServerSentEventsBuilder);
+
+        await Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await serverSentEventsManager.ReceiveDataAsync(null!, CancellationToken.None));
+
+        await serviceProvider.DisposeAsync();
     }
 
     [Fact]
@@ -129,18 +143,20 @@ public class ServerSentEventsManagerTests(ITestOutputHelper output)
             });
         var serverSentEventsManager = new ServerSentEventsManager(httpRemoteService, httpServerSentEventsBuilder);
 
+        var messageChannel = Channel.CreateUnbounded<ServerSentEventsData>();
         using var messageCancellationTokenSource = new CancellationTokenSource();
-        var receiveDataTask = serverSentEventsManager.ReceiveDataAsync(messageCancellationTokenSource.Token);
+        var receiveDataTask =
+            serverSentEventsManager.ReceiveDataAsync(messageChannel, messageCancellationTokenSource.Token);
 
         for (var j = 0; j < 3; j++)
         {
-            await serverSentEventsManager._messageChannel.Writer.WriteAsync(
-                new ServerSentEventsData());
+            await messageChannel.Writer.WriteAsync(
+                new ServerSentEventsData(), messageCancellationTokenSource.Token);
         }
 
         await Task.Delay(200, messageCancellationTokenSource.Token);
 
-        serverSentEventsManager._messageChannel.Writer.Complete();
+        messageChannel.Writer.Complete();
 
         await messageCancellationTokenSource.CancelAsync();
         await receiveDataTask;
@@ -167,18 +183,20 @@ public class ServerSentEventsManagerTests(ITestOutputHelper output)
             });
         var serverSentEventsManager = new ServerSentEventsManager(httpRemoteService, httpServerSentEventsBuilder);
 
+        var messageChannel = Channel.CreateUnbounded<ServerSentEventsData>();
         using var messageCancellationTokenSource = new CancellationTokenSource();
-        var receiveDataTask = serverSentEventsManager.ReceiveDataAsync(messageCancellationTokenSource.Token);
+        var receiveDataTask =
+            serverSentEventsManager.ReceiveDataAsync(messageChannel, messageCancellationTokenSource.Token);
 
         for (var j = 0; j < 3; j++)
         {
-            await serverSentEventsManager._messageChannel.Writer.WriteAsync(
-                new ServerSentEventsData());
+            await messageChannel.Writer.WriteAsync(
+                new ServerSentEventsData(), messageCancellationTokenSource.Token);
         }
 
         await Task.Delay(200, messageCancellationTokenSource.Token);
 
-        serverSentEventsManager._messageChannel.Writer.Complete();
+        messageChannel.Writer.Complete();
 
         await messageCancellationTokenSource.CancelAsync();
         await receiveDataTask;
@@ -199,6 +217,8 @@ public class ServerSentEventsManagerTests(ITestOutputHelper output)
         var serverSentEventsManager = new ServerSentEventsManager(httpRemoteService, httpServerSentEventsBuilder);
 
         serverSentEventsManager.HandleOpen();
+
+        serviceProvider.Dispose();
     }
 
     [Fact]
@@ -212,6 +232,8 @@ public class ServerSentEventsManagerTests(ITestOutputHelper output)
         var serverSentEventsManager = new ServerSentEventsManager(httpRemoteService, httpServerSentEventsBuilder);
 
         serverSentEventsManager.HandleError(new Exception("出错了"));
+
+        serviceProvider.Dispose();
     }
 
     [Fact]

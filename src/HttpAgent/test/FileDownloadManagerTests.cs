@@ -197,12 +197,13 @@ public class FileDownloadManagerTests(ITestOutputHelper output)
         var fileDownloadManager = new FileDownloadManager(httpRemoteService, httpFileDownloadBuilder);
 
         using var progressCancellationTokenSource = new CancellationTokenSource();
-        var reportProgressTask = fileDownloadManager.ReportProgressAsync(progressCancellationTokenSource.Token);
+        var reportProgressTask =
+            fileDownloadManager.ReportProgressAsync(progressCancellationTokenSource.Token, CancellationToken.None);
 
         for (var j = 0; j < 3; j++)
         {
             await fileDownloadManager._progressChannel.Writer.WriteAsync(
-                new FileTransferProgress(@"C:\Workspaces\index.html", -1));
+                new FileTransferProgress(@"C:\Workspaces\index.html", -1), progressCancellationTokenSource.Token);
         }
 
         await Task.Delay(200, progressCancellationTokenSource.Token);
@@ -236,12 +237,13 @@ public class FileDownloadManagerTests(ITestOutputHelper output)
         var fileDownloadManager = new FileDownloadManager(httpRemoteService, httpFileDownloadBuilder);
 
         using var progressCancellationTokenSource = new CancellationTokenSource();
-        var reportProgressTask = fileDownloadManager.ReportProgressAsync(progressCancellationTokenSource.Token);
+        var reportProgressTask =
+            fileDownloadManager.ReportProgressAsync(progressCancellationTokenSource.Token, CancellationToken.None);
 
         for (var j = 0; j < 3; j++)
         {
             await fileDownloadManager._progressChannel.Writer.WriteAsync(
-                new FileTransferProgress(@"C:\Workspaces\index.html", -1));
+                new FileTransferProgress(@"C:\Workspaces\index.html", -1), progressCancellationTokenSource.Token);
         }
 
         await Task.Delay(200, progressCancellationTokenSource.Token);
@@ -268,6 +270,8 @@ public class FileDownloadManagerTests(ITestOutputHelper output)
         var fileDownloadManager = new FileDownloadManager(httpRemoteService, httpFileDownloadBuilder);
 
         fileDownloadManager.HandleTransferStarted();
+
+        serviceProvider.Dispose();
     }
 
     [Fact]
@@ -282,6 +286,8 @@ public class FileDownloadManagerTests(ITestOutputHelper output)
         var fileDownloadManager = new FileDownloadManager(httpRemoteService, httpFileDownloadBuilder);
 
         fileDownloadManager.HandleTransferCompleted(100);
+
+        serviceProvider.Dispose();
     }
 
     [Fact]
@@ -296,6 +302,8 @@ public class FileDownloadManagerTests(ITestOutputHelper output)
         var fileDownloadManager = new FileDownloadManager(httpRemoteService, httpFileDownloadBuilder);
 
         fileDownloadManager.HandleTransferFailed(new Exception("出错了"));
+
+        serviceProvider.Dispose();
     }
 
     [Fact]
@@ -313,6 +321,8 @@ public class FileDownloadManagerTests(ITestOutputHelper output)
 
         fileDownloadManager.HandleFileExistAndSkip();
         Assert.Equal(1, i);
+
+        serviceProvider.Dispose();
     }
 
     [Fact]
@@ -571,7 +581,7 @@ public class FileDownloadManagerTests(ITestOutputHelper output)
         // ReSharper disable once MethodHasAsyncOverload
         fileDownloadManager.Start();
 
-        Assert.Equal(2, i);
+        Assert.Equal(1, i);
         Assert.True(File.Exists(destinationPath));
         Assert.Equal(12, (await File.ReadAllBytesAsync(destinationPath)).Length);
 
@@ -873,7 +883,7 @@ public class FileDownloadManagerTests(ITestOutputHelper output)
 
         await fileDownloadManager.StartAsync();
 
-        Assert.Equal(2, i);
+        Assert.Equal(1, i);
         Assert.True(File.Exists(destinationPath));
         Assert.Equal(12, (await File.ReadAllBytesAsync(destinationPath)).Length);
 

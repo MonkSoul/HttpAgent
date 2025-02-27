@@ -373,7 +373,7 @@ public class HttpRemoteServiceExtensionsTests
         // ReSharper disable once MethodHasAsyncOverload
         httpRemoteService.Send(httpFileDownloadBuilder);
 
-        Assert.Equal(2, i);
+        Assert.Equal(1, i);
         Assert.True(File.Exists(destinationPath));
         Assert.Equal(12, (await File.ReadAllBytesAsync(destinationPath)).Length);
 
@@ -595,7 +595,7 @@ public class HttpRemoteServiceExtensionsTests
 
         await httpRemoteService.SendAsync(httpFileDownloadBuilder);
 
-        Assert.Equal(2, i);
+        Assert.Equal(1, i);
         Assert.True(File.Exists(destinationPath));
         Assert.Equal(12, (await File.ReadAllBytesAsync(destinationPath)).Length);
 
@@ -1023,7 +1023,7 @@ public class HttpRemoteServiceExtensionsTests
         // ReSharper disable once MethodHasAsyncOverload
         var httpResponseMessage = httpRemoteService.Send(httpFileUploadBuilder);
 
-        Assert.Equal(2, i);
+        Assert.Equal(1, i);
         var result = await httpResponseMessage.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal("test.txt", result);
@@ -1226,7 +1226,7 @@ public class HttpRemoteServiceExtensionsTests
 
         var httpResponseMessage = await httpRemoteService.SendAsync(httpFileUploadBuilder);
 
-        Assert.Equal(2, i);
+        Assert.Equal(1, i);
         var result = await httpResponseMessage.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal("test.txt", result);

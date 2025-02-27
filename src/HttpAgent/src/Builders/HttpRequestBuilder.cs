@@ -98,19 +98,29 @@ public sealed partial class HttpRequestBuilder
     internal string BuildFinalRequestUri(Uri? clientBaseAddress, IConfiguration? configuration)
     {
         // 替换路径或配置参数，处理非标准 HTTP URI 的应用场景（如 {url}），此时需优先解决路径或配置参数问题
-        var newRequestUri = RequestUri is null or { OriginalString: null }
+        var processedRequestUri = RequestUri is null or { OriginalString: null }
             ? RequestUri
             : new Uri(ReplacePlaceholders(RequestUri.OriginalString, configuration), UriKind.RelativeOrAbsolute);
 
         // 初始化带局部 BaseAddress 的请求地址
         var requestUriWithBaseAddress = BaseAddress is null
-            ? newRequestUri!
-            : new Uri(BaseAddress, newRequestUri!);
+            ? processedRequestUri
+            : processedRequestUri is null
+                ? BaseAddress
+                : new Uri(BaseAddress, processedRequestUri);
+
+        // 初始化带全局（客户端） BaseAddress 的请求地址
+        var requestUriWithClientBaseAddress = clientBaseAddress is null
+            ? requestUriWithBaseAddress
+            : requestUriWithBaseAddress is null
+                ? clientBaseAddress
+                : new Uri(clientBaseAddress, requestUriWithBaseAddress);
+
+        // 空检查
+        ArgumentNullException.ThrowIfNull(requestUriWithClientBaseAddress);
 
         // 初始化 UriBuilder 实例
-        var uriBuilder = new UriBuilder(clientBaseAddress is null
-            ? requestUriWithBaseAddress
-            : new Uri(clientBaseAddress, requestUriWithBaseAddress));
+        var uriBuilder = new UriBuilder(requestUriWithClientBaseAddress);
 
         // 追加片段标识符
         AppendFragment(uriBuilder);

@@ -6240,10 +6240,13 @@
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
-        <member name="M:HttpAgent.FileDownloadManager.ReportProgressAsync(System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.FileDownloadManager.ReportProgressAsync(System.Threading.CancellationToken,System.Threading.CancellationToken)">
             <summary>
                 文件传输进度报告任务
             </summary>
+            <param name="progressCancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -6375,10 +6378,13 @@
                 <see cref="T:System.Threading.Tasks.Task`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.FileUploadManager.ReportProgressAsync(System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.FileUploadManager.ReportProgressAsync(System.Threading.CancellationToken,System.Threading.CancellationToken)">
             <summary>
                 文件传输进度报告任务
             </summary>
+            <param name="progressCancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -6413,11 +6419,6 @@
         <member name="T:HttpAgent.LongPollingManager">
             <summary>
                 长轮询管理器
-            </summary>
-        </member>
-        <member name="F:HttpAgent.LongPollingManager._dataChannel">
-            <summary>
-                数据接收传输的通道
             </summary>
         </member>
         <member name="F:HttpAgent.LongPollingManager._httpLongPollingBuilder">
@@ -6498,10 +6499,11 @@
                 <see cref="T:System.Boolean" />
             </returns>
         </member>
-        <member name="M:HttpAgent.LongPollingManager.FetchResponseAsync(System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.LongPollingManager.FetchResponseAsync(System.Threading.Channels.Channel{System.Net.Http.HttpResponseMessage},System.Threading.CancellationToken)">
             <summary>
                 接收服务器响应数据任务
             </summary>
+            <param name="dataChannel">数据接收传输的通道</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -6549,11 +6551,6 @@
         </member>
         <member name="F:HttpAgent.ServerSentEventsManager._httpServerSentEventsBuilder">
             <inheritdoc cref="T:HttpAgent.HttpServerSentEventsBuilder" />
-        </member>
-        <member name="F:HttpAgent.ServerSentEventsManager._messageChannel">
-            <summary>
-                事件消息传输的通道
-            </summary>
         </member>
         <member name="M:HttpAgent.ServerSentEventsManager.#ctor(HttpAgent.IHttpRemoteService,HttpAgent.HttpServerSentEventsBuilder,System.Action{HttpAgent.HttpRequestBuilder})">
             <summary>
@@ -6636,7 +6633,7 @@
             <summary>
                 尝试解析事件消息行文本
             </summary>
-            <param name="line"></param>
+            <param name="line">消息行文本</param>
             <param name="serverSentEventsData">
                 <see cref="T:HttpAgent.ServerSentEventsData" />
             </param>
@@ -6644,10 +6641,11 @@
                 <see cref="T:System.Boolean" />
             </returns>
         </member>
-        <member name="M:HttpAgent.ServerSentEventsManager.ReceiveDataAsync(System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.ServerSentEventsManager.ReceiveDataAsync(System.Threading.Channels.Channel{HttpAgent.ServerSentEventsData},System.Threading.CancellationToken)">
             <summary>
                 接收事件消息任务
             </summary>
+            <param name="messageChannel">事件消息传输的通道</param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
@@ -13291,9 +13289,6 @@
         </member>
         <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_ascii_60FF03FEFFFF87FEFFFF47">
             <summary>Supports searching for characters in or not in "-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~".</summary>
-        </member>
-        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_indexOfString_EBC667BDABA1472FA863B5B39B31251EF2B4C95DD643BDECF694CB1CE7BDC178">
-            <summary>Supports searching for the string "[[".</summary>
         </member>
         <member name="T:Microsoft.Extensions.DependencyInjection.HttpRemoteServiceCollectionExtensions">
             <summary>
