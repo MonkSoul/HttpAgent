@@ -126,14 +126,14 @@ internal sealed partial class HttpRemoteService
             cancellationToken);
 
     /// <inheritdoc />
-    public void LongPolling(string? requestUri, Func<HttpResponseMessage, Task> onDataReceived,
+    public void LongPolling(string? requestUri, Func<HttpResponseMessage, CancellationToken, Task> onDataReceived,
         Action<HttpLongPollingBuilder>? configure = null, Action<HttpRequestBuilder>? requestConfigure = null,
         CancellationToken cancellationToken = default) =>
         Send(HttpRequestBuilder.LongPolling(requestUri, onDataReceived, configure), requestConfigure,
             cancellationToken);
 
     /// <inheritdoc />
-    public Task LongPollingAsync(string? requestUri, Func<HttpResponseMessage, Task> onDataReceived,
+    public Task LongPollingAsync(string? requestUri, Func<HttpResponseMessage, CancellationToken, Task> onDataReceived,
         Action<HttpLongPollingBuilder>? configure = null, Action<HttpRequestBuilder>? requestConfigure = null,
         CancellationToken cancellationToken = default) =>
         SendAsync(HttpRequestBuilder.LongPolling(requestUri, onDataReceived, configure), requestConfigure,

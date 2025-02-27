@@ -354,7 +354,7 @@ public class GetStartController(
     public async Task LongPolling(CancellationToken cancellationToken)
     {
         await httpRemoteService.LongPollingAsync("https://localhost:7044/HttpRemote/LongPolling"
-            , async responseMessage =>
+            , async (responseMessage, token) =>
             {
                 Console.WriteLine(await responseMessage.Content.ReadAsStringAsync(cancellationToken));
                 await Task.CompletedTask;
@@ -363,7 +363,7 @@ public class GetStartController(
         // 使用构建器模式
         //await httpRemoteService.SendAsync(HttpRequestBuilder
         //    .LongPolling("https://localhost:7044/HttpRemote/LongPolling"
-        //    , async responseMessage =>
+        //    , async (responseMessage, token) =>
         //    {
         //        Console.WriteLine(await responseMessage.Content.ReadAsStringAsync(cancellationToken));
         //        await Task.CompletedTask;
@@ -762,7 +762,8 @@ public class GetStartController(
         // 使用 XDocument 解析 XML
         var xDocument = XDocument.Parse(result!);
         // SOAP 1.1
-        var bodyContent = xDocument.Descendants(XName.Get("Body", "http://schemas.xmlsoap.org/soap/envelope/")).FirstOrDefault()?.Value!;
+        var bodyContent = xDocument.Descendants(XName.Get("Body", "http://schemas.xmlsoap.org/soap/envelope/"))
+            .FirstOrDefault()?.Value!;
         // SOAP 1.2
         // var bodyContent = xDocument.Descendants(XName.Get("Body", "http://www.w3.org/2003/05/soap-envelope")).FirstOrDefault()?.Value!;
 

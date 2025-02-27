@@ -109,7 +109,7 @@ public class HttpLongPollingBuilderTests
     public void SetOnDataReceived_ReturnOK()
     {
         var builder = new HttpLongPollingBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        builder.SetOnDataReceived(async _ => await Task.CompletedTask);
+        builder.SetOnDataReceived(async (_, _) => await Task.CompletedTask);
         Assert.NotNull(builder.OnDataReceived);
     }
 
@@ -124,7 +124,7 @@ public class HttpLongPollingBuilderTests
     public void SetOnError_ReturnOK()
     {
         var builder = new HttpLongPollingBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        builder.SetOnError(async _ => await Task.CompletedTask);
+        builder.SetOnError(async (_, _) => await Task.CompletedTask);
         Assert.NotNull(builder.OnError);
     }
 
@@ -139,7 +139,7 @@ public class HttpLongPollingBuilderTests
     public void SetOnEndOfStream_ReturnOK()
     {
         var builder = new HttpLongPollingBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        builder.SetOnEndOfStream(async _ => await Task.CompletedTask);
+        builder.SetOnEndOfStream(async (_, _) => await Task.CompletedTask);
         Assert.NotNull(builder.OnEndOfStream);
     }
 

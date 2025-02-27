@@ -511,7 +511,7 @@
                 <see cref="T:HttpAgent.HttpLongPollingBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpLongPollingBuilder.SetOnDataReceived(System.Func{System.Net.Http.HttpResponseMessage,System.Threading.Tasks.Task})">
+        <member name="M:HttpAgent.HttpLongPollingBuilder.SetOnDataReceived(System.Func{System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken,System.Threading.Tasks.Task})">
             <summary>
                 设置在接收服务器返回 <c>200~299</c> 状态码的数据的操作
             </summary>
@@ -520,7 +520,7 @@
                 <see cref="T:HttpAgent.HttpLongPollingBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpLongPollingBuilder.SetOnError(System.Func{System.Net.Http.HttpResponseMessage,System.Threading.Tasks.Task})">
+        <member name="M:HttpAgent.HttpLongPollingBuilder.SetOnError(System.Func{System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken,System.Threading.Tasks.Task})">
             <summary>
                 设置在接收服务器返回非 <c>200~299</c> 状态码的数据的操作
             </summary>
@@ -529,7 +529,7 @@
                 <see cref="T:HttpAgent.HttpLongPollingBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpLongPollingBuilder.SetOnEndOfStream(System.Func{System.Net.Http.HttpResponseMessage,System.Threading.Tasks.Task})">
+        <member name="M:HttpAgent.HttpLongPollingBuilder.SetOnEndOfStream(System.Func{System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken,System.Threading.Tasks.Task})">
             <summary>
                 设置在响应标头包含 <c>X-End-Of-Stream</c> 时触发的操作
             </summary>
@@ -2675,7 +2675,7 @@
                 <see cref="T:HttpAgent.HttpStressTestHarnessBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.LongPolling(System.Net.Http.HttpMethod,System.Uri,System.Func{System.Net.Http.HttpResponseMessage,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpLongPollingBuilder})">
+        <member name="M:HttpAgent.HttpRequestBuilder.LongPolling(System.Net.Http.HttpMethod,System.Uri,System.Func{System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpLongPollingBuilder})">
             <summary>
                 创建 <see cref="T:HttpAgent.HttpLongPollingBuilder" /> 构建器
             </summary>
@@ -2687,7 +2687,7 @@
                 <see cref="T:HttpAgent.HttpLongPollingBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.LongPolling(System.Uri,System.Func{System.Net.Http.HttpResponseMessage,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpLongPollingBuilder})">
+        <member name="M:HttpAgent.HttpRequestBuilder.LongPolling(System.Uri,System.Func{System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpLongPollingBuilder})">
             <summary>
                 创建 <see cref="T:HttpAgent.HttpLongPollingBuilder" /> 构建器
             </summary>
@@ -2698,7 +2698,7 @@
                 <see cref="T:HttpAgent.HttpLongPollingBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.LongPolling(System.String,System.Func{System.Net.Http.HttpResponseMessage,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpLongPollingBuilder})">
+        <member name="M:HttpAgent.HttpRequestBuilder.LongPolling(System.String,System.Func{System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpLongPollingBuilder})">
             <summary>
                 创建 <see cref="T:HttpAgent.HttpLongPollingBuilder" /> 构建器
             </summary>
@@ -5977,34 +5977,43 @@
                 长轮询事件处理程序
             </summary>
         </member>
-        <member name="M:HttpAgent.IHttpLongPollingEventHandler.OnDataReceivedAsync(System.Net.Http.HttpResponseMessage)">
+        <member name="M:HttpAgent.IHttpLongPollingEventHandler.OnDataReceivedAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <summary>
                 用于接收服务器返回 <c>200~299</c> 状态码的数据的操作
             </summary>
             <param name="httpResponseMessage">
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
             <returns>
                 <see cref="T:System.Threading.Tasks.Task" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpLongPollingEventHandler.OnErrorAsync(System.Net.Http.HttpResponseMessage)">
+        <member name="M:HttpAgent.IHttpLongPollingEventHandler.OnErrorAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <summary>
                 用于接收服务器返回非 <c>200~299</c> 状态码的数据的操作
             </summary>
             <param name="httpResponseMessage">
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
             <returns>
                 <see cref="T:System.Threading.Tasks.Task" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpLongPollingEventHandler.OnEndOfStreamAsync(System.Net.Http.HttpResponseMessage)">
+        <member name="M:HttpAgent.IHttpLongPollingEventHandler.OnEndOfStreamAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <summary>
                 用于响应标头包含 <c>X-End-Of-Stream</c> 时触发的操作
             </summary>
             <param name="httpResponseMessage">
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
             </param>
             <returns>
                 <see cref="T:System.Threading.Tasks.Task" />
@@ -6508,36 +6517,48 @@
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
-        <member name="M:HttpAgent.LongPollingManager.HandleResponseAsync(System.Net.Http.HttpResponseMessage)">
+        <member name="M:HttpAgent.LongPollingManager.HandleResponseAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <summary>
                 处理服务器响应数据
             </summary>
             <param name="httpResponseMessage">
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
         </member>
-        <member name="M:HttpAgent.LongPollingManager.HandleDataReceivedAsync(System.Net.Http.HttpResponseMessage)">
+        <member name="M:HttpAgent.LongPollingManager.HandleDataReceivedAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <summary>
                 处理服务器返回 <c>200~299</c> 状态码的数据
             </summary>
             <param name="httpResponseMessage">
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
         </member>
-        <member name="M:HttpAgent.LongPollingManager.HandleErrorAsync(System.Net.Http.HttpResponseMessage)">
+        <member name="M:HttpAgent.LongPollingManager.HandleErrorAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <summary>
                 处理服务器返回非 <c>200~299</c> 状态码的数据
             </summary>
             <param name="httpResponseMessage">
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
             </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
+            </param>
         </member>
-        <member name="M:HttpAgent.LongPollingManager.HandleEndOfStreamAsync(System.Net.Http.HttpResponseMessage)">
+        <member name="M:HttpAgent.LongPollingManager.HandleEndOfStreamAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <summary>
                 处理服务器响应标头包含 <c>X-End-Of-Stream</c> 时触发的操作
             </summary>
             <param name="httpResponseMessage">
                 <see cref="T:System.Net.Http.HttpResponseMessage" />
+            </param>
+            <param name="cancellationToken">
+                <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
         <member name="T:HttpAgent.ServerSentEventsManager">
@@ -8317,10 +8338,10 @@
         <member name="M:HttpAgent.HttpRemoteService.SendAsync(HttpAgent.HttpStressTestHarnessBuilder,System.Action{HttpAgent.HttpRequestBuilder},System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.LongPolling(System.String,System.Func{System.Net.Http.HttpResponseMessage,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpLongPollingBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.LongPolling(System.String,System.Func{System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpLongPollingBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.HttpRemoteService.LongPollingAsync(System.String,System.Func{System.Net.Http.HttpResponseMessage,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpLongPollingBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpRemoteService.LongPollingAsync(System.String,System.Func{System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpLongPollingBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.HttpRemoteService.Send(HttpAgent.HttpLongPollingBuilder,System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
@@ -9633,7 +9654,7 @@
                 <see cref="T:System.Threading.Tasks.Task`1" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.LongPolling(System.String,System.Func{System.Net.Http.HttpResponseMessage,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpLongPollingBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.LongPolling(System.String,System.Func{System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpLongPollingBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送长轮询请求
             </summary>
@@ -9645,7 +9666,7 @@
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteService.LongPollingAsync(System.String,System.Func{System.Net.Http.HttpResponseMessage,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpLongPollingBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.IHttpRemoteService.LongPollingAsync(System.String,System.Func{System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Action{HttpAgent.HttpLongPollingBuilder},System.Action{HttpAgent.HttpRequestBuilder},System.Threading.CancellationToken)">
             <summary>
                 发送长轮询请求
             </summary>
@@ -13315,6 +13336,15 @@
                 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
             </param>
             <param name="httpRemoteBuilder">
+                <see cref="T:HttpAgent.HttpRemoteBuilder" />
+            </param>
+            <returns>
+                <see cref="T:HttpAgent.IHttpRemoteBuilder" />
+            </returns>
+        </member>
+    </members>
+</doc>
+teBuilder">
                 <see cref="T:HttpAgent.HttpRemoteBuilder" />
             </param>
             <returns>

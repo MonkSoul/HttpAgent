@@ -160,33 +160,37 @@ public class CustomLongPollingEventHandler : IHttpLongPollingEventHandler
     public int counter;
 
     /// <inheritdoc />
-    public Task OnDataReceivedAsync(HttpResponseMessage httpResponseMessage)
+    public Task OnDataReceivedAsync(HttpResponseMessage httpResponseMessage, CancellationToken cancellationToken)
     {
         counter++;
         return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    public Task OnErrorAsync(HttpResponseMessage httpResponseMessage)
+    public Task OnErrorAsync(HttpResponseMessage httpResponseMessage, CancellationToken cancellationToken)
     {
         counter++;
         return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    public Task OnEndOfStreamAsync(HttpResponseMessage httpResponseMessage) => Task.CompletedTask;
+    public Task OnEndOfStreamAsync(HttpResponseMessage httpResponseMessage, CancellationToken cancellationToken) =>
+        Task.CompletedTask;
 }
 
 public class CustomLongPollingEventHandler2 : IHttpLongPollingEventHandler, IHttpRequestEventHandler
 {
     /// <inheritdoc />
-    public Task OnDataReceivedAsync(HttpResponseMessage httpResponseMessage) => throw new NotImplementedException();
+    public Task OnDataReceivedAsync(HttpResponseMessage httpResponseMessage, CancellationToken cancellationToken) =>
+        throw new NotImplementedException();
 
     /// <inheritdoc />
-    public Task OnErrorAsync(HttpResponseMessage httpResponseMessage) => throw new NotImplementedException();
+    public Task OnErrorAsync(HttpResponseMessage httpResponseMessage, CancellationToken cancellationToken) =>
+        throw new NotImplementedException();
 
     /// <inheritdoc />
-    public Task OnEndOfStreamAsync(HttpResponseMessage httpResponseMessage) => throw new NotImplementedException();
+    public Task OnEndOfStreamAsync(HttpResponseMessage httpResponseMessage, CancellationToken cancellationToken) =>
+        throw new NotImplementedException();
 
     /// <inheritdoc />
     public void OnPreSendRequest(HttpRequestMessage httpRequestMessage) => throw new NotImplementedException();

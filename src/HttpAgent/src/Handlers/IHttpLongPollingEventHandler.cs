@@ -15,10 +15,13 @@ public interface IHttpLongPollingEventHandler
     /// <param name="httpResponseMessage">
     ///     <see cref="HttpResponseMessage" />
     /// </param>
+    /// <param name="cancellationToken">
+    ///     <see cref="CancellationToken" />
+    /// </param>
     /// <returns>
     ///     <see cref="Task" />
     /// </returns>
-    Task OnDataReceivedAsync(HttpResponseMessage httpResponseMessage);
+    Task OnDataReceivedAsync(HttpResponseMessage httpResponseMessage, CancellationToken cancellationToken);
 
     /// <summary>
     ///     用于接收服务器返回非 <c>200~299</c> 状态码的数据的操作
@@ -26,10 +29,13 @@ public interface IHttpLongPollingEventHandler
     /// <param name="httpResponseMessage">
     ///     <see cref="HttpResponseMessage" />
     /// </param>
+    /// <param name="cancellationToken">
+    ///     <see cref="CancellationToken" />
+    /// </param>
     /// <returns>
     ///     <see cref="Task" />
     /// </returns>
-    Task OnErrorAsync(HttpResponseMessage httpResponseMessage);
+    Task OnErrorAsync(HttpResponseMessage httpResponseMessage, CancellationToken cancellationToken);
 
     /// <summary>
     ///     用于响应标头包含 <c>X-End-Of-Stream</c> 时触发的操作
@@ -37,8 +43,11 @@ public interface IHttpLongPollingEventHandler
     /// <param name="httpResponseMessage">
     ///     <see cref="HttpResponseMessage" />
     /// </param>
+    /// <param name="cancellationToken">
+    ///     <see cref="CancellationToken" />
+    /// </param>
     /// <returns>
     ///     <see cref="Task" />
     /// </returns>
-    Task OnEndOfStreamAsync(HttpResponseMessage httpResponseMessage);
+    Task OnEndOfStreamAsync(HttpResponseMessage httpResponseMessage, CancellationToken cancellationToken);
 }

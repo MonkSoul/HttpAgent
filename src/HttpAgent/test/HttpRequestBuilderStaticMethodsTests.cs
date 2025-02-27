@@ -427,32 +427,33 @@ public class HttpRequestBuilderStaticMethodsTests
     public void LongPolling_ReturnOK()
     {
         var httpLongPollingBuilder =
-            HttpRequestBuilder.LongPolling(HttpMethod.Get, new Uri("http://localhost"), _ => Task.CompletedTask);
+            HttpRequestBuilder.LongPolling(HttpMethod.Get, new Uri("http://localhost"), (_, _) => Task.CompletedTask);
 
         Assert.NotNull(httpLongPollingBuilder);
         Assert.Equal(HttpMethod.Get, httpLongPollingBuilder.Method);
         Assert.NotNull(httpLongPollingBuilder.RequestUri);
         Assert.Equal("http://localhost/", httpLongPollingBuilder.RequestUri.ToString());
 
-        var httpLongPollingBuilder2 = HttpRequestBuilder.LongPolling(HttpMethod.Get, null, _ => Task.CompletedTask);
+        var httpLongPollingBuilder2 =
+            HttpRequestBuilder.LongPolling(HttpMethod.Get, null, (_, _) => Task.CompletedTask);
         Assert.Equal(HttpMethod.Get, httpLongPollingBuilder2.Method);
         Assert.Null(httpLongPollingBuilder2.RequestUri);
 
-        var httpLongPollingBuilder3 = HttpRequestBuilder.LongPolling((string)null!, _ => Task.CompletedTask);
+        var httpLongPollingBuilder3 = HttpRequestBuilder.LongPolling((string)null!, (_, _) => Task.CompletedTask);
         Assert.Equal(HttpMethod.Get, httpLongPollingBuilder3.Method);
         Assert.Null(httpLongPollingBuilder3.RequestUri);
 
-        var httpLongPollingBuilder4 = HttpRequestBuilder.LongPolling("http://localhost", _ => Task.CompletedTask);
+        var httpLongPollingBuilder4 = HttpRequestBuilder.LongPolling("http://localhost", (_, _) => Task.CompletedTask);
         Assert.Equal(HttpMethod.Get, httpLongPollingBuilder4.Method);
         Assert.NotNull(httpLongPollingBuilder4.RequestUri);
         Assert.Equal("http://localhost/", httpLongPollingBuilder4.RequestUri.ToString());
 
-        var httpLongPollingBuilder5 = HttpRequestBuilder.LongPolling((Uri)null!, _ => Task.CompletedTask);
+        var httpLongPollingBuilder5 = HttpRequestBuilder.LongPolling((Uri)null!, (_, _) => Task.CompletedTask);
         Assert.Equal(HttpMethod.Get, httpLongPollingBuilder5.Method);
         Assert.Null(httpLongPollingBuilder5.RequestUri);
 
         var httpLongPollingBuilder6 =
-            HttpRequestBuilder.LongPolling(new Uri("http://localhost"), _ => Task.CompletedTask);
+            HttpRequestBuilder.LongPolling(new Uri("http://localhost"), (_, _) => Task.CompletedTask);
         Assert.Equal(HttpMethod.Get, httpLongPollingBuilder6.Method);
         Assert.NotNull(httpLongPollingBuilder6.RequestUri);
         Assert.Equal("http://localhost/", httpLongPollingBuilder6.RequestUri.ToString());
