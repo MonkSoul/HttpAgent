@@ -21,7 +21,7 @@ public class HttpLongPollingBuilderTests
         Assert.NotNull(builder2);
         Assert.NotNull(builder2.RequestUri);
         Assert.Equal("http://localhost/", builder2.RequestUri.ToString());
-        Assert.Equal(HttpMethod.Get, builder2.Method);
+        Assert.Equal(HttpMethod.Get, builder2.HttpMethod);
         Assert.Equal(TimeSpan.FromSeconds(2), builder2.RetryInterval);
         Assert.Null(builder2.Timeout);
         Assert.Equal(100, builder2.MaxRetries);
@@ -185,7 +185,7 @@ public class HttpLongPollingBuilderTests
 
         var httpRequestBuilder = httpLongPollingBuilder.Build(httpRemoteOptions);
         Assert.NotNull(httpRequestBuilder);
-        Assert.Equal(HttpMethod.Get, httpRequestBuilder.Method);
+        Assert.Equal(HttpMethod.Get, httpRequestBuilder.HttpMethod);
         Assert.NotNull(httpRequestBuilder.RequestUri);
         Assert.Equal("http://localhost/", httpRequestBuilder.RequestUri.ToString());
         Assert.False(httpRequestBuilder.EnsureSuccessStatusCodeEnabled);

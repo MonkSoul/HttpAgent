@@ -155,16 +155,16 @@ public sealed class DigestCredentials
     ///     生成摘要认证授权凭证
     /// </summary>
     /// <param name="digestUri">请求相对地址（不包含主机地址）</param>
-    /// <param name="method">
+    /// <param name="httpMethod">
     ///     <see cref="HttpMethod" />
     /// </param>
     /// <returns>
     ///     <see cref="string" />
     /// </returns>
-    internal string GenerateCredentials(string? digestUri, HttpMethod method)
+    internal string GenerateCredentials(string? digestUri, HttpMethod httpMethod)
     {
         var ha1 = GenerateMd5Hash($"{Username}:{Realm}:{Password}");
-        var ha2 = GenerateMd5Hash($"{method}:{digestUri}");
+        var ha2 = GenerateMd5Hash($"{httpMethod}:{digestUri}");
 
         var digestResponse =
             GenerateMd5Hash(

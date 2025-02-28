@@ -188,7 +188,7 @@ public class HttpRemoteExtensionsTests
         httpRequestMessage.Content = stringContent;
 
         var clonedHttpRequestMessage = await httpRequestMessage.CloneAsync();
-        Assert.Equal("furion", clonedHttpRequestMessage.Headers.GetValues("User-Agent").First());
+        Assert.Equal("furion", clonedHttpRequestMessage.Headers.UserAgent.ToString());
 
         var streamContent = clonedHttpRequestMessage.Content as StreamContent;
         Assert.NotNull(streamContent);
@@ -211,7 +211,7 @@ public class HttpRemoteExtensionsTests
         httpRequestMessage.Content = stringContent;
 
         var clonedHttpRequestMessage = httpRequestMessage.Clone();
-        Assert.Equal("furion", clonedHttpRequestMessage.Headers.GetValues("User-Agent").First());
+        Assert.Equal("furion", clonedHttpRequestMessage.Headers.UserAgent.ToString());
 
         var streamContent = clonedHttpRequestMessage.Content as StreamContent;
         Assert.NotNull(streamContent);

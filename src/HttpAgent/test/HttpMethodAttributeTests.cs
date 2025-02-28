@@ -25,15 +25,15 @@ public class HttpMethodAttributeTests
         Assert.False(attributeUsage.AllowMultiple);
 
         var attribute = new HttpMethodAttribute("GET");
-        Assert.Equal(HttpMethod.Get, attribute.Method);
+        Assert.Equal(HttpMethod.Get, attribute.HttpMethod);
         Assert.Null(attribute.RequestUri);
 
         var attribute2 = new HttpMethodAttribute("DELETE", "http://localhost");
-        Assert.Equal(HttpMethod.Delete, attribute2.Method);
+        Assert.Equal(HttpMethod.Delete, attribute2.HttpMethod);
         Assert.Equal("http://localhost", attribute2.RequestUri);
 
         var attribute3 = new HttpMethodAttribute("UNKNOWN", "http://localhost");
-        Assert.Equal("UNKNOWN", attribute3.Method.ToString());
+        Assert.Equal("UNKNOWN", attribute3.HttpMethod.ToString());
         Assert.Equal("http://localhost", attribute3.RequestUri);
     }
 
@@ -46,11 +46,11 @@ public class HttpMethodAttributeTests
         Assert.False(attributeUsage.AllowMultiple);
 
         var attribute = new DeleteAttribute();
-        Assert.Equal(HttpMethod.Delete, attribute.Method);
+        Assert.Equal(HttpMethod.Delete, attribute.HttpMethod);
         Assert.Null(attribute.RequestUri);
 
         var attribute2 = new DeleteAttribute("http://localhost");
-        Assert.Equal(HttpMethod.Delete, attribute2.Method);
+        Assert.Equal(HttpMethod.Delete, attribute2.HttpMethod);
         Assert.Equal("http://localhost", attribute2.RequestUri);
     }
 
@@ -63,11 +63,11 @@ public class HttpMethodAttributeTests
         Assert.False(attributeUsage.AllowMultiple);
 
         var attribute = new GetAttribute();
-        Assert.Equal(HttpMethod.Get, attribute.Method);
+        Assert.Equal(HttpMethod.Get, attribute.HttpMethod);
         Assert.Null(attribute.RequestUri);
 
         var attribute2 = new GetAttribute("http://localhost");
-        Assert.Equal(HttpMethod.Get, attribute2.Method);
+        Assert.Equal(HttpMethod.Get, attribute2.HttpMethod);
         Assert.Equal("http://localhost", attribute2.RequestUri);
     }
 
@@ -80,11 +80,11 @@ public class HttpMethodAttributeTests
         Assert.False(attributeUsage.AllowMultiple);
 
         var attribute = new HeadAttribute();
-        Assert.Equal(HttpMethod.Head, attribute.Method);
+        Assert.Equal(HttpMethod.Head, attribute.HttpMethod);
         Assert.Null(attribute.RequestUri);
 
         var attribute2 = new HeadAttribute("http://localhost");
-        Assert.Equal(HttpMethod.Head, attribute2.Method);
+        Assert.Equal(HttpMethod.Head, attribute2.HttpMethod);
         Assert.Equal("http://localhost", attribute2.RequestUri);
     }
 
@@ -97,11 +97,11 @@ public class HttpMethodAttributeTests
         Assert.False(attributeUsage.AllowMultiple);
 
         var attribute = new OptionsAttribute();
-        Assert.Equal(HttpMethod.Options, attribute.Method);
+        Assert.Equal(HttpMethod.Options, attribute.HttpMethod);
         Assert.Null(attribute.RequestUri);
 
         var attribute2 = new OptionsAttribute("http://localhost");
-        Assert.Equal(HttpMethod.Options, attribute2.Method);
+        Assert.Equal(HttpMethod.Options, attribute2.HttpMethod);
         Assert.Equal("http://localhost", attribute2.RequestUri);
     }
 
@@ -114,11 +114,11 @@ public class HttpMethodAttributeTests
         Assert.False(attributeUsage.AllowMultiple);
 
         var attribute = new PatchAttribute();
-        Assert.Equal(HttpMethod.Patch, attribute.Method);
+        Assert.Equal(HttpMethod.Patch, attribute.HttpMethod);
         Assert.Null(attribute.RequestUri);
 
         var attribute2 = new PatchAttribute("http://localhost");
-        Assert.Equal(HttpMethod.Patch, attribute2.Method);
+        Assert.Equal(HttpMethod.Patch, attribute2.HttpMethod);
         Assert.Equal("http://localhost", attribute2.RequestUri);
     }
 
@@ -131,11 +131,11 @@ public class HttpMethodAttributeTests
         Assert.False(attributeUsage.AllowMultiple);
 
         var attribute = new PostAttribute();
-        Assert.Equal(HttpMethod.Post, attribute.Method);
+        Assert.Equal(HttpMethod.Post, attribute.HttpMethod);
         Assert.Null(attribute.RequestUri);
 
         var attribute2 = new PostAttribute("http://localhost");
-        Assert.Equal(HttpMethod.Post, attribute2.Method);
+        Assert.Equal(HttpMethod.Post, attribute2.HttpMethod);
         Assert.Equal("http://localhost", attribute2.RequestUri);
     }
 
@@ -148,11 +148,11 @@ public class HttpMethodAttributeTests
         Assert.False(attributeUsage.AllowMultiple);
 
         var attribute = new PutAttribute();
-        Assert.Equal(HttpMethod.Put, attribute.Method);
+        Assert.Equal(HttpMethod.Put, attribute.HttpMethod);
         Assert.Null(attribute.RequestUri);
 
         var attribute2 = new PutAttribute("http://localhost");
-        Assert.Equal(HttpMethod.Put, attribute2.Method);
+        Assert.Equal(HttpMethod.Put, attribute2.HttpMethod);
         Assert.Equal("http://localhost", attribute2.RequestUri);
     }
 
@@ -165,11 +165,11 @@ public class HttpMethodAttributeTests
         Assert.False(attributeUsage.AllowMultiple);
 
         var attribute = new TraceAttribute();
-        Assert.Equal(HttpMethod.Trace, attribute.Method);
+        Assert.Equal(HttpMethod.Trace, attribute.HttpMethod);
         Assert.Null(attribute.RequestUri);
 
         var attribute2 = new TraceAttribute("http://localhost");
-        Assert.Equal(HttpMethod.Trace, attribute2.Method);
+        Assert.Equal(HttpMethod.Trace, attribute2.HttpMethod);
         Assert.Equal("http://localhost", attribute2.RequestUri);
     }
 }

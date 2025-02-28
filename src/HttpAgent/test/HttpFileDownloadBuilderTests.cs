@@ -14,11 +14,11 @@ public class HttpFileDownloadBuilderTests
     public void New_ReturnOK()
     {
         var builder = new HttpFileDownloadBuilder(HttpMethod.Get, null);
-        Assert.Equal(HttpMethod.Get, builder.Method);
+        Assert.Equal(HttpMethod.Get, builder.HttpMethod);
         Assert.Null(builder.RequestUri);
 
         var builder2 = new HttpFileDownloadBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        Assert.Equal(HttpMethod.Get, builder2.Method);
+        Assert.Equal(HttpMethod.Get, builder2.HttpMethod);
         Assert.NotNull(builder2.RequestUri);
         Assert.Equal("http://localhost/", builder2.RequestUri.ToString());
         Assert.Equal(80 * 1024, builder2.BufferSize);
@@ -232,7 +232,7 @@ public class HttpFileDownloadBuilderTests
 
         var httpRequestBuilder = httpFileDownloadBuilder.Build(httpRemoteOptions);
         Assert.NotNull(httpRequestBuilder);
-        Assert.Equal(HttpMethod.Get, httpRequestBuilder.Method);
+        Assert.Equal(HttpMethod.Get, httpRequestBuilder.HttpMethod);
         Assert.NotNull(httpRequestBuilder.RequestUri);
         Assert.Equal("http://localhost/", httpRequestBuilder.RequestUri.ToString());
         Assert.True(httpRequestBuilder.EnsureSuccessStatusCodeEnabled);

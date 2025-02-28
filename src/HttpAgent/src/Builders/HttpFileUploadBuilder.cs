@@ -26,7 +26,7 @@ public sealed class HttpFileUploadBuilder
         ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
-        Method = httpMethod;
+        HttpMethod = httpMethod;
         RequestUri = requestUri;
 
         FilePath = filePath;
@@ -42,7 +42,7 @@ public sealed class HttpFileUploadBuilder
     /// <summary>
     ///     请求方式
     /// </summary>
-    public HttpMethod Method { get; }
+    public HttpMethod HttpMethod { get; }
 
     /// <summary>
     ///     文件路径
@@ -331,8 +331,9 @@ public sealed class HttpFileUploadBuilder
         EnsureLegalData(FilePath, AllowedFileExtensions, MaxFileSizeInBytes);
 
         // 初始化 HttpRequestBuilder 实例
-        var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure).SetMultipartContent(builder =>
-            builder.AddFileWithProgressAsStream(FilePath, progressChannel, Name, FileName, ContentType));
+        var httpRequestBuilder = HttpRequestBuilder.Create(HttpMethod, RequestUri, configure)
+            .SetMultipartContent(builder =>
+                builder.AddFileWithProgressAsStream(FilePath, progressChannel, Name, FileName, ContentType));
 
         // 检查是否设置了事件处理程序且该处理程序实现了 IHttpRequestEventHandler 接口，如果有则设置给 httpRequestBuilder
         if (FileTransferEventHandlerType is not null &&

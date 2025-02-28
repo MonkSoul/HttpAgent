@@ -37,7 +37,7 @@
                 转发地址
             </summary>
         </member>
-        <member name="P:HttpAgent.HttpContextForwardBuilder.Method">
+        <member name="P:HttpAgent.HttpContextForwardBuilder.HttpMethod">
             <summary>
                 转发方式
             </summary>

@@ -32,7 +32,7 @@ public sealed class HttpServerSentEventsBuilder
         // 空检查
         ArgumentNullException.ThrowIfNull(httpMethod);
 
-        Method = httpMethod;
+        HttpMethod = httpMethod;
         RequestUri = requestUri;
     }
 
@@ -45,7 +45,7 @@ public sealed class HttpServerSentEventsBuilder
     ///     请求方式
     /// </summary>
     /// <remarks>默认请求为：<c>GET</c>。</remarks>
-    public HttpMethod Method { get; }
+    public HttpMethod HttpMethod { get; }
 
     /// <summary>
     ///     默认重新连接的间隔时间（毫秒）
@@ -228,7 +228,7 @@ public sealed class HttpServerSentEventsBuilder
 
         // 初始化 HttpRequestBuilder 实例，并确保请求标头中添加了 Accept: text/event-stream；同时启用 HttpClient 池化管理
         // 如果请求失败，则应抛出异常。
-        var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure)
+        var httpRequestBuilder = HttpRequestBuilder.Create(HttpMethod, RequestUri, configure)
             .WithHeader(nameof(HttpRequestHeaders.Accept), "text/event-stream", replace: true).DisableCache()
             .UseHttpClientPool().EnsureSuccessStatusCode();
 

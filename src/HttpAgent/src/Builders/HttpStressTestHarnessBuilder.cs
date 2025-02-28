@@ -20,7 +20,7 @@ public sealed class HttpStressTestHarnessBuilder
         // 空检查
         ArgumentNullException.ThrowIfNull(httpMethod);
 
-        Method = httpMethod;
+        HttpMethod = httpMethod;
         RequestUri = requestUri;
     }
 
@@ -32,7 +32,7 @@ public sealed class HttpStressTestHarnessBuilder
     /// <summary>
     ///     请求方式
     /// </summary>
-    public HttpMethod Method { get; }
+    public HttpMethod HttpMethod { get; }
 
     /// <summary>
     ///     并发请求数量
@@ -134,7 +134,7 @@ public sealed class HttpStressTestHarnessBuilder
 
         // 初始化 HttpRequestBuilder 实例，并确保请求标头中添加了 X-Stress-Test: Harness；
         // 同时禁用请求分析工具和启用 HttpClient 池化管理
-        var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure)
+        var httpRequestBuilder = HttpRequestBuilder.Create(HttpMethod, RequestUri, configure)
             .WithHeader(Constants.X_STRESS_TEST_HEADER, Constants.X_STRESS_TEST_VALUE, replace: true).Profiler(false)
             .PerformanceOptimization()
             .UseHttpClientPool();

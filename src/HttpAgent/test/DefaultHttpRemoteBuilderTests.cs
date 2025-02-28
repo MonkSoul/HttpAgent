@@ -43,4 +43,23 @@ public class DefaultHttpRemoteBuilderTests
             options.DefaultContentType = "application/json";
         });
     }
+
+    [Fact]
+    public void AddProfilerDelegatingHandler_ReturnOK()
+    {
+        var services = new ServiceCollection();
+        var builder = new DefaultHttpRemoteBuilder(services);
+
+        services.AddHttpClient();
+        services.AddHttpClient("github", client => { });
+
+        builder.AddProfilerDelegatingHandler();
+        builder.AddProfilerDelegatingHandler(true);
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var httpClientFactoryOptions = serviceProvider.GetService<IOptions<HttpClientFactoryOptions>>()?.Value;
+        Assert.NotNull(httpClientFactoryOptions);
+        Assert.NotNull(httpClientFactoryOptions.HttpMessageHandlerBuilderActions);
+        Assert.Equal(2, httpClientFactoryOptions.HttpMessageHandlerBuilderActions.Count);
+    }
 }

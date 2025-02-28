@@ -24,49 +24,4 @@ public static class JsonUtility
 
         return JsonDocument.Parse(jsonString);
     }
-
-    /// <summary>
-    ///     尝试解析 JSON 字符串
-    /// </summary>
-    /// <param name="jsonString">JSON 字符串</param>
-    /// <param name="jsonDocument">
-    ///     <see cref="JsonDocument" />
-    /// </param>
-    /// <returns>
-    ///     <see cref="bool" />
-    /// </returns>
-    public static bool TryParse(string jsonString, [NotNullWhen(true)] out JsonDocument? jsonDocument)
-    {
-        // 空检查
-        ArgumentNullException.ThrowIfNull(jsonString);
-
-        try
-        {
-            jsonDocument = Parse(jsonString);
-            return true;
-        }
-        catch (JsonException)
-        {
-            jsonDocument = null;
-            return false;
-        }
-    }
-
-    /// <summary>
-    ///     检查 <see cref="JsonDocument" /> 的 <c>ValueKind</c> 属性值是否是 <c>Object</c>、<c>Array</c> 或 <c>Null</c>
-    /// </summary>
-    /// <param name="jsonDocument">
-    ///     <see cref="JsonDocument" />
-    /// </param>
-    /// <returns>
-    ///     <see cref="bool" />
-    /// </returns>
-    public static bool IsObjectOrArrayOrNull(JsonDocument jsonDocument)
-    {
-        // 空检查
-        ArgumentNullException.ThrowIfNull(jsonDocument);
-
-        var root = jsonDocument.RootElement;
-        return root.ValueKind is JsonValueKind.Object or JsonValueKind.Array or JsonValueKind.Null;
-    }
 }

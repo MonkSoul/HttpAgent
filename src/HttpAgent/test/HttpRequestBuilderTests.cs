@@ -19,13 +19,13 @@ public class HttpRequestBuilderTests
         Assert.NotNull(HttpRequestBuilder._stringContentForFormUrlEncodedContentProcessorInstance);
 
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, null!);
-        Assert.Equal(HttpMethod.Get, httpRequestBuilder.Method);
+        Assert.Equal(HttpMethod.Get, httpRequestBuilder.HttpMethod);
         Assert.Null(httpRequestBuilder.RequestUri);
         Assert.False(httpRequestBuilder._isAddedStringContentForFormUrlEncodedContentProcessor);
         Assert.NotNull(httpRequestBuilder._lock);
 
         var httpRequestBuilder2 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        Assert.Equal(HttpMethod.Get, httpRequestBuilder2.Method);
+        Assert.Equal(HttpMethod.Get, httpRequestBuilder2.HttpMethod);
         Assert.Equal("http://localhost/", httpRequestBuilder2.RequestUri?.ToString());
     }
 
@@ -216,7 +216,7 @@ public class HttpRequestBuilderTests
         var httpRequestBuilder =
             new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost")).AutoSetHostHeader(false);
         var finalRequestUri = httpRequestBuilder.BuildFinalRequestUri(null, null);
-        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.Method!, finalRequestUri);
+        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.HttpMethod!, finalRequestUri);
 
         httpRequestBuilder.AppendHeaders(httpRequestMessage);
         Assert.Empty(httpRequestMessage.Headers);
@@ -263,7 +263,7 @@ public class HttpRequestBuilderTests
             new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost/")).AddBasicAuthentication(
                 "admin", "a123456789");
         var finalRequestUri = httpRequestBuilder.BuildFinalRequestUri(null, null);
-        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.Method!, finalRequestUri);
+        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.HttpMethod!, finalRequestUri);
 
         httpRequestBuilder.AppendAuthentication(httpRequestMessage);
         Assert.Equal("Basic YWRtaW46YTEyMzQ1Njc4OQ==",
@@ -293,7 +293,7 @@ public class HttpRequestBuilderTests
             new HttpRequestBuilder(HttpMethod.Get, new Uri($"http://localhost:{port}/test")).AddDigestAuthentication(
                 "admin", "a123456789");
         var finalRequestUri = httpRequestBuilder.BuildFinalRequestUri(null, null);
-        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.Method!, finalRequestUri);
+        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.HttpMethod!, finalRequestUri);
 
         httpRequestBuilder.AppendAuthentication(httpRequestMessage);
 
@@ -309,7 +309,7 @@ public class HttpRequestBuilderTests
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
         var finalRequestUri = httpRequestBuilder.BuildFinalRequestUri(null, null);
-        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.Method!, finalRequestUri);
+        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.HttpMethod!, finalRequestUri);
 
         httpRequestBuilder.AppendCookies(httpRequestMessage);
         Assert.Empty(httpRequestMessage.Headers);
@@ -328,7 +328,7 @@ public class HttpRequestBuilderTests
             new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"))
                 .WithCookies(new { id = 10, name = "furion", age = 30, address = "广东省" }).RemoveCookies("age", "id");
         var finalRequestUri = httpRequestBuilder.BuildFinalRequestUri(null, null);
-        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.Method!, finalRequestUri);
+        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.HttpMethod!, finalRequestUri);
         httpRequestBuilder.AppendCookies(httpRequestMessage);
         httpRequestBuilder.RemoveCookies(httpRequestMessage);
 
@@ -343,7 +343,7 @@ public class HttpRequestBuilderTests
         var httpRequestBuilder =
             new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost")).AutoSetHostHeader(false);
         var finalRequestUri = httpRequestBuilder.BuildFinalRequestUri(null, null);
-        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.Method!, finalRequestUri);
+        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.HttpMethod!, finalRequestUri);
 
         httpRequestBuilder.RemoveHeaders(httpRequestMessage);
         Assert.Empty(httpRequestMessage.Headers);
@@ -371,7 +371,7 @@ public class HttpRequestBuilderTests
 
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
         var finalRequestUri = httpRequestBuilder.BuildFinalRequestUri(null, null);
-        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.Method!, finalRequestUri);
+        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.HttpMethod!, finalRequestUri);
         var httpContentProcessorFactory = new HttpContentProcessorFactory(serviceProvider, []);
 
         httpRequestBuilder.BuildAndSetContent(httpRequestMessage, httpContentProcessorFactory,
@@ -416,7 +416,7 @@ public class HttpRequestBuilderTests
     public void AppendProperties_ReturnOK()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
-        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.Method!, new Uri("http://localhost"));
+        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.HttpMethod!, new Uri("http://localhost"));
 
         httpRequestBuilder.AppendProperties(httpRequestMessage);
         Assert.Empty(httpRequestMessage.Options);
@@ -601,7 +601,7 @@ public class HttpRequestBuilderTests
         var httpRequestBuilder =
             new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost/"));
         var finalRequestUri = httpRequestBuilder.BuildFinalRequestUri(null, null);
-        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.Method!, finalRequestUri);
+        var httpRequestMessage = new HttpRequestMessage(httpRequestBuilder.HttpMethod!, finalRequestUri);
 
         httpRequestBuilder.EnablePerformanceOptimization(httpRequestMessage);
         Assert.Empty(httpRequestMessage.Headers);

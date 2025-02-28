@@ -25,11 +25,11 @@ public class HttpContextForwardBuilderTests
         var httpContext = new DefaultHttpContext { RequestServices = provider };
 
         var builder = new HttpContextForwardBuilder(httpContext, HttpMethod.Get);
-        Assert.Equal(HttpMethod.Get, builder.Method);
+        Assert.Equal(HttpMethod.Get, builder.HttpMethod);
         Assert.Null(builder.RequestUri);
 
         var builder2 = new HttpContextForwardBuilder(httpContext, HttpMethod.Get, new Uri("http://localhost"));
-        Assert.Equal(HttpMethod.Get, builder2.Method);
+        Assert.Equal(HttpMethod.Get, builder2.HttpMethod);
         Assert.NotNull(builder2.RequestUri);
         Assert.Equal("http://localhost/", builder2.RequestUri.ToString());
         Assert.NotNull(builder2.HttpContext);
@@ -40,7 +40,7 @@ public class HttpContextForwardBuilderTests
             Request = { Headers = { ["X-Forward-To"] = "https://furion.net" } }, RequestServices = provider
         };
         var builder3 = new HttpContextForwardBuilder(httpContext2, HttpMethod.Get);
-        Assert.Equal(HttpMethod.Get, builder3.Method);
+        Assert.Equal(HttpMethod.Get, builder3.HttpMethod);
         Assert.NotNull(builder3.RequestUri);
         Assert.Equal("https://furion.net/", builder3.RequestUri.ToString());
     }

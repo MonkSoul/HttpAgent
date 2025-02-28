@@ -17,13 +17,13 @@ public class HttpRequestBuilderPropertiesTests
     public void New_ReturnOK()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, null!);
-        Assert.Equal(HttpMethod.Get, httpRequestBuilder.Method);
+        Assert.Equal(HttpMethod.Get, httpRequestBuilder.HttpMethod);
         Assert.Null(httpRequestBuilder.RequestUri);
 
         var httpRequestBuilder2 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
         Assert.NotNull(httpRequestBuilder2.RequestUri);
         Assert.Equal("http://localhost/", httpRequestBuilder2.RequestUri!.ToString());
-        Assert.Equal(HttpMethod.Get, httpRequestBuilder2.Method);
+        Assert.Equal(HttpMethod.Get, httpRequestBuilder2.HttpMethod);
         Assert.Null(httpRequestBuilder2.TraceIdentifier);
         Assert.Null(httpRequestBuilder2.ContentType);
         Assert.Null(httpRequestBuilder2.ContentEncoding);

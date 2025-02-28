@@ -30,14 +30,14 @@ public class HttpMethodAttribute : Attribute
         // 空检查
         ArgumentNullException.ThrowIfNull(httpMethod);
 
-        Method = httpMethod;
+        HttpMethod = httpMethod;
         RequestUri = requestUri;
     }
 
     /// <summary>
     ///     请求方式
     /// </summary>
-    public HttpMethod Method { get; set; }
+    public HttpMethod HttpMethod { get; set; }
 
     /// <summary>
     ///     请求地址

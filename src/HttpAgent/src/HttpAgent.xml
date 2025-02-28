@@ -22,7 +22,7 @@
                 请求地址
             </summary>
         </member>
-        <member name="P:HttpAgent.HttpFileDownloadBuilder.Method">
+        <member name="P:HttpAgent.HttpFileDownloadBuilder.HttpMethod">
             <summary>
                 请求方式
             </summary>
@@ -222,7 +222,7 @@
                 请求地址
             </summary>
         </member>
-        <member name="P:HttpAgent.HttpFileUploadBuilder.Method">
+        <member name="P:HttpAgent.HttpFileUploadBuilder.HttpMethod">
             <summary>
                 请求方式
             </summary>
@@ -430,7 +430,7 @@
                 请求地址
             </summary>
         </member>
-        <member name="P:HttpAgent.HttpLongPollingBuilder.Method">
+        <member name="P:HttpAgent.HttpLongPollingBuilder.HttpMethod">
             <summary>
                 请求方式
             </summary>
@@ -2050,7 +2050,7 @@
                 请求地址
             </summary>
         </member>
-        <member name="P:HttpAgent.HttpRequestBuilder.Method">
+        <member name="P:HttpAgent.HttpRequestBuilder.HttpMethod">
             <summary>
                 请求方式
             </summary>
@@ -2155,6 +2155,23 @@
             </summary>
             <remarks>可为单次请求设置最大缓存字节数。</remarks>
         </member>
+        <member name="P:HttpAgent.HttpRequestBuilder.AuthenticationHeader">
+            <summary>
+                身份验证凭据请求授权标头
+            </summary>
+            <remarks>可为单次请求设置身份验证凭据请求授权标头。</remarks>
+        </member>
+        <member name="P:HttpAgent.HttpRequestBuilder.Properties">
+            <summary>
+                <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性集合
+            </summary>
+            <remarks>用于添加 <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性。该值将合并到 <c>HttpRequestMessage.Options</c> 属性中。</remarks>
+        </member>
+        <member name="P:HttpAgent.HttpRequestBuilder.BaseAddress">
+            <summary>
+                请求基地址
+            </summary>
+        </member>
         <member name="P:HttpAgent.HttpRequestBuilder.HttpClientProvider">
             <summary>
                 <see cref="T:System.Net.Http.HttpClient" /> 实例提供器
@@ -2194,23 +2211,6 @@
         <member name="P:HttpAgent.HttpRequestBuilder.OnRequestFailed">
             <summary>
                 用于处理在发送 HTTP 请求发生异常时的操作
-            </summary>
-        </member>
-        <member name="P:HttpAgent.HttpRequestBuilder.AuthenticationHeader">
-            <summary>
-                身份验证凭据请求授权标头
-            </summary>
-            <remarks>可为单次请求设置身份验证凭据请求授权标头。</remarks>
-        </member>
-        <member name="P:HttpAgent.HttpRequestBuilder.Properties">
-            <summary>
-                <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性集合
-            </summary>
-            <remarks>用于添加 <see cref="T:System.Net.Http.HttpRequestMessage" /> 请求属性。该值将合并到 <c>HttpRequestMessage.Options</c> 属性中。</remarks>
-        </member>
-        <member name="P:HttpAgent.HttpRequestBuilder.BaseAddress">
-            <summary>
-                请求基地址
             </summary>
         </member>
         <member name="P:HttpAgent.HttpRequestBuilder.MultipartFormDataBuilder">
@@ -2746,7 +2746,7 @@
                 请求地址
             </summary>
         </member>
-        <member name="P:HttpAgent.HttpServerSentEventsBuilder.Method">
+        <member name="P:HttpAgent.HttpServerSentEventsBuilder.HttpMethod">
             <summary>
                 请求方式
             </summary>
@@ -2882,7 +2882,7 @@
                 请求地址
             </summary>
         </member>
-        <member name="P:HttpAgent.HttpStressTestHarnessBuilder.Method">
+        <member name="P:HttpAgent.HttpStressTestHarnessBuilder.HttpMethod">
             <summary>
                 请求方式
             </summary>
@@ -2975,6 +2975,24 @@
                 <see cref="T:HttpAgent.IHttpRemoteBuilder" />
             </returns>
         </member>
+        <member name="M:HttpAgent.IHttpRemoteBuilder.AddProfilerDelegatingHandler(System.Func{System.Boolean})">
+            <summary>
+                为所有 <see cref="T:System.Net.Http.HttpClient" /> 添加 HTTP 远程请求分析工具处理委托
+            </summary>
+            <param name="disableIn">自定义禁用配置委托</param>
+            <returns>
+                <see cref="T:HttpAgent.IHttpRemoteBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.IHttpRemoteBuilder.AddProfilerDelegatingHandler(System.Boolean)">
+            <summary>
+                为所有 <see cref="T:System.Net.Http.HttpClient" /> 添加 HTTP 远程请求分析工具处理委托
+            </summary>
+            <param name="disableInProduction">是否在生产环境中禁用。默认值为：<c>false</c>。</param>
+            <returns>
+                <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />
+            </returns>
+        </member>
         <member name="T:HttpAgent.DefaultHttpRemoteBuilder">
             <summary>
                 <see cref="T:HttpAgent.IHttpRemoteBuilder" /> 默认实现
@@ -2995,6 +3013,12 @@
             <inheritdoc />
         </member>
         <member name="M:HttpAgent.DefaultHttpRemoteBuilder.ConfigureOptions(System.Action{HttpAgent.HttpRemoteOptions,System.IServiceProvider})">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.DefaultHttpRemoteBuilder.AddProfilerDelegatingHandler(System.Func{System.Boolean})">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.DefaultHttpRemoteBuilder.AddProfilerDelegatingHandler(System.Boolean)">
             <inheritdoc />
         </member>
         <member name="T:HttpAgent.Constants">
@@ -3318,35 +3342,6 @@
         <member name="M:HttpAgent.VoidContentConverter.ReadAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="T:HttpAgent.Core.Extensions.AssemblyExtensions">
-            <summary>
-                <see cref="T:System.Reflection.Assembly" /> 拓展类
-            </summary>
-        </member>
-        <member name="M:HttpAgent.Core.Extensions.AssemblyExtensions.GetVersion(System.Reflection.Assembly)">
-            <summary>
-                获取程序集版本
-            </summary>
-            <param name="assembly">
-                <see cref="T:System.Reflection.Assembly" />
-            </param>
-            <returns>
-                <see cref="T:System.String" />
-            </returns>
-        </member>
-        <member name="M:HttpAgent.Core.Extensions.AssemblyExtensions.ConvertTo``1(System.Reflection.Assembly,System.Func{System.Reflection.Assembly,``0})">
-            <summary>
-                将程序集转换成指定类型返回
-            </summary>
-            <param name="assembly">
-                <see cref="T:System.Reflection.Assembly" />
-            </param>
-            <param name="configure">自定义配置委托</param>
-            <typeparam name="TResult">结果类型</typeparam>
-            <returns>
-                <typeparamref name="TResult" />
-            </returns>
-        </member>
         <member name="T:HttpAgent.Core.Extensions.DelegateExtensions">
             <summary>
                 委托拓展类
@@ -3470,19 +3465,6 @@
         <member name="M:HttpAgent.Core.Extensions.IDictionaryExtensions.AddOrUpdate``2(System.Collections.Generic.IDictionary{``0,``1},System.Collections.Generic.IDictionary{``0,``1})">
             <summary>
                 添加或更新
-            </summary>
-            <typeparam name="TKey">字典键类型</typeparam>
-            <typeparam name="TValue">字典值类型</typeparam>
-            <param name="dictionary">
-                <see cref="T:System.Collections.Generic.IDictionary`2" />
-            </param>
-            <param name="concatDictionary">
-                <see cref="T:System.Collections.Generic.IDictionary`2" />
-            </param>
-        </member>
-        <member name="M:HttpAgent.Core.Extensions.IDictionaryExtensions.TryAdd``2(System.Collections.Generic.IDictionary{``0,``1},System.Collections.Generic.IDictionary{``0,``1})">
-            <summary>
-                尝试添加
             </summary>
             <typeparam name="TKey">字典键类型</typeparam>
             <typeparam name="TValue">字典值类型</typeparam>
@@ -3706,17 +3688,6 @@
         <member name="M:HttpAgent.Core.Extensions.StringExtensions.AddQuotes(System.String)">
             <summary>
                 为字符串前后添加双引号
-            </summary>
-            <param name="input">
-                <see cref="T:System.String" />
-            </param>
-            <returns>
-                <see cref="T:System.String" />
-            </returns>
-        </member>
-        <member name="M:HttpAgent.Core.Extensions.StringExtensions.ToLowerFirstLetter(System.String)">
-            <summary>
-                将字符串首字母转换为小写
             </summary>
             <param name="input">
                 <see cref="T:System.String" />
@@ -4077,18 +4048,6 @@
                 提供文件实用方法
             </summary>
         </member>
-        <member name="M:HttpAgent.Core.Utilities.FileUtility.TryValidateExtension(System.String,System.String,System.Collections.Generic.HashSet{System.String}@)">
-            <summary>
-                尝试验证文件拓展名
-            </summary>
-            <remarks>特别说明：不支持拓展名中包含通配符，如 <c>*</c>。</remarks>
-            <param name="fileName">文件的名称</param>
-            <param name="allowedFileExtensions">允许的文件扩展名字符串，用分号分隔</param>
-            <param name="validFileExtensions">有效的文件拓展名集合</param>
-            <returns>
-                <see cref="T:System.Boolean" />
-            </returns>
-        </member>
         <member name="M:HttpAgent.Core.Utilities.FileUtility.TryValidateExtension(System.String,System.String[],System.Collections.Generic.HashSet{System.String}@)">
             <summary>
                 尝试验证文件拓展名
@@ -4100,15 +4059,6 @@
             <returns>
                 <see cref="T:System.Boolean" />
             </returns>
-        </member>
-        <member name="M:HttpAgent.Core.Utilities.FileUtility.ValidateExtension(System.String,System.String)">
-            <summary>
-                验证文件拓展名
-            </summary>
-            <remarks>特别说明：不支持拓展名中包含通配符，如 <c>*</c>。</remarks>
-            <param name="fileName">文件的名称</param>
-            <param name="allowedFileExtensions">允许的文件扩展名字符串，用分号分隔</param>
-            <exception cref="T:System.InvalidOperationException"></exception>
         </member>
         <member name="M:HttpAgent.Core.Utilities.FileUtility.ValidateExtension(System.String,System.String[])">
             <summary>
@@ -4161,29 +4111,6 @@
                 <see cref="T:System.Text.Json.JsonDocument" />
             </returns>
             <exception cref="T:System.Text.Json.JsonException"></exception>
-        </member>
-        <member name="M:HttpAgent.Core.Utilities.JsonUtility.TryParse(System.String,System.Text.Json.JsonDocument@)">
-            <summary>
-                尝试解析 JSON 字符串
-            </summary>
-            <param name="jsonString">JSON 字符串</param>
-            <param name="jsonDocument">
-                <see cref="T:System.Text.Json.JsonDocument" />
-            </param>
-            <returns>
-                <see cref="T:System.Boolean" />
-            </returns>
-        </member>
-        <member name="M:HttpAgent.Core.Utilities.JsonUtility.IsObjectOrArrayOrNull(System.Text.Json.JsonDocument)">
-            <summary>
-                检查 <see cref="T:System.Text.Json.JsonDocument" /> 的 <c>ValueKind</c> 属性值是否是 <c>Object</c>、<c>Array</c> 或 <c>Null</c>
-            </summary>
-            <param name="jsonDocument">
-                <see cref="T:System.Text.Json.JsonDocument" />
-            </param>
-            <returns>
-                <see cref="T:System.Boolean" />
-            </returns>
         </member>
         <member name="T:HttpAgent.Core.Utilities.NetworkUtility">
             <summary>
@@ -4578,7 +4505,7 @@
             <param name="httpMethod">请求方式</param>
             <param name="requestUri">请求地址</param>
         </member>
-        <member name="P:HttpAgent.HttpMethodAttribute.Method">
+        <member name="P:HttpAgent.HttpMethodAttribute.HttpMethod">
             <summary>
                 请求方式
             </summary>
@@ -6831,7 +6758,7 @@
                 生成摘要认证授权凭证
             </summary>
             <param name="digestUri">请求相对地址（不包含主机地址）</param>
-            <param name="method">
+            <param name="httpMethod">
                 <see cref="T:System.Net.Http.HttpMethod" />
             </param>
             <returns>
@@ -13311,6 +13238,9 @@
         <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_ascii_60FF03FEFFFF87FEFFFF47">
             <summary>Supports searching for characters in or not in "-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~".</summary>
         </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_indexOfString_EBC667BDABA1472FA863B5B39B31251EF2B4C95DD643BDECF694CB1CE7BDC178">
+            <summary>Supports searching for the string "[[".</summary>
+        </member>
         <member name="T:Microsoft.Extensions.DependencyInjection.HttpRemoteServiceCollectionExtensions">
             <summary>
                 HTTP 远程请求模块 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> 拓展类
@@ -13336,15 +13266,6 @@
                 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
             </param>
             <param name="httpRemoteBuilder">
-                <see cref="T:HttpAgent.HttpRemoteBuilder" />
-            </param>
-            <returns>
-                <see cref="T:HttpAgent.IHttpRemoteBuilder" />
-            </returns>
-        </member>
-    </members>
-</doc>
-teBuilder">
                 <see cref="T:HttpAgent.HttpRemoteBuilder" />
             </param>
             <returns>

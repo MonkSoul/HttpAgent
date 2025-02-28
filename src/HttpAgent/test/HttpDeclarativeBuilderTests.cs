@@ -89,7 +89,7 @@ public class HttpDeclarativeBuilderTests
         var builder = new HttpDeclarativeBuilder(method!, []);
 
         var httpRequestBuilder = builder.Build(new HttpRemoteOptions());
-        Assert.Equal(HttpMethod.Get, httpRequestBuilder.Method);
+        Assert.Equal(HttpMethod.Get, httpRequestBuilder.HttpMethod);
         Assert.Equal("https://furion.net/", httpRequestBuilder.RequestUri?.ToString());
         Assert.True(builder._hasLoadedExtractors);
 
@@ -108,7 +108,7 @@ public class HttpDeclarativeBuilderTests
         {
             HttpDeclarativeExtractors = [() => [new CustomHttpDeclarativeExtractor()]]
         });
-        Assert.Equal(HttpMethod.Get, httpRequestBuilder.Method);
+        Assert.Equal(HttpMethod.Get, httpRequestBuilder.HttpMethod);
         Assert.Equal("https://furion.net/", httpRequestBuilder.RequestUri?.ToString());
         Assert.True(builder._hasLoadedExtractors);
 

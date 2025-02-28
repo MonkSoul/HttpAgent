@@ -14,29 +14,6 @@ public static class FileUtility
     /// </summary>
     /// <remarks>特别说明：不支持拓展名中包含通配符，如 <c>*</c>。</remarks>
     /// <param name="fileName">文件的名称</param>
-    /// <param name="allowedFileExtensions">允许的文件扩展名字符串，用分号分隔</param>
-    /// <param name="validFileExtensions">有效的文件拓展名集合</param>
-    /// <returns>
-    ///     <see cref="bool" />
-    /// </returns>
-    public static bool TryValidateExtension(string fileName, [NotNullWhen(false)] string? allowedFileExtensions,
-        [NotNullWhen(false)] out HashSet<string>? validFileExtensions)
-    {
-        // 空检查
-        ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
-
-        // 初始化 out 返回值
-        validFileExtensions = null;
-
-        return string.IsNullOrWhiteSpace(allowedFileExtensions) || TryValidateExtension(fileName,
-            allowedFileExtensions.Split(';', StringSplitOptions.RemoveEmptyEntries), out validFileExtensions);
-    }
-
-    /// <summary>
-    ///     尝试验证文件拓展名
-    /// </summary>
-    /// <remarks>特别说明：不支持拓展名中包含通配符，如 <c>*</c>。</remarks>
-    /// <param name="fileName">文件的名称</param>
     /// <param name="allowedFileExtensions">允许的文件拓展名数组</param>
     /// <param name="validFileExtensions">有效的文件拓展名集合</param>
     /// <returns>
@@ -65,17 +42,6 @@ public static class FileUtility
 
         return validFileExtensions.Contains(extension);
     }
-
-    /// <summary>
-    ///     验证文件拓展名
-    /// </summary>
-    /// <remarks>特别说明：不支持拓展名中包含通配符，如 <c>*</c>。</remarks>
-    /// <param name="fileName">文件的名称</param>
-    /// <param name="allowedFileExtensions">允许的文件扩展名字符串，用分号分隔</param>
-    /// <exception cref="InvalidOperationException"></exception>
-    public static void ValidateExtension(string fileName, string? allowedFileExtensions) =>
-        ValidateExtension(fileName,
-            (allowedFileExtensions ?? string.Empty).Split(';', StringSplitOptions.RemoveEmptyEntries));
 
     /// <summary>
     ///     验证文件拓展名

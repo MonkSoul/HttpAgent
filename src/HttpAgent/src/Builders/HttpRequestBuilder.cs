@@ -30,7 +30,7 @@ public sealed partial class HttpRequestBuilder
         // 空检查
         ArgumentNullException.ThrowIfNull(httpMethod);
 
-        Method = httpMethod;
+        HttpMethod = httpMethod;
         RequestUri = requestUri;
     }
 
@@ -53,13 +53,13 @@ public sealed partial class HttpRequestBuilder
         // 空检查
         ArgumentNullException.ThrowIfNull(httpRemoteOptions);
         ArgumentNullException.ThrowIfNull(httpContentProcessorFactory);
-        ArgumentNullException.ThrowIfNull(Method);
+        ArgumentNullException.ThrowIfNull(HttpMethod);
 
         // 构建最终的请求地址
         var finalRequestUri = BuildFinalRequestUri(clientBaseAddress, httpRemoteOptions.Configuration);
 
         // 初始化 HttpRequestMessage 实例
-        var httpRequestMessage = new HttpRequestMessage(Method, finalRequestUri);
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod, finalRequestUri);
 
         // 启用性能优化
         EnablePerformanceOptimization(httpRequestMessage);
@@ -300,7 +300,7 @@ public sealed partial class HttpRequestBuilder
         // 获取 Digest 摘要认证授权凭证
         var digestCredentials =
             DigestCredentials.GetDigestCredentials(httpRequestMessage.RequestUri?.OriginalString, parts[0], parts[1],
-                Method!);
+                HttpMethod!);
 
         // 设置身份验证凭据请求授权标头
         httpRequestMessage.Headers.Authorization =

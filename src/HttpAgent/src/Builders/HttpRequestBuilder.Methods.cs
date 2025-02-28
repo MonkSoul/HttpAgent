@@ -1561,7 +1561,7 @@ public sealed partial class HttpRequestBuilder
         ArgumentNullException.ThrowIfNull(redirectMethod);
 
         RequestUri = redirectUri;
-        Method = redirectMethod;
+        HttpMethod = redirectMethod;
 
         // 重定向时不应拼接原始请求参数
         QueryParameters?.Clear();

@@ -20,7 +20,7 @@ public sealed class HttpLongPollingBuilder
         // 空检查
         ArgumentNullException.ThrowIfNull(httpMethod);
 
-        Method = httpMethod;
+        HttpMethod = httpMethod;
         RequestUri = requestUri;
     }
 
@@ -32,7 +32,7 @@ public sealed class HttpLongPollingBuilder
     /// <summary>
     ///     请求方式
     /// </summary>
-    public HttpMethod Method { get; }
+    public HttpMethod HttpMethod { get; }
 
     /// <summary>
     ///     超时时间
@@ -254,7 +254,7 @@ public sealed class HttpLongPollingBuilder
         ArgumentNullException.ThrowIfNull(httpRemoteOptions);
 
         // 初始化 HttpRequestBuilder 实例
-        var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure).DisableCache();
+        var httpRequestBuilder = HttpRequestBuilder.Create(HttpMethod, RequestUri, configure).DisableCache();
 
         // 设置超时时间
         if (Timeout is not null)

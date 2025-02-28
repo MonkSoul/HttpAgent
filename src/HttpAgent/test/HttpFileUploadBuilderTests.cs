@@ -27,12 +27,12 @@ public class HttpFileUploadBuilderTests
     public void New_ReturnOK()
     {
         var builder = new HttpFileUploadBuilder(HttpMethod.Post, null, @"C:\Workspaces\index.html", "file");
-        Assert.Equal(HttpMethod.Post, builder.Method);
+        Assert.Equal(HttpMethod.Post, builder.HttpMethod);
         Assert.Null(builder.RequestUri);
 
         var builder2 = new HttpFileUploadBuilder(HttpMethod.Post, new Uri("http://localhost"),
             @"C:\Workspaces\index.html", "file");
-        Assert.Equal(HttpMethod.Post, builder2.Method);
+        Assert.Equal(HttpMethod.Post, builder2.HttpMethod);
         Assert.NotNull(builder2.RequestUri);
         Assert.Equal("http://localhost/", builder2.RequestUri.ToString());
         Assert.Equal(@"C:\Workspaces\index.html", builder2.FilePath);
@@ -334,7 +334,7 @@ public class HttpFileUploadBuilderTests
 
         var httpRequestBuilder = httpFileUploadBuilder.Build(httpRemoteOptions, progressChannel);
         Assert.NotNull(httpRequestBuilder);
-        Assert.Equal(HttpMethod.Post, httpRequestBuilder.Method);
+        Assert.Equal(HttpMethod.Post, httpRequestBuilder.HttpMethod);
         Assert.NotNull(httpRequestBuilder.RequestUri);
         Assert.Equal("http://localhost/", httpRequestBuilder.RequestUri.ToString());
         Assert.False(httpRequestBuilder.EnsureSuccessStatusCodeEnabled);

@@ -2,6 +2,8 @@
 // 
 // 此源代码遵循位于源代码树根目录中的 LICENSE 文件的许可证。
 
+using Microsoft.Net.Http.Headers;
+
 namespace HttpAgent;
 
 /// <summary>
@@ -444,7 +446,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
 
             // 初始化当前重定向次数和原始请求方法
             var redirections = 0;
-            var originalHttpMethod = httpRequestBuilder.Method!;
+            var originalHttpMethod = httpRequestBuilder.HttpMethod!;
 
             // 处理请求重定向
             while (Helpers.DetermineRedirectMethod(httpResponseMessage.StatusCode, originalHttpMethod,
@@ -707,10 +709,8 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
             return;
         }
 
-        // User-Agent 默认格式为：程序集名称/程序集版本号
-        httpClient.DefaultRequestHeaders.UserAgent.Add(typeof(HttpRemoteService).Assembly.ConvertTo(ass =>
-            new ProductInfoHeaderValue(ass.GetName().Name!,
-                ass.GetVersion()?.ToString() ?? Constants.UNKNOWN_USER_AGENT_VERSION)));
+        httpClient.DefaultRequestHeaders.TryAddWithoutValidation(HeaderNames.UserAgent,
+            Constants.USER_AGENT_OF_BROWSER);
     }
 
     /// <summary>

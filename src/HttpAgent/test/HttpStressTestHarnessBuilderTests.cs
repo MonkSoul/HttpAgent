@@ -15,7 +15,7 @@ public class HttpStressTestHarnessBuilderTests
     {
         var builder = new HttpStressTestHarnessBuilder(HttpMethod.Get, new Uri("http://localhost"));
 
-        Assert.Equal(HttpMethod.Get, builder.Method);
+        Assert.Equal(HttpMethod.Get, builder.HttpMethod);
         Assert.NotNull(builder.RequestUri);
         Assert.Equal("http://localhost/", builder.RequestUri.ToString());
         Assert.Equal(100, builder.NumberOfRequests);
@@ -95,7 +95,7 @@ public class HttpStressTestHarnessBuilderTests
         var httpRequestBuilder = builder.Build(httpRemoteOptions);
 
         Assert.NotNull(httpRequestBuilder);
-        Assert.Equal(HttpMethod.Post, httpRequestBuilder.Method);
+        Assert.Equal(HttpMethod.Post, httpRequestBuilder.HttpMethod);
         Assert.NotNull(httpRequestBuilder.RequestUri);
         Assert.Equal("http://localhost/", httpRequestBuilder.RequestUri.ToString());
         Assert.True(httpRequestBuilder.HttpClientPoolingEnabled);

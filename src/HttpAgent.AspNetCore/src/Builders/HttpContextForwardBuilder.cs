@@ -46,7 +46,7 @@ public sealed class HttpContextForwardBuilder
         ArgumentNullException.ThrowIfNull(httpContext);
 
         HttpContext = httpContext;
-        Method = httpMethod;
+        HttpMethod = httpMethod;
 
         RequestUri = GetTargetUri(httpContext, requestUri);
         ForwardOptions = GetForwardOptions(httpContext, forwardOptions);
@@ -60,7 +60,7 @@ public sealed class HttpContextForwardBuilder
     /// <summary>
     ///     转发方式
     /// </summary>
-    public HttpMethod Method { get; }
+    public HttpMethod HttpMethod { get; }
 
     /// <inheritdoc cref="Microsoft.AspNetCore.Http.HttpContext" />
     public HttpContext HttpContext { get; }
@@ -120,7 +120,7 @@ public sealed class HttpContextForwardBuilder
     internal HttpRequestBuilder Build(Action<HttpRequestBuilder>? configure = null)
     {
         // 初始化 HttpRequestBuilder 实例
-        var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure)
+        var httpRequestBuilder = HttpRequestBuilder.Create(HttpMethod, RequestUri, configure)
             .AddHttpContentConverters(() => [_actionResultContentConverterInstance.Value]).DisableCache();
 
         // 复制查询参数和路由参数
@@ -145,7 +145,7 @@ public sealed class HttpContextForwardBuilder
     internal async Task<HttpRequestBuilder> BuildAsync(Action<HttpRequestBuilder>? configure = null)
     {
         // 初始化 HttpRequestBuilder 实例
-        var httpRequestBuilder = HttpRequestBuilder.Create(Method, RequestUri, configure)
+        var httpRequestBuilder = HttpRequestBuilder.Create(HttpMethod, RequestUri, configure)
             .AddHttpContentConverters(() => [new IActionResultContentConverter()]).DisableCache();
 
         // 复制查询参数和路由参数

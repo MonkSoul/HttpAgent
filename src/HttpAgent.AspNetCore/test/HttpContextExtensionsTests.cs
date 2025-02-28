@@ -43,7 +43,7 @@ public class HttpContextExtensionsTests
         var httpContext = new DefaultHttpContext { RequestServices = provider };
         var builder = httpContext.CreateForwardBuilder(HttpMethod.Get, (Uri?)null);
         Assert.NotNull(builder);
-        Assert.Equal(HttpMethod.Get, builder.Method);
+        Assert.Equal(HttpMethod.Get, builder.HttpMethod);
         Assert.Null(builder.RequestUri);
         Assert.NotNull(builder.ForwardOptions);
 
@@ -55,7 +55,7 @@ public class HttpContextExtensionsTests
 
         var builder2 = httpContext2.CreateForwardBuilder(HttpMethod.Get, (Uri?)null);
         Assert.NotNull(builder2);
-        Assert.Equal(HttpMethod.Get, builder2.Method);
+        Assert.Equal(HttpMethod.Get, builder2.HttpMethod);
         Assert.NotNull(builder2.RequestUri);
         Assert.Equal("https://furion.net/", builder2.RequestUri.ToString());
         Assert.NotNull(builder2.ForwardOptions);
@@ -69,14 +69,14 @@ public class HttpContextExtensionsTests
         var httpContext3 = new DefaultHttpContext { RequestServices = provider2 };
         var builder3 = httpContext3.CreateForwardBuilder(HttpMethod.Get, (Uri?)null);
         Assert.NotNull(builder3);
-        Assert.Equal(HttpMethod.Get, builder3.Method);
+        Assert.Equal(HttpMethod.Get, builder3.HttpMethod);
         Assert.Null(builder3.RequestUri);
         Assert.NotNull(builder3.ForwardOptions);
         Assert.False(builder3.ForwardOptions.WithResponseContentHeaders);
 
         var builder4 = httpContext2.CreateForwardBuilder((Uri?)null);
         Assert.NotNull(builder4);
-        Assert.Equal(HttpMethod.Get, builder4.Method);
+        Assert.Equal(HttpMethod.Get, builder4.HttpMethod);
 
         var builder5 = httpContext2.CreateForwardBuilder(HttpMethod.Get, "https://furion.net");
         Assert.NotNull(builder5);
@@ -84,7 +84,7 @@ public class HttpContextExtensionsTests
 
         var builder6 = httpContext2.CreateForwardBuilder("https://furion.net");
         Assert.NotNull(builder6);
-        Assert.Equal(HttpMethod.Get, builder6.Method);
+        Assert.Equal(HttpMethod.Get, builder6.HttpMethod);
     }
 
     [Fact]

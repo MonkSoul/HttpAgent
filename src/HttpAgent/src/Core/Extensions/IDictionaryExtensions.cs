@@ -108,31 +108,6 @@ internal static class IDictionaryExtensions
     /// <summary>
     ///     尝试添加
     /// </summary>
-    /// <typeparam name="TKey">字典键类型</typeparam>
-    /// <typeparam name="TValue">字典值类型</typeparam>
-    /// <param name="dictionary">
-    ///     <see cref="IDictionary{TKey, TValue}" />
-    /// </param>
-    /// <param name="concatDictionary">
-    ///     <see cref="IDictionary{TKey, TValue}" />
-    /// </param>
-    internal static void TryAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary,
-        IDictionary<TKey, TValue> concatDictionary)
-        where TKey : notnull
-    {
-        // 空检查
-        ArgumentNullException.ThrowIfNull(concatDictionary);
-
-        // 逐条遍历合并更新
-        foreach (var (key, value) in concatDictionary)
-        {
-            dictionary.TryAdd(key, value);
-        }
-    }
-
-    /// <summary>
-    ///     尝试添加
-    /// </summary>
     /// <remarks>其中键是由值通过给定的选择器函数生成的。</remarks>
     /// <param name="dictionary">
     ///     <see cref="IDictionary{TKey, TValue}" />

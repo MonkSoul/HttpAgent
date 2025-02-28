@@ -31,6 +31,24 @@ public interface IHttpRemoteBuilder
     ///     <see cref="IHttpRemoteBuilder" />
     /// </returns>
     IHttpRemoteBuilder ConfigureOptions(Action<HttpRemoteOptions, IServiceProvider> configure);
+
+    /// <summary>
+    ///     为所有 <see cref="HttpClient" /> 添加 HTTP 远程请求分析工具处理委托
+    /// </summary>
+    /// <param name="disableIn">自定义禁用配置委托</param>
+    /// <returns>
+    ///     <see cref="IHttpRemoteBuilder" />
+    /// </returns>
+    IHttpRemoteBuilder AddProfilerDelegatingHandler(Func<bool>? disableIn = null);
+
+    /// <summary>
+    ///     为所有 <see cref="HttpClient" /> 添加 HTTP 远程请求分析工具处理委托
+    /// </summary>
+    /// <param name="disableInProduction">是否在生产环境中禁用。默认值为：<c>false</c>。</param>
+    /// <returns>
+    ///     <see cref="IHttpClientBuilder" />
+    /// </returns>
+    IHttpRemoteBuilder AddProfilerDelegatingHandler(bool disableInProduction);
 }
 
 /// <summary>
@@ -73,6 +91,28 @@ internal sealed class DefaultHttpRemoteBuilder : IHttpRemoteBuilder
         ArgumentNullException.ThrowIfNull(configure);
 
         Services.AddOptions<HttpRemoteOptions>().Configure(configure);
+
+        return this;
+    }
+
+    /// <inheritdoc />
+    public IHttpRemoteBuilder AddProfilerDelegatingHandler(Func<bool>? disableIn = null)
+    {
+        Services.ConfigureHttpClientDefaults(builder =>
+        {
+            builder.AddProfilerDelegatingHandler(disableIn);
+        });
+
+        return this;
+    }
+
+    /// <inheritdoc />
+    public IHttpRemoteBuilder AddProfilerDelegatingHandler(bool disableInProduction)
+    {
+        Services.ConfigureHttpClientDefaults(builder =>
+        {
+            builder.AddProfilerDelegatingHandler(disableInProduction);
+        });
 
         return this;
     }
