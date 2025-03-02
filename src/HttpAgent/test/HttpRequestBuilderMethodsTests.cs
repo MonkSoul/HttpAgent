@@ -560,6 +560,63 @@ public class HttpRequestBuilderMethodsTests
     }
 
     [Fact]
+    public void WithPathSegment_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        Assert.Null(httpRequestBuilder.PathParameters);
+
+        httpRequestBuilder.WithPathSegment("furion").WithPathSegment("dotnet");
+        Assert.NotNull(httpRequestBuilder.PathSegments);
+        Assert.Equal(["furion", "dotnet"], httpRequestBuilder.PathSegments);
+
+        httpRequestBuilder.WithPathSegment("fur ion", true);
+        Assert.Equal(["furion", "dotnet", "fur%20ion"], httpRequestBuilder.PathSegments);
+    }
+
+    [Fact]
+    public void WithPathSegments_Invalid_Parameters()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+
+        Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.WithPathSegments(null!));
+    }
+
+    [Fact]
+    public void WithPathSegments_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        Assert.Null(httpRequestBuilder.PathParameters);
+
+        httpRequestBuilder.WithPathSegments(["furion", "dotnet"]);
+        Assert.NotNull(httpRequestBuilder.PathSegments);
+        Assert.Equal(["furion", "dotnet"], httpRequestBuilder.PathSegments);
+
+        httpRequestBuilder.WithPathSegments(["fur ion", "dot net"], true);
+        Assert.Equal(["furion", "dotnet", "fur%20ion", "dot%20net"], httpRequestBuilder.PathSegments);
+    }
+
+    [Fact]
+    public void RemovePathSegments_Invalid_Parameters()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.RemovePathSegments(null!));
+    }
+
+    [Fact]
+    public void RemovePathSegments_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder.RemovePathSegments(null!, string.Empty, " ");
+
+        Assert.NotNull(httpRequestBuilder.PathSegmentsToRemove);
+        Assert.Empty(httpRequestBuilder.PathSegmentsToRemove);
+
+        httpRequestBuilder.RemovePathSegments("name");
+        httpRequestBuilder.RemovePathSegments("name");
+        Assert.Single(httpRequestBuilder.PathSegmentsToRemove);
+    }
+
+    [Fact]
     public void WithQueryParameter_Invalid_Parameters()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));

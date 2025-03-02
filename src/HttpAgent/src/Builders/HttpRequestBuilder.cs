@@ -122,16 +122,72 @@ public sealed partial class HttpRequestBuilder
         // 初始化 UriBuilder 实例
         var uriBuilder = new UriBuilder(requestUriWithClientBaseAddress);
 
-        // 追加片段标识符
-        AppendFragment(uriBuilder);
+        // 追加路径片段
+        AppendPathSegments(uriBuilder);
 
         // 追加查询参数
         AppendQueryParameters(uriBuilder);
+
+        // 追加片段标识符
+        AppendFragment(uriBuilder);
 
         // 替换路径或配置参数
         var finalRequestUri = ReplacePlaceholders(uriBuilder.Uri.ToString(), configuration);
 
         return finalRequestUri;
+    }
+
+    /// <summary>
+    ///     追加路径片段
+    /// </summary>
+    /// <param name="uriBuilder">
+    ///     <see cref="UriBuilder" />
+    /// </param>
+    internal void AppendPathSegments(UriBuilder uriBuilder)
+    {
+        // 解析 URL 中的路径片段列表
+        var pathSegments = uriBuilder.Path.Split('/', StringSplitOptions.RemoveEmptyEntries).Concat([]);
+
+        // 追加路径片段
+        pathSegments = pathSegments.Concat(PathSegments.ConcatIgnoreNull([]).Where(u => !string.IsNullOrWhiteSpace(u))
+            .Select(u => u.TrimStart('/').TrimEnd('/')));
+
+        // 构建路径片段赋值给 UriBuilder 的 Path 属性
+        uriBuilder.Path = '/' + string.Join('/',
+            // 过滤已标记为移除的路径片段
+            pathSegments.WhereIf(PathSegmentsToRemove is { Count: > 0 },
+                u => PathSegmentsToRemove?.TryGetValue(u, out _) == false));
+    }
+
+    /// <summary>
+    ///     追加查询参数
+    /// </summary>
+    /// <param name="uriBuilder">
+    ///     <see cref="UriBuilder" />
+    /// </param>
+    internal void AppendQueryParameters(UriBuilder uriBuilder)
+    {
+        // 解析 URL 中的查询字符串为键值对列表
+        var queryParameters = uriBuilder.Query.ParseFormatKeyValueString(['&'], '?');
+
+        // 追加查询参数
+        foreach (var (key, values) in QueryParameters.ConcatIgnoreNull([]))
+        {
+            queryParameters.AddRange(values.Select(value =>
+                new KeyValuePair<string, string?>(key, value)));
+        }
+
+        // 构建最终的查询参数
+        var finalQueryParameters = queryParameters
+            // 过滤已标记为移除的查询参数键
+            .WhereIf(QueryParametersToRemove is { Count: > 0 },
+                u => QueryParametersToRemove?.TryGetValue(u.Key, out _) == false).Select(u => $"{u.Key}={u.Value}")
+            .ToArray();
+
+        // 构建查询字符串赋值给 UriBuilder 的 Query 属性
+        uriBuilder.Query = finalQueryParameters.Length == 0
+            ? string.Empty
+            : '?' + string.Join('&', finalQueryParameters);
     }
 
     /// <summary>
@@ -149,40 +205,6 @@ public sealed partial class HttpRequestBuilder
         }
 
         uriBuilder.Fragment = Fragment;
-    }
-
-    /// <summary>
-    ///     追加查询参数
-    /// </summary>
-    /// <param name="uriBuilder">
-    ///     <see cref="UriBuilder" />
-    /// </param>
-    internal void AppendQueryParameters(UriBuilder uriBuilder)
-    {
-        // 空检查
-        if (QueryParameters.IsNullOrEmpty())
-        {
-            return;
-        }
-
-        // 解析 URL 中的查询字符串为键值对列表
-        var queryParameters = uriBuilder.Query.ParseFormatKeyValueString(['&'], '?');
-
-        // 追加查询参数
-        foreach (var (key, values) in QueryParameters)
-        {
-            queryParameters.AddRange(values.Select(value =>
-                new KeyValuePair<string, string?>(key, value)));
-        }
-
-        // 构建查询字符串赋值给 UriBuilder 的 Query 属性
-        uriBuilder.Query =
-            "?" + string.Join('&',
-                queryParameters
-                    // 过滤已标记为移除的查询参数
-                    .WhereIf(QueryParametersToRemove is { Count: > 0 },
-                        u => QueryParametersToRemove?.TryGetValue(u.Key, out _) == false)
-                    .Select(u => $"{u.Key}={u.Value}"));
     }
 
     /// <summary>

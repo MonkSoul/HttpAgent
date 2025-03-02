@@ -30,6 +30,8 @@ public class HttpRequestBuilderPropertiesTests
         Assert.Null(httpRequestBuilder2.RawContent);
         Assert.Null(httpRequestBuilder2.Headers);
         Assert.Null(httpRequestBuilder2.HeadersToRemove);
+        Assert.Null(httpRequestBuilder2.PathSegments);
+        Assert.Null(httpRequestBuilder2.PathSegmentsToRemove);
         Assert.Null(httpRequestBuilder2.Fragment);
         Assert.Null(httpRequestBuilder2.Timeout);
         Assert.Null(httpRequestBuilder2.QueryParameters);

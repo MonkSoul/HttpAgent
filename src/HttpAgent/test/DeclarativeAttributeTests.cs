@@ -305,6 +305,34 @@ public class DeclarativeAttributeTests
     }
 
     [Fact]
+    public void PathSegmentAttribute_Invalid_Parameters()
+    {
+        Assert.Throws<ArgumentNullException>(() => new PathSegmentAttribute(null!));
+        Assert.Throws<ArgumentException>(() => new PathSegmentAttribute(string.Empty));
+        Assert.Throws<ArgumentException>(() => new PathSegmentAttribute(" "));
+    }
+
+    [Fact]
+    public void PathSegmentAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(PathSegmentAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface | AttributeTargets.Parameter,
+            attributeUsage.ValidOn);
+        Assert.True(attributeUsage.AllowMultiple);
+
+        var attribute = new PathSegmentAttribute();
+        Assert.Null(attribute.Segment);
+        Assert.False(attribute.Escape);
+        Assert.False(attribute.Remove);
+
+        var attribute2 = new PathSegmentAttribute("docs");
+        Assert.Equal("docs", attribute2.Segment);
+        Assert.False(attribute.Escape);
+        Assert.False(attribute.Remove);
+    }
+
+    [Fact]
     public void SimulateBrowserAttribute_ReturnOK()
     {
         var attributeUsage = typeof(SimulateBrowserAttribute).GetCustomAttribute<AttributeUsageAttribute>();

@@ -482,6 +482,71 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
+    ///     设置路径片段
+    /// </summary>
+    /// <remarks>支持多次调用。</remarks>
+    /// <param name="segment">路径片段</param>
+    /// <param name="escape">是否转义字符串，默认 <c>false</c></param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder WithPathSegment(string segment, bool escape = false) =>
+        WithPathSegments([segment], escape);
+
+    /// <summary>
+    ///     设置路径片段
+    /// </summary>
+    /// <remarks>支持多次调用。</remarks>
+    /// <param name="segments">路径片段集合</param>
+    /// <param name="escape">是否转义字符串，默认 <c>false</c></param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder WithPathSegments(IEnumerable<string> segments, bool escape = false)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(segments);
+
+        PathSegments ??= [];
+        PathSegments.AddRange(segments.Select(u => u.EscapeDataString(escape)!));
+
+        return this;
+    }
+
+    /// <summary>
+    ///     设置需要从 URL 地址中移除的路径片段
+    /// </summary>
+    /// <remarks>支持多次调用。</remarks>
+    /// <param name="segments">路径片段集合</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder RemovePathSegments(params string[] segments)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(segments);
+
+        // 检查是否为空元素数组
+        if (segments.Length == 0)
+        {
+            return this;
+        }
+
+        PathSegmentsToRemove ??= new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        // 逐条添加到集合中
+        foreach (var segment in segments)
+        {
+            if (!string.IsNullOrWhiteSpace(segment))
+            {
+                PathSegmentsToRemove.Add(segment);
+            }
+        }
+
+        return this;
+    }
+
+    /// <summary>
     ///     设置查询参数
     /// </summary>
     /// <remarks>支持多次调用。</remarks>

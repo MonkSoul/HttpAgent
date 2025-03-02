@@ -93,6 +93,10 @@ public class HttpRequestBuilderTests
         var finalRequestUri7 = httpRequestBuilder6.BuildFinalRequestUri(new Uri("https://furion.net"), null);
         Assert.Equal("http://localhost/api/test", finalRequestUri7);
 
+        httpRequestBuilder6.WithPathSegment("docs");
+        var finalRequestUri8 = httpRequestBuilder6.BuildFinalRequestUri(new Uri("https://furion.net"), null);
+        Assert.Equal("http://localhost/api/test/docs", finalRequestUri8);
+
         var builder = WebApplication.CreateBuilder();
         builder.Configuration.Sources.Clear();
         builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
@@ -104,9 +108,49 @@ public class HttpRequestBuilderTests
             new HttpRequestBuilder(HttpMethod.Get,
                 new Uri("https://furion.net/[[name]]/[[age]]/[[furion:author]]/[[notfound:key || default]]",
                     UriKind.RelativeOrAbsolute));
-        var finalRequestUri8 =
+        var finalRequestUri9 =
             httpRequestBuilder7.BuildFinalRequestUri(new Uri("https://furion.net"), builder.Configuration);
-        Assert.Equal("https://furion.net/Furion/10/MonkSoul/default", finalRequestUri8);
+        Assert.Equal("https://furion.net/Furion/10/MonkSoul/default", finalRequestUri9);
+    }
+
+    [Fact]
+    public void AppendPathSegments_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost:5001/test"));
+        var uriBuilder = new UriBuilder(httpRequestBuilder.RequestUri!);
+
+        httpRequestBuilder.AppendPathSegments(uriBuilder);
+        Assert.Equal("/test", uriBuilder.Path);
+
+        httpRequestBuilder.WithPathSegments(["abc", "/cde", "efg/", "", null!]);
+
+        httpRequestBuilder.AppendPathSegments(uriBuilder);
+        Assert.Equal("/test/abc/cde/efg", uriBuilder.Path);
+
+        var httpRequestBuilder2 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        var uriBuilder2 = new UriBuilder(httpRequestBuilder2.RequestUri!);
+
+        httpRequestBuilder2.AppendPathSegments(uriBuilder2);
+        Assert.Equal("/", uriBuilder2.Path);
+
+        httpRequestBuilder2.WithPathSegment("///abc").WithPathSegment("cfd/efg");
+
+        httpRequestBuilder2.AppendPathSegments(uriBuilder2);
+        Assert.Equal("/abc/cfd/efg", uriBuilder2.Path);
+
+        var httpRequestBuilder3 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost/test/abc"))
+            .WithPathSegments(["abc", "cfd"]).RemovePathSegments("abc", "test");
+        var uriBuilder3 = new UriBuilder(httpRequestBuilder3.RequestUri!);
+
+        httpRequestBuilder3.AppendPathSegments(uriBuilder3);
+        Assert.Equal("/cfd", uriBuilder3.Path);
+
+        var httpRequestBuilder4 =
+            new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost/test/abc")).RemovePathSegments("test");
+        var uriBuilder4 = new UriBuilder(httpRequestBuilder4.RequestUri!);
+
+        httpRequestBuilder4.AppendPathSegments(uriBuilder4);
+        Assert.Equal("/abc", uriBuilder4.Path);
     }
 
     [Fact]
@@ -156,6 +200,14 @@ public class HttpRequestBuilderTests
 
         httpRequestBuilder3.AppendQueryParameters(uriBuilder3);
         Assert.Equal("?v=1&name=10&id=10", uriBuilder3.Query);
+
+        var httpRequestBuilder4 =
+            new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost?id=10&name=furion"))
+                .RemoveQueryParameters("id");
+        var uriBuilder4 = new UriBuilder(httpRequestBuilder4.RequestUri!);
+
+        httpRequestBuilder4.AppendQueryParameters(uriBuilder4);
+        Assert.Equal("?name=furion", uriBuilder4.Query);
     }
 
     [Fact]

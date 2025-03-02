@@ -45,6 +45,7 @@ public class HttpDeclarativeBuilderTests
                 new EnsureSuccessStatusCodeDeclarativeExtractor()
             },
             { typeof(TimeoutDeclarativeExtractor), new TimeoutDeclarativeExtractor() },
+            { typeof(PathSegmentDeclarativeExtractor), new PathSegmentDeclarativeExtractor() },
             { typeof(QueryDeclarativeExtractor), new QueryDeclarativeExtractor() },
             { typeof(PathDeclarativeExtractor), new PathDeclarativeExtractor() },
             { typeof(CookieDeclarativeExtractor), new CookieDeclarativeExtractor() },
@@ -132,6 +133,7 @@ public class HttpDeclarativeBuilderTests
                 new EnsureSuccessStatusCodeDeclarativeExtractor()
             },
             { typeof(TimeoutDeclarativeExtractor), new TimeoutDeclarativeExtractor() },
+            { typeof(PathSegmentDeclarativeExtractor), new PathSegmentDeclarativeExtractor() },
             { typeof(QueryDeclarativeExtractor), new QueryDeclarativeExtractor() },
             { typeof(PathDeclarativeExtractor), new PathDeclarativeExtractor() },
             { typeof(CookieDeclarativeExtractor), new CookieDeclarativeExtractor() },

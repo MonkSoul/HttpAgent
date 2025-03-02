@@ -67,6 +67,17 @@ public sealed partial class HttpRequestBuilder
     public TimeSpan? Timeout { get; private set; }
 
     /// <summary>
+    ///     路径片段集合
+    /// </summary>
+    /// <remarks>请求地址中位于主机端口之后且 <c>?</c> 符号之前的部分。</remarks>
+    public List<string>? PathSegments { get; private set; }
+
+    /// <summary>
+    ///     需要从 URL 中移除的路径片段集合
+    /// </summary>
+    public HashSet<string>? PathSegmentsToRemove { get; private set; }
+
+    /// <summary>
     ///     查询参数集合
     /// </summary>
     /// <remarks>请求地址中位于 <c>?</c> 符号之后且 <c>#</c> 符号之前的部分。</remarks>
