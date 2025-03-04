@@ -45,7 +45,16 @@ public class DefaultHttpRemoteBuilderTests
     }
 
     [Fact]
-    public void AddProfilerDelegatingHandler_ReturnOK()
+    public void ConfigureHttpClientDefaults_Invalid_Parameters()
+    {
+        var services = new ServiceCollection();
+        var builder = new DefaultHttpRemoteBuilder(services);
+
+        Assert.Throws<ArgumentNullException>(() => builder.ConfigureHttpClientDefaults(null!));
+    }
+
+    [Fact]
+    public void ConfigureHttpClientDefaults_ReturnOK()
     {
         var services = new ServiceCollection();
         var builder = new DefaultHttpRemoteBuilder(services);
@@ -53,8 +62,11 @@ public class DefaultHttpRemoteBuilderTests
         services.AddHttpClient();
         services.AddHttpClient("github", client => { });
 
-        builder.AddProfilerDelegatingHandler();
-        builder.AddProfilerDelegatingHandler(true);
+        builder.ConfigureHttpClientDefaults(clientBuilder =>
+        {
+            clientBuilder.AddProfilerDelegatingHandler();
+            clientBuilder.AddProfilerDelegatingHandler(true);
+        });
 
         using var serviceProvider = services.BuildServiceProvider();
         var httpClientFactoryOptions = serviceProvider.GetService<IOptions<HttpClientFactoryOptions>>()?.Value;

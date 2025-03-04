@@ -3026,22 +3026,13 @@
                 <see cref="T:HttpAgent.IHttpRemoteBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.IHttpRemoteBuilder.AddProfilerDelegatingHandler(System.Func{System.Boolean})">
+        <member name="M:HttpAgent.IHttpRemoteBuilder.ConfigureHttpClientDefaults(System.Action{Microsoft.Extensions.DependencyInjection.IHttpClientBuilder})">
             <summary>
-                为所有 <see cref="T:System.Net.Http.HttpClient" /> 添加 HTTP 远程请求分析工具处理委托
+                为所有 <see cref="T:System.Net.Http.HttpClient" /> 添加配置
             </summary>
-            <param name="disableIn">自定义禁用配置委托</param>
+            <param name="configure">自定义配置委托</param>
             <returns>
                 <see cref="T:HttpAgent.IHttpRemoteBuilder" />
-            </returns>
-        </member>
-        <member name="M:HttpAgent.IHttpRemoteBuilder.AddProfilerDelegatingHandler(System.Boolean)">
-            <summary>
-                为所有 <see cref="T:System.Net.Http.HttpClient" /> 添加 HTTP 远程请求分析工具处理委托
-            </summary>
-            <param name="disableInProduction">是否在生产环境中禁用。默认值为：<c>false</c>。</param>
-            <returns>
-                <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />
             </returns>
         </member>
         <member name="T:HttpAgent.DefaultHttpRemoteBuilder">
@@ -3066,10 +3057,7 @@
         <member name="M:HttpAgent.DefaultHttpRemoteBuilder.ConfigureOptions(System.Action{HttpAgent.HttpRemoteOptions,System.IServiceProvider})">
             <inheritdoc />
         </member>
-        <member name="M:HttpAgent.DefaultHttpRemoteBuilder.AddProfilerDelegatingHandler(System.Func{System.Boolean})">
-            <inheritdoc />
-        </member>
-        <member name="M:HttpAgent.DefaultHttpRemoteBuilder.AddProfilerDelegatingHandler(System.Boolean)">
+        <member name="M:HttpAgent.DefaultHttpRemoteBuilder.ConfigureHttpClientDefaults(System.Action{Microsoft.Extensions.DependencyInjection.IHttpClientBuilder})">
             <inheritdoc />
         </member>
         <member name="T:HttpAgent.Constants">

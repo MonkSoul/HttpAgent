@@ -780,4 +780,11 @@ public class GetStartController(
 
         return body;
     }
+
+    [HttpGet]
+    public async Task<string?> ServiceDiscovery()
+    {
+        return await httpRemoteService.SendAsStringAsync(HttpRequestBuilder.Get("docs")
+            .SetHttpClientName("furion"));
+    }
 }

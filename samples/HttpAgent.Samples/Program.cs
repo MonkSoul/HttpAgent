@@ -32,11 +32,15 @@ builder.Services.AddHttpClient(string.Empty, client => { })
 //.AddProfilerDelegatingHandler();
 
 // 为特定客户端启用
-//builder.Services.AddHttpClient("weixin")
-//    .AddProfilerDelegatingHandler();
+builder.Services.AddHttpClient("furion", client =>
+{
+    client.BaseAddress = new Uri("https://furion");
+});
+//.AddProfilerDelegatingHandler();
 
 builder.Services.TryAddTransient<AuthorizationDelegatingHandler>();
 
+builder.Services.AddServiceDiscovery();
 builder.Services.AddHttpRemote(options =>
     {
         // 注册单个 HTTP 声明式请求接口
@@ -47,7 +51,11 @@ builder.Services.AddHttpRemote(options =>
         options.AddHttpDeclarativeExtractorFromAssemblies([Assembly.GetEntryAssembly()]);
         options.AddHttpContentConverters(() => [new ClayContentConverter()]);
     }).ConfigureOptions(options => { options.JsonSerializerOptions.Converters.Add(new ClayJsonConverter()); })
-    .AddProfilerDelegatingHandler();
+    .ConfigureHttpClientDefaults(clientBuilder =>
+    {
+        clientBuilder.AddServiceDiscovery();
+        clientBuilder.AddProfilerDelegatingHandler();
+    });
 
 var app = builder.Build();
 
