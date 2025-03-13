@@ -109,7 +109,7 @@ internal static partial class StringExtensions
 
         var pairs = (trimChar is null ? keyValueString : keyValueString.TrimStart(trimChar.Value)).Split(separators);
         return (from pair in pairs
-            select pair.Split('=')
+            select pair.Split('=', 2) // 限制只分割一次
             into keyValue
             where keyValue.Length == 2
             select new KeyValuePair<string, string?>(keyValue[0].Trim(), keyValue[1])).ToList();

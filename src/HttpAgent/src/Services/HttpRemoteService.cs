@@ -102,7 +102,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         // 发送 HTTP 远程请求
         var (httpResponseMessage, _) = await SendCoreAsync(httpRequestBuilder, completionOption,
             (httpClient, httpRequestMessage, option, token) =>
-                httpClient.SendAsync(httpRequestMessage, option, token), default, cancellationToken);
+                httpClient.SendAsync(httpRequestMessage, option, token), null, cancellationToken);
 
         return httpResponseMessage;
     }
@@ -183,7 +183,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         // 发送 HTTP 远程请求
         var (httpResponseMessage, requestDuration) = await SendCoreAsync(httpRequestBuilder, completionOption,
             (httpClient, httpRequestMessage, option, token) =>
-                httpClient.SendAsync(httpRequestMessage, option, token), default, cancellationToken);
+                httpClient.SendAsync(httpRequestMessage, option, token), null, cancellationToken);
 
         // 获取结果类型
         var resultType = typeof(TResult);
@@ -282,7 +282,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         // 发送 HTTP 远程请求
         var (httpResponseMessage, requestDuration) = await SendCoreAsync(httpRequestBuilder, completionOption,
             (httpClient, httpRequestMessage, option, token) =>
-                httpClient.SendAsync(httpRequestMessage, option, token), default, cancellationToken);
+                httpClient.SendAsync(httpRequestMessage, option, token), null, cancellationToken);
 
         // 检查类型是否是 HttpRemoteResult<TResult> 类型
         if (!typeof(HttpRemoteResult<>).IsDefinitionEqual(resultType))
@@ -342,7 +342,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         // 发送 HTTP 远程请求
         var (httpResponseMessage, requestDuration) = await SendCoreAsync(httpRequestBuilder, completionOption,
             (httpClient, httpRequestMessage, option, token) =>
-                httpClient.SendAsync(httpRequestMessage, option, token), default, cancellationToken);
+                httpClient.SendAsync(httpRequestMessage, option, token), null, cancellationToken);
 
         // 将 HttpResponseMessage 转换为 TResult 实例
         var result = await _httpContentConverterFactory.ReadAsync<TResult>(httpResponseMessage,
