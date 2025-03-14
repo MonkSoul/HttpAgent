@@ -3381,6 +3381,30 @@
         <member name="M:HttpAgent.VoidContentConverter.ReadAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="T:HttpAgent.Core.Converters.Json.DateTimeConverterUsingDateTimeParseAsFallback">
+            <summary>
+                <see cref="T:System.DateTime" /> JSON 序列化转换器
+            </summary>
+            <remarks>在不符合 <c>ISO 8601-1:2019</c> 格式的 <see cref="T:System.DateTime" /> 时间使用 <c>DateTime.Parse</c> 作为回退。</remarks>
+        </member>
+        <member name="M:HttpAgent.Core.Converters.Json.DateTimeConverterUsingDateTimeParseAsFallback.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.Core.Converters.Json.DateTimeConverterUsingDateTimeParseAsFallback.Write(System.Text.Json.Utf8JsonWriter,System.DateTime,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:HttpAgent.Core.Converters.Json.DateTimeOffsetConverterUsingDateTimeOffsetParseAsFallback">
+            <summary>
+                <see cref="T:System.DateTimeOffset" /> JSON 序列化转换器
+            </summary>
+            <remarks>在不符合 <c>ISO 8601-1:2019</c> 格式的 <see cref="T:System.DateTimeOffset" /> 时间使用 <c>DateTimeOffset.Parse</c> 作为回退。</remarks>
+        </member>
+        <member name="M:HttpAgent.Core.Converters.Json.DateTimeOffsetConverterUsingDateTimeOffsetParseAsFallback.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.Core.Converters.Json.DateTimeOffsetConverterUsingDateTimeOffsetParseAsFallback.Write(System.Text.Json.Utf8JsonWriter,System.DateTimeOffset,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
         <member name="T:HttpAgent.Core.Extensions.DelegateExtensions">
             <summary>
                 委托拓展类

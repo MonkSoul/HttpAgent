@@ -6,6 +6,7 @@ global using HttpAgent.Core.Extensions;
 global using HttpAgent.Extensions;
 global using System.Runtime.CompilerServices;
 global using HttpAgent;
+global using HttpAgent.Core.Converters.Json;
 global using HttpAgent.Core.Utilities;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;

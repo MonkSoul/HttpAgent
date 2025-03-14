@@ -17,7 +17,12 @@ public sealed class HttpRemoteOptions
     {
         PropertyNameCaseInsensitive = true,
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        NumberHandling = JsonNumberHandling.AllowReadingFromString
+        NumberHandling = JsonNumberHandling.AllowReadingFromString,
+        Converters =
+        {
+            new DateTimeConverterUsingDateTimeParseAsFallback(),
+            new DateTimeOffsetConverterUsingDateTimeOffsetParseAsFallback()
+        }
     };
 
     /// <summary>

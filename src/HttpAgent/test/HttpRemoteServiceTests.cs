@@ -1411,4 +1411,47 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
 
         await app.StopAsync();
     }
+
+    [Fact]
+    public async Task SendAsync_WithNoISO8601TimeClass_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+        builder.Services.AddHttpRemote();
+
+        await using var app = builder.Build();
+
+        app.MapGet("/test", async httpContext =>
+        {
+            await Task.Delay(50);
+            httpContext.Response.ContentType = "application/json";
+            await httpContext.Response.WriteAsync("""
+                                                  {
+                                                      "id": 1,
+                                                      "name": "furion",
+                                                      "time": "2025-03-13 14:20:30"
+                                                  }
+                                                  """);
+        });
+
+        await app.StartAsync();
+
+        var httpRemoteService = app.Services.GetRequiredService<IHttpRemoteService>();
+
+        var result = await httpRemoteService.SendAsync<NoISO8601TimeClass>(
+            HttpRequestBuilder.Get($"http://localhost:{port}/test"));
+
+        Assert.NotNull(result.Result);
+        Assert.Equal("2025-03-13T14:20:30", result.Result.Time.ToString("s"));
+
+        await app.StopAsync();
+    }
+}
+
+public class NoISO8601TimeClass
+{
+    public int Id { get; set; }
+    public string? Name { get; set; }
+    public DateTime Time { get; set; }
 }
