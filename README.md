@@ -32,8 +32,8 @@ consumption and high test coverage.
   definitions.
 - **`MessagePack` Support**: Integrates `MessagePack` serialization and deserialization capabilities to enhance data
   exchange efficiency.
-- **`WebService` Support**: Comprehensive support for `SOAP` and `RESTful` WebService, including automatic client proxy
-  generation, WSDL parsing, XML/JSON data binding, simplifying integration and interaction.
+- **`WebService` Support**: Comprehensive support for `SOAP` and `RESTful WebService`, including automatic client proxy
+  generation, `WSDL` parsing, `XML/JSON` data binding, simplifying integration and interaction.
 - **Flexible Response Transformation**: Provides common `HTTP` response transformers and supports custom transformation
   logic.
 - **High Performance and Resource Management**: Employs memory optimization techniques and connection pool management to
