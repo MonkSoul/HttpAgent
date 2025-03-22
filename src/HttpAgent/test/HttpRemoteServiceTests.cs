@@ -383,6 +383,17 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         });
         Assert.Equal("Both `sendAsyncMethod` and `sendMethod` cannot be null.", exception.Message);
 
+        var exception2 = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+        {
+            _ = await httpRemoteService.SendCoreAsync(
+                HttpRequestBuilder.Get("https://furion.net").SetTimeout(TimeSpan.FromSeconds(101)),
+                HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
+                    httpClient.SendAsync(httpRequestMessage, option, token), null);
+        });
+        Assert.Equal(
+            "HttpRequestBuilder's Timeout cannot be greater than HttpClient's Timeout, which defaults to 100 seconds.",
+            exception2.Message);
+
         await serviceProvider.DisposeAsync();
     }
 
@@ -407,7 +418,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri($"http://localhost:{port}/test"));
         var (httpResponseMessage, requestDuration) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
             HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
-                httpClient.SendAsync(httpRequestMessage, option, token), default);
+                httpClient.SendAsync(httpRequestMessage, option, token), null);
 
         Assert.NotNull(httpResponseMessage);
         Assert.True(requestDuration > 0);

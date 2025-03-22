@@ -8151,6 +8151,7 @@
             <returns>
                 <see cref="T:System.Tuple`2" />
             </returns>
+            <exception cref="T:System.InvalidOperationException"></exception>
         </member>
         <member name="M:HttpAgent.HttpRemoteService.HandlePreSendRequest(HttpAgent.HttpRequestBuilder,HttpAgent.IHttpRequestEventHandler,System.Net.Http.HttpRequestMessage)">
             <summary>

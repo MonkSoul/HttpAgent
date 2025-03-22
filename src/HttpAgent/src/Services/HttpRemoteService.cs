@@ -374,6 +374,7 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
     /// <returns>
     ///     <see cref="Tuple{T1, T2}" />
     /// </returns>
+    /// <exception cref="InvalidOperationException"></exception>
     internal async Task<(HttpResponseMessage ResponseMessage, long RequestDuration)> SendCoreAsync(
         HttpRequestBuilder httpRequestBuilder, HttpCompletionOption completionOption,
         Func<HttpClient, HttpRequestMessage, HttpCompletionOption, CancellationToken, Task<HttpResponseMessage>>?
@@ -427,6 +428,13 @@ internal sealed partial class HttpRemoteService : IHttpRemoteService
         // 设置单次请求超时时间控制
         if (httpRequestBuilder.Timeout is not null && httpRequestBuilder.Timeout.Value != TimeSpan.Zero)
         {
+            // 确保 HttpRequestBuilder 的 Timeout 属性值小于 HttpClient 的 Timeout 属性值（默认 100秒）
+            if (httpRequestBuilder.Timeout.Value > httpClient.Timeout)
+            {
+                throw new InvalidOperationException(
+                    "HttpRequestBuilder's Timeout cannot be greater than HttpClient's Timeout, which defaults to 100 seconds.");
+            }
+
             timeoutCancellationTokenSource.CancelAfter(httpRequestBuilder.Timeout.Value);
         }
 
