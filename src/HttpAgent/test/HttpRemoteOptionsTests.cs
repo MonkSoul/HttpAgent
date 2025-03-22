@@ -24,13 +24,17 @@ public class HttpRemoteOptionsTests
         Assert.Equal(JsonNamingPolicy.CamelCase, HttpRemoteOptions.JsonSerializerOptionsDefault.PropertyNamingPolicy);
         Assert.Equal(JsonNumberHandling.AllowReadingFromString,
             HttpRemoteOptions.JsonSerializerOptionsDefault.NumberHandling);
-        Assert.Equal(2, HttpRemoteOptions.JsonSerializerOptionsDefault.Converters.Count);
+        Assert.Equal(JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            HttpRemoteOptions.JsonSerializerOptionsDefault.Encoder);
+        Assert.True(HttpRemoteOptions.JsonSerializerOptionsDefault.AllowTrailingCommas);
+        Assert.Equal(3, HttpRemoteOptions.JsonSerializerOptionsDefault.Converters.Count);
         Assert.True(
             HttpRemoteOptions.JsonSerializerOptionsDefault.Converters[0] is
                 DateTimeConverterUsingDateTimeParseAsFallback);
         Assert.True(
             HttpRemoteOptions.JsonSerializerOptionsDefault.Converters[1] is
                 DateTimeOffsetConverterUsingDateTimeOffsetParseAsFallback);
+        Assert.True(HttpRemoteOptions.JsonSerializerOptionsDefault.Converters[2] is StringJsonConverter);
 
         Assert.NotNull(httpRemoteOptions.JsonSerializerOptions);
         Assert.NotEqual(HttpRemoteOptions.JsonSerializerOptionsDefault, httpRemoteOptions.JsonSerializerOptions);

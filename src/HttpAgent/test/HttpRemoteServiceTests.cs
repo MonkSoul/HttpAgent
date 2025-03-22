@@ -427,7 +427,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         Assert.Equal("Hello World!", await httpResponseMessage.Content.ReadAsStringAsync());
 
         var (httpResponseMessage2, requestDuration2) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
-            HttpCompletionOption.ResponseContentRead, default, (httpClient, httpRequestMessage, option, token) =>
+            HttpCompletionOption.ResponseContentRead, null, (httpClient, httpRequestMessage, option, token) =>
                 httpClient.Send(httpRequestMessage, option, token));
 
         Assert.NotNull(httpResponseMessage2);
@@ -463,7 +463,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri($"http://localhost:{port}/test"));
         var (httpResponseMessage, requestDuration) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
             HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
-                httpClient.SendAsync(httpRequestMessage, option, token), default);
+                httpClient.SendAsync(httpRequestMessage, option, token), null);
 
         Assert.NotNull(httpResponseMessage);
         Assert.True(requestDuration > 0);
@@ -502,7 +502,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         {
             _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
                 HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
-                    httpClient.SendAsync(httpRequestMessage, option, token), default);
+                    httpClient.SendAsync(httpRequestMessage, option, token), null);
         });
 
         await app.StopAsync();
@@ -542,7 +542,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
 
         _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
             HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
-                httpClient.SendAsync(httpRequestMessage, option, token), default);
+                httpClient.SendAsync(httpRequestMessage, option, token), null);
 
         Assert.Equal(2, i);
 
@@ -589,7 +589,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         {
             _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
                 HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
-                    httpClient.SendAsync(httpRequestMessage, option, token), default);
+                    httpClient.SendAsync(httpRequestMessage, option, token), null);
         }
         catch
         {
@@ -642,7 +642,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         {
             _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
                 HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
-                    httpClient.SendAsync(httpRequestMessage, option, token), default);
+                    httpClient.SendAsync(httpRequestMessage, option, token), null);
         }
         catch
         {
@@ -686,7 +686,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
 
         _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
             HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
-                httpClient.SendAsync(httpRequestMessage, option, token), default);
+                httpClient.SendAsync(httpRequestMessage, option, token), null);
 
         Assert.Equal(1, i);
 
@@ -724,7 +724,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
 
         _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
             HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
-                httpClient.SendAsync(httpRequestMessage, option, token), default);
+                httpClient.SendAsync(httpRequestMessage, option, token), null);
 
         Assert.Equal(0, i);
 
@@ -757,7 +757,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         {
             _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
                 HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
-                    httpClient.SendAsync(httpRequestMessage, option, token), default);
+                    httpClient.SendAsync(httpRequestMessage, option, token), null);
         });
 
         // 超时为 0
@@ -765,7 +765,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
             new HttpRequestBuilder(HttpMethod.Get, new Uri($"http://localhost:{port}/test")).SetTimeout(0);
         _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder2,
             HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
-                httpClient.SendAsync(httpRequestMessage, option, token), default);
+                httpClient.SendAsync(httpRequestMessage, option, token), null);
 
         await app.StopAsync();
         await serviceProvider.DisposeAsync();
@@ -783,7 +783,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         {
             var (httpResponseMessage, _) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
                 HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
-                    httpClient.SendAsync(httpRequestMessage, option, token), default);
+                    httpClient.SendAsync(httpRequestMessage, option, token), null);
             Assert.Null(httpResponseMessage);
         });
 
@@ -803,7 +803,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         {
             var (httpResponseMessage, _) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
                 HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
-                    httpClient.SendAsync(httpRequestMessage, option, token), default);
+                    httpClient.SendAsync(httpRequestMessage, option, token), null);
             Assert.Null(httpResponseMessage);
         });
 
@@ -838,7 +838,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         {
             _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
                 HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
-                    httpClient.SendAsync(httpRequestMessage, option, token), default, cancellationTokenSource.Token);
+                    httpClient.SendAsync(httpRequestMessage, option, token), null, cancellationTokenSource.Token);
         });
 
         await app.StopAsync();
@@ -874,7 +874,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
 
         _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
             HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
-                httpClient.SendAsync(httpRequestMessage, option, token), default);
+                httpClient.SendAsync(httpRequestMessage, option, token), null);
 
         Assert.NotNull(httpRequestBuilder.Disposables);
         Assert.Empty(httpRequestBuilder.Disposables);
@@ -925,7 +925,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
 
         var result = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
             HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
-                httpClient.SendAsync(httpRequestMessage, option, token), default);
+                httpClient.SendAsync(httpRequestMessage, option, token), null);
 
         var str = await result.ResponseMessage.Content.ReadAsStringAsync();
         Assert.Equal("1 Furion", str);
@@ -964,7 +964,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
 
         _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
             HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
-                httpClient.SendAsync(httpRequestMessage, option, token), default);
+                httpClient.SendAsync(httpRequestMessage, option, token), null);
 
         Assert.Equal(1, i);
 
@@ -1001,7 +1001,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
                 });
 
         _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
-            HttpCompletionOption.ResponseContentRead, default, (httpClient, httpRequestMessage, option, token) =>
+            HttpCompletionOption.ResponseContentRead, null, (httpClient, httpRequestMessage, option, token) =>
                 httpClient.Send(httpRequestMessage, option, token));
 
         Assert.Equal(0, i);
@@ -1033,7 +1033,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri($"http://localhost:{port}/test"));
         var (httpResponseMessage, requestDuration) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
             HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
-                httpClient.SendAsync(httpRequestMessage, option, token), default);
+                httpClient.SendAsync(httpRequestMessage, option, token), null);
 
         Assert.NotNull(httpResponseMessage);
         Assert.True(requestDuration > 0);
@@ -1042,7 +1042,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         Assert.Equal("Redirect!", await httpResponseMessage.Content.ReadAsStringAsync());
 
         var (httpResponseMessage2, requestDuration2) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
-            HttpCompletionOption.ResponseContentRead, default, (httpClient, httpRequestMessage, option, token) =>
+            HttpCompletionOption.ResponseContentRead, null, (httpClient, httpRequestMessage, option, token) =>
                 httpClient.Send(httpRequestMessage, option, token));
 
         Assert.NotNull(httpResponseMessage2);
@@ -1077,16 +1077,16 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         var (httpRemoteService, serviceProvider) =
             Helpers.CreateHttpRemoteService(allowAutoRedirect: false, frameworkAllowAutoRedirect: false);
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri($"http://localhost:{port}/test"));
-        var (httpResponseMessage, requestDuration) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
+        var (httpResponseMessage, _) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
             HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
-                httpClient.SendAsync(httpRequestMessage, option, token), default);
+                httpClient.SendAsync(httpRequestMessage, option, token), null);
 
         Assert.NotNull(httpResponseMessage);
         Assert.False(httpResponseMessage.IsSuccessStatusCode);
         Assert.Equal(302, (int)httpResponseMessage.StatusCode);
 
-        var (httpResponseMessage2, requestDuration2) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
-            HttpCompletionOption.ResponseContentRead, default, (httpClient, httpRequestMessage, option, token) =>
+        var (httpResponseMessage2, _) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
+            HttpCompletionOption.ResponseContentRead, null, (httpClient, httpRequestMessage, option, token) =>
                 httpClient.Send(httpRequestMessage, option, token));
 
         Assert.NotNull(httpResponseMessage2);
@@ -1458,6 +1458,44 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
 
         await app.StopAsync();
     }
+
+    [Fact]
+    public async Task SendAsync_WithStringClass_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+        builder.Services.AddHttpRemote();
+
+        await using var app = builder.Build();
+
+        app.MapGet("/test", async httpContext =>
+        {
+            await Task.Delay(50);
+            httpContext.Response.ContentType = "application/json";
+            await httpContext.Response.WriteAsync("""
+                                                  {
+                                                    "String1": 601139524199,
+                                                    "String2": true,
+                                                    "String3": false
+                                                  }
+                                                  """);
+        });
+
+        await app.StartAsync();
+
+        var httpRemoteService = app.Services.GetRequiredService<IHttpRemoteService>();
+
+        var result = await httpRemoteService.SendAsync<StringClassTest>(
+            HttpRequestBuilder.Get($"http://localhost:{port}/test"));
+
+        Assert.NotNull(result.Result);
+        Assert.Equal("601139524199", result.Result.String1);
+        Assert.Equal("True", result.Result.String2);
+        Assert.Equal("False", result.Result.String3);
+
+        await app.StopAsync();
+    }
 }
 
 public class NoISO8601TimeClass
@@ -1465,4 +1503,11 @@ public class NoISO8601TimeClass
     public int Id { get; set; }
     public string? Name { get; set; }
     public DateTime Time { get; set; }
+}
+
+public class StringClassTest
+{
+    public string? String1 { get; set; }
+    public string? String2 { get; set; }
+    public string? String3 { get; set; }
 }

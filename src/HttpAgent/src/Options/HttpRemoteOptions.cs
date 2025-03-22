@@ -17,11 +17,17 @@ public sealed class HttpRemoteOptions
     {
         PropertyNameCaseInsensitive = true,
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        // 允许 String 转 Number
         NumberHandling = JsonNumberHandling.AllowReadingFromString,
+        // 解决中文乱码问题
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        AllowTrailingCommas = true,
         Converters =
         {
             new DateTimeConverterUsingDateTimeParseAsFallback(),
-            new DateTimeOffsetConverterUsingDateTimeOffsetParseAsFallback()
+            new DateTimeOffsetConverterUsingDateTimeOffsetParseAsFallback(),
+            // 允许 Number 或 Boolean 转 String
+            new StringJsonConverter()
         }
     };
 

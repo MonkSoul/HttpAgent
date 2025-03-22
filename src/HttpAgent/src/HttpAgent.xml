@@ -3405,6 +3405,18 @@
         <member name="M:HttpAgent.Core.Converters.Json.DateTimeOffsetConverterUsingDateTimeOffsetParseAsFallback.Write(System.Text.Json.Utf8JsonWriter,System.DateTimeOffset,System.Text.Json.JsonSerializerOptions)">
             <inheritdoc />
         </member>
+        <member name="T:HttpAgent.Core.Converters.Json.StringJsonConverter">
+            <summary>
+                <see cref="T:System.String" /> JSON 序列化转换器
+            </summary>
+            <remarks>解决 Number 类型和 Boolean 类型转 String 类型时异常。</remarks>
+        </member>
+        <member name="M:HttpAgent.Core.Converters.Json.StringJsonConverter.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:HttpAgent.Core.Converters.Json.StringJsonConverter.Write(System.Text.Json.Utf8JsonWriter,System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
         <member name="T:HttpAgent.Core.Extensions.DelegateExtensions">
             <summary>
                 委托拓展类
@@ -4072,6 +4084,23 @@
             </summary>
             <param name="type">
                 <see cref="T:System.Type" />
+            </param>
+            <returns>
+                <see cref="T:System.String" />
+            </returns>
+        </member>
+        <member name="T:HttpAgent.Core.Extensions.Utf8JsonReaderExtensions">
+            <summary>
+                <see cref="T:System.Text.Json.Utf8JsonReader" /> 拓展类
+            </summary>
+        </member>
+        <member name="M:HttpAgent.Core.Extensions.Utf8JsonReaderExtensions.ConvertRawValueToString(System.Text.Json.Utf8JsonReader)">
+            <summary>
+                从 <see cref="T:System.Text.Json.Utf8JsonReader" /> 中提取原始值，并将其转换为字符串
+            </summary>
+            <remarks>支持处理各种类型的原始值（例如数字、布尔值等）。</remarks>
+            <param name="reader">
+                <see cref="T:System.Text.Json.Utf8JsonReader" />
             </param>
             <returns>
                 <see cref="T:System.String" />
@@ -13348,9 +13377,6 @@
         <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_ascii_60FF03FEFFFF87FEFFFF47">
             <summary>Supports searching for characters in or not in "-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~".</summary>
         </member>
-        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_indexOfString_EBC667BDABA1472FA863B5B39B31251EF2B4C95DD643BDECF694CB1CE7BDC178">
-            <summary>Supports searching for the string "[[".</summary>
-        </member>
         <member name="T:Microsoft.Extensions.DependencyInjection.HttpRemoteServiceCollectionExtensions">
             <summary>
                 HTTP 远程请求模块 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> 拓展类
@@ -13376,6 +13402,15 @@
                 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
             </param>
             <param name="httpRemoteBuilder">
+                <see cref="T:HttpAgent.HttpRemoteBuilder" />
+            </param>
+            <returns>
+                <see cref="T:HttpAgent.IHttpRemoteBuilder" />
+            </returns>
+        </member>
+    </members>
+</doc>
+teBuilder">
                 <see cref="T:HttpAgent.HttpRemoteBuilder" />
             </param>
             <returns>

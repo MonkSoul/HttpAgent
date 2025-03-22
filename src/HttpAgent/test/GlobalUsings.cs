@@ -24,6 +24,7 @@ global using System.Net.Sockets;
 global using System.Net.WebSockets;
 global using System.Reflection;
 global using System.Security.Authentication;
+global using System.Text.Encodings.Web;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
 global using System.Threading.Channels;
