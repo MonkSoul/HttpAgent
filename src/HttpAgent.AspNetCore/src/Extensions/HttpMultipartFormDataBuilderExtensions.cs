@@ -18,11 +18,16 @@ public static class HttpMultipartFormDataBuilderExtensions
     /// <param name="formFile">
     ///     <see cref="IFormFile" />
     /// </param>
+    /// <param name="name">表单名称</param>
+    /// <param name="fileName">文件的名称</param>
+    /// <param name="contentType">内容类型</param>
+    /// <param name="contentEncoding">内容编码</param>
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
     public static HttpMultipartFormDataBuilder AddFile(this HttpMultipartFormDataBuilder httpMultipartFormDataBuilder,
-        IFormFile formFile)
+        IFormFile formFile, string? name = null, string? fileName = null, string? contentType = null,
+        Encoding? contentEncoding = null)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(formFile);
@@ -37,8 +42,9 @@ public static class HttpMultipartFormDataBuilderExtensions
         memoryStream.Position = 0;
 
         // 添加文件流
-        return httpMultipartFormDataBuilder.AddStream(memoryStream, formFile.Name, formFile.FileName,
-            formFile.ContentType, disposeStreamOnRequestCompletion: true);
+        return httpMultipartFormDataBuilder.AddStream(memoryStream, name ?? formFile.Name,
+            fileName ?? formFile.FileName, contentType ?? formFile.ContentType, contentEncoding,
+            disposeStreamOnRequestCompletion: true);
     }
 
     /// <summary>
@@ -50,11 +56,12 @@ public static class HttpMultipartFormDataBuilderExtensions
     /// <param name="formFiles">
     ///     <see cref="IFormFileCollection" />
     /// </param>
+    /// <param name="name">表单名称</param>
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
     public static HttpMultipartFormDataBuilder AddFiles(this HttpMultipartFormDataBuilder httpMultipartFormDataBuilder,
-        IEnumerable<IFormFile> formFiles)
+        IEnumerable<IFormFile> formFiles, string? name = null)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(formFiles);
@@ -62,7 +69,7 @@ public static class HttpMultipartFormDataBuilderExtensions
         // 逐条添加文件
         foreach (var formFile in formFiles)
         {
-            httpMultipartFormDataBuilder.AddFile(formFile);
+            httpMultipartFormDataBuilder.AddFile(formFile, name ?? formFile.Name);
         }
 
         return httpMultipartFormDataBuilder;

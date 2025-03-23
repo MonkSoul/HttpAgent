@@ -1650,7 +1650,7 @@
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" /> 拓展类
             </summary>
         </member>
-        <member name="M:HttpAgent.HttpMultipartFormDataBuilderExtensions.AddFile(HttpAgent.HttpMultipartFormDataBuilder,Microsoft.AspNetCore.Http.IFormFile)">
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilderExtensions.AddFile(HttpAgent.HttpMultipartFormDataBuilder,Microsoft.AspNetCore.Http.IFormFile,System.String,System.String,System.String,System.Text.Encoding)">
             <summary>
                 添加文件
             </summary>
@@ -1660,11 +1660,15 @@
             <param name="formFile">
                 <see cref="T:Microsoft.AspNetCore.Http.IFormFile" />
             </param>
+            <param name="name">表单名称</param>
+            <param name="fileName">文件的名称</param>
+            <param name="contentType">内容类型</param>
+            <param name="contentEncoding">内容编码</param>
             <returns>
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpMultipartFormDataBuilderExtensions.AddFiles(HttpAgent.HttpMultipartFormDataBuilder,System.Collections.Generic.IEnumerable{Microsoft.AspNetCore.Http.IFormFile})">
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilderExtensions.AddFiles(HttpAgent.HttpMultipartFormDataBuilder,System.Collections.Generic.IEnumerable{Microsoft.AspNetCore.Http.IFormFile},System.String)">
             <summary>
                 添加多个文件
             </summary>
@@ -1674,6 +1678,7 @@
             <param name="formFiles">
                 <see cref="T:Microsoft.AspNetCore.Http.IFormFileCollection" />
             </param>
+            <param name="name">表单名称</param>
             <returns>
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
