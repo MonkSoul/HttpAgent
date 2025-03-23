@@ -780,7 +780,7 @@
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddStream(System.IO.Stream,System.String,System.String,System.String,System.Text.Encoding)">
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilder.AddStream(System.IO.Stream,System.String,System.String,System.String,System.Text.Encoding,System.Boolean)">
             <summary>
                 添加流
             </summary>
@@ -791,6 +791,7 @@
             <param name="fileName">文件的名称</param>
             <param name="contentType">内容类型</param>
             <param name="contentEncoding">内容编码</param>
+            <param name="disposeStreamOnRequestCompletion">是否在请求结束后自动释放流。默认值为：<c>false</c></param>
             <returns>
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>

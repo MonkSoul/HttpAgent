@@ -694,6 +694,13 @@ public class HttpMultipartFormDataBuilderTests
         Assert.Null(builder._partContents[5].ContentEncoding);
         Assert.Equal(stream, builder._partContents[5].RawContent);
         Assert.Equal("image.jpg", builder._partContents[5].FileName);
+
+        var builder2 = new HttpMultipartFormDataBuilder(HttpRequestBuilder.Get("http://localhost"));
+        using var stream2 = new MemoryStream();
+        Assert.Null(builder2._httpRequestBuilder.Disposables);
+        builder2.AddStream(stream2, "test", "image.jpg", "image/jpeg", disposeStreamOnRequestCompletion: true);
+        Assert.NotNull(builder2._httpRequestBuilder.Disposables);
+        Assert.Single(builder2._httpRequestBuilder.Disposables);
     }
 
     [Fact]

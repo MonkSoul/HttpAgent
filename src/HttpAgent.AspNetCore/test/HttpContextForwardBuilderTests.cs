@@ -474,7 +474,7 @@ public class HttpContextForwardBuilderTests
             Assert.NotNull(multipartSection);
 
             await HttpContextForwardBuilder.CopyFileMultipartSectionAsync(multipartSection,
-                httpMultipartFormDataBuilder, httpRequestBuilder, context.RequestAborted);
+                httpMultipartFormDataBuilder, context.RequestAborted);
             Assert.Equal(3, httpMultipartFormDataBuilder._partContents.Count);
             Assert.True(httpMultipartFormDataBuilder._partContents[2].RawContent is Stream);
             Assert.Equal("File", httpMultipartFormDataBuilder._partContents[2].Name);

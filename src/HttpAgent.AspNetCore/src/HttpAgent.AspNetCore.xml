@@ -157,7 +157,7 @@
                 <see cref="T:System.Threading.CancellationToken" />
             </param>
         </member>
-        <member name="M:HttpAgent.HttpContextForwardBuilder.CopyFileMultipartSectionAsync(Microsoft.AspNetCore.WebUtilities.MultipartSection,HttpAgent.HttpMultipartFormDataBuilder,HttpAgent.HttpRequestBuilder,System.Threading.CancellationToken)">
+        <member name="M:HttpAgent.HttpContextForwardBuilder.CopyFileMultipartSectionAsync(Microsoft.AspNetCore.WebUtilities.MultipartSection,HttpAgent.HttpMultipartFormDataBuilder,System.Threading.CancellationToken)">
             <summary>
                 复制多部分表单内容文件节内容
             </summary>
@@ -166,9 +166,6 @@
             </param>
             <param name="httpMultipartFormDataBuilder">
                 <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
-            </param>
-            <param name="httpRequestBuilder">
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
             </param>
             <param name="cancellationToken">
                 <see cref="T:System.Threading.CancellationToken" />
@@ -1646,6 +1643,39 @@
             </param>
             <returns>
                 <see cref="T:System.Object" />
+            </returns>
+        </member>
+        <member name="T:HttpAgent.HttpMultipartFormDataBuilderExtensions">
+            <summary>
+                <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" /> 拓展类
+            </summary>
+        </member>
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilderExtensions.AddFile(HttpAgent.HttpMultipartFormDataBuilder,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+                添加文件
+            </summary>
+            <param name="httpMultipartFormDataBuilder">
+                <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
+            </param>
+            <param name="formFile">
+                <see cref="T:Microsoft.AspNetCore.Http.IFormFile" />
+            </param>
+            <returns>
+                <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpMultipartFormDataBuilderExtensions.AddFiles(HttpAgent.HttpMultipartFormDataBuilder,System.Collections.Generic.IEnumerable{Microsoft.AspNetCore.Http.IFormFile})">
+            <summary>
+                添加多个文件
+            </summary>
+            <param name="httpMultipartFormDataBuilder">
+                <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
+            </param>
+            <param name="formFiles">
+                <see cref="T:Microsoft.AspNetCore.Http.IFormFileCollection" />
+            </param>
+            <returns>
+                <see cref="T:HttpAgent.HttpMultipartFormDataBuilder" />
             </returns>
         </member>
         <member name="T:HttpAgent.AspNetCore.Extensions.IApplicationBuilderExtensions">

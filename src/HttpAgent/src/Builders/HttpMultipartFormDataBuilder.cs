@@ -271,10 +271,8 @@ public sealed class HttpMultipartFormDataBuilder
         // 从互联网 URL 地址中加载流
         var fileStream = Helpers.GetStreamFromRemote(url);
 
-        // 添加文件流到请求结束时需要释放的集合中
-        _httpRequestBuilder.AddDisposable(fileStream);
-
-        return AddStream(fileStream, name, newFileName, contentType, contentEncoding);
+        return AddStream(fileStream, name, newFileName, contentType, contentEncoding,
+            true);
     }
 
     /// <summary>
@@ -344,10 +342,8 @@ public sealed class HttpMultipartFormDataBuilder
         // 读取文件流（没有 using）
         var fileStream = File.OpenRead(filePath);
 
-        // 添加文件流到请求结束时需要释放的集合中
-        _httpRequestBuilder.AddDisposable(fileStream);
-
-        return AddStream(fileStream, name, newFileName, contentType, contentEncoding);
+        return AddStream(fileStream, name, newFileName, contentType, contentEncoding,
+            true);
     }
 
     /// <summary>
@@ -386,10 +382,8 @@ public sealed class HttpMultipartFormDataBuilder
         // 初始化带读写进度的文件流
         var progressFileStream = new ProgressFileStream(fileStream, filePath, progressChannel, newFileName);
 
-        // 添加文件流到请求结束时需要释放的集合中
-        _httpRequestBuilder.AddDisposable(progressFileStream);
-
-        return AddStream(progressFileStream, name, newFileName, contentType, contentEncoding);
+        return AddStream(progressFileStream, name, newFileName, contentType, contentEncoding,
+            true);
     }
 
     /// <summary>
@@ -479,11 +473,12 @@ public sealed class HttpMultipartFormDataBuilder
     /// <param name="fileName">文件的名称</param>
     /// <param name="contentType">内容类型</param>
     /// <param name="contentEncoding">内容编码</param>
+    /// <param name="disposeStreamOnRequestCompletion">是否在请求结束后自动释放流。默认值为：<c>false</c></param>
     /// <returns>
     ///     <see cref="HttpMultipartFormDataBuilder" />
     /// </returns>
     public HttpMultipartFormDataBuilder AddStream(Stream stream, string name = "file", string? fileName = null,
-        string? contentType = null, Encoding? contentEncoding = null)
+        string? contentType = null, Encoding? contentEncoding = null, bool disposeStreamOnRequestCompletion = false)
     {
         // 空检查
         ArgumentNullException.ThrowIfNull(stream);
@@ -504,6 +499,12 @@ public sealed class HttpMultipartFormDataBuilder
         {
             ContentType = mimeType, RawContent = stream, ContentEncoding = encoding, FileName = fileName
         });
+
+        // 是否在请求结束后自动释放流
+        if (disposeStreamOnRequestCompletion)
+        {
+            _httpRequestBuilder.AddDisposable(stream);
+        }
 
         return this;
     }
