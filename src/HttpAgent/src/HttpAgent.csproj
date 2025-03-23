@@ -15,8 +15,4 @@
         <PackageReference Include="Microsoft.Net.Http.Headers" Version="9.0.0"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <Compile Remove="Core\Extensions\AssemblyExtensions.cs"/>
-    </ItemGroup>
-
 </Project>
