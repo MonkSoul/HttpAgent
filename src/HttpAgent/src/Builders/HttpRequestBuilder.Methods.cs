@@ -1139,6 +1139,17 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
+    ///     设置身份验证凭据请求授权标头
+    /// </summary>
+    /// <param name="scheme">身份验证的方案</param>
+    /// <param name="parameter">身份验证的凭证</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder AddAuthentication(string scheme, string? parameter) =>
+        AddAuthentication(new AuthenticationHeaderValue(scheme, parameter));
+
+    /// <summary>
     ///     设置 JWT (JSON Web Token) 身份验证凭据请求授权标头
     /// </summary>
     /// <param name="jwtToken">JWT 字符串</param>

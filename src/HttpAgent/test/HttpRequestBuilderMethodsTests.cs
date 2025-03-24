@@ -1363,6 +1363,13 @@ public class HttpRequestBuilderMethodsTests
         Assert.NotNull(httpRequestBuilder.AuthenticationHeader);
         Assert.Equal("Bearer jwtbearer", httpRequestBuilder.AuthenticationHeader.ToString());
         Assert.Equal("Bearer", httpRequestBuilder.AuthenticationHeader.Scheme);
+
+        var httpRequestBuilder2 = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder2.AddAuthentication("Bearer", "jwtbearer");
+
+        Assert.NotNull(httpRequestBuilder2.AuthenticationHeader);
+        Assert.Equal("Bearer jwtbearer", httpRequestBuilder2.AuthenticationHeader.ToString());
+        Assert.Equal("Bearer", httpRequestBuilder2.AuthenticationHeader.Scheme);
     }
 
     [Fact]
