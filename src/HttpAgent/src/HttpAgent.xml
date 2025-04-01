@@ -1795,16 +1795,6 @@
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
         </member>
-        <member name="M:HttpAgent.HttpRequestBuilder.AddAuthentication(System.String,System.String)">
-            <summary>
-                设置身份验证凭据请求授权标头
-            </summary>
-            <param name="scheme">身份验证的方案</param>
-            <param name="parameter">身份验证的凭证</param>
-            <returns>
-                <see cref="T:HttpAgent.HttpRequestBuilder" />
-            </returns>
-        </member>
         <member name="M:HttpAgent.HttpRequestBuilder.AddJwtBearerAuthentication(System.String)">
             <summary>
                 设置 JWT (JSON Web Token) 身份验证凭据请求授权标头
@@ -1820,6 +1810,16 @@
             </summary>
             <param name="username">用户名</param>
             <param name="password">密码</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.AddAuthentication(System.String,System.String)">
+            <summary>
+                设置身份验证凭据请求授权标头
+            </summary>
+            <param name="scheme">身份验证的方案</param>
+            <param name="parameter">身份验证的凭证</param>
             <returns>
                 <see cref="T:HttpAgent.HttpRequestBuilder" />
             </returns>
@@ -1902,6 +1902,16 @@
                 释放资源集合
             </summary>
             <remarks>包含自定义 <see cref="T:System.Net.Http.HttpClient" /> 实例和其他可释放对象集合。</remarks>
+        </member>
+        <member name="M:HttpAgent.HttpRequestBuilder.SetReferer(System.String)">
+            <summary>
+                设置请求来源地址
+            </summary>
+            <remarks>设置此配置后，将在单次请求标头中添加 <c>Referer</c> 标头。</remarks>
+            <param name="referer">请求来源地址，当设置为 <c>"{BASE_ADDRESS}"</c> 时将替换为基地址</param>
+            <returns>
+                <see cref="T:HttpAgent.HttpRequestBuilder" />
+            </returns>
         </member>
         <member name="M:HttpAgent.HttpRequestBuilder.SimulateBrowser(System.Boolean)">
             <summary>
@@ -3156,6 +3166,11 @@
         <member name="F:HttpAgent.Constants.USER_AGENT_OF_MOBILE_BROWSER">
             <summary>
                 移动端浏览器的 <c>User-Agent</c> 标头值
+            </summary>
+        </member>
+        <member name="F:HttpAgent.Constants.REFERER_HEADER_BASE_ADDRESS_TEMPLATE">
+            <summary>
+                <c>Referer</c> 标头请求基地址模板
             </summary>
         </member>
         <member name="T:HttpAgent.FileExistsBehavior">
@@ -4996,6 +5011,22 @@
                 是否设置了值
             </summary>
         </member>
+        <member name="T:HttpAgent.RefererAttribute">
+            <summary>
+                HTTP 声明式请求来源地址特性
+            </summary>
+        </member>
+        <member name="M:HttpAgent.RefererAttribute.#ctor(System.String)">
+            <summary>
+                <inheritdoc cref="T:HttpAgent.RefererAttribute" />
+            </summary>
+            <param name="referer">请求来源地址，当设置为 <c>"{BASE_ADDRESS}"</c> 时将替换为基地址</param>
+        </member>
+        <member name="P:HttpAgent.RefererAttribute.Referer">
+            <summary>
+                请求来源地址，当设置为 <c>"{BASE_ADDRESS}"</c> 时将替换为基地址
+            </summary>
+        </member>
         <member name="T:HttpAgent.SimulateBrowserAttribute">
             <summary>
                 HTTP 声明式模拟浏览器环境特性
@@ -5371,6 +5402,14 @@
             </summary>
         </member>
         <member name="M:HttpAgent.QueryDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
+            <inheritdoc />
+        </member>
+        <member name="T:HttpAgent.RefererDeclarativeExtractor">
+            <summary>
+                HTTP 声明式 <see cref="T:HttpAgent.RefererAttribute" /> 特性提取器
+            </summary>
+        </member>
+        <member name="M:HttpAgent.RefererDeclarativeExtractor.Extract(HttpAgent.HttpRequestBuilder,HttpAgent.HttpDeclarativeExtractorContext)">
             <inheritdoc />
         </member>
         <member name="T:HttpAgent.SimulateBrowserDeclarativeExtractor">
@@ -13413,6 +13452,15 @@
                 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
             </param>
             <param name="httpRemoteBuilder">
+                <see cref="T:HttpAgent.HttpRemoteBuilder" />
+            </param>
+            <returns>
+                <see cref="T:HttpAgent.IHttpRemoteBuilder" />
+            </returns>
+        </member>
+    </members>
+</doc>
+teBuilder">
                 <see cref="T:HttpAgent.HttpRemoteBuilder" />
             </param>
             <returns>

@@ -1139,17 +1139,6 @@ public sealed partial class HttpRequestBuilder
     }
 
     /// <summary>
-    ///     设置身份验证凭据请求授权标头
-    /// </summary>
-    /// <param name="scheme">身份验证的方案</param>
-    /// <param name="parameter">身份验证的凭证</param>
-    /// <returns>
-    ///     <see cref="HttpRequestBuilder" />
-    /// </returns>
-    public HttpRequestBuilder AddAuthentication(string scheme, string? parameter) =>
-        AddAuthentication(new AuthenticationHeaderValue(scheme, parameter));
-
-    /// <summary>
     ///     设置 JWT (JSON Web Token) 身份验证凭据请求授权标头
     /// </summary>
     /// <param name="jwtToken">JWT 字符串</param>
@@ -1186,6 +1175,17 @@ public sealed partial class HttpRequestBuilder
 
         return this;
     }
+
+    /// <summary>
+    ///     设置身份验证凭据请求授权标头
+    /// </summary>
+    /// <param name="scheme">身份验证的方案</param>
+    /// <param name="parameter">身份验证的凭证</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder AddAuthentication(string scheme, string? parameter) =>
+        AddAuthentication(new AuthenticationHeaderValue(scheme, parameter));
 
     /// <summary>
     ///     设置身份验证凭据请求授权标头
@@ -1321,6 +1321,17 @@ public sealed partial class HttpRequestBuilder
         // 释放可释放的对象集合
         ReleaseDisposables();
     }
+
+    /// <summary>
+    ///     设置请求来源地址
+    /// </summary>
+    /// <remarks>设置此配置后，将在单次请求标头中添加 <c>Referer</c> 标头。</remarks>
+    /// <param name="referer">请求来源地址，当设置为 <c>"{BASE_ADDRESS}"</c> 时将替换为基地址</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder SetReferer(string? referer) =>
+        WithHeader(HeaderNames.Referer, referer, replace: true);
 
     /// <summary>
     ///     设置模拟浏览器环境

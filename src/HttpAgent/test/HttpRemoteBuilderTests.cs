@@ -181,7 +181,7 @@ public class HttpRemoteBuilderTests
         builder.AddHttpDeclarativeFromAssemblies([typeof(HttpRemoteBuilderTests).Assembly, null]);
 
         Assert.NotNull(builder._httpDeclarativeTypes);
-        Assert.Equal(38, builder._httpDeclarativeTypes.Count);
+        Assert.Equal(40, builder._httpDeclarativeTypes.Count);
     }
 
     [Fact]

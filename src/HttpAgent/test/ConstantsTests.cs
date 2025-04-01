@@ -70,4 +70,8 @@ public class ConstantsTests
         Assert.Equal(
             "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Mobile Safari/537.36 Edg/133.0.0.0",
             Constants.USER_AGENT_OF_MOBILE_BROWSER);
+
+    [Fact]
+    public void REFERER_HEADER_BASE_ADDRESS_TEMPLATE() =>
+        Assert.Equal("{BASE_ADDRESS}", Constants.REFERER_HEADER_BASE_ADDRESS_TEMPLATE);
 }

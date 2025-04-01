@@ -92,4 +92,9 @@ internal static class Constants
     /// </summary>
     internal const string USER_AGENT_OF_MOBILE_BROWSER =
         "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Mobile Safari/537.36 Edg/133.0.0.0";
+
+    /// <summary>
+    ///     <c>Referer</c> 标头请求基地址模板
+    /// </summary>
+    internal const string REFERER_HEADER_BASE_ADDRESS_TEMPLATE = "{BASE_ADDRESS}";
 }

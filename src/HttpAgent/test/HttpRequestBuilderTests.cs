@@ -306,6 +306,10 @@ public class HttpRequestBuilderTests
         httpRequestBuilder.AutoSetHostHeader();
         httpRequestBuilder.AppendHeaders(httpRequestMessage);
         Assert.Equal("localhost", httpRequestMessage.Headers.Host);
+
+        httpRequestBuilder.SetReferer("{BASE_ADDRESS}");
+        httpRequestBuilder.AppendHeaders(httpRequestMessage);
+        Assert.Equal("http://localhost/", httpRequestMessage.Headers.Referrer?.ToString());
     }
 
     [Fact]

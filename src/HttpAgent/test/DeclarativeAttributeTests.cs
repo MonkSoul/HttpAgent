@@ -400,4 +400,19 @@ public class DeclarativeAttributeTests
         var attribute2 = new BaseAddressAttribute("https://localhost");
         Assert.Equal("https://localhost", attribute2.BaseAddress);
     }
+
+    [Fact]
+    public void RefererAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(RefererAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface, attributeUsage.ValidOn);
+        Assert.False(attributeUsage.AllowMultiple);
+
+        var attribute = new RefererAttribute(null);
+        Assert.Null(attribute.Referer);
+
+        var attribute2 = new RefererAttribute("https://localhost");
+        Assert.Equal("https://localhost", attribute2.Referer);
+    }
 }

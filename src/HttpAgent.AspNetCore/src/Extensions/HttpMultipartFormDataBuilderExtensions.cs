@@ -44,7 +44,7 @@ public static class HttpMultipartFormDataBuilderExtensions
         // 添加文件流
         return httpMultipartFormDataBuilder.AddStream(memoryStream, name ?? formFile.Name,
             fileName ?? formFile.FileName, contentType ?? formFile.ContentType, contentEncoding,
-            disposeStreamOnRequestCompletion: true);
+            true);
     }
 
     /// <summary>

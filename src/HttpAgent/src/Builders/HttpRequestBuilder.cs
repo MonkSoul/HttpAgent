@@ -283,6 +283,16 @@ public sealed partial class HttpRequestBuilder
         // 遍历请求标头集合并追加到 HttpRequestMessage.Headers 中
         foreach (var (key, values) in Headers)
         {
+            // 替换 Referer 标头的 "{BASE_ADDRESS}" 模板字符串
+            if (key.IsIn([HeaderNames.Referer], StringComparer.OrdinalIgnoreCase) &&
+                values.FirstOrDefault() == Constants.REFERER_HEADER_BASE_ADDRESS_TEMPLATE)
+            {
+                httpRequestMessage.Headers.Referrer = new Uri(
+                    $"{httpRequestMessage.RequestUri?.Scheme}://{httpRequestMessage.RequestUri?.Host}{(httpRequestMessage.RequestUri?.IsDefaultPort != true ? $":{httpRequestMessage.RequestUri?.Port}" : string.Empty)}",
+                    UriKind.RelativeOrAbsolute);
+                continue;
+            }
+
             httpRequestMessage.Headers.TryAddWithoutValidation(key, values);
         }
     }

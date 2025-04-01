@@ -1425,6 +1425,36 @@ public class HttpRequestBuilderMethodsTests
     }
 
     [Fact]
+    public void SetReferer_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder.SetReferer(null);
+
+        Assert.NotNull(httpRequestBuilder.Headers);
+        Assert.Single(httpRequestBuilder.Headers);
+        Assert.Null(httpRequestBuilder.Headers["Referer"].First());
+
+        httpRequestBuilder.SetReferer("https://furion.net/");
+
+        Assert.NotNull(httpRequestBuilder.Headers);
+        Assert.Single(httpRequestBuilder.Headers);
+        Assert.Equal("https://furion.net/", httpRequestBuilder.Headers["Referer"].First());
+    }
+
+    [Fact]
+    public void SetReferer_Duplicate_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder.SetReferer("https://furion.net/");
+        httpRequestBuilder.SetReferer("https://baiqian.com/");
+
+        Assert.NotNull(httpRequestBuilder.Headers);
+        Assert.Single(httpRequestBuilder.Headers);
+        Assert.Single(httpRequestBuilder.Headers["Referer"]);
+        Assert.Equal("https://baiqian.com/", httpRequestBuilder.Headers["Referer"].First());
+    }
+
+    [Fact]
     public void SimulateBrowser_ReturnOK()
     {
         var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
