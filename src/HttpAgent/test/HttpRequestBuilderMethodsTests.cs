@@ -1762,6 +1762,69 @@ public class HttpRequestBuilderMethodsTests
     }
 
     [Fact]
+    public void SetVersion_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder.SetVersion((string?)null);
+        Assert.Null(httpRequestBuilder.Version);
+
+        httpRequestBuilder.SetVersion("1.1");
+        Assert.Equal("1.1", httpRequestBuilder.Version?.ToString());
+
+        httpRequestBuilder.SetVersion((Version)null!);
+        Assert.Null(httpRequestBuilder.Version);
+
+        httpRequestBuilder.SetVersion(new Version("1.2"));
+        Assert.Equal("1.2", httpRequestBuilder.Version?.ToString());
+
+        httpRequestBuilder.SetVersion(HttpVersion.Version20);
+        Assert.Equal("2.0", httpRequestBuilder.Version?.ToString());
+    }
+
+    [Fact]
+    public void SuppressExceptions_Invalid_Parameters()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        Assert.Throws<ArgumentNullException>(() => httpRequestBuilder.SuppressExceptions(null!));
+
+        var exception =
+            Assert.Throws<ArgumentException>(() => httpRequestBuilder.SuppressExceptions([typeof(Exception), null!]));
+        Assert.Equal("All elements in exceptionTypes must be non-null and assignable to System.Exception.",
+            exception.Message);
+
+        var exception2 =
+            Assert.Throws<ArgumentException>(() =>
+                httpRequestBuilder.SuppressExceptions([typeof(Exception), typeof(object)]));
+        Assert.Equal("All elements in exceptionTypes must be non-null and assignable to System.Exception.",
+            exception2.Message);
+    }
+
+    [Fact]
+    public void SuppressExceptions_ReturnOK()
+    {
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri("http://localhost"));
+        httpRequestBuilder.SuppressExceptions();
+        Assert.NotNull(httpRequestBuilder.SuppressExceptionTypes);
+        Assert.Single(httpRequestBuilder.SuppressExceptionTypes);
+        Assert.Equal(typeof(Exception), httpRequestBuilder.SuppressExceptionTypes.Single());
+
+        httpRequestBuilder.SuppressExceptions();
+        Assert.Single(httpRequestBuilder.SuppressExceptionTypes);
+        Assert.Equal(typeof(Exception), httpRequestBuilder.SuppressExceptionTypes.Single());
+
+        httpRequestBuilder.SuppressExceptions([typeof(TimeoutException), typeof(TaskCanceledException)]);
+        Assert.Equal(2, httpRequestBuilder.SuppressExceptionTypes.Count);
+
+        httpRequestBuilder.SuppressExceptions(false);
+        Assert.Null(httpRequestBuilder.SuppressExceptionTypes);
+
+        httpRequestBuilder.SuppressExceptions(true);
+        Assert.NotNull(httpRequestBuilder.SuppressExceptionTypes);
+        Assert.Single(httpRequestBuilder.SuppressExceptionTypes);
+        Assert.Equal(typeof(Exception), httpRequestBuilder.SuppressExceptionTypes.Single());
+    }
+
+    [Fact]
     public void ConfigureForRedirect_Invalid_Parameters()
     {
         var httpRequestBuilder =

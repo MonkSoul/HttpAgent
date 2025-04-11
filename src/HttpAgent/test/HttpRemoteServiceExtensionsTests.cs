@@ -719,7 +719,7 @@ public class HttpRemoteServiceExtensionsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpResponseMessage = httpRemoteService.UploadFile($"http://localhost:{port}/test", filePath);
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal("test.txt", result);
 
@@ -795,7 +795,7 @@ public class HttpRemoteServiceExtensionsTests
                 });
             });
 
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal("test.txt", result);
         Assert.Equal(1, i);
@@ -829,7 +829,7 @@ public class HttpRemoteServiceExtensionsTests
         var httpResponseMessage =
             await httpRemoteService.UploadFileAsync($"http://localhost:{port}/test", filePath);
 
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal("test.txt", result);
 
@@ -904,7 +904,7 @@ public class HttpRemoteServiceExtensionsTests
                 });
             });
 
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal("test.txt", result);
         Assert.Equal(1, i);
@@ -940,7 +940,7 @@ public class HttpRemoteServiceExtensionsTests
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpResponseMessage = httpRemoteService.Send(httpFileUploadBuilder);
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal("test.txt", result);
 
@@ -1024,7 +1024,7 @@ public class HttpRemoteServiceExtensionsTests
         var httpResponseMessage = httpRemoteService.Send(httpFileUploadBuilder);
 
         Assert.Equal(1, i);
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal("test.txt", result);
 
@@ -1067,7 +1067,7 @@ public class HttpRemoteServiceExtensionsTests
             });
         });
 
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal(1, i);
         Assert.Equal("test.txt", result);
@@ -1107,7 +1107,7 @@ public class HttpRemoteServiceExtensionsTests
         var httpResponseMessage =
             httpRemoteService.Send(httpFileUploadBuilder.SetEventHandler<CustomFileTransferEventHandler>());
 
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal("test.txt", result);
         Assert.Equal(2, customFileTransferEventHandler.counter);
@@ -1143,7 +1143,7 @@ public class HttpRemoteServiceExtensionsTests
 
         var httpResponseMessage = await httpRemoteService.SendAsync(httpFileUploadBuilder);
 
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal("test.txt", result);
 
@@ -1228,7 +1228,7 @@ public class HttpRemoteServiceExtensionsTests
         var httpResponseMessage = await httpRemoteService.SendAsync(httpFileUploadBuilder);
 
         Assert.Equal(1, i);
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal("test.txt", result);
 
@@ -1270,7 +1270,7 @@ public class HttpRemoteServiceExtensionsTests
             });
         });
 
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal("test.txt", result);
         Assert.Equal(1, i);
@@ -1309,7 +1309,7 @@ public class HttpRemoteServiceExtensionsTests
         var httpResponseMessage = await httpRemoteService.SendAsync(httpFileUploadBuilder
             .SetEventHandler<CustomFileTransferEventHandler>());
 
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal("test.txt", result);
         Assert.Equal(2, customFileTransferEventHandler.counter);

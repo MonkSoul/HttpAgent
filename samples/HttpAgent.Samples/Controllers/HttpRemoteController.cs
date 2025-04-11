@@ -23,7 +23,7 @@ public class HttpRemoteController : ControllerBase
     }
 
     [HttpPost]
-    public Task<YourRemoteModel> AddURLForm([FromForm] YourRemoteModel model)
+    public Task<YourRemoteModel> AddUrlForm([FromForm] YourRemoteModel model)
     {
         return Task.FromResult(model);
     }

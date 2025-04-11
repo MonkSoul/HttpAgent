@@ -415,4 +415,43 @@ public class DeclarativeAttributeTests
         var attribute2 = new RefererAttribute("https://localhost");
         Assert.Equal("https://localhost", attribute2.Referer);
     }
+
+    [Fact]
+    public void VersionAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(VersionAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface, attributeUsage.ValidOn);
+        Assert.False(attributeUsage.AllowMultiple);
+
+        var attribute = new VersionAttribute(null);
+        Assert.Null(attribute.Version);
+
+        var attribute2 = new VersionAttribute("1.2");
+        Assert.Equal("1.2", attribute2.Version);
+    }
+
+    [Fact]
+    public void SuppressExceptionsAttribute_ReturnOK()
+    {
+        var attributeUsage = typeof(SuppressExceptionsAttribute).GetCustomAttribute<AttributeUsageAttribute>();
+        Assert.NotNull(attributeUsage);
+        Assert.Equal(AttributeTargets.Method | AttributeTargets.Interface, attributeUsage.ValidOn);
+        Assert.False(attributeUsage.AllowMultiple);
+
+        var attribute = new SuppressExceptionsAttribute();
+        Assert.Single(attribute.Types);
+        Assert.Equal(typeof(Exception), attribute.Types[0]);
+
+        var attribute2 = new SuppressExceptionsAttribute(true);
+        Assert.Single(attribute2.Types);
+        Assert.Equal(typeof(Exception), attribute2.Types[0]);
+
+        var attribute3 = new SuppressExceptionsAttribute(false);
+        Assert.Empty(attribute3.Types);
+
+        var attribute4 = new SuppressExceptionsAttribute(typeof(Exception), typeof(TimeoutAttribute));
+        Assert.Equal(2, attribute4.Types.Length);
+        Assert.Equal([typeof(Exception), typeof(TimeoutAttribute)], attribute4.Types);
+    }
 }

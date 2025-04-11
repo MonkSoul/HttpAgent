@@ -11,10 +11,10 @@ public class GetStartController(
     [HttpGet]
     public async Task<int> AllowAutoRedirect()
     {
-        var res = await httpRemoteService.HeadAsync(
+        var httpResponseMessage = await httpRemoteService.HeadAsync(
             "https://gitee.com/Hgui/FastTunnel/releases/download/v2.1.2/FastTunnel.Server.tar.gz");
 
-        return (int)res.StatusCode;
+        return (int?)httpResponseMessage?.StatusCode ?? 0;
     }
 
     /// <summary>
@@ -36,11 +36,14 @@ public class GetStartController(
 
         // 获取 HttpRemoteResult 类型
         var result = await httpRemoteService.SendAsync<string>(HttpRequestBuilder.Get("https://furion.net"));
-        var content3 = result.Result;
+        var content3 = result?.Result;
 
         // 获取 HttpResponseMessage 类型
         var httpResponseMessage = await httpRemoteService.SendAsync(HttpRequestBuilder.Get("https://furion.net"));
-        var content4 = await httpResponseMessage.Content.ReadAsStringAsync();
+        if (httpResponseMessage is not null)
+        {
+            var content4 = await httpResponseMessage.Content.ReadAsStringAsync();
+        }
 
         // 2. 请求谓词方式
 
@@ -49,11 +52,14 @@ public class GetStartController(
 
         // 获取 HttpRemoteResult 类型
         var result2 = await httpRemoteService.GetAsync<string>("https://furion.net");
-        var content6 = result2.Result;
+        var content6 = result2?.Result;
 
         // 获取 HttpResponseMessage 类型
         var httpResponseMessage2 = await httpRemoteService.GetAsync("https://furion.net");
-        var content7 = await httpResponseMessage2.Content.ReadAsStringAsync();
+        if (httpResponseMessage2 is not null)
+        {
+            var content7 = await httpResponseMessage2.Content.ReadAsStringAsync();
+        }
 
         return content;
     }
@@ -146,7 +152,7 @@ public class GetStartController(
     /// </summary>
     /// <returns></returns>
     [HttpPost]
-    public async Task<YourRemoteModel?> PostURLForm()
+    public async Task<YourRemoteModel?> PostUrlForm()
     {
         var content = await httpRemoteService.PostAsAsync<YourRemoteModel>(
             "https://localhost:7044/HttpRemote/AddURLForm",
@@ -583,9 +589,9 @@ public class GetStartController(
         // 构建器方式
         var result2 = await httpRemoteService.SendAsync<string>(HttpRequestBuilder.Get("https://furion.net/"));
 
-        Console.WriteLine(result1.ToString());
+        Console.WriteLine(result1?.ToString());
 
-        return result1.Result;
+        return result1?.Result;
     }
 
     /// <summary>
@@ -634,7 +640,7 @@ public class GetStartController(
                             """), cancellationToken);
 
         // 使用流变对象获取实际内容
-        dynamic clay = Clay.Parse(result.Result, ClayOptions.Flexible);
+        dynamic clay = Clay.Parse(result?.Result, ClayOptions.Flexible);
         var content = clay.choices[0].message.content;
 
         return content;

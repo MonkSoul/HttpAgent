@@ -148,6 +148,11 @@ public sealed partial class HttpRequestBuilder
     public Uri? BaseAddress { get; private set; }
 
     /// <summary>
+    ///     HTTP 版本
+    /// </summary>
+    public Version? Version { get; private set; }
+
+    /// <summary>
     ///     <see cref="HttpClient" /> 实例提供器
     /// </summary>
     /// <value>
@@ -263,4 +268,10 @@ public sealed partial class HttpRequestBuilder
         get;
         private set;
     }
+
+    /// <summary>
+    ///     异常抑制类型集合
+    /// </summary>
+    /// <remarks>当配置了异常抑制类型集合后，框架将抑制（即不抛出）该集合中匹配的异常类型。</remarks>
+    internal HashSet<Type>? SuppressExceptionTypes { get; private set; }
 }

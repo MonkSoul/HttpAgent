@@ -151,6 +151,7 @@ public static class HttpRemoteExtensions
             new KeyValuePair<string, IEnumerable<string>>("HTTP Method", [httpRequestMessage.Method.ToString()]),
             new KeyValuePair<string, IEnumerable<string>>("Status Code",
                 [$"{(int)httpResponseMessage.StatusCode} {httpResponseMessage.StatusCode}"]),
+            new KeyValuePair<string, IEnumerable<string>>("HTTP Version", [httpResponseMessage.Version.ToString()]),
             new KeyValuePair<string, IEnumerable<string>>("HTTP Content",
                 [$"{httpContent?.GetType().Name}"])
         }.ConcatIgnoreNull(declarativeKeyValues).ConcatIgnoreNull(generalCustomKeyValues), generalSummary);

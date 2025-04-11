@@ -13,7 +13,7 @@ public sealed class HttpDeclarativeExtractorContext
     ///     冻结参数类型集合
     /// </summary>
     /// <remarks>此类参数类型不应作为外部提取对象。</remarks>
-    internal static Type[] _frozenParameterTypes =
+    internal static readonly Type[] _frozenParameterTypes =
     [
         typeof(Action<HttpRequestBuilder>), typeof(Action<HttpMultipartFormDataBuilder>), typeof(HttpCompletionOption),
         typeof(CancellationToken)

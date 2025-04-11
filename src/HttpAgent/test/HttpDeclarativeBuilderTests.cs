@@ -52,6 +52,8 @@ public class HttpDeclarativeBuilderTests
             { typeof(RefererDeclarativeExtractor), new RefererDeclarativeExtractor() },
             { typeof(HeaderDeclarativeExtractor), new HeaderDeclarativeExtractor() },
             { typeof(PropertyDeclarativeExtractor), new PropertyDeclarativeExtractor() },
+            { typeof(VersionDeclarativeExtractor), new VersionDeclarativeExtractor() },
+            { typeof(SuppressExceptionsDeclarativeExtractor), new SuppressExceptionsDeclarativeExtractor() },
             { typeof(BodyDeclarativeExtractor), new BodyDeclarativeExtractor() }
         };
 
@@ -88,7 +90,7 @@ public class HttpDeclarativeBuilderTests
     public void Build_ReturnOK()
     {
         var method = typeof(IHttpDeclarativeTest).GetMethod(nameof(IHttpDeclarativeTest.Method1))!;
-        var builder = new HttpDeclarativeBuilder(method!, []);
+        var builder = new HttpDeclarativeBuilder(method, []);
 
         var httpRequestBuilder = builder.Build(new HttpRemoteOptions());
         Assert.Equal(HttpMethod.Get, httpRequestBuilder.HttpMethod);
@@ -141,6 +143,8 @@ public class HttpDeclarativeBuilderTests
             { typeof(RefererDeclarativeExtractor), new RefererDeclarativeExtractor() },
             { typeof(HeaderDeclarativeExtractor), new HeaderDeclarativeExtractor() },
             { typeof(PropertyDeclarativeExtractor), new PropertyDeclarativeExtractor() },
+            { typeof(VersionDeclarativeExtractor), new VersionDeclarativeExtractor() },
+            { typeof(SuppressExceptionsDeclarativeExtractor), new SuppressExceptionsDeclarativeExtractor() },
             { typeof(BodyDeclarativeExtractor), new BodyDeclarativeExtractor() },
             { typeof(CustomHttpDeclarativeExtractor), new CustomHttpDeclarativeExtractor() }
         };

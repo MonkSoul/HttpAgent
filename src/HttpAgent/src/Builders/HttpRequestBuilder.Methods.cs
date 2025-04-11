@@ -1596,6 +1596,93 @@ public sealed partial class HttpRequestBuilder
             : new Uri(baseAddress, UriKind.RelativeOrAbsolute));
 
     /// <summary>
+    ///     设置 HTTP 版本
+    /// </summary>
+    /// <param name="version">版本号</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder SetVersion(string? version) =>
+        SetVersion(string.IsNullOrWhiteSpace(version) ? null : new Version(version));
+
+    /// <summary>
+    ///     设置 HTTP 版本
+    /// </summary>
+    /// <param name="version">
+    ///     <see cref="Version" />
+    /// </param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder SetVersion(Version? version)
+    {
+        Version = version;
+
+        return this;
+    }
+
+    /// <summary>
+    ///     设置异常抑制
+    /// </summary>
+    /// <remarks>抑制所有异常。重复调用仅最后一次调用生效。</remarks>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder SuppressExceptions() => SuppressExceptions(true);
+
+    /// <summary>
+    ///     设置异常抑制
+    /// </summary>
+    /// <remarks>重复调用仅最后一次调用生效。</remarks>
+    /// <param name="enable">是否启用异常抑制。当设置为 <c>false</c> 时，将禁用异常抑制机制。</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    public HttpRequestBuilder SuppressExceptions(bool enable) => SuppressExceptions(enable ? [typeof(Exception)] : []);
+
+    /// <summary>
+    ///     设置异常抑制
+    /// </summary>
+    /// <remarks>重复调用仅最后一次调用生效。</remarks>
+    /// <param name="exceptionTypes">异常抑制类型集合</param>
+    /// <returns>
+    ///     <see cref="HttpRequestBuilder" />
+    /// </returns>
+    /// <exception cref="ArgumentException"></exception>
+    public HttpRequestBuilder SuppressExceptions(Type[] exceptionTypes)
+    {
+        // 空检查
+        ArgumentNullException.ThrowIfNull(exceptionTypes);
+
+        // 检查是否包含 null 或者不是 Exception 类型的元素
+        if (exceptionTypes.Any(u => (Type?)u is null || !typeof(Exception).IsAssignableFrom(u)))
+        {
+            throw new ArgumentException(
+                "All elements in exceptionTypes must be non-null and assignable to System.Exception.");
+        }
+
+        // 释放引用（无关紧要）
+        SuppressExceptionTypes = null;
+
+        // 空检查
+        if (exceptionTypes.Length == 0)
+        {
+            return this;
+        }
+
+        // 确保每次都能覆盖
+        SuppressExceptionTypes = [];
+
+        // 遍历异常抑制类型集合逐条追加
+        foreach (var exceptionType in exceptionTypes)
+        {
+            SuppressExceptionTypes.Add(exceptionType);
+        }
+
+        return this;
+    }
+
+    /// <summary>
     ///     释放可释放的对象集合
     /// </summary>
     internal void ReleaseDisposables()

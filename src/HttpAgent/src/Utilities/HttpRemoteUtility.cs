@@ -24,7 +24,7 @@ public static class HttpRemoteUtility
     ///     忽略 SSL 证书验证
     /// </summary>
     public static Func<HttpRequestMessage, X509Certificate2?, X509Chain?, SslPolicyErrors, bool> IgnoreSslErrors =>
-        (message, cert, chain, errors) => true;
+        (_, _, _, _) => true;
 
     /// <summary>
     ///     获取使用 IPv4 连接到服务器的回调

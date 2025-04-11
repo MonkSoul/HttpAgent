@@ -161,8 +161,8 @@ public class HttpContextExtensionsTests
             var result4 = await context.ForwardAsync<string>($"http://localhost:{port}/HttpRemote/Request1",
                 forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
-            await context.Response.WriteAsync(result1.Result + " " + result2.Result + " " + result3.Result + " " +
-                                              result4.Result);
+            await context.Response.WriteAsync(result1!.Result + " " + result2!.Result + " " + result3!.Result + " " +
+                                              result4!.Result);
         });
 
         await app.StartAsync();
@@ -216,10 +216,10 @@ public class HttpContextExtensionsTests
                 await context.ForwardAsync<HttpRemoteAspNetCoreModel1>($"http://localhost:{port}/HttpRemote/Request2",
                     forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
-            await context.Response.WriteAsync(result1.Result!.Id + " " + result1.Result.Name + " " +
-                                              result2.Result!.Id + " " + result2.Result.Name +
-                                              " " + result3.Result!.Id + " " + result3.Result.Name + " " +
-                                              result4.Result!.Id + " " +
+            await context.Response.WriteAsync(result1!.Result!.Id + " " + result1.Result.Name + " " +
+                                              result2!.Result!.Id + " " + result2.Result.Name +
+                                              " " + result3!.Result!.Id + " " + result3.Result.Name + " " +
+                                              result4!.Result!.Id + " " +
                                               result4.Result.Name + "");
         });
 
@@ -279,10 +279,10 @@ public class HttpContextExtensionsTests
                         $"http://localhost:{port}/HttpRemote/Request3",
                         forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
-                await context.Response.WriteAsync(result1.Result!.Id + " " + result1.Result.Name + " " +
-                                                  result2.Result!.Id + " " + result2.Result.Name +
-                                                  " " + result3.Result!.Id + " " + result3.Result.Name + " " +
-                                                  result4.Result!.Id + " " +
+                await context.Response.WriteAsync(result1!.Result!.Id + " " + result1.Result.Name + " " +
+                                                  result2!.Result!.Id + " " + result2.Result.Name +
+                                                  " " + result3!.Result!.Id + " " + result3.Result.Name + " " +
+                                                  result4!.Result!.Id + " " +
                                                   result4.Result.Name + "");
             }).DisableAntiforgery();
 
@@ -348,8 +348,8 @@ public class HttpContextExtensionsTests
                 await context.ForwardAsync<string>($"http://localhost:{port}/HttpRemote/Request4",
                     forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
-            await context.Response.WriteAsync(result1.Result + " " + result2.Result + " " + result3.Result + " " +
-                                              result4.Result);
+            await context.Response.WriteAsync(result1!.Result + " " + result2!.Result + " " + result3!.Result + " " +
+                                              result4!.Result);
         }).DisableAntiforgery();
 
         await app.StartAsync();
@@ -415,8 +415,8 @@ public class HttpContextExtensionsTests
                 await context.ForwardAsync<string>($"http://localhost:{port}/HttpRemote/Request5",
                     forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
-            await context.Response.WriteAsync(result1.Result + " " + result2.Result + " " + result3.Result + " " +
-                                              result4.Result);
+            await context.Response.WriteAsync(result1!.Result + " " + result2!.Result + " " + result3!.Result + " " +
+                                              result4!.Result);
         }).DisableAntiforgery();
 
         await app.StartAsync();
@@ -483,8 +483,8 @@ public class HttpContextExtensionsTests
                 await context.ForwardAsync<string>($"http://localhost:{port}/HttpRemote/Request6",
                     forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
-            await context.Response.WriteAsync(result1.Result + " " + result2.Result + " " + result3.Result + " " +
-                                              result4.Result);
+            await context.Response.WriteAsync(result1!.Result + " " + result2!.Result + " " + result3!.Result + " " +
+                                              result4!.Result);
         }).DisableAntiforgery();
 
         await app.StartAsync();
@@ -618,8 +618,8 @@ public class HttpContextExtensionsTests
             var result4 = context.Forward<string>($"http://localhost:{port}/HttpRemote/Request1",
                 forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
-            await context.Response.WriteAsync(result1.Result + " " + result2.Result + " " + result3.Result + " " +
-                                              result4.Result);
+            await context.Response.WriteAsync(result1!.Result + " " + result2!.Result + " " + result3!.Result + " " +
+                                              result4!.Result);
         });
 
         await app.StartAsync();
@@ -673,10 +673,10 @@ public class HttpContextExtensionsTests
                 context.Forward<HttpRemoteAspNetCoreModel1>($"http://localhost:{port}/HttpRemote/Request2",
                     forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
-            await context.Response.WriteAsync(result1.Result!.Id + " " + result1.Result.Name + " " +
-                                              result2.Result!.Id + " " + result2.Result.Name +
-                                              " " + result3.Result!.Id + " " + result3.Result.Name + " " +
-                                              result4.Result!.Id + " " +
+            await context.Response.WriteAsync(result1!.Result!.Id + " " + result1.Result.Name + " " +
+                                              result2!.Result!.Id + " " + result2.Result.Name +
+                                              " " + result3!.Result!.Id + " " + result3.Result.Name + " " +
+                                              result4!.Result!.Id + " " +
                                               result4.Result.Name + "");
         });
 
@@ -734,8 +734,8 @@ public class HttpContextExtensionsTests
                 context.Forward<string>($"http://localhost:{port}/HttpRemote/Request6",
                     forwardOptions: new HttpContextForwardOptions { IgnoreResponseHeaders = ["Content-Length"] });
 
-            await context.Response.WriteAsync(result1.Result + " " + result2.Result + " " + result3.Result + " " +
-                                              result4.Result);
+            await context.Response.WriteAsync(result1!.Result + " " + result2!.Result + " " + result3!.Result + " " +
+                                              result4!.Result);
         }).DisableAntiforgery();
 
         await app.StartAsync();
@@ -791,7 +791,7 @@ public class HttpContextExtensionsTests
             var result1 = await context.ForwardAsync<string>(HttpMethod.Get,
                 new Uri($"http://localhost:{port}/HttpRemote/Request8"));
 
-            await context.Response.WriteAsync(result1.Result!);
+            await context.Response.WriteAsync(result1!.Result!);
         });
 
         await app.StartAsync();
@@ -834,7 +834,7 @@ public class HttpContextExtensionsTests
             var result1 = await context.ForwardAsync<Stream>(HttpMethod.Post,
                 new Uri($"http://localhost:{port}/HttpRemote/Request9"));
 
-            await result1.Result!.CopyToAsync(context.Response.Body);
+            await result1!.Result!.CopyToAsync(context.Response.Body);
         });
 
         await app.StartAsync();
@@ -891,10 +891,10 @@ public class HttpContextExtensionsTests
                 $"http://localhost:{port}/HttpRemote/Request1");
             var httpResponseMessage4 = await context.ForwardAsync($"http://localhost:{port}/HttpRemote/Request1");
 
-            var str1 = await httpResponseMessage1.Content.ReadAsStringAsync();
-            var str2 = await httpResponseMessage2.Content.ReadAsStringAsync();
-            var str3 = await httpResponseMessage3.Content.ReadAsStringAsync();
-            var str4 = await httpResponseMessage4.Content.ReadAsStringAsync();
+            var str1 = await httpResponseMessage1!.Content.ReadAsStringAsync();
+            var str2 = await httpResponseMessage2!.Content.ReadAsStringAsync();
+            var str3 = await httpResponseMessage3!.Content.ReadAsStringAsync();
+            var str4 = await httpResponseMessage4!.Content.ReadAsStringAsync();
 
             await context.Response.WriteAsync(str1 + " " + str2 + " " + str3 + " " + str4);
         });
@@ -946,10 +946,10 @@ public class HttpContextExtensionsTests
             var httpResponseMessage4 =
                 await context.ForwardAsync($"http://localhost:{port}/HttpRemote/Request2");
 
-            var model1 = await httpResponseMessage1.Content.ReadFromJsonAsync<HttpRemoteAspNetCoreModel1>();
-            var model2 = await httpResponseMessage2.Content.ReadFromJsonAsync<HttpRemoteAspNetCoreModel1>();
-            var model3 = await httpResponseMessage3.Content.ReadFromJsonAsync<HttpRemoteAspNetCoreModel1>();
-            var model4 = await httpResponseMessage4.Content.ReadFromJsonAsync<HttpRemoteAspNetCoreModel1>();
+            var model1 = await httpResponseMessage1!.Content.ReadFromJsonAsync<HttpRemoteAspNetCoreModel1>();
+            var model2 = await httpResponseMessage2!.Content.ReadFromJsonAsync<HttpRemoteAspNetCoreModel1>();
+            var model3 = await httpResponseMessage3!.Content.ReadFromJsonAsync<HttpRemoteAspNetCoreModel1>();
+            var model4 = await httpResponseMessage4!.Content.ReadFromJsonAsync<HttpRemoteAspNetCoreModel1>();
 
             await context.Response.WriteAsync(model1!.Id + " " + model1.Name + " " +
                                               model2!.Id + " " + model2.Name +
@@ -1008,10 +1008,10 @@ public class HttpContextExtensionsTests
             var httpResponseMessage4 =
                 await context.ForwardAsync($"http://localhost:{port}/HttpRemote/Request6");
 
-            var str1 = await httpResponseMessage1.Content.ReadAsStringAsync();
-            var str2 = await httpResponseMessage2.Content.ReadAsStringAsync();
-            var str3 = await httpResponseMessage3.Content.ReadAsStringAsync();
-            var str4 = await httpResponseMessage4.Content.ReadAsStringAsync();
+            var str1 = await httpResponseMessage1!.Content.ReadAsStringAsync();
+            var str2 = await httpResponseMessage2!.Content.ReadAsStringAsync();
+            var str3 = await httpResponseMessage3!.Content.ReadAsStringAsync();
+            var str4 = await httpResponseMessage4!.Content.ReadAsStringAsync();
 
             await context.Response.WriteAsync(str1 + " " + str2 + " " + str3 + " " + str4);
         }).DisableAntiforgery();
@@ -1086,10 +1086,10 @@ public class HttpContextExtensionsTests
             // ReSharper disable once MethodHasAsyncOverload
             var httpResponseMessage4 = context.Forward($"http://localhost:{port}/HttpRemote/Request1");
 
-            var str1 = await httpResponseMessage1.Content.ReadAsStringAsync();
-            var str2 = await httpResponseMessage2.Content.ReadAsStringAsync();
-            var str3 = await httpResponseMessage3.Content.ReadAsStringAsync();
-            var str4 = await httpResponseMessage4.Content.ReadAsStringAsync();
+            var str1 = await httpResponseMessage1!.Content.ReadAsStringAsync();
+            var str2 = await httpResponseMessage2!.Content.ReadAsStringAsync();
+            var str3 = await httpResponseMessage3!.Content.ReadAsStringAsync();
+            var str4 = await httpResponseMessage4!.Content.ReadAsStringAsync();
 
             await context.Response.WriteAsync(str1 + " " + str2 + " " + str3 + " " + str4);
         });
@@ -1144,10 +1144,10 @@ public class HttpContextExtensionsTests
             var httpResponseMessage4 =
                 context.Forward($"http://localhost:{port}/HttpRemote/Request2");
 
-            var model1 = await httpResponseMessage1.Content.ReadFromJsonAsync<HttpRemoteAspNetCoreModel1>();
-            var model2 = await httpResponseMessage2.Content.ReadFromJsonAsync<HttpRemoteAspNetCoreModel1>();
-            var model3 = await httpResponseMessage3.Content.ReadFromJsonAsync<HttpRemoteAspNetCoreModel1>();
-            var model4 = await httpResponseMessage4.Content.ReadFromJsonAsync<HttpRemoteAspNetCoreModel1>();
+            var model1 = await httpResponseMessage1!.Content.ReadFromJsonAsync<HttpRemoteAspNetCoreModel1>();
+            var model2 = await httpResponseMessage2!.Content.ReadFromJsonAsync<HttpRemoteAspNetCoreModel1>();
+            var model3 = await httpResponseMessage3!.Content.ReadFromJsonAsync<HttpRemoteAspNetCoreModel1>();
+            var model4 = await httpResponseMessage4!.Content.ReadFromJsonAsync<HttpRemoteAspNetCoreModel1>();
 
             await context.Response.WriteAsync(model1!.Id + " " + model1.Name + " " +
                                               model2!.Id + " " + model2.Name +
@@ -1209,10 +1209,10 @@ public class HttpContextExtensionsTests
             var httpResponseMessage4 =
                 context.Forward($"http://localhost:{port}/HttpRemote/Request6");
 
-            var str1 = await httpResponseMessage1.Content.ReadAsStringAsync();
-            var str2 = await httpResponseMessage2.Content.ReadAsStringAsync();
-            var str3 = await httpResponseMessage3.Content.ReadAsStringAsync();
-            var str4 = await httpResponseMessage4.Content.ReadAsStringAsync();
+            var str1 = await httpResponseMessage1!.Content.ReadAsStringAsync();
+            var str2 = await httpResponseMessage2!.Content.ReadAsStringAsync();
+            var str3 = await httpResponseMessage3!.Content.ReadAsStringAsync();
+            var str4 = await httpResponseMessage4!.Content.ReadAsStringAsync();
 
             await context.Response.WriteAsync(str1 + " " + str2 + " " + str3 + " " + str4);
         }).DisableAntiforgery();
@@ -1270,7 +1270,7 @@ public class HttpContextExtensionsTests
             var httpResponseMessage1 = await context.ForwardAsync(HttpMethod.Get,
                 new Uri($"http://localhost:{port}/HttpRemote/Request8"));
 
-            var str1 = await httpResponseMessage1.Content.ReadAsStringAsync();
+            var str1 = await httpResponseMessage1!.Content.ReadAsStringAsync();
 
             await context.Response.WriteAsync(str1);
         });
@@ -1315,7 +1315,7 @@ public class HttpContextExtensionsTests
             var httpResponseMessage1 = await context.ForwardAsync(HttpMethod.Post,
                 new Uri($"http://localhost:{port}/HttpRemote/Request9"));
 
-            var stream = await httpResponseMessage1.Content.ReadAsStreamAsync();
+            var stream = await httpResponseMessage1!.Content.ReadAsStreamAsync();
 
             await stream.CopyToAsync(context.Response.Body);
         });
@@ -1359,6 +1359,8 @@ public class HttpContextExtensionsTests
         services.AddHttpContextAccessor();
         using var provider = services.BuildServiceProvider();
         var defaultHttpContext = new DefaultHttpContext { RequestServices = provider };
+
+        HttpContextExtensions.ForwardResponseMessage(defaultHttpContext, null, new HttpContextForwardOptions());
 
         HttpContextExtensions.ForwardResponseMessage(defaultHttpContext, httpResponseMessage,
             new HttpContextForwardOptions());
@@ -1458,7 +1460,7 @@ public class HttpContextExtensionsTests
                     hbuilder.AddHttpContentConverters(() => [new IActionResultContentConverter()]);
                 });
 
-            var contentResult = actionResult.Result as ContentResult;
+            var contentResult = actionResult!.Result as ContentResult;
 
             await context.Response.WriteAsync(contentResult?.Content ?? string.Empty);
         });

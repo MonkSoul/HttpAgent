@@ -10,22 +10,22 @@ namespace HttpAgent;
 internal sealed partial class HttpRemoteService
 {
     /// <inheritdoc />
-    public HttpResponseMessage Get(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public HttpResponseMessage? Get(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => Get(requestUri, HttpCompletionOption.ResponseContentRead,
         configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpResponseMessage Get(string? requestUri, HttpCompletionOption completionOption,
+    public HttpResponseMessage? Get(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => Send(
         HttpRequestBuilder.Create(HttpMethod.Get, requestUri, configure), completionOption, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpResponseMessage> GetAsync(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public Task<HttpResponseMessage?> GetAsync(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => GetAsync(requestUri, HttpCompletionOption.ResponseContentRead,
         configure, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpResponseMessage> GetAsync(string? requestUri, HttpCompletionOption completionOption,
+    public Task<HttpResponseMessage?> GetAsync(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => SendAsync(
         HttpRequestBuilder.Create(HttpMethod.Get, requestUri, configure), completionOption, cancellationToken);
 
@@ -51,22 +51,22 @@ internal sealed partial class HttpRemoteService
             cancellationToken);
 
     /// <inheritdoc />
-    public HttpRemoteResult<TResult> Get<TResult>(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public HttpRemoteResult<TResult>? Get<TResult>(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => Get<TResult>(requestUri,
         HttpCompletionOption.ResponseContentRead, configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpRemoteResult<TResult> Get<TResult>(string? requestUri, HttpCompletionOption completionOption,
+    public HttpRemoteResult<TResult>? Get<TResult>(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => Send<TResult>(
         HttpRequestBuilder.Create(HttpMethod.Get, requestUri, configure), completionOption, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpRemoteResult<TResult>> GetAsync<TResult>(string? requestUri,
+    public Task<HttpRemoteResult<TResult>?> GetAsync<TResult>(string? requestUri,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) =>
         GetAsync<TResult>(requestUri, HttpCompletionOption.ResponseContentRead, configure, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpRemoteResult<TResult>> GetAsync<TResult>(string? requestUri, HttpCompletionOption completionOption,
+    public Task<HttpRemoteResult<TResult>?> GetAsync<TResult>(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) =>
         SendAsync<TResult>(HttpRequestBuilder.Create(HttpMethod.Get, requestUri, configure), completionOption,
             cancellationToken);
@@ -126,22 +126,22 @@ internal sealed partial class HttpRemoteService
         GetAsAsync<byte[]>(requestUri, completionOption, configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpResponseMessage Put(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public HttpResponseMessage? Put(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => Put(requestUri, HttpCompletionOption.ResponseContentRead,
         configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpResponseMessage Put(string? requestUri, HttpCompletionOption completionOption,
+    public HttpResponseMessage? Put(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => Send(
         HttpRequestBuilder.Create(HttpMethod.Put, requestUri, configure), completionOption, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpResponseMessage> PutAsync(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public Task<HttpResponseMessage?> PutAsync(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => PutAsync(requestUri, HttpCompletionOption.ResponseContentRead,
         configure, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpResponseMessage> PutAsync(string? requestUri, HttpCompletionOption completionOption,
+    public Task<HttpResponseMessage?> PutAsync(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => SendAsync(
         HttpRequestBuilder.Create(HttpMethod.Put, requestUri, configure), completionOption, cancellationToken);
 
@@ -167,22 +167,22 @@ internal sealed partial class HttpRemoteService
             cancellationToken);
 
     /// <inheritdoc />
-    public HttpRemoteResult<TResult> Put<TResult>(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public HttpRemoteResult<TResult>? Put<TResult>(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => Put<TResult>(requestUri,
         HttpCompletionOption.ResponseContentRead, configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpRemoteResult<TResult> Put<TResult>(string? requestUri, HttpCompletionOption completionOption,
+    public HttpRemoteResult<TResult>? Put<TResult>(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => Send<TResult>(
         HttpRequestBuilder.Create(HttpMethod.Put, requestUri, configure), completionOption, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpRemoteResult<TResult>> PutAsync<TResult>(string? requestUri,
+    public Task<HttpRemoteResult<TResult>?> PutAsync<TResult>(string? requestUri,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) =>
         PutAsync<TResult>(requestUri, HttpCompletionOption.ResponseContentRead, configure, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpRemoteResult<TResult>> PutAsync<TResult>(string? requestUri, HttpCompletionOption completionOption,
+    public Task<HttpRemoteResult<TResult>?> PutAsync<TResult>(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) =>
         SendAsync<TResult>(HttpRequestBuilder.Create(HttpMethod.Put, requestUri, configure), completionOption,
             cancellationToken);
@@ -242,23 +242,23 @@ internal sealed partial class HttpRemoteService
         PutAsAsync<byte[]>(requestUri, completionOption, configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpResponseMessage Post(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public HttpResponseMessage? Post(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => Post(requestUri, HttpCompletionOption.ResponseContentRead,
         configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpResponseMessage Post(string? requestUri, HttpCompletionOption completionOption,
+    public HttpResponseMessage? Post(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => Send(
         HttpRequestBuilder.Create(HttpMethod.Post, requestUri, configure), completionOption, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpResponseMessage> PostAsync(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public Task<HttpResponseMessage?> PostAsync(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => PostAsync(requestUri,
         HttpCompletionOption.ResponseContentRead,
         configure, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpResponseMessage> PostAsync(string? requestUri, HttpCompletionOption completionOption,
+    public Task<HttpResponseMessage?> PostAsync(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => SendAsync(
         HttpRequestBuilder.Create(HttpMethod.Post, requestUri, configure), completionOption, cancellationToken);
 
@@ -284,22 +284,23 @@ internal sealed partial class HttpRemoteService
             cancellationToken);
 
     /// <inheritdoc />
-    public HttpRemoteResult<TResult> Post<TResult>(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public HttpRemoteResult<TResult>? Post<TResult>(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => Post<TResult>(requestUri,
         HttpCompletionOption.ResponseContentRead, configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpRemoteResult<TResult> Post<TResult>(string? requestUri, HttpCompletionOption completionOption,
+    public HttpRemoteResult<TResult>? Post<TResult>(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => Send<TResult>(
         HttpRequestBuilder.Create(HttpMethod.Post, requestUri, configure), completionOption, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpRemoteResult<TResult>> PostAsync<TResult>(string? requestUri,
+    public Task<HttpRemoteResult<TResult>?> PostAsync<TResult>(string? requestUri,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) =>
         PostAsync<TResult>(requestUri, HttpCompletionOption.ResponseContentRead, configure, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpRemoteResult<TResult>> PostAsync<TResult>(string? requestUri, HttpCompletionOption completionOption,
+    public Task<HttpRemoteResult<TResult>?> PostAsync<TResult>(string? requestUri,
+        HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) =>
         SendAsync<TResult>(HttpRequestBuilder.Create(HttpMethod.Post, requestUri, configure), completionOption,
             cancellationToken);
@@ -359,23 +360,23 @@ internal sealed partial class HttpRemoteService
         PostAsAsync<byte[]>(requestUri, completionOption, configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpResponseMessage Delete(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public HttpResponseMessage? Delete(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => Delete(requestUri, HttpCompletionOption.ResponseContentRead,
         configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpResponseMessage Delete(string? requestUri, HttpCompletionOption completionOption,
+    public HttpResponseMessage? Delete(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => Send(
         HttpRequestBuilder.Create(HttpMethod.Delete, requestUri, configure), completionOption, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpResponseMessage> DeleteAsync(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public Task<HttpResponseMessage?> DeleteAsync(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => DeleteAsync(requestUri,
         HttpCompletionOption.ResponseContentRead,
         configure, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpResponseMessage> DeleteAsync(string? requestUri, HttpCompletionOption completionOption,
+    public Task<HttpResponseMessage?> DeleteAsync(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => SendAsync(
         HttpRequestBuilder.Create(HttpMethod.Delete, requestUri, configure), completionOption, cancellationToken);
 
@@ -401,22 +402,22 @@ internal sealed partial class HttpRemoteService
             cancellationToken);
 
     /// <inheritdoc />
-    public HttpRemoteResult<TResult> Delete<TResult>(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public HttpRemoteResult<TResult>? Delete<TResult>(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => Delete<TResult>(requestUri,
         HttpCompletionOption.ResponseContentRead, configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpRemoteResult<TResult> Delete<TResult>(string? requestUri, HttpCompletionOption completionOption,
+    public HttpRemoteResult<TResult>? Delete<TResult>(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => Send<TResult>(
         HttpRequestBuilder.Create(HttpMethod.Delete, requestUri, configure), completionOption, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpRemoteResult<TResult>> DeleteAsync<TResult>(string? requestUri,
+    public Task<HttpRemoteResult<TResult>?> DeleteAsync<TResult>(string? requestUri,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) =>
         DeleteAsync<TResult>(requestUri, HttpCompletionOption.ResponseContentRead, configure, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpRemoteResult<TResult>> DeleteAsync<TResult>(string? requestUri,
+    public Task<HttpRemoteResult<TResult>?> DeleteAsync<TResult>(string? requestUri,
         HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) =>
         SendAsync<TResult>(HttpRequestBuilder.Create(HttpMethod.Delete, requestUri, configure), completionOption,
@@ -480,23 +481,23 @@ internal sealed partial class HttpRemoteService
         DeleteAsAsync<byte[]>(requestUri, completionOption, configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpResponseMessage Head(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public HttpResponseMessage? Head(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => Head(requestUri, HttpCompletionOption.ResponseContentRead,
         configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpResponseMessage Head(string? requestUri, HttpCompletionOption completionOption,
+    public HttpResponseMessage? Head(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => Send(
         HttpRequestBuilder.Create(HttpMethod.Head, requestUri, configure), completionOption, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpResponseMessage> HeadAsync(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public Task<HttpResponseMessage?> HeadAsync(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => HeadAsync(requestUri,
         HttpCompletionOption.ResponseContentRead,
         configure, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpResponseMessage> HeadAsync(string? requestUri, HttpCompletionOption completionOption,
+    public Task<HttpResponseMessage?> HeadAsync(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => SendAsync(
         HttpRequestBuilder.Create(HttpMethod.Head, requestUri, configure), completionOption, cancellationToken);
 
@@ -522,22 +523,23 @@ internal sealed partial class HttpRemoteService
             cancellationToken);
 
     /// <inheritdoc />
-    public HttpRemoteResult<TResult> Head<TResult>(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public HttpRemoteResult<TResult>? Head<TResult>(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => Head<TResult>(requestUri,
         HttpCompletionOption.ResponseContentRead, configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpRemoteResult<TResult> Head<TResult>(string? requestUri, HttpCompletionOption completionOption,
+    public HttpRemoteResult<TResult>? Head<TResult>(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => Send<TResult>(
         HttpRequestBuilder.Create(HttpMethod.Head, requestUri, configure), completionOption, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpRemoteResult<TResult>> HeadAsync<TResult>(string? requestUri,
+    public Task<HttpRemoteResult<TResult>?> HeadAsync<TResult>(string? requestUri,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) =>
         HeadAsync<TResult>(requestUri, HttpCompletionOption.ResponseContentRead, configure, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpRemoteResult<TResult>> HeadAsync<TResult>(string? requestUri, HttpCompletionOption completionOption,
+    public Task<HttpRemoteResult<TResult>?> HeadAsync<TResult>(string? requestUri,
+        HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) =>
         SendAsync<TResult>(HttpRequestBuilder.Create(HttpMethod.Head, requestUri, configure), completionOption,
             cancellationToken);
@@ -597,23 +599,23 @@ internal sealed partial class HttpRemoteService
         HeadAsAsync<byte[]>(requestUri, completionOption, configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpResponseMessage Options(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public HttpResponseMessage? Options(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => Options(requestUri, HttpCompletionOption.ResponseContentRead,
         configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpResponseMessage Options(string? requestUri, HttpCompletionOption completionOption,
+    public HttpResponseMessage? Options(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => Send(
         HttpRequestBuilder.Create(HttpMethod.Options, requestUri, configure), completionOption, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpResponseMessage> OptionsAsync(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public Task<HttpResponseMessage?> OptionsAsync(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => OptionsAsync(requestUri,
         HttpCompletionOption.ResponseContentRead,
         configure, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpResponseMessage> OptionsAsync(string? requestUri, HttpCompletionOption completionOption,
+    public Task<HttpResponseMessage?> OptionsAsync(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => SendAsync(
         HttpRequestBuilder.Create(HttpMethod.Options, requestUri, configure), completionOption, cancellationToken);
 
@@ -639,22 +641,22 @@ internal sealed partial class HttpRemoteService
             cancellationToken);
 
     /// <inheritdoc />
-    public HttpRemoteResult<TResult> Options<TResult>(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public HttpRemoteResult<TResult>? Options<TResult>(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => Options<TResult>(requestUri,
         HttpCompletionOption.ResponseContentRead, configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpRemoteResult<TResult> Options<TResult>(string? requestUri, HttpCompletionOption completionOption,
+    public HttpRemoteResult<TResult>? Options<TResult>(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => Send<TResult>(
         HttpRequestBuilder.Create(HttpMethod.Options, requestUri, configure), completionOption, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpRemoteResult<TResult>> OptionsAsync<TResult>(string? requestUri,
+    public Task<HttpRemoteResult<TResult>?> OptionsAsync<TResult>(string? requestUri,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) =>
         OptionsAsync<TResult>(requestUri, HttpCompletionOption.ResponseContentRead, configure, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpRemoteResult<TResult>> OptionsAsync<TResult>(string? requestUri,
+    public Task<HttpRemoteResult<TResult>?> OptionsAsync<TResult>(string? requestUri,
         HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) =>
         SendAsync<TResult>(HttpRequestBuilder.Create(HttpMethod.Options, requestUri, configure), completionOption,
@@ -718,23 +720,23 @@ internal sealed partial class HttpRemoteService
         OptionsAsAsync<byte[]>(requestUri, completionOption, configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpResponseMessage Trace(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public HttpResponseMessage? Trace(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => Trace(requestUri, HttpCompletionOption.ResponseContentRead,
         configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpResponseMessage Trace(string? requestUri, HttpCompletionOption completionOption,
+    public HttpResponseMessage? Trace(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => Send(
         HttpRequestBuilder.Create(HttpMethod.Trace, requestUri, configure), completionOption, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpResponseMessage> TraceAsync(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public Task<HttpResponseMessage?> TraceAsync(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => TraceAsync(requestUri,
         HttpCompletionOption.ResponseContentRead,
         configure, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpResponseMessage> TraceAsync(string? requestUri, HttpCompletionOption completionOption,
+    public Task<HttpResponseMessage?> TraceAsync(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => SendAsync(
         HttpRequestBuilder.Create(HttpMethod.Trace, requestUri, configure), completionOption, cancellationToken);
 
@@ -760,22 +762,22 @@ internal sealed partial class HttpRemoteService
             cancellationToken);
 
     /// <inheritdoc />
-    public HttpRemoteResult<TResult> Trace<TResult>(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public HttpRemoteResult<TResult>? Trace<TResult>(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => Trace<TResult>(requestUri,
         HttpCompletionOption.ResponseContentRead, configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpRemoteResult<TResult> Trace<TResult>(string? requestUri, HttpCompletionOption completionOption,
+    public HttpRemoteResult<TResult>? Trace<TResult>(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => Send<TResult>(
         HttpRequestBuilder.Create(HttpMethod.Trace, requestUri, configure), completionOption, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpRemoteResult<TResult>> TraceAsync<TResult>(string? requestUri,
+    public Task<HttpRemoteResult<TResult>?> TraceAsync<TResult>(string? requestUri,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) =>
         TraceAsync<TResult>(requestUri, HttpCompletionOption.ResponseContentRead, configure, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpRemoteResult<TResult>> TraceAsync<TResult>(string? requestUri,
+    public Task<HttpRemoteResult<TResult>?> TraceAsync<TResult>(string? requestUri,
         HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) =>
         SendAsync<TResult>(HttpRequestBuilder.Create(HttpMethod.Trace, requestUri, configure), completionOption,
@@ -839,23 +841,23 @@ internal sealed partial class HttpRemoteService
         TraceAsAsync<byte[]>(requestUri, completionOption, configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpResponseMessage Patch(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public HttpResponseMessage? Patch(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => Patch(requestUri, HttpCompletionOption.ResponseContentRead,
         configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpResponseMessage Patch(string? requestUri, HttpCompletionOption completionOption,
+    public HttpResponseMessage? Patch(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => Send(
         HttpRequestBuilder.Create(HttpMethod.Patch, requestUri, configure), completionOption, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpResponseMessage> PatchAsync(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public Task<HttpResponseMessage?> PatchAsync(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => PatchAsync(requestUri,
         HttpCompletionOption.ResponseContentRead,
         configure, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpResponseMessage> PatchAsync(string? requestUri, HttpCompletionOption completionOption,
+    public Task<HttpResponseMessage?> PatchAsync(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => SendAsync(
         HttpRequestBuilder.Create(HttpMethod.Patch, requestUri, configure), completionOption, cancellationToken);
 
@@ -881,22 +883,22 @@ internal sealed partial class HttpRemoteService
             cancellationToken);
 
     /// <inheritdoc />
-    public HttpRemoteResult<TResult> Patch<TResult>(string? requestUri, Action<HttpRequestBuilder>? configure = null,
+    public HttpRemoteResult<TResult>? Patch<TResult>(string? requestUri, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default) => Patch<TResult>(requestUri,
         HttpCompletionOption.ResponseContentRead, configure, cancellationToken);
 
     /// <inheritdoc />
-    public HttpRemoteResult<TResult> Patch<TResult>(string? requestUri, HttpCompletionOption completionOption,
+    public HttpRemoteResult<TResult>? Patch<TResult>(string? requestUri, HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) => Send<TResult>(
         HttpRequestBuilder.Create(HttpMethod.Patch, requestUri, configure), completionOption, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpRemoteResult<TResult>> PatchAsync<TResult>(string? requestUri,
+    public Task<HttpRemoteResult<TResult>?> PatchAsync<TResult>(string? requestUri,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) =>
         PatchAsync<TResult>(requestUri, HttpCompletionOption.ResponseContentRead, configure, cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpRemoteResult<TResult>> PatchAsync<TResult>(string? requestUri,
+    public Task<HttpRemoteResult<TResult>?> PatchAsync<TResult>(string? requestUri,
         HttpCompletionOption completionOption,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) =>
         SendAsync<TResult>(HttpRequestBuilder.Create(HttpMethod.Patch, requestUri, configure), completionOption,

@@ -48,9 +48,7 @@ public class HttpRemoteServiceCollectionExtensionsTests
             options.DefaultContentType = "application/json";
         });
 
-        services.AddHttpRemote(builder =>
-        {
-        });
+        services.AddHttpRemote();
 
         Assert.NotEmpty(services);
         _ = services.BuildServiceProvider();

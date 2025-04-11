@@ -73,7 +73,7 @@ internal sealed class FileUploadManager
     ///     <see cref="HttpResponseMessage" />
     /// </returns>
     /// <exception cref="NotImplementedException"></exception>
-    internal HttpResponseMessage Start(CancellationToken cancellationToken = default)
+    internal HttpResponseMessage? Start(CancellationToken cancellationToken = default)
     {
         // 创建进度报告任务取消标识
         using var progressCancellationTokenSource = new CancellationTokenSource();
@@ -87,7 +87,7 @@ internal sealed class FileUploadManager
         // 初始化 Stopwatch 实例并开启计时操作
         var stopwatch = Stopwatch.StartNew();
 
-        HttpResponseMessage httpResponseMessage;
+        HttpResponseMessage? httpResponseMessage;
 
         try
         {
@@ -132,7 +132,7 @@ internal sealed class FileUploadManager
     /// <returns>
     ///     <see cref="Task{TResult}" />
     /// </returns>
-    internal async Task<HttpResponseMessage> StartAsync(CancellationToken cancellationToken = default)
+    internal async Task<HttpResponseMessage?> StartAsync(CancellationToken cancellationToken = default)
     {
         // 创建进度报告任务取消标识
         using var progressCancellationTokenSource = new CancellationTokenSource();
@@ -146,7 +146,7 @@ internal sealed class FileUploadManager
         // 初始化 Stopwatch 实例并开启计时操作
         var stopwatch = Stopwatch.StartNew();
 
-        HttpResponseMessage httpResponseMessage;
+        HttpResponseMessage? httpResponseMessage;
 
         try
         {

@@ -32,6 +32,7 @@ public class HttpRemoteResultTests
         Assert.True(httpRemoteResult.IsSuccessStatusCode);
         Assert.NotNull(httpRemoteResult.Headers);
         Assert.NotNull(httpRemoteResult.ContentHeaders);
+        Assert.Equal("1.1", httpRemoteResult.Version.ToString());
     }
 
     [Fact]
@@ -126,9 +127,11 @@ public class HttpRemoteResultTests
     public void Initialize_ReturnOK()
     {
         var httpResponseMessage = new HttpResponseMessage();
+        httpResponseMessage.Version = new Version(1, 2);
         var httpRemoteResult = new HttpRemoteResult<string>(httpResponseMessage);
         httpRemoteResult.Initialize();
 
+        Assert.Equal("1.2", httpRemoteResult.Version.ToString());
         Assert.Null(httpRemoteResult.RawSetCookies);
         Assert.Null(httpRemoteResult.SetCookies);
 
@@ -179,7 +182,7 @@ public class HttpRemoteResultTests
         var httpRemoteResult = new HttpRemoteResult<string>(httpResponseMessage) { RequestDuration = 200 };
 
         Assert.Equal(
-            "Request Headers: \r\n\tAccept:              application/json\r\n\tAccept-Encoding:     gzip, deflate\r\nGeneral: \r\n\tRequest URL:               http://localhost\r\n\tHTTP Method:               GET\r\n\tStatus Code:               200 OK\r\n\tHTTP Content:              \r\n\tRequest Duration (ms):     200.00\r\nResponse Headers: \r\n\tAccept:              application/json\r\n\tAccept-Encoding:     gzip, deflate\r\n\tContent-Type:        application/json\r\n\tContent-Length:      0",
+            "Request Headers: \r\n\tAccept:              application/json\r\n\tAccept-Encoding:     gzip, deflate\r\nGeneral: \r\n\tRequest URL:               http://localhost\r\n\tHTTP Method:               GET\r\n\tStatus Code:               200 OK\r\n\tHTTP Version:              1.1\r\n\tHTTP Content:              \r\n\tRequest Duration (ms):     200.00\r\nResponse Headers: \r\n\tAccept:              application/json\r\n\tAccept-Encoding:     gzip, deflate\r\n\tContent-Type:        application/json\r\n\tContent-Length:      0",
             httpRemoteResult.ToString());
     }
 }

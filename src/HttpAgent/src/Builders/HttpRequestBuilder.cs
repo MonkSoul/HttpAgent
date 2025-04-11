@@ -61,6 +61,12 @@ public sealed partial class HttpRequestBuilder
         // 初始化 HttpRequestMessage 实例
         var httpRequestMessage = new HttpRequestMessage(HttpMethod, finalRequestUri);
 
+        // 设置 HTTP 版本
+        if (Version is not null)
+        {
+            httpRequestMessage.Version = Version;
+        }
+
         // 启用性能优化
         EnablePerformanceOptimization(httpRequestMessage);
 

@@ -25,5 +25,5 @@ public sealed class WebSocketTextReceiveResult : WebSocketReceiveResult
     /// <summary>
     ///     文本消息
     /// </summary>
-    public string Message { get; internal init; } = default!;
+    public string Message { get; internal init; } = null!;
 }

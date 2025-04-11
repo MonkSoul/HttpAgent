@@ -256,7 +256,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpResponseMessage = fileUploadManager.Start();
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         output.WriteLine(result);
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal("test.txt", result);
@@ -335,7 +335,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpResponseMessage = fileUploadManager.Start();
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         output.WriteLine(result);
 
         Assert.Equal(1, i);
@@ -383,7 +383,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpResponseMessage = fileUploadManager.Start();
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         output.WriteLine(result);
 
         Assert.Equal(2, i);
@@ -433,7 +433,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
 
         // ReSharper disable once MethodHasAsyncOverload
         var httpResponseMessage = fileUploadManager.Start();
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         output.WriteLine(result);
 
         Assert.Equal(2, i);
@@ -526,7 +526,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var fileUploadManager = new FileUploadManager(httpRemoteService, httpFileUploadBuilder);
 
         var httpResponseMessage = await fileUploadManager.StartAsync();
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         output.WriteLine(result);
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal("test.txt", result);
@@ -604,7 +604,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var fileUploadManager = new FileUploadManager(httpRemoteService, httpFileUploadBuilder);
 
         var httpResponseMessage = await fileUploadManager.StartAsync();
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         output.WriteLine(result);
 
         Assert.Equal(1, i);
@@ -651,7 +651,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var fileUploadManager = new FileUploadManager(httpRemoteService, httpFileUploadBuilder);
 
         var httpResponseMessage = await fileUploadManager.StartAsync();
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         output.WriteLine(result);
 
         Assert.Equal(2, i);
@@ -700,7 +700,7 @@ public class FileUploadManagerTests(ITestOutputHelper output)
         var fileUploadManager = new FileUploadManager(httpRemoteService, httpFileUploadBuilder);
 
         var httpResponseMessage = await fileUploadManager.StartAsync();
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         output.WriteLine(result);
 
         Assert.Equal(2, i);

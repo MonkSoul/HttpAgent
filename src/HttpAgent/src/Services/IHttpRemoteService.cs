@@ -26,7 +26,7 @@ public partial interface IHttpRemoteService
     /// <returns>
     ///     <see cref="HttpResponseMessage" />
     /// </returns>
-    HttpResponseMessage Send(HttpRequestBuilder httpRequestBuilder, CancellationToken cancellationToken = default);
+    HttpResponseMessage? Send(HttpRequestBuilder httpRequestBuilder, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     发送 HTTP 远程请求
@@ -43,7 +43,7 @@ public partial interface IHttpRemoteService
     /// <returns>
     ///     <see cref="HttpResponseMessage" />
     /// </returns>
-    HttpResponseMessage Send(HttpRequestBuilder httpRequestBuilder, HttpCompletionOption completionOption,
+    HttpResponseMessage? Send(HttpRequestBuilder httpRequestBuilder, HttpCompletionOption completionOption,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -58,7 +58,7 @@ public partial interface IHttpRemoteService
     /// <returns>
     ///     <see cref="HttpResponseMessage" />
     /// </returns>
-    Task<HttpResponseMessage> SendAsync(HttpRequestBuilder httpRequestBuilder,
+    Task<HttpResponseMessage?> SendAsync(HttpRequestBuilder httpRequestBuilder,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -76,7 +76,7 @@ public partial interface IHttpRemoteService
     /// <returns>
     ///     <see cref="HttpResponseMessage" />
     /// </returns>
-    Task<HttpResponseMessage> SendAsync(HttpRequestBuilder httpRequestBuilder, HttpCompletionOption completionOption,
+    Task<HttpResponseMessage?> SendAsync(HttpRequestBuilder httpRequestBuilder, HttpCompletionOption completionOption,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -426,7 +426,7 @@ public partial interface IHttpRemoteService
     /// <returns>
     ///     <see cref="HttpRemoteResult{TResult}" />
     /// </returns>
-    HttpRemoteResult<TResult> Send<TResult>(HttpRequestBuilder httpRequestBuilder,
+    HttpRemoteResult<TResult>? Send<TResult>(HttpRequestBuilder httpRequestBuilder,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -445,7 +445,7 @@ public partial interface IHttpRemoteService
     /// <returns>
     ///     <see cref="HttpRemoteResult{TResult}" />
     /// </returns>
-    HttpRemoteResult<TResult> Send<TResult>(HttpRequestBuilder httpRequestBuilder,
+    HttpRemoteResult<TResult>? Send<TResult>(HttpRequestBuilder httpRequestBuilder,
         HttpCompletionOption completionOption, CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -461,7 +461,7 @@ public partial interface IHttpRemoteService
     /// <returns>
     ///     <see cref="HttpRemoteResult{TResult}" />
     /// </returns>
-    Task<HttpRemoteResult<TResult>> SendAsync<TResult>(HttpRequestBuilder httpRequestBuilder,
+    Task<HttpRemoteResult<TResult>?> SendAsync<TResult>(HttpRequestBuilder httpRequestBuilder,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -480,6 +480,6 @@ public partial interface IHttpRemoteService
     /// <returns>
     ///     <see cref="HttpRemoteResult{TResult}" />
     /// </returns>
-    Task<HttpRemoteResult<TResult>> SendAsync<TResult>(HttpRequestBuilder httpRequestBuilder,
+    Task<HttpRemoteResult<TResult>?> SendAsync<TResult>(HttpRequestBuilder httpRequestBuilder,
         HttpCompletionOption completionOption, CancellationToken cancellationToken = default);
 }

@@ -21,7 +21,7 @@ public sealed class HttpContextForwardBuilder
     /// <summary>
     ///     忽略在转发时需要跳过的请求标头列表
     /// </summary>
-    internal static HashSet<string> _ignoreRequestHeaders =
+    internal static readonly HashSet<string> _ignoreRequestHeaders =
     [
         Constants.X_FORWARD_TO_HEADER, "Host", "Accept", "Accept-CH", "Accept-Charset", "Accept-Encoding",
         "Accept-Language", "Accept-Patch", "Accept-Post", "Accept-Ranges"

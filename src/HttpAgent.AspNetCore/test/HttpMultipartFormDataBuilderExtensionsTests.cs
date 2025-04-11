@@ -58,7 +58,7 @@ public class HttpMultipartFormDataBuilderExtensionsTests
         var httpResponseMessage = await httpRemoteService.SendAsync(HttpRequestBuilder
             .Post($"http://localhost:{port}/test")
             .SetMultipartContent(multipart => multipart.AddFileAsStream(filePath)));
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal("test.txt", result);
 
@@ -117,7 +117,7 @@ public class HttpMultipartFormDataBuilderExtensionsTests
         var httpResponseMessage = await httpRemoteService.SendAsync(HttpRequestBuilder
             .Post($"http://localhost:{port}/test")
             .SetMultipartContent(multipart => multipart.AddFileAsStream(filePath)));
-        var result = await httpResponseMessage.Content.ReadAsStringAsync();
+        var result = await httpResponseMessage!.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
         Assert.Equal("test.txt", result);
 

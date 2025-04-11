@@ -30,8 +30,8 @@ public class HttpRemoteCasesTests
                 HttpRequestBuilder.Post($"http://localhost:{port}/HttpRemote/SendJson")
                     .SetJsonContent(new HttpRemoteModel { Id = 1, Name = "Furion" }));
 
-        Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
-        Assert.NotNull(httpRemoteResult.Result);
+        Assert.Equal(HttpStatusCode.OK, httpRemoteResult?.StatusCode);
+        Assert.NotNull(httpRemoteResult?.Result);
         Assert.Equal(1, httpRemoteResult.Result.Id);
         Assert.Equal("Furion", httpRemoteResult.Result.Name);
 
@@ -62,8 +62,8 @@ public class HttpRemoteCasesTests
                 HttpRequestBuilder.Post($"http://localhost:{port}/HttpRemote/SendJson")
                     .SetJsonContent("{\"id\":1,\"name\":\"Furion\"}"));
 
-        Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
-        Assert.NotNull(httpRemoteResult.Result);
+        Assert.Equal(HttpStatusCode.OK, httpRemoteResult?.StatusCode);
+        Assert.NotNull(httpRemoteResult?.Result);
         Assert.Equal(1, httpRemoteResult.Result.Id);
         Assert.Equal("Furion", httpRemoteResult.Result.Name);
 
@@ -94,8 +94,8 @@ public class HttpRemoteCasesTests
                 HttpRequestBuilder.Post($"http://localhost:{port}/HttpRemote/SendFormUrlEncoded")
                     .SetFormUrlEncodedContent(new HttpRemoteModel { Id = 1, Name = "Furion" }));
 
-        Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
-        Assert.NotNull(httpRemoteResult.Result);
+        Assert.Equal(HttpStatusCode.OK, httpRemoteResult?.StatusCode);
+        Assert.NotNull(httpRemoteResult?.Result);
         Assert.Equal(1, httpRemoteResult.Result.Id);
         Assert.Equal("Furion", httpRemoteResult.Result.Name);
 
@@ -126,8 +126,8 @@ public class HttpRemoteCasesTests
                 HttpRequestBuilder.Post($"http://localhost:{port}/HttpRemote/SendFormUrlEncoded")
                     .SetFormUrlEncodedContent(new HttpRemoteModel { Id = 1, Name = "Furion" }, useStringContent: true));
 
-        Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
-        Assert.NotNull(httpRemoteResult.Result);
+        Assert.Equal(HttpStatusCode.OK, httpRemoteResult?.StatusCode);
+        Assert.NotNull(httpRemoteResult?.Result);
         Assert.Equal(1, httpRemoteResult.Result.Id);
         Assert.Equal("Furion", httpRemoteResult.Result.Name);
 
@@ -158,8 +158,8 @@ public class HttpRemoteCasesTests
                 HttpRequestBuilder.Post($"http://localhost:{port}/HttpRemote/SendFormUrlEncoded")
                     .SetFormUrlEncodedContent("id=1&name=Furion", useStringContent: true));
 
-        Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
-        Assert.NotNull(httpRemoteResult.Result);
+        Assert.Equal(HttpStatusCode.OK, httpRemoteResult?.StatusCode);
+        Assert.NotNull(httpRemoteResult?.Result);
         Assert.Equal(1, httpRemoteResult.Result.Id);
         Assert.Equal("Furion", httpRemoteResult.Result.Name);
 
@@ -194,8 +194,8 @@ public class HttpRemoteCasesTests
                         mBuilder.AddFileAsStream(filePath);
                     }));
 
-        Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
-        Assert.NotNull(httpRemoteResult.Result);
+        Assert.Equal(HttpStatusCode.OK, httpRemoteResult?.StatusCode);
+        Assert.NotNull(httpRemoteResult?.Result);
         Assert.Equal("test.txt", httpRemoteResult.Result);
 
         await app.StopAsync();
@@ -229,8 +229,8 @@ public class HttpRemoteCasesTests
                         mBuilder.AddFileAsByteArray(filePath);
                     }));
 
-        Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
-        Assert.NotNull(httpRemoteResult.Result);
+        Assert.Equal(HttpStatusCode.OK, httpRemoteResult?.StatusCode);
+        Assert.NotNull(httpRemoteResult?.Result);
         Assert.Equal("test.txt", httpRemoteResult.Result);
 
         await app.StopAsync();
@@ -264,8 +264,8 @@ public class HttpRemoteCasesTests
                             "https://download2.huduntech.com/application/workspace/49/49d0cbe19a9bf7e54c1735b24fa41f27/Installer_%E8%BF%85%E6%8D%B7%E5%B1%8F%E5%B9%95%E5%BD%95%E5%83%8F%E5%B7%A5%E5%85%B7_1.7.9_123.exe");
                     }));
 
-        Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
-        Assert.NotNull(httpRemoteResult.Result);
+        Assert.Equal(HttpStatusCode.OK, httpRemoteResult?.StatusCode);
+        Assert.NotNull(httpRemoteResult?.Result);
         Assert.Equal("Installer_迅捷屏幕录像工具_1.7.9_123.exe", httpRemoteResult.Result);
 
         await app.StopAsync();
@@ -300,8 +300,8 @@ public class HttpRemoteCasesTests
                         mBuilder.AddFileFromBase64String(base64String, "file", "test.txt");
                     }));
 
-        Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
-        Assert.NotNull(httpRemoteResult.Result);
+        Assert.Equal(HttpStatusCode.OK, httpRemoteResult?.StatusCode);
+        Assert.NotNull(httpRemoteResult?.Result);
         Assert.Equal("test.txt", httpRemoteResult.Result);
 
         await app.StopAsync();
@@ -337,8 +337,8 @@ public class HttpRemoteCasesTests
                         mBuilder.AddFileAsStream(filePath2, "files");
                     }));
 
-        Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
-        Assert.NotNull(httpRemoteResult.Result);
+        Assert.Equal(HttpStatusCode.OK, httpRemoteResult?.StatusCode);
+        Assert.NotNull(httpRemoteResult?.Result);
         Assert.Equal("test.txt;test2.txt", httpRemoteResult.Result);
 
         await app.StopAsync();
@@ -374,8 +374,8 @@ public class HttpRemoteCasesTests
                         mBuilder.AddFileAsByteArray(filePath2, "files");
                     }));
 
-        Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
-        Assert.NotNull(httpRemoteResult.Result);
+        Assert.Equal(HttpStatusCode.OK, httpRemoteResult?.StatusCode);
+        Assert.NotNull(httpRemoteResult?.Result);
         Assert.Equal("test.txt;test2.txt", httpRemoteResult.Result);
 
         await app.StopAsync();
@@ -410,8 +410,8 @@ public class HttpRemoteCasesTests
                         mBuilder.AddFileAsStream(filePath);
                     }));
 
-        Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
-        Assert.NotNull(httpRemoteResult.Result);
+        Assert.Equal(HttpStatusCode.OK, httpRemoteResult?.StatusCode);
+        Assert.NotNull(httpRemoteResult?.Result);
         Assert.Equal("1;furion;test.txt", httpRemoteResult.Result);
 
         await app.StopAsync();
@@ -447,8 +447,8 @@ public class HttpRemoteCasesTests
                         mBuilder.AddFileAsStream(filePath);
                     }));
 
-        Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
-        Assert.NotNull(httpRemoteResult.Result);
+        Assert.Equal(HttpStatusCode.OK, httpRemoteResult?.StatusCode);
+        Assert.NotNull(httpRemoteResult?.Result);
         Assert.Equal("1;furion;test.txt", httpRemoteResult.Result);
 
         await app.StopAsync();
@@ -483,8 +483,8 @@ public class HttpRemoteCasesTests
                         mBuilder.AddFileAsStream(filePath);
                     }));
 
-        Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
-        Assert.NotNull(httpRemoteResult.Result);
+        Assert.Equal(HttpStatusCode.OK, httpRemoteResult?.StatusCode);
+        Assert.NotNull(httpRemoteResult?.Result);
         Assert.Equal("1;furion;test.txt", httpRemoteResult.Result);
 
         await app.StopAsync();
@@ -513,8 +513,8 @@ public class HttpRemoteCasesTests
             await httpRemoteService.SendAsync<string>(
                 HttpRequestBuilder.Get($"http://localhost:{port}/HttpRemote/RedirectTo"));
 
-        Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
-        Assert.NotNull(httpRemoteResult.Result);
+        Assert.Equal(HttpStatusCode.OK, httpRemoteResult?.StatusCode);
+        Assert.NotNull(httpRemoteResult?.Result);
         Assert.Equal("Redirect", httpRemoteResult.Result);
 
         await app.StopAsync();
@@ -543,8 +543,8 @@ public class HttpRemoteCasesTests
             await httpRemoteService.SendAsync<Stream>(
                 HttpRequestBuilder.Post($"http://localhost:{port}/HttpRemote/GetFile"));
 
-        Assert.Equal(HttpStatusCode.OK, httpRemoteResult.StatusCode);
-        Assert.NotNull(httpRemoteResult.Result);
+        Assert.Equal(HttpStatusCode.OK, httpRemoteResult?.StatusCode);
+        Assert.NotNull(httpRemoteResult?.Result);
         Assert.True(httpRemoteResult.Result.CanRead);
 
         await app.StopAsync();

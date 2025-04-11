@@ -927,7 +927,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
             HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
                 httpClient.SendAsync(httpRequestMessage, option, token), null);
 
-        var str = await result.ResponseMessage.Content.ReadAsStringAsync();
+        var str = await result.ResponseMessage!.Content.ReadAsStringAsync();
         Assert.Equal("1 Furion", str);
 
         await app.StopAsync();
@@ -1092,6 +1092,71 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         Assert.NotNull(httpResponseMessage2);
         Assert.False(httpResponseMessage2.IsSuccessStatusCode);
         Assert.Equal(302, (int)httpResponseMessage2.StatusCode);
+
+        await app.StopAsync();
+        await serviceProvider.DisposeAsync();
+    }
+
+    [Fact]
+    public async Task SendCoreAsync_UnknownServer_WithSuppressExceptions_ReturnOK()
+    {
+        // 测试代码
+        var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
+        var httpRequestBuilder =
+            new HttpRequestBuilder(HttpMethod.Get, new Uri("https://test-unknown-server.com/test"));
+
+        await Assert.ThrowsAsync<HttpRequestException>(async () =>
+        {
+            var (httpResponseMessage, _) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
+                HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
+                    httpClient.SendAsync(httpRequestMessage, option, token), null);
+            Assert.Null(httpResponseMessage);
+        });
+
+        httpRequestBuilder.SuppressExceptions();
+        var (httpResponseMessage2, _) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
+            HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
+                httpClient.SendAsync(httpRequestMessage, option, token), null);
+        Assert.Null(httpResponseMessage2);
+
+        await serviceProvider.DisposeAsync();
+    }
+
+    [Fact]
+    public async Task SendCoreAsync_EnsureSuccessStatusCode_WithSuppressExceptions_ReturnOK()
+    {
+        var port = NetworkUtility.FindAvailableTcpPort();
+        var urls = new[] { "--urls", $"http://localhost:{port}" };
+        var builder = WebApplication.CreateBuilder(urls);
+        await using var app = builder.Build();
+
+        app.MapGet("/test", () =>
+        {
+            throw new Exception("Test exception");
+#pragma warning disable CS0162 // 检测到不可到达的代码
+            return "Hello World!";
+#pragma warning restore CS0162 // 检测到不可到达的代码
+        });
+
+        await app.StartAsync();
+
+        // 测试代码
+        var (httpRemoteService, serviceProvider) = Helpers.CreateHttpRemoteService();
+        var httpRequestBuilder = new HttpRequestBuilder(HttpMethod.Get, new Uri($"http://localhost:{port}/test"))
+            .EnsureSuccessStatusCode();
+
+        await Assert.ThrowsAsync<HttpRequestException>(async () =>
+        {
+            _ = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
+                HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
+                    httpClient.SendAsync(httpRequestMessage, option, token), null);
+        });
+
+        httpRequestBuilder.SuppressExceptions();
+        var (httpResponseMessage, _) = await httpRemoteService.SendCoreAsync(httpRequestBuilder,
+            HttpCompletionOption.ResponseContentRead, (httpClient, httpRequestMessage, option, token) =>
+                httpClient.SendAsync(httpRequestMessage, option, token), null);
+        Assert.NotNull(httpResponseMessage); // 可能为 null
 
         await app.StopAsync();
         await serviceProvider.DisposeAsync();
@@ -1453,7 +1518,7 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         var result = await httpRemoteService.SendAsync<NoISO8601TimeClass>(
             HttpRequestBuilder.Get($"http://localhost:{port}/test"));
 
-        Assert.NotNull(result.Result);
+        Assert.NotNull(result?.Result);
         Assert.Equal("2025-03-13T14:20:30", result.Result.Time.ToString("s"));
 
         await app.StopAsync();
@@ -1489,12 +1554,26 @@ public class HttpRemoteServiceTests(ITestOutputHelper output)
         var result = await httpRemoteService.SendAsync<StringClassTest>(
             HttpRequestBuilder.Get($"http://localhost:{port}/test"));
 
-        Assert.NotNull(result.Result);
+        Assert.NotNull(result?.Result);
         Assert.Equal("601139524199", result.Result.String1);
         Assert.Equal("True", result.Result.String2);
         Assert.Equal("False", result.Result.String3);
 
         await app.StopAsync();
+    }
+
+    [Fact]
+    public void ShouldSuppressException_ReturnOK()
+    {
+        Assert.False(HttpRemoteService.ShouldSuppressException(null, null));
+        Assert.False(HttpRemoteService.ShouldSuppressException([], null));
+        Assert.False(HttpRemoteService.ShouldSuppressException([typeof(Exception)], null));
+
+        Assert.True(HttpRemoteService.ShouldSuppressException([typeof(Exception)], new Exception()));
+        Assert.True(HttpRemoteService.ShouldSuppressException([typeof(Exception)], new InvalidCastException()));
+        Assert.True(HttpRemoteService.ShouldSuppressException([typeof(Exception)], new TimeoutException()));
+        Assert.True(HttpRemoteService.ShouldSuppressException([typeof(Exception)], new HttpRequestException()));
+        Assert.False(HttpRemoteService.ShouldSuppressException([typeof(TimeoutException)], new Exception()));
     }
 }
 

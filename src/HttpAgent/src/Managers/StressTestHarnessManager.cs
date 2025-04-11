@@ -131,6 +131,15 @@ internal sealed class StressTestHarnessManager
                         var httpResponseMessage =
                             await _httpRemoteService.SendAsync(RequestBuilder, completionOption, cancellationToken);
 
+                        // 空检查
+                        if (httpResponseMessage is null)
+                        {
+                            // 输出调试信息
+                            Debugging.Error("The response content was not read, as it was empty.");
+
+                            return;
+                        }
+
                         // 检查响应状态码是否是成功状态
                         if (httpResponseMessage.IsSuccessStatusCode)
                         {

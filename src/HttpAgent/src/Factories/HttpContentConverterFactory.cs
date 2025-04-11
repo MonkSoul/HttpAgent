@@ -41,27 +41,44 @@ internal sealed class HttpContentConverterFactory : IHttpContentConverterFactory
     public IServiceProvider ServiceProvider { get; }
 
     /// <inheritdoc />
-    public TResult? Read<TResult>(HttpResponseMessage httpResponseMessage, IHttpContentConverter[]? converters = null,
+    public TResult? Read<TResult>(HttpResponseMessage? httpResponseMessage, IHttpContentConverter[]? converters = null,
         CancellationToken cancellationToken = default) =>
-        GetConverter<TResult>(converters).Read(httpResponseMessage, cancellationToken);
+        httpResponseMessage is null
+            ? default
+            : GetConverter<TResult>(converters).Read(httpResponseMessage, cancellationToken);
 
     /// <inheritdoc />
-    public object? Read(Type resultType, HttpResponseMessage httpResponseMessage,
-        IHttpContentConverter[]? converters = null,
-        CancellationToken cancellationToken = default) =>
-        GetConverter(resultType, converters).Read(resultType, httpResponseMessage, cancellationToken);
+    public object? Read(Type resultType, HttpResponseMessage? httpResponseMessage,
+        IHttpContentConverter[]? converters = null, CancellationToken cancellationToken = default) =>
+        httpResponseMessage is null
+            ? null
+            : GetConverter(resultType, converters).Read(resultType, httpResponseMessage, cancellationToken);
 
     /// <inheritdoc />
-    public async Task<TResult?> ReadAsync<TResult>(HttpResponseMessage httpResponseMessage,
-        IHttpContentConverter[]? converters = null,
-        CancellationToken cancellationToken = default) =>
-        await GetConverter<TResult>(converters).ReadAsync(httpResponseMessage, cancellationToken);
+    public async Task<TResult?> ReadAsync<TResult>(HttpResponseMessage? httpResponseMessage,
+        IHttpContentConverter[]? converters = null, CancellationToken cancellationToken = default)
+    {
+        // 空检查
+        if (httpResponseMessage is null)
+        {
+            return default;
+        }
+
+        return await GetConverter<TResult>(converters).ReadAsync(httpResponseMessage, cancellationToken);
+    }
 
     /// <inheritdoc />
-    public async Task<object?> ReadAsync(Type resultType, HttpResponseMessage httpResponseMessage,
-        IHttpContentConverter[]? converters = null,
-        CancellationToken cancellationToken = default) =>
-        await GetConverter(resultType, converters).ReadAsync(resultType, httpResponseMessage, cancellationToken);
+    public async Task<object?> ReadAsync(Type resultType, HttpResponseMessage? httpResponseMessage,
+        IHttpContentConverter[]? converters = null, CancellationToken cancellationToken = default)
+    {
+        // 空检查
+        if (httpResponseMessage is null)
+        {
+            return null;
+        }
+
+        return await GetConverter(resultType, converters).ReadAsync(resultType, httpResponseMessage, cancellationToken);
+    }
 
     /// <summary>
     ///     获取 <see cref="IHttpContentConverter{TResult}" /> 实例

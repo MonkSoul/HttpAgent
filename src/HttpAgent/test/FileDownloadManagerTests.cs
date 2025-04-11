@@ -54,7 +54,7 @@ public class FileDownloadManagerTests(ITestOutputHelper output)
         var httpResponseMessage =
             httpRemoteService.Send(fileDownloadManager.RequestBuilder, HttpCompletionOption.ResponseHeadersRead);
 
-        Assert.Throws<ArgumentException>(() => fileDownloadManager.GetFileName(httpResponseMessage));
+        Assert.Throws<ArgumentException>(() => fileDownloadManager.GetFileName(httpResponseMessage!));
 
         serviceProvider.Dispose();
     }
@@ -72,7 +72,7 @@ public class FileDownloadManagerTests(ITestOutputHelper output)
         var httpResponseMessage =
             httpRemoteService.Send(fileDownloadManager.RequestBuilder, HttpCompletionOption.ResponseHeadersRead);
 
-        Assert.Equal("index.html", fileDownloadManager.GetFileName(httpResponseMessage));
+        Assert.Equal("index.html", fileDownloadManager.GetFileName(httpResponseMessage!));
 
         serviceProvider.Dispose();
     }
@@ -90,7 +90,7 @@ public class FileDownloadManagerTests(ITestOutputHelper output)
         var httpResponseMessage =
             httpRemoteService.Send(fileDownloadManager.RequestBuilder, HttpCompletionOption.ResponseHeadersRead);
 
-        Assert.Equal("index.html", fileDownloadManager.GetFileName(httpResponseMessage));
+        Assert.Equal("index.html", fileDownloadManager.GetFileName(httpResponseMessage!));
 
         serviceProvider.Dispose();
     }
@@ -124,7 +124,7 @@ public class FileDownloadManagerTests(ITestOutputHelper output)
             await httpRemoteService.SendAsync(fileDownloadManager.RequestBuilder,
                 HttpCompletionOption.ResponseHeadersRead);
 
-        Assert.Equal("index.html", fileDownloadManager.GetFileName(httpResponseMessage));
+        Assert.Equal("index.html", fileDownloadManager.GetFileName(httpResponseMessage!));
 
         await app.StopAsync();
         await serviceProvider.DisposeAsync();
@@ -144,7 +144,7 @@ public class FileDownloadManagerTests(ITestOutputHelper output)
             httpRemoteService.Send(fileDownloadManager.RequestBuilder, HttpCompletionOption.ResponseHeadersRead);
 
         var exception = Assert.Throws<InvalidOperationException>(() =>
-            fileDownloadManager.ShouldContinueWithDownload(httpResponseMessage, out _));
+            fileDownloadManager.ShouldContinueWithDownload(httpResponseMessage!, out _));
 
         Assert.Equal($"The destination path `{filePath}` already exists.", exception.Message);
 
@@ -164,18 +164,18 @@ public class FileDownloadManagerTests(ITestOutputHelper output)
         var httpResponseMessage =
             httpRemoteService.Send(fileDownloadManager.RequestBuilder, HttpCompletionOption.ResponseHeadersRead);
 
-        Assert.True(fileDownloadManager.ShouldContinueWithDownload(httpResponseMessage, out var destinationPath));
+        Assert.True(fileDownloadManager.ShouldContinueWithDownload(httpResponseMessage!, out var destinationPath));
         Assert.Equal(@"C:\Workspaces\index.html", destinationPath);
 
         var fileDownloadManager2 = new FileDownloadManager(httpRemoteService,
             httpFileDownloadBuilder.SetFileExistsBehavior(FileExistsBehavior.CreateNew));
-        Assert.True(fileDownloadManager2.ShouldContinueWithDownload(httpResponseMessage, out var destinationPath2));
+        Assert.True(fileDownloadManager2.ShouldContinueWithDownload(httpResponseMessage!, out var destinationPath2));
         Assert.Equal(@"C:\Workspaces\index.html", destinationPath2);
 
         var filePath = Path.Combine(AppContext.BaseDirectory, "test.txt");
         var fileDownloadManager3 = new FileDownloadManager(httpRemoteService,
             httpFileDownloadBuilder.SetFileExistsBehavior(FileExistsBehavior.Skip).SetDestinationPath(filePath));
-        Assert.False(fileDownloadManager3.ShouldContinueWithDownload(httpResponseMessage, out var destinationPath3));
+        Assert.False(fileDownloadManager3.ShouldContinueWithDownload(httpResponseMessage!, out var destinationPath3));
         Assert.Equal(filePath, destinationPath3);
 
         serviceProvider.Dispose();

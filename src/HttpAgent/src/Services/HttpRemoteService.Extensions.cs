@@ -42,7 +42,7 @@ internal sealed partial class HttpRemoteService
         new FileDownloadManager(this, httpFileDownloadBuilder, configure).StartAsync(cancellationToken);
 
     /// <inheritdoc />
-    public HttpResponseMessage UploadFile(string? requestUri, string filePath, string name = "file",
+    public HttpResponseMessage? UploadFile(string? requestUri, string filePath, string name = "file",
         Func<FileTransferProgress, Task>? onProgressChanged = null, string? fileName = null,
         Action<HttpFileUploadBuilder>? configure = null, Action<HttpRequestBuilder>? requestConfigure = null,
         CancellationToken cancellationToken = default) =>
@@ -51,7 +51,7 @@ internal sealed partial class HttpRemoteService
             cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpResponseMessage> UploadFileAsync(string? requestUri, string filePath, string name = "file",
+    public Task<HttpResponseMessage?> UploadFileAsync(string? requestUri, string filePath, string name = "file",
         Func<FileTransferProgress, Task>? onProgressChanged = null, string? fileName = null,
         Action<HttpFileUploadBuilder>? configure = null, Action<HttpRequestBuilder>? requestConfigure = null,
         CancellationToken cancellationToken = default) =>
@@ -60,12 +60,12 @@ internal sealed partial class HttpRemoteService
             cancellationToken);
 
     /// <inheritdoc />
-    public HttpResponseMessage Send(HttpFileUploadBuilder httpFileUploadBuilder,
+    public HttpResponseMessage? Send(HttpFileUploadBuilder httpFileUploadBuilder,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) =>
         new FileUploadManager(this, httpFileUploadBuilder, configure).Start(cancellationToken);
 
     /// <inheritdoc />
-    public Task<HttpResponseMessage> SendAsync(HttpFileUploadBuilder httpFileUploadBuilder,
+    public Task<HttpResponseMessage?> SendAsync(HttpFileUploadBuilder httpFileUploadBuilder,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default) =>
         new FileUploadManager(this, httpFileUploadBuilder, configure).StartAsync(cancellationToken);
 

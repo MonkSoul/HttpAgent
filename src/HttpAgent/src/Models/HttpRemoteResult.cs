@@ -97,6 +97,11 @@ public sealed class HttpRemoteResult<TResult>
     public HttpContentHeaders ContentHeaders { get; private set; } = null!;
 
     /// <summary>
+    ///     HTTP 版本
+    /// </summary>
+    public Version Version { get; private set; } = null!;
+
+    /// <summary>
     ///     初始化
     /// </summary>
     internal void Initialize()
@@ -112,6 +117,9 @@ public sealed class HttpRemoteResult<TResult>
 
         // 解析响应标头 Set-Cookie 集合
         ParseSetCookies(ResponseMessage.Headers);
+
+        // 获取 HTTP 版本
+        Version = ResponseMessage.Version;
     }
 
     /// <summary>

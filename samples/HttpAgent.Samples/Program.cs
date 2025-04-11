@@ -32,10 +32,7 @@ builder.Services.AddHttpClient(string.Empty, client => { })
 //.AddProfilerDelegatingHandler();
 
 // 为特定客户端启用
-builder.Services.AddHttpClient("furion", client =>
-{
-    client.BaseAddress = new Uri("https://furion");
-});
+builder.Services.AddHttpClient("furion", client => { client.BaseAddress = new Uri("https://furion"); });
 //.AddProfilerDelegatingHandler();
 
 builder.Services.TryAddTransient<AuthorizationDelegatingHandler>();

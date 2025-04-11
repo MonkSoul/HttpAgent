@@ -97,7 +97,7 @@ public partial interface IHttpRemoteService
     /// <returns>
     ///     <see cref="HttpResponseMessage" />
     /// </returns>
-    HttpResponseMessage UploadFile(string? requestUri, string filePath, string name = "file",
+    HttpResponseMessage? UploadFile(string? requestUri, string filePath, string name = "file",
         Func<FileTransferProgress, Task>? onProgressChanged = null, string? fileName = null,
         Action<HttpFileUploadBuilder>? configure = null, Action<HttpRequestBuilder>? requestConfigure = null,
         CancellationToken cancellationToken = default);
@@ -118,7 +118,7 @@ public partial interface IHttpRemoteService
     /// <returns>
     ///     <see cref="Task{TResult}" />
     /// </returns>
-    Task<HttpResponseMessage> UploadFileAsync(string? requestUri, string filePath, string name = "file",
+    Task<HttpResponseMessage?> UploadFileAsync(string? requestUri, string filePath, string name = "file",
         Func<FileTransferProgress, Task>? onProgressChanged = null, string? fileName = null,
         Action<HttpFileUploadBuilder>? configure = null, Action<HttpRequestBuilder>? requestConfigure = null,
         CancellationToken cancellationToken = default);
@@ -136,7 +136,7 @@ public partial interface IHttpRemoteService
     /// <returns>
     ///     <see cref="HttpResponseMessage" />
     /// </returns>
-    HttpResponseMessage Send(HttpFileUploadBuilder httpFileUploadBuilder, Action<HttpRequestBuilder>? configure = null,
+    HttpResponseMessage? Send(HttpFileUploadBuilder httpFileUploadBuilder, Action<HttpRequestBuilder>? configure = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -152,7 +152,7 @@ public partial interface IHttpRemoteService
     /// <returns>
     ///     <see cref="Task{TResult}" />
     /// </returns>
-    Task<HttpResponseMessage> SendAsync(HttpFileUploadBuilder httpFileUploadBuilder,
+    Task<HttpResponseMessage?> SendAsync(HttpFileUploadBuilder httpFileUploadBuilder,
         Action<HttpRequestBuilder>? configure = null, CancellationToken cancellationToken = default);
 
     /// <summary>

@@ -604,10 +604,12 @@ public class HttpRequestBuilderTests
                 .RemoveHeaders("name")
                 .Profiler(false)
                 .AutoSetHostHeader(false)
+                .SetVersion("1.2")
                 .Build(httpRemoteOptions, new HttpContentProcessorFactory(serviceProvider, []), null);
 
         Assert.NotNull(httpRequestMessage);
         Assert.NotNull(httpRequestMessage.RequestUri);
+        Assert.Equal("1.2", httpRequestMessage.Version.ToString());
         Assert.Equal("http://localhost/10/furion/Furion/10?id=10&name=furion",
             httpRequestMessage.RequestUri.ToString());
         Assert.Equal(2, httpRequestMessage.Headers.Count());
